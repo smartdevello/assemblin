@@ -37,7 +37,8 @@ class FoxeriotController extends Controller
             return curl_error($curl);
         }
         curl_close($curl);
-        return json_decode($response);
+        return response()->json($response);
+
     }
     public function getObservations(){
 
@@ -62,8 +63,7 @@ class FoxeriotController extends Controller
             return curl_error($curl);
         }
         curl_close($curl);
-
-        return json_decode($response);
+        return response()->json($response);
     }
     /**
      * Show the form for creating a new resource.
