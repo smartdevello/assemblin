@@ -27,6 +27,7 @@ class PointController extends Controller
         ));
 
         $response = curl_exec($curl);
+        $response = ['aa' => 1];
         return $response;
         curl_close($curl);
         return json_decode($response);
