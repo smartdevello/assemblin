@@ -17,4 +17,4 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::resource('points', '\App\Http\Controllers\PointController@index');
+Route::resource('points', '\App\Http\Controllers\PointController');
