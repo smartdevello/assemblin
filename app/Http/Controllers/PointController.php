@@ -25,7 +25,7 @@ class PointController extends Controller
         $response = curl_exec($curl);
         
         curl_close($curl);
-        echo $response;
-        return $response;
+        return response()->json($response, 200);
+        // return $response;
     }
 }
