@@ -19,3 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('points', 'PointController@getpoints');
+Route::get('test', function(){
+    return ['test' => 1];
+});

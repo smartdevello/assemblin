@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 class PointController extends Controller
 {
     //
+    public function index(){
+
+    }
     public function getpoints()
     {
         $curl = curl_init();
