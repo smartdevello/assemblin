@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="568e9bbd-19b3-4e02-983f-a9806117a18c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PointController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PointController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,20 +16,29 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="api.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="api.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/api.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="431">
-              <caret line="21" column="86" selection-start-line="21" selection-start-column="69" selection-end-line="21" selection-end-column="86" />
+            <state relative-caret-position="481">
+              <caret line="23" column="96" lean-forward="true" selection-start-line="23" selection-start-column="96" selection-end-line="23" selection-end-column="96" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PointController.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="PointController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PointController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="56">
-              <caret line="50" column="40" lean-forward="true" selection-start-line="50" selection-start-column="40" selection-end-line="50" selection-end-column="40" />
+            <state relative-caret-position="331">
+              <caret line="61" selection-start-line="61" selection-end-line="63" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FoxeriotController.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FoxeriotController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="181">
+              <caret line="41" column="35" selection-start-line="41" selection-start-column="20" selection-end-line="41" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -44,6 +52,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/app/Http/Controllers/PointController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/FoxeriotController.php" />
         <option value="$PROJECT_DIR$/routes/api.php" />
       </list>
     </option>
@@ -248,12 +257,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1619704114291</updated>
-      <workItem from="1619704115487" duration="4708000" />
+      <workItem from="1619704115487" duration="5085000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4708000" />
+    <option name="totallyTimeSpent" value="5085000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="2" y="13" width="1942" height="979" extended-state="0" />
@@ -265,8 +274,8 @@
       <window_info anchor="bottom" id="Version Control" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info id="npm" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" visible="true" weight="0.3298611" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24974039" />
+      <window_info anchor="bottom" id="Terminal" visible="true" weight="0.3298611" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24974039" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="right" id="Database" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -287,18 +296,30 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/routes/api.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PointController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="431">
-          <caret line="21" column="86" selection-start-line="21" selection-start-column="69" selection-end-line="21" selection-end-column="86" />
+        <state relative-caret-position="331">
+          <caret line="61" selection-start-line="61" selection-end-line="63" selection-end-column="9" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PointController.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FoxeriotController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="56">
-          <caret line="50" column="40" lean-forward="true" selection-start-line="50" selection-start-column="40" selection-end-line="50" selection-end-column="40" />
+        <state relative-caret-position="181">
+          <caret line="41" column="35" selection-start-line="41" selection-start-column="20" selection-end-line="41" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/api.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="481">
+          <caret line="23" column="96" lean-forward="true" selection-start-line="23" selection-start-column="96" selection-end-line="23" selection-end-column="96" />
         </state>
       </provider>
     </entry>

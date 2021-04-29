@@ -20,3 +20,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('points', '\App\Http\Controllers\PointController@index');
 Route::get('points/readable', '\App\Http\Controllers\PointController@getReadablePoints');
 Route::get('points/writable', '\App\Http\Controllers\PointController@getWritablePoints');
+Route::get('foxeriot/devices', '\App\Http\Controllers\FoxeriotController@getDevices');
+Route::get('foxeriot/observations', '\App\Http\Controllers\FoxeriotController@getObservations');
