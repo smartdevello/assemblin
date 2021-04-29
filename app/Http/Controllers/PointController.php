@@ -15,7 +15,7 @@ class PointController extends Controller
     {
         //
         $curl = curl_init();
-
+        return 'curl';
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://172.21.8.245:8000/assemblin/points/byid',
             CURLOPT_RETURNTRANSFER => true,
@@ -26,7 +26,7 @@ class PointController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'GET',
         ));
-
+        return 'curl_setopt';
         $response = curl_exec($curl);
 
         curl_close($curl);
