@@ -18,7 +18,7 @@ class PointController extends Controller
 
         curl_setopt($ch, CURLOPT_URL, 'https://172.21.8.245:8000/assemblin/points/byid');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         $result = curl_exec($ch);
         if (curl_errno($ch)) {
             return curl_error($ch);
