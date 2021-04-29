@@ -48,6 +48,24 @@ class PointController extends Controller
         return json_decode($result);
 
     }
+    public function getWritablePoints(){
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $this->api_uri. '/assemblin/points/writeablebyid');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            return curl_error($ch);
+        }
+        curl_close($ch);
+        return json_decode($result);
+
+    }
     /**
      * Store a newly created resource in storage.
      *
