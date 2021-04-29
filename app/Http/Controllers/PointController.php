@@ -14,23 +14,17 @@ class PointController extends Controller
     public function index()
     {
         //
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://172.21.8.245:8000/assemblin/points/byid',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-        ));
+        $ch = curl_init();
 
-        $response = curl_exec($curl);
-        $response = ['aa' => 1];
-        return $response;
-        curl_close($curl);
-        return json_decode($response);
+        curl_setopt($ch, CURLOPT_URL, 'https://172.21.8.245:8000/assemblin/points/byid');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            return curl_error($ch);
+        }
+        curl_close($ch);
+        return $result;
     }
 
     /**
