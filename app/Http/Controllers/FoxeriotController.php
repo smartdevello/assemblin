@@ -39,8 +39,9 @@ class FoxeriotController extends Controller
         curl_close($curl);
 //        return json_encode($response);
 //        return response()->json($response);
+        return $response;
         $response = response()->json($response)->getData();
-        return json_decode($response);
+
 
     }
     public function getObservations(Request $request){
