@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="568e9bbd-19b3-4e02-983f-a9806117a18c" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/FoxeriotController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/FoxeriotController.php" afterDir="false" />
-    </list>
+    <list default="true" id="568e9bbd-19b3-4e02-983f-a9806117a18c" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -38,7 +36,7 @@
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FoxeriotController.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="350">
-              <caret line="41" column="31" lean-forward="true" selection-start-line="41" selection-start-column="31" selection-end-line="41" selection-end-column="31" />
+              <caret line="41" column="24" selection-start-line="41" selection-start-column="24" selection-end-line="41" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -268,12 +266,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1619704114291</updated>
-      <workItem from="1619704115487" duration="9697000" />
+      <workItem from="1619704115487" duration="9731000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9697000" />
+    <option name="totallyTimeSpent" value="9731000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
@@ -330,7 +328,7 @@
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FoxeriotController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="350">
-          <caret line="41" column="31" lean-forward="true" selection-start-line="41" selection-start-column="31" selection-end-line="41" selection-end-column="31" />
+          <caret line="41" column="24" selection-start-line="41" selection-start-column="24" selection-end-line="41" selection-end-column="24" />
         </state>
       </provider>
     </entry>
