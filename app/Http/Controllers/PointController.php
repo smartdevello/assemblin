@@ -43,12 +43,7 @@ class PointController extends Controller
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'PUT',
-            CURLOPT_POSTFIELDS =>'[
-                {
-                    "id" : "Sigfox 1",
-                    "value": "12.0"
-                }
-            ]',
+            CURLOPT_POSTFIELDS => json_decode($request),
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/json'
             ),
