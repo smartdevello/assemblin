@@ -12,12 +12,28 @@ class PointController extends Controller
      * @return \Illuminate\Http\Response
      */
     public $api_uri = 'https://172.21.8.245:8000';
-    public function index()
+    public function getPoints()
     {
         //
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $this->api_uri. '/assemblin/points/byid');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            return curl_error($ch);
+        }
+        curl_close($ch);
+        return json_decode($result);
+    }
+    public function getTrendValues(){
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $this->api_uri. '/assemblin/trends/values');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
