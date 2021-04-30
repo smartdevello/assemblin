@@ -41,7 +41,7 @@ class PointController extends Controller
             CURLOPT_POSTFIELDS => '[
                 {
                     "id" : "Sigfox4",
-                    "value": "5.000000"
+                    "value": "15.000000"
                 }
             ]',
             CURLOPT_HTTPHEADER => array(
