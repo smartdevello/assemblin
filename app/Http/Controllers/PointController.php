@@ -35,7 +35,7 @@ class PointController extends Controller
         $ch = curl_init();
 
         curl_setopt_array($ch, array(
-            CURLOPT_URL => $this->api_uri. '/assemblin/trends/values',
+            CURLOPT_URL => $this->api_uri. '/assemblin/points/writebyid',
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_CUSTOMREQUEST => "PUT",
             CURLOPT_POSTFIELDS => '[
