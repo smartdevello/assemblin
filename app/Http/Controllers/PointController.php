@@ -34,26 +34,22 @@ class PointController extends Controller
 
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, $this->api_uri. '/assemblin/points/writebyid');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => $this->api_uri. '/assemblin/trends/values',
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_CUSTOMREQUEST => "PUT",
+            CURLOPT_POSTFIELDS => '[
+                {
+                    "id" : "Sigfox4",
+                    "value": "5.000000"
+                }
+            ]',
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "Accept: application/json"
+            ),
+        ));
 
-        $postData = array(
-            'testData' => '/home/toor/file.json',
-        );
-
-        curl_setopt($ch, CURLOPT_POSTFIELDS, '[
-    {
-        "id" : "Sigfox4",
-        "value": "5.000000"
-    }
-]');
-
-        $headers[] = [
-            'content-type: application/json',
-            'accept: application/json'
-        ];
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
