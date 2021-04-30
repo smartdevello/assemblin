@@ -41,7 +41,7 @@ class FoxeriotController extends Controller
 //        return response()->json($response);
         return $response;
 
-        return json_encode($response);
+        return json_decode($response);
         $response = response()->json($response)->getData();
 
 
