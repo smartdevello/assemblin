@@ -40,7 +40,7 @@ class FoxeriotController extends Controller
 //        return json_encode($response);
 //        return response()->json($response);
         $response = response()->json($response);
-        return $response;
+        return $response['data'];
 
     }
     public function getObservations(Request $request){
