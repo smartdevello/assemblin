@@ -40,12 +40,12 @@ class FoxeriotController extends Controller
         return response()->json($response);
 
     }
-    public function getObservations(){
+    public function getObservations(Request $request){
 
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://api.foxeriot.com/api/v1/get-observations?deviceId=0033533A',
+            CURLOPT_URL => 'https://api.foxeriot.com/api/v1/get-observations?deviceId='.$request['deviceId'],
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
