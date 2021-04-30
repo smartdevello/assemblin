@@ -23,7 +23,7 @@ Route::get('points/writable', '\App\Http\Controllers\PointController@getWritable
 Route::put('points/writepointsbyid', '\App\Http\Controllers\PointController@WritePointsbyid');
 
 Route::get('points/trends', '\App\Http\Controllers\PointController@getTrendPoints');
-Route::get('points/trends/values', '\App\Http\Controllers\PointController@getTrendValues');
+Route::put('points/trends/values', '\App\Http\Controllers\PointController@getTrendValues');
 
 Route::get('foxeriot/devices', '\App\Http\Controllers\FoxeriotController@getDevices');
 Route::get('foxeriot/observations', '\App\Http\Controllers\FoxeriotController@getObservations');

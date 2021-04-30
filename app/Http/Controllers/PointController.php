@@ -57,11 +57,20 @@ class PointController extends Controller
         return $result;
         return json_decode($result);
     }
-    public function getTrendValues(){
+    public function getTrendValues(Request $request){
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, $this->api_uri. '/assemblin/trends/values');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => $this->api_uri. '/assemblin/trends/values',
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_CUSTOMREQUEST => "PUT",
+            CURLOPT_POSTFIELDS => json_encode($request->all()),
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "Accept: application/json"
+            ),
+        ));
+
 
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
