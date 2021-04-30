@@ -48,8 +48,8 @@ class PointController extends Controller
                 'Content-Type: application/json'
             ),
         ));
-        return $request;
-        
+
+
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
@@ -58,6 +58,7 @@ class PointController extends Controller
             return curl_error($ch);
         }
         curl_close($ch);
+        return $result;
         return json_decode($result);
     }
     public function getTrendValues(){
