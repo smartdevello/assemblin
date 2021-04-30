@@ -28,8 +28,8 @@
       <file leaf-file-name="FoxeriotController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FoxeriotController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="42" column="33" lean-forward="true" selection-start-line="42" selection-start-column="33" selection-end-line="42" selection-end-column="33" />
+            <state relative-caret-position="275">
+              <caret line="41" column="59" lean-forward="true" selection-start-line="41" selection-start-column="59" selection-end-line="41" selection-end-column="59" />
             </state>
           </provider>
         </entry>
@@ -176,9 +176,9 @@
       <path value="$PROJECT_DIR$/vendor/hamcrest/hamcrest-php" />
     </include_path>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1654" />
-    <option name="y" value="151" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-135" />
+    <option name="y" value="223" />
     <option name="width" value="1942" />
     <option name="height" value="979" />
   </component>
@@ -259,15 +259,15 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1619704114291</updated>
-      <workItem from="1619704115487" duration="9954000" />
+      <workItem from="1619704115487" duration="10118000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9954000" />
+    <option name="totallyTimeSpent" value="10118000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-135" y="223" width="1942" height="979" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -276,8 +276,8 @@
       <window_info anchor="bottom" id="Version Control" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info id="npm" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" visible="true" weight="0.3028693" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25052083" />
+      <window_info anchor="bottom" id="Terminal" visible="true" weight="0.3298611" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24974039" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="right" id="Database" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -320,8 +320,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FoxeriotController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="42" column="33" lean-forward="true" selection-start-line="42" selection-start-column="33" selection-end-line="42" selection-end-column="33" />
+        <state relative-caret-position="275">
+          <caret line="41" column="59" lean-forward="true" selection-start-line="41" selection-start-column="59" selection-end-line="41" selection-end-column="59" />
         </state>
       </provider>
     </entry>
