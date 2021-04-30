@@ -35,7 +35,7 @@ class PointController extends Controller
         $ch = curl_init();
 
         curl_setopt_array($ch, array(
-            CURLOPT_URL => 'https://172.20.40.194:8000/assemblin/points/writebyid',
+            CURLOPT_URL => $this->api_uri . '/assemblin/points/writebyid',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -46,7 +46,7 @@ class PointController extends Controller
             CURLOPT_POSTFIELDS =>'[
                 {
                     "id" : "Sigfox 1",
-                    "value": "1234"
+                    "value": "12.0"
                 }
             ]',
             CURLOPT_HTTPHEADER => array(
