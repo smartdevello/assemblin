@@ -39,9 +39,9 @@ class PointController extends Controller
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
 
         $postData = array(
-            'testData' => '@/home/toor/file.json',
+            'testData' => '/home/toor/file.json',
         );
-        
+
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
 
         $headers[] = 'Content-Type: application/json';
