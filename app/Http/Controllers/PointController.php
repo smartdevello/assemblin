@@ -38,12 +38,7 @@ class PointController extends Controller
             CURLOPT_URL => $this->api_uri. '/assemblin/points/writebyid',
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_CUSTOMREQUEST => "PUT",
-            CURLOPT_POSTFIELDS => '[
-                {
-                    "id" : "Sigfox4",
-                    "value": "15.000000"
-                }
-            ]',
+            CURLOPT_POSTFIELDS => $request,
             CURLOPT_HTTPHEADER => array(
                 "Content-Type: application/json",
                 "Accept: application/json"
