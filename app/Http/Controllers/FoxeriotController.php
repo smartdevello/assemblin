@@ -69,6 +69,7 @@ class FoxeriotController extends Controller
         curl_close($curl);
         return response()->json($response);
     }
+
     /**
      * Show the form for creating a new resource.
      *

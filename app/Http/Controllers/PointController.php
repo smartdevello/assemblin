@@ -30,6 +30,40 @@ class PointController extends Controller
         curl_close($ch);
         return json_decode($result);
     }
+    public function WritePointsbyid(Request $request){
+
+        $ch = curl_init();
+
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => 'https://172.20.40.194:8000/assemblin/points/writebyid',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'PUT',
+            CURLOPT_POSTFIELDS =>'[
+                {
+                    "id" : "Sigfox 1",
+                    "value": "1234"
+                }
+            ]',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json'
+            ),
+        ));
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            return curl_error($ch);
+        }
+        curl_close($ch);
+        return json_decode($result);
+    }
     public function getTrendValues(){
         $ch = curl_init();
 

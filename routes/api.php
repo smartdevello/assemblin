@@ -20,6 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('points', '\App\Http\Controllers\PointController@getPoints');
 Route::get('points/readable', '\App\Http\Controllers\PointController@getReadablePoints');
 Route::get('points/writable', '\App\Http\Controllers\PointController@getWritablePoints');
+Route::put('points/writepointsbyid', '\App\Http\Controllers\PointController@WritePointsbyid');
+
 Route::get('points/trends', '\App\Http\Controllers\PointController@getTrendPoints');
 Route::get('points/trends/values', '\App\Http\Controllers\PointController@getTrendValues');
 
