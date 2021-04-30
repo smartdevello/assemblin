@@ -33,7 +33,7 @@ class PointController extends Controller
     public function WritePointsbyid(Request $request){
 
         $ch = curl_init();
-        return $request;
+//        return $request;
         curl_setopt_array($ch, array(
             CURLOPT_URL => $this->api_uri. '/assemblin/points/writebyid',
             CURLOPT_RETURNTRANSFER => 1,
