@@ -42,9 +42,12 @@ class PointController extends Controller
             'testData' => '/home/toor/file.json',
         );
 
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($request));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($request));
 
-        $headers[] = 'Content-Type: application/json';
+        $headers[] = [
+            'content-type: application/json',
+            'accept: application/json'
+        ];
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
