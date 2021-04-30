@@ -42,7 +42,12 @@ class PointController extends Controller
             'testData' => '/home/toor/file.json',
         );
 
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($request));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, '[
+    {
+        "id" : "Sigfox4",
+        "value": "5.000000"
+    }
+]');
 
         $headers[] = [
             'content-type: application/json',
