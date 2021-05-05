@@ -1,0 +1,18 @@
+#app{
+    max-width: 1600px;
+    margin: 0 auto;
+    background-color: #fff;
+    position: relative;
+    padding-top: 200px;
+}
+.section_container{
+    background: lightgray;
+    padding: 10px;
+    border: 1px solid;
+    border-radius: 10px;
+    display: inline-block;
+}
+h1.section_title{
+    font-size: 25px;
+    padding: 10px;
+}
