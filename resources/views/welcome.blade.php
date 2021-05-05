@@ -58,7 +58,7 @@
                             Latest value
                         </v-col>
                         <v-col cols="12" sm="1" md="1" >
-                            Set value manually
+                            Manual Value
                         </v-col>
                     </v-row>
                             <div v-for="device in devices.data">
@@ -95,21 +95,21 @@
                         <div v-if="DEOSPoints" class ="section_container DEOS">
                             <h1 class="section_title">DEOS</h1>
                             <v-row>
-                                <v-col cols="12" sm="6" md="6" >
+                                <v-col cols="12" sm="8" md="8" >
                                     DEOS point name
                                 </v-col>
-                                <v-col cols="12" sm="6" md="6" >
+                                <v-col cols="12" sm="4" md="4" >
                                     DEOS Controller
                                 </v-col>
                             </v-row>
                             <div v-for="device in devices.data">
                                 <div v-for="observation in device.latestObservations">
                                     <v-row>
-                                        <v-col cols="12" sm="6" md="6" >
+                                        <v-col cols="12" sm="8" md="8" >
                                             <v-select :items="DEOSPoints"  item-text="id" item-value="value" solo>
                                             </v-select>
                                         </v-col>
-                                        <v-col cols="12" sm="6" md="6" >
+                                        <v-col cols="12" sm="4" md="4" >
                                             <v-text-field v-model="observation.value" solo></v-text-field>
                                         </v-col>
                                     </v-row>
