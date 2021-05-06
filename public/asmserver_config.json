@@ -1,0 +1,17 @@
+{
+  "Port": "8000",
+  "Live": true,
+  "Trend": true,
+  "Slaves" : [
+    {
+      "Name": "VAK01",
+      "IP": "localhost",
+      "Port": "8001"
+    },
+    {
+      "Name": "VAK02",
+      "IP": "localhost",
+      "Port": "8002"
+    }
+  ]
+}

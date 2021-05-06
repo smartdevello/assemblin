@@ -29,6 +29,11 @@
 
         <link href="{{asset('public/css/style.css')}}" rel="stylesheet">
 
+
+        <script src="{{asset('public/js/vue.js')}}"></script>
+        <script src="{{asset('public/js/vuetify.js')}}"></script>
+        <script src="{{asset('public/js/jquery-3.x-git.min.js')}}"></script>
+        <script src="{{asset('public/js/toastr.min.js')}}"></script>
     </head>
 
     <body class="antialiased">
@@ -39,56 +44,56 @@
                         <div v-if="devices" class ="section_container sensors">
                             <h1 class="section_title">Sensors</h1>
                             <v-row>
-                        <v-col cols="12" sm="2" md="2" >
-                            Device ID
-                        </v-col>
-                        <v-col cols="12" sm="2" md="2" >
-                            Sensor ID
-                        </v-col>
-                        <v-col cols="12" sm="2" md="2" >
-                            Tag
-                        </v-col>
-                        <v-col cols="12" sm="2" md="2" >
-                            Name
-                        </v-col>
-                        <v-col cols="12" sm="2" md="2" >
-                            Type
-                        </v-col>
-                        <v-col cols="12" sm="1" md="1" >
-                            Latest value
-                        </v-col>
-                        <v-col cols="12" sm="1" md="1" >
-                            Manual Value
-                        </v-col>
-                    </v-row>
-                            <div v-for="device in devices.data">
-                        <div v-for="observation in device.latestObservations">
-                            <v-row>
                                 <v-col cols="12" sm="2" md="2" >
-                                    <v-text-field v-model="device.deviceId" solo></v-text-field>
+                                    Device ID
                                 </v-col>
                                 <v-col cols="12" sm="2" md="2" >
-                                    <v-text-field v-model="observation.id" solo></v-text-field>
+                                    Sensor ID
                                 </v-col>
                                 <v-col cols="12" sm="2" md="2" >
-                                    <v-text-field v-model="device.tags[0]" solo></v-text-field>
+                                    Tag
                                 </v-col>
                                 <v-col cols="12" sm="2" md="2" >
-                                    <v-text-field v-model="device.displayName" solo></v-text-field>
+                                    Name
                                 </v-col>
                                 <v-col cols="12" sm="2" md="2" >
-                                    <v-text-field v-model="observation.valueType" solo></v-text-field>
+                                    Type
                                 </v-col>
                                 <v-col cols="12" sm="1" md="1" >
-                                    <v-text-field v-model="observation.value" solo></v-text-field>
+                                    Latest value
                                 </v-col>
                                 <v-col cols="12" sm="1" md="1" >
-                                    <v-text-field v-model="observation.value" solo></v-text-field>
-
+                                    Manual Value
                                 </v-col>
                             </v-row>
-                        </div>
+                            <div v-for="device in devices.data">
+                    <div v-for="observation in device.latestObservations">
+                        <v-row>
+                            <v-col cols="12" sm="2" md="2" >
+                                <v-text-field v-model="device.deviceId" solo></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="2" md="2" >
+                                <v-text-field v-model="observation.id" solo></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="2" md="2" >
+                                <v-text-field v-model="device.tags[0]" solo></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="2" md="2" >
+                                <v-text-field v-model="device.displayName" solo></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="2" md="2" >
+                                <v-text-field v-model="observation.valueType" solo></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="1" md="1" >
+                                <v-text-field v-model="observation.value" solo></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="1" md="1" >
+                                <v-text-field v-model="observation.value" solo></v-text-field>
+
+                            </v-col>
+                        </v-row>
                     </div>
+                </div>
                         </div>
                     </v-col>
                     <v-col cols="12" sm="3" md="3">
@@ -106,7 +111,7 @@
                                 <div v-for="observation in device.latestObservations">
                                     <v-row>
                                         <v-col cols="12" sm="8" md="8" >
-                                            <v-select :items="DEOSPoints"  item-text="id" item-value="value" solo>
+                                            <v-select :items="DEOSPoints"  item-text="id" item-value="id" v-model="DEOSPoints[0]" solo>
                                             </v-select>
                                         </v-col>
                                         <v-col cols="12" sm="4" md="4" >
@@ -139,11 +144,11 @@
                 </v-row>
             </v-container>
         </v-app>
-        <script src="{{asset('public/js/vue.js')}}"></script>
-        <script src="{{asset('public/js/vuetify.js')}}"></script>
-        <script src="{{asset('public/js/jquery-3.x-git.min.js')}}"></script>
-        <script src="{{asset('public/js/toastr.min.js')}}"></script>
+
+        <script>
+            var base_url = "{{env('BASE_URL')}}";
+        </script>
+
         <script src="{{asset('public/js/main.js')}}"></script>
     </body>
-    <?php ?>
 </html>

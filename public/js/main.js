@@ -1,5 +1,7 @@
 $(document).ready(function(){
 
+
+
 var main_vm = new Vue({
     el: '#app',
     vuetify: new Vuetify(),
@@ -11,9 +13,9 @@ var main_vm = new Vue({
 
     mounted: function()
     {
-        this.getFoxeriotDevices();
-        this.getDEOSPoints();
-
+        // this.getFoxeriotDevices().then();
+        // this.getDEOSPoints().then();
+        this.getAsmServerConfig().then();
         // this.reload_template_products();
         // client.get('ticket.requester.email').then(function(data) {
         //     main_vm.coupon.allowed_emails = data["ticket.requester.email"];
@@ -27,21 +29,40 @@ var main_vm = new Vue({
     methods: {
         getFoxeriotDevices: function(){
 
-            $.ajax({
+            return $.ajax({
                 url: "http://hkasrv4.hameenkiinteistoautomaatio.fi/api/foxeriot/devices",
                 success: function(data)
                 {
                     main_vm.devices = JSON.parse(data);
+                },
+                error: function(err){
+
+                }
+            });
+        },
+        getAsmServerConfig: function(){
+            console.log(base_url + "api/asm_server/config/");
+            return $.ajax({
+                url: base_url + "api/asm_server/config/",
+                success: function(data)
+                {
+                    console.log(JSON.parse(data));
+                },
+                error: function(err){
+
                 }
             });
         },
         getDEOSPoints: function(){
-            $.ajax({
+            return $.ajax({
                 url: "http://hkasrv4.hameenkiinteistoautomaatio.fi/api/points",
                 success: function(data)
                 {
                     main_vm.DEOSPoints = data;
                     // console.log(data);
+                },
+                error: function(err){
+
                 }
             });
         },

@@ -17,13 +17,16 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('points', '\App\Http\Controllers\PointController@getPoints');
-Route::get('points/readable', '\App\Http\Controllers\PointController@getReadablePoints');
-Route::get('points/writable', '\App\Http\Controllers\PointController@getWritablePoints');
-Route::put('points/writepointsbyid', '\App\Http\Controllers\PointController@WritePointsbyid');
+Route::middleware(['cors'])->group(function(){
+    Route::get('points', '\App\Http\Controllers\PointController@getPoints');
+    Route::get('points/readable', '\App\Http\Controllers\PointController@getReadablePoints');
+    Route::get('points/writable', '\App\Http\Controllers\PointController@getWritablePoints');
+    Route::put('points/writepointsbyid', '\App\Http\Controllers\PointController@WritePointsbyid');
 
-Route::get('points/trends', '\App\Http\Controllers\PointController@getTrendPoints');
-Route::post('points/trends/values', '\App\Http\Controllers\PointController@getTrendValues');
+    Route::get('points/trends', '\App\Http\Controllers\PointController@getTrendPoints');
+    Route::post('points/trends/values', '\App\Http\Controllers\PointController@getTrendValues');
 
-Route::get('foxeriot/devices', '\App\Http\Controllers\FoxeriotController@getDevices');
-Route::get('foxeriot/observations', '\App\Http\Controllers\FoxeriotController@getObservations');
+    Route::get('foxeriot/devices', '\App\Http\Controllers\FoxeriotController@getDevices');
+    Route::get('foxeriot/observations', '\App\Http\Controllers\FoxeriotController@getObservations');
+    Route::get('asm_server/config/', '\App\Http\Controllers\AsmServerController@getConfig');
+});
