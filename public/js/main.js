@@ -8,7 +8,7 @@ var main_vm = new Vue({
     data: {
         devices: null,
         DEOSPoints: null,
-        DEOSvalue: '',
+        asm_serverconfig: null
     },
 
     mounted: function()
@@ -24,7 +24,6 @@ var main_vm = new Vue({
     },
     methods: {
         getFoxeriotDevices: function(){
-
             return $.ajax({
                 url: "http://hkasrv4.hameenkiinteistoautomaatio.fi/api/foxeriot/devices",
                 success: function(data)
@@ -42,12 +41,16 @@ var main_vm = new Vue({
                 url: base_url + "api/asm_server/config/",
                 success: function(data)
                 {
-                    console.log(JSON.parse(data));
+                    main_vm.asm_serverconfig = JSON.parse(JSON.parse(data));
+                    console.log(main_vm.asm_serverconfig);
                 },
                 error: function(err){
 
                 }
             });
+        },
+        getAsmRestConfig: function(filename){
+
         },
         getDEOSPoints: function(){
             return $.ajax({

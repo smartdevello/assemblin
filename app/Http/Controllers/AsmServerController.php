@@ -18,7 +18,7 @@ class AsmServerController extends Controller
 
     public function getConfig()
     {
-        $filepath = env('ASMSERVER_CONFIGFILE');
+        $filepath = env('BASE_CONFIG_PATH') . 'asmserver/config.json';
         $myfile = fopen($filepath, "rw") or die("Unable to open file!");
         $content = fread($myfile, filesize($filepath));
         return json_encode($content);
