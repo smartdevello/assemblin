@@ -13,13 +13,9 @@ var main_vm = new Vue({
 
     mounted: function()
     {
-        // this.getFoxeriotDevices().then();
-        // this.getDEOSPoints().then();
-        this.getAsmServerConfig().then();
-        // this.reload_template_products();
-        // client.get('ticket.requester.email').then(function(data) {
-        //     main_vm.coupon.allowed_emails = data["ticket.requester.email"];
-        // });
+        this.getFoxeriotDevices();
+        this.getDEOSPoints();
+        this.getAsmServerConfig();
     },
     watch: {
         devices: function(){
