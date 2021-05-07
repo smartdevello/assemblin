@@ -18,10 +18,40 @@ class AsmServerController extends Controller
 
     public function getConfig()
     {
-        $filepath = env('BASE_CONFIG_PATH') . 'asmserver/config.json';
-        $myfile = fopen($filepath, "rw") or die("Unable to open file!");
-        $content = fread($myfile, filesize($filepath));
-        return json_encode($content);
+        try{
+            $filepath = config()->get('constants.BASE_CONFIG_PATH') . 'asmserver/config.json';
+            $myfile = fopen($filepath, "rw") or die("Unable to open file!");
+            $content = fread($myfile, filesize($filepath));
+            fclose($myfile);
+            return json_encode($content);
+        } catch (\Exception $e){
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 403);
+        }
+
+    }
+    public function getRESTconfig(Request $request)
+    {
+        if (!empty($request['name']) ) {
+            try{
+                $filepath = config()->get('constants.BASE_CONFIG_PATH') . 'asmrest/' . $request['name'] . ".json";
+                $myfile = fopen($filepath, "rw") or die("Unable to open file!");
+                $content = fread($myfile, filesize($filepath));
+                fclose($myfile);
+                return json_encode($content);
+
+            }catch (\Exception $e){
+                return response()->json([
+                    'error' => $e->getMessage()
+                ], 403);
+            }
+
+        } else {
+            return response()->json([
+                'error' => 'name parameter is empty!'
+            ], 404);
+        }
     }
     /**
      * Show the form for creating a new resource.

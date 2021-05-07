@@ -8,7 +8,8 @@ var main_vm = new Vue({
     data: {
         devices: null,
         DEOSPoints: null,
-        asm_serverconfig: null
+        asm_serverconfig: null,
+        asm_restconfig: {},
     },
 
     mounted: function()
@@ -36,20 +37,37 @@ var main_vm = new Vue({
             });
         },
         getAsmServerConfig: function(){
-            console.log(base_url + "api/asm_server/config/");
-            return $.ajax({
+            $.ajax({
                 url: base_url + "api/asm_server/config/",
                 success: function(data)
                 {
                     main_vm.asm_serverconfig = JSON.parse(JSON.parse(data));
-                    console.log(main_vm.asm_serverconfig);
+                    // console.log(main_vm.asm_serverconfig);
+                    for (let slave of main_vm.asm_serverconfig["Slaves"]){
+                        main_vm.getAsmRestConfig(slave);
+                    }
                 },
                 error: function(err){
-
+                    console.error(err);
                 }
             });
         },
-        getAsmRestConfig: function(filename){
+        getAsmRestConfig: function(slave){
+            let ip = slave['IP'];
+            let name = slave['Name'];
+            let Port = slave['Port'];
+
+            $.ajax({
+                url: base_url + "api/asm_server/config/getRESTconfig?name=" + name,
+                success: function(data)
+                {
+                    main_vm.asm_restconfig[name] = JSON.parse(JSON.parse(data));
+                    console.log(main_vm.asm_restconfig[name]);
+                },
+                error: function(err){
+                    console.error(err);
+                }
+            });
 
         },
         getDEOSPoints: function(){

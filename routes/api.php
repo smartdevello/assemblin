@@ -29,4 +29,6 @@ Route::middleware(['cors'])->group(function(){
     Route::get('foxeriot/devices', '\App\Http\Controllers\FoxeriotController@getDevices');
     Route::get('foxeriot/observations', '\App\Http\Controllers\FoxeriotController@getObservations');
     Route::get('asm_server/config/', '\App\Http\Controllers\AsmServerController@getConfig');
+    Route::get('asm_server/config/getRESTconfig', '\App\Http\Controllers\AsmServerController@getRESTconfig');
+
 });
