@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /public/assemblin_config
+/config/constants.php
 /storage/*.key
 /vendor
 .env
