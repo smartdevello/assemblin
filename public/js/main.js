@@ -10,6 +10,7 @@ var main_vm = new Vue({
         DEOSPoints: null,
         asm_serverconfig: null,
         asm_restconfig: {},
+        is_relation_updating: false
     },
 
     mounted: function()
@@ -30,6 +31,13 @@ var main_vm = new Vue({
                 success: function(data)
                 {
                     main_vm.devices = JSON.parse(data);
+                    for (device of main_vm.devices.data){
+                        for (observation of device.latestObservations){
+                            // observation.manual_value = '';
+                            // console.log(observation);
+                        }
+                    }
+
                 },
                 error: function(err){
 
@@ -62,7 +70,7 @@ var main_vm = new Vue({
                 success: function(data)
                 {
                     main_vm.asm_restconfig[name] = JSON.parse(JSON.parse(data));
-                    console.log(main_vm.asm_restconfig[name]);
+                    // console.log(main_vm.asm_restconfig[name]);
                 },
                 error: function(err){
                     console.error(err);
@@ -82,6 +90,41 @@ var main_vm = new Vue({
 
                 }
             });
+        },
+
+        update_relations: function(){
+            let data = [];
+
+            for (device of this.devices.data){
+                for (observation of device.latestObservations){
+                    // observation.manual_value = '';
+                    if (observation.manual_value !== undefined && observation.manual_value !== '' && observation.DEOS_pointname !== undefined){
+                        console.log(observation.manual_value);
+
+                        data.push({
+                            "id": observation.DEOS_pointname,
+                            "value": String(observation.manual_value)
+                        });
+                        observation.value = observation.manual_value;
+                        observation.manual_value = '';
+                    }
+                }
+            }
+
+            var settings = {
+                "url": "http://hkasrv4.hameenkiinteistoautomaatio.fi/api/points/writepointsbyid",
+                "method": "PUT",
+                "timeout": 0,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "data": JSON.stringify(data),
+            };
+            console.log(data);
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+            });
+
         },
         create_template: function() {
             this.is_creating_template = true;

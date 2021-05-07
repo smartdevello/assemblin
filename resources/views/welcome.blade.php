@@ -67,33 +67,32 @@
                                 </v-col>
                             </v-row>
                             <div v-for="device in devices.data">
-                    <div v-for="observation in device.latestObservations">
-                        <v-row>
-                            <v-col cols="12" sm="2" md="2" >
-                                <v-text-field v-model="device.deviceId" solo></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="2" md="2" >
-                                <v-text-field v-model="observation.id" solo></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="2" md="2" >
-                                <v-text-field v-model="device.tags[0]" solo></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="2" md="2" >
-                                <v-text-field v-model="device.displayName" solo></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="2" md="2" >
-                                <v-text-field v-model="observation.valueType" solo></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="1" md="1" >
-                                <v-text-field v-model="observation.value" solo></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="1" md="1" >
-                                <v-text-field v-model="observation.value" solo></v-text-field>
-
-                            </v-col>
-                        </v-row>
-                    </div>
-                </div>
+                                <div v-for="observation in device.latestObservations">
+                                    <v-row>
+                                        <v-col cols="12" sm="2" md="2" >
+                                            <v-text-field v-model="device.deviceId" solo></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="2" md="2" >
+                                            <v-text-field v-model="observation.id" solo></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="2" md="2" >
+                                            <v-text-field v-model="device.tags[0]" solo></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="2" md="2" >
+                                            <v-text-field v-model="device.displayName" solo></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="2" md="2" >
+                                            <v-text-field v-model="observation.variable" solo></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="1" md="1" >
+                                            <v-text-field v-model="observation.value" solo></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="1" md="1" >
+                                            <v-text-field v-model="observation.manual_value" solo></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                </div>
+                            </div>
                         </div>
                     </v-col>
                     <v-col cols="12" sm="3" md="3">
@@ -110,12 +109,12 @@
                             <div v-for="device in devices.data">
                                 <div v-for="observation in device.latestObservations">
                                     <v-row>
-                                        <v-col cols="12" sm="8" md="8" >
-                                            <v-select :items="DEOSPoints"  item-text="id" item-value="id" v-model="DEOSPoints[0]" solo>
+                                        <v-col cols="12" sm="7" md="7" >
+                                            <v-select :items="DEOSPoints"  v-model="observation.DEOS_pointname" item-text="id" item-value="id" solo>
                                             </v-select>
                                         </v-col>
-                                        <v-col cols="12" sm="4" md="4" >
-                                            <v-text-field v-model="observation.value" solo></v-text-field>
+                                        <v-col cols="12" sm="5" md="5" >
+                                            <v-select v-if="asm_serverconfig" :items="asm_serverconfig.Slaves"  item-text="Name" item-value="Name" solo></v-select>
                                         </v-col>
                                     </v-row>
                                 </div>
@@ -131,15 +130,23 @@
                             </v-col>
                         </v-row>
                             <div v-for="device in devices.data">
-                        <div v-for="observation in device.latestObservations">
-                            <v-row>
-                                <v-col cols="12" sm="12" md="12" >
-                                    <v-text-field v-model="observation.value" solo></v-text-field>
-                                </v-col>
-                            </v-row>
+                                <div v-for="observation in device.latestObservations">
+                                    <v-row>
+                                        <v-col cols="12" sm="12" md="12" >
+                                            <v-text-field  solo></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                        </div>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="12" sm="10" md="10">
+
+                    </v-col>
+                    <v-col cols="12" sm="2" md="2">
+                        <v-btn :loading="is_relation_updating" :disabled="is_relation_updating" outlined @click="update_relations">Update</v-btn>
                     </v-col>
                 </v-row>
             </v-container>
