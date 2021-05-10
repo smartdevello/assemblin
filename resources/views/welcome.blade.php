@@ -37,11 +37,11 @@
     </head>
 
     <body class="antialiased">
-        <v-app  id="app">
+        <v-app id="app">
             <v-container>
                 <v-row>
                     <v-col cols="12" sm="8" md="8">
-                        <div v-if="devices" class ="section_container sensors">
+                        <div  class ="section_container sensors">
                             <h1 class="section_title">Sensors</h1>
                             <v-row>
                                 <v-col cols="12" sm="2" md="2" >
@@ -145,8 +145,8 @@
                     <v-col cols="12" sm="10" md="10">
 
                     </v-col>
-                    <v-col cols="12" sm="2" md="2">
-                        <v-btn :loading="is_relation_updating" :disabled="is_relation_updating" outlined @click="update_relations">Update</v-btn>
+                    <v-col  cols="12" sm="2" md="2">
+                        <v-btn v-if="devices" :loading="is_relation_updating" :disabled="is_relation_updating" outlined @click="update_relations">Update</v-btn>
                     </v-col>
                 </v-row>
             </v-container>

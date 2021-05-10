@@ -37,13 +37,13 @@ class FoxeriotController extends Controller
             return curl_error($curl);
         }
         curl_close($curl);
-//        return json_encode($response);
-//        return response()->json($response);
+
+        foreach ($response['data']['latestObservations'] as $device){
+
+        }
+        return gettype($response);
+
         return $response;
-
-        return json_decode($response);
-        $response = response()->json($response)->getData();
-
 
     }
     public function getObservations(Request $request){

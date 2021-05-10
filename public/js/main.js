@@ -110,20 +110,22 @@ var main_vm = new Vue({
                     }
                 }
             }
+            if (data.length > 0) {
+                var settings = {
+                    "url": "http://hkasrv4.hameenkiinteistoautomaatio.fi/api/points/writepointsbyid",
+                    "method": "PUT",
+                    "timeout": 0,
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": JSON.stringify(data),
+                };
+                console.log(data);
+                $.ajax(settings).done(function (response) {
+                    console.log(response);
+                });
+            }
 
-            var settings = {
-                "url": "http://hkasrv4.hameenkiinteistoautomaatio.fi/api/points/writepointsbyid",
-                "method": "PUT",
-                "timeout": 0,
-                "headers": {
-                    "Content-Type": "application/json"
-                },
-                "data": JSON.stringify(data),
-            };
-            console.log(data);
-            $.ajax(settings).done(function (response) {
-                console.log(response);
-            });
 
         },
         create_template: function() {
