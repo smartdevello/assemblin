@@ -48,18 +48,6 @@ class FoxeriotController extends Controller
                         $row = new Sensor();
                         $row->id = $sensor['id'];
                     }
-//                        $data = array(
-//                            'id' => $sensor['id'],
-//                            'deviceId' => $device['deviceId'],
-//                            'tag' => implode(" ", $device['tags']),
-//                            'name' => $device['displayName'],
-//                            'type' => $sensor['variable'],
-//                            'unit' => $sensor['unit'],
-//                            'value' => $sensor['value'],
-//                            'message_time' => $sensor['message-time']
-//                        );
-
-
                     $row->deviceId = $device['deviceId'];
                     $row->tag = implode(" ", $device['tags']);
                     $row->name = $device['displayName'];
@@ -68,6 +56,8 @@ class FoxeriotController extends Controller
                     $row->value = $sensor['value'];
                     $row->message_time = $sensor['message-time'];
                     $row->save();
+
+                    $sensor['abc'] = 'abc';
             }
         }
         return json_encode($res);
@@ -152,6 +142,9 @@ class FoxeriotController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $sensor = Sensor::find($id);
+        $sensor->DEOS_pointId = $request['DEOS_pointId'];
+        $sensor->save();
     }
 
     /**

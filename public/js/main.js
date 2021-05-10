@@ -31,7 +31,6 @@ var main_vm = new Vue({
                 success: function(data)
                 {
                     main_vm.devices = JSON.parse(data);
-                    console.log(main_vm.devices);
                     for (device of main_vm.devices.data){
                         for (observation of device.latestObservations){
                             // observation.manual_value = '';
@@ -50,8 +49,8 @@ var main_vm = new Vue({
                 url: base_url + "api/asm_server/config/",
                 success: function(data)
                 {
+
                     main_vm.asm_serverconfig = JSON.parse(JSON.parse(data));
-                    // console.log(main_vm.asm_serverconfig);
                     for (let slave of main_vm.asm_serverconfig["Slaves"]){
                         main_vm.getAsmRestConfig(slave);
                     }
@@ -84,7 +83,7 @@ var main_vm = new Vue({
                 url: "http://hkasrv4.hameenkiinteistoautomaatio.fi/api/points",
                 success: function(data)
                 {
-                    main_vm.DEOSPoints = data;
+                    main_vm.DEOSPoints = JSON.parse(data);
                     // console.log(data);
                 },
                 error: function(err){
@@ -100,14 +99,10 @@ var main_vm = new Vue({
                 for (observation of device.latestObservations){
                     // observation.manual_value = '';
                     if (observation.manual_value !== undefined && observation.manual_value !== '' && observation.DEOS_pointname !== undefined){
-                        console.log(observation.manual_value);
-
                         data.push({
                             "id": observation.DEOS_pointname,
                             "value": String(observation.manual_value)
                         });
-                        observation.value = observation.manual_value;
-                        observation.manual_value = '';
                     }
                 }
             }
@@ -121,9 +116,9 @@ var main_vm = new Vue({
                     },
                     "data": JSON.stringify(data),
                 };
-                console.log(data);
+
                 $.ajax(settings).done(function (response) {
-                    console.log(response);
+
                 });
             }
 
