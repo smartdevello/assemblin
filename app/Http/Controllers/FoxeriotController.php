@@ -42,8 +42,9 @@ class FoxeriotController extends Controller
         $res = json_decode($response, true);
 
         foreach($res['data'] as &$device){
+            $chunks = Sensor::where('deviceId', $device['deviceId']);
             foreach($device['latestObservations'] as &$sensor){
-                    $row = Sensor::find($sensor['id']);
+                    $row = $chunks->where('type', $sensor['variable'])->get();
                     if ($row === null) {
                         $row = new Sensor();
                         $row->id = $sensor['id'];
