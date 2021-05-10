@@ -56,7 +56,7 @@ class FoxeriotController extends Controller
                     $row->value = $sensor['value'];
                     $row->message_time = $sensor['message-time'];
                     $row->save();
-                    $sensor['abc'] = 'abc';
+                    $sensor['DEOS_pointId'] = $row['DEOS_pointId'];
             }
         }
         return json_encode($res);
