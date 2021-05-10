@@ -41,9 +41,11 @@ class FoxeriotController extends Controller
 
         $res = json_decode($response, true);
 
+        $tmp = [];
         foreach($res['data'] as $device){
             foreach($device['latestObservations'] as $sensor){
                     $row = Sensor::where('id', $sensor['id']);
+                    array_push($tmp, $row);
                     if (!$row) {
                         $data = array(
                             'id' => $sensor['id'],
@@ -60,6 +62,7 @@ class FoxeriotController extends Controller
 
             }
         }
+        return json_encode($tmp);
         return json_encode($res);
 
     }
