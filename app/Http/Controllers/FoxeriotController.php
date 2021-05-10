@@ -45,6 +45,18 @@ class FoxeriotController extends Controller
             foreach($device['latestObservations'] as $sensor){
                     $row = Sensor::find($sensor['id']);
                     if ($row === null) {
+                        $row = new Sensor();
+                        $row->id = $sensor['id'];
+                        $row->deviceId = $device['deviceId'];
+
+                        $row->tag = $device['tags'][0];
+                        $row->name = $device['displayName'];
+                        $row->type = $sensor['variable'];
+                        $row->unit = $sensor['unit'];
+                        $row->value = $sensor['value'];
+                        $row->message_time = $sensor['message-time'];
+
+                        $row->save();
                         $data = array(
                             'id' => $sensor['id'],
                             'deviceId' => $device['deviceId'],
@@ -55,7 +67,7 @@ class FoxeriotController extends Controller
                             'value' => $sensor['value'],
                             'message_time' => $sensor['message-time']
                         );
-                        Sensor::create($data);
+
                     }
 
             }
