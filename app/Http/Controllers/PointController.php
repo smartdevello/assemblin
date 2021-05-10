@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\DEOS_point;
 
 class PointController extends Controller
 {
@@ -29,8 +30,17 @@ class PointController extends Controller
         }
         curl_close($ch);
 
-        return gettype($result);
-        return json_decode($result);
+        $res = json_decode($result);
+        foreach ($res as $point){
+            $row = DEOS_point::find($point['id']);
+            if ($row === null) {
+                $row = new DEOS_point();
+                $row->id = $point['id'];
+            }
+            $row->value = $point['value'];
+            $row->save();
+        }
+        return json_encode($res);
     }
     public function WritePointsbyid(Request $request){
 
