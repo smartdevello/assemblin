@@ -38,9 +38,9 @@ class FoxeriotController extends Controller
         }
         curl_close($curl);
 
-        foreach ($response['data']['latestObservations'] as $device){
-
-        }
+//        foreach ($response['data']['latestObservations'] as $device){
+//
+//        }
         return gettype($response);
 
         return $response;
