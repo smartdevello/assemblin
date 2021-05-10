@@ -42,7 +42,6 @@ class FoxeriotController extends Controller
         $res = json_decode($response, true);
 
         foreach($res['data'] as $device){
-            return $device['tags'];
             foreach($device['latestObservations'] as $sensor){
                     $row = Sensor::find($sensor['id']);
                     if ($row === null) {
@@ -50,7 +49,7 @@ class FoxeriotController extends Controller
                         $row->id = $sensor['id'];
                         $row->deviceId = $device['deviceId'];
 
-                        $row->tag = $device['tags'][0];
+                        $row->tag = implode( " ", $device['tags']);
                         $row->name = $device['displayName'];
                         $row->type = $sensor['variable'];
                         $row->unit = $sensor['unit'];
