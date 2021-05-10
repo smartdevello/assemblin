@@ -30,8 +30,8 @@ var main_vm = new Vue({
                 url: "http://hkasrv4.hameenkiinteistoautomaatio.fi/api/foxeriot/devices",
                 success: function(data)
                 {
-                    console.log(data);
                     main_vm.devices = JSON.parse(data);
+                    console.log(main_vm.devices);
                     for (device of main_vm.devices.data){
                         for (observation of device.latestObservations){
                             // observation.manual_value = '';
