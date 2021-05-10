@@ -42,9 +42,9 @@ class FoxeriotController extends Controller
 
         $res = json_decode($response, true);
 
-        foreach ($res['data']['latestObservations'] as $device){
-
-        }
+//        foreach ($res['data']['latestObservations'] as $device){
+//
+//        }
         return gettype($res);
         return $response;
 
