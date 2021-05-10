@@ -30,7 +30,7 @@ class PointController extends Controller
         }
         curl_close($ch);
 
-        $res = json_decode($result);
+        $res = json_decode($result, true);
         foreach ($res as $point){
             $row = DEOS_point::find($point['id']);
             if ($row === null) {
