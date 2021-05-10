@@ -43,17 +43,21 @@ class FoxeriotController extends Controller
 
         foreach($res['data'] as $device){
             foreach($device['latestObservations'] as $sensor){
-                    $data = array(
-                        'id' => $sensor['id'],
-                        'deviceID' => $device['deviceId'],
-                        'tag' => $device['tags'][0],
-                        'name' => $device['displayName'],
-                        'type' => $sensor['variable'],
-                        'unit' => $sensor['unit'],
-                        'value' => $sensor['value'],
-                        'message_time' => $sensor['message-time']
-                    );
-                    $row = Sensor::firstOrCreate($data);
+                    $row = Sensor::where('id', $sensor['id']);
+                    if (!row) {
+                        $data = array(
+                            'id' => $sensor['id'],
+                            'deviceId' => $device['deviceId'],
+                            'tag' => $device['tags'][0],
+                            'name' => $device['displayName'],
+                            'type' => $sensor['variable'],
+                            'unit' => $sensor['unit'],
+                            'value' => $sensor['value'],
+                            'message_time' => $sensor['message-time']
+                        );
+                        Sensor::create($data);
+                    }
+
             }
         }
         return json_encode($res);
