@@ -43,8 +43,8 @@ class FoxeriotController extends Controller
 
         foreach($res['data'] as $device){
             foreach($device['latestObservations'] as $sensor){
-                    $row = Sensor::where('id', $sensor['id']);
-                    if (!$row->id || empty($row->id)) {
+                    $row = Sensor::find($sensor['id']);
+                    if ($row === null) {
                         $data = array(
                             'id' => $sensor['id'],
                             'deviceId' => $device['deviceId'],
