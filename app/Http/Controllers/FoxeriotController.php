@@ -60,7 +60,7 @@ class FoxeriotController extends Controller
                         $data = array(
                             'id' => $sensor['id'],
                             'deviceId' => $device['deviceId'],
-                            'tag' => $device['tags'][0],
+                            'tag' => implode(" ", $device['tags']),
                             'name' => $device['displayName'],
                             'type' => $sensor['variable'],
                             'unit' => $sensor['unit'],
