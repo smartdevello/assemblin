@@ -28,6 +28,8 @@ class PointController extends Controller
             return curl_error($ch);
         }
         curl_close($ch);
+
+        return gettype($result);
         return json_decode($result);
     }
     public function WritePointsbyid(Request $request){
