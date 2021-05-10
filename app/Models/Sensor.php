@@ -12,4 +12,5 @@ class Sensor extends Model
     protected $primaryKey = 'id';
     protected $fillable = ['id'];
     public $incrementing = false;
+    public $timestamps = false;
 }
