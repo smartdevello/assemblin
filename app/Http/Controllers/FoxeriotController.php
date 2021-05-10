@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Sensor;
 
 class FoxeriotController extends Controller
 {
@@ -46,7 +47,22 @@ class FoxeriotController extends Controller
 //
 //        }
 //        return gettype($res);
-        return $res;
+        foreach($res['data'] as $device){
+            foreach($device['latestObservations'] as $sensor){
+                $existing = Sensor::where('id', $sensor['id'])->first();
+
+                if ($existing) {
+
+                } else {
+                    $data = array(
+                        'id' => $sensor['id'],
+                        'deviceID' => $device['deviceId'],
+
+                    );
+                }
+            }
+        }
+        return json_encode($res);
 
     }
     public function getObservations(Request $request){
