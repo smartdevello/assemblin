@@ -47,29 +47,27 @@ class FoxeriotController extends Controller
                     if ($row === null) {
                         $row = new Sensor();
                         $row->id = $sensor['id'];
-                        $row->deviceId = $device['deviceId'];
-
-                        $row->tag = implode( " ", $device['tags']);
-                        $row->name = $device['displayName'];
-                        $row->type = $sensor['variable'];
-                        $row->unit = $sensor['unit'];
-                        $row->value = $sensor['value'];
-                        $row->message_time = $sensor['message-time'];
-
-                        $row->save();
-                        $data = array(
-                            'id' => $sensor['id'],
-                            'deviceId' => $device['deviceId'],
-                            'tag' => implode(" ", $device['tags']),
-                            'name' => $device['displayName'],
-                            'type' => $sensor['variable'],
-                            'unit' => $sensor['unit'],
-                            'value' => $sensor['value'],
-                            'message_time' => $sensor['message-time']
-                        );
-
                     }
+//                        $data = array(
+//                            'id' => $sensor['id'],
+//                            'deviceId' => $device['deviceId'],
+//                            'tag' => implode(" ", $device['tags']),
+//                            'name' => $device['displayName'],
+//                            'type' => $sensor['variable'],
+//                            'unit' => $sensor['unit'],
+//                            'value' => $sensor['value'],
+//                            'message_time' => $sensor['message-time']
+//                        );
 
+
+                    $row->deviceId = $device['deviceId'];
+                    $row->tag = implode(" ", $device['tags']);
+                    $row->name = $device['displayName'];
+                    $row->type = $sensor['variable'];
+                    $row->unit = $sensor['unit'];
+                    $row->value = $sensor['value'];
+                    $row->message_time = $sensor['message-time'];
+                    $row->save();
             }
         }
         return json_encode($res);
