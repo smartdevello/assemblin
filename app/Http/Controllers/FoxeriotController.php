@@ -41,8 +41,8 @@ class FoxeriotController extends Controller
 
         $res = json_decode($response, true);
 
-        foreach($res['data'] as &$device){
-            foreach($device['latestObservations'] as &$sensor){
+        foreach($res['data'] as $key1 => $device){
+            foreach($device['latestObservations'] as $key2 => $sensor){
                     $row = Sensor::find($sensor['id']);
                     if ($row === null) {
                         $row = new Sensor();
@@ -56,8 +56,7 @@ class FoxeriotController extends Controller
                     $row->value = $sensor['value'];
                     $row->message_time = $sensor['message-time'];
                     $row->save();
-
-                    $sensor['abc'] = 'abc';
+                    $res['data']['key1']['latestObservations']['key2']['abc'] = 'abc';
             }
         }
         return json_encode($res);
