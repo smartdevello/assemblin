@@ -45,8 +45,8 @@ class FoxeriotController extends Controller
 //        foreach ($res['data']['latestObservations'] as $device){
 //
 //        }
-        return gettype($res);
-        return $response;
+//        return gettype($res);
+        return $res;
 
     }
     public function getObservations(Request $request){
