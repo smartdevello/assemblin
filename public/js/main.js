@@ -112,16 +112,19 @@ var main_vm = new Vue({
                 }
             });
         },
-        update_DEOS_pointId: function(data){
+        update_DEOS_pointId: function(point_data){
+            console.log(point_data);
             return $.ajax({
                 type: "PUT",
                 url: "http://hkasrv4.hameenkiinteistoautomaatio.fi/api/foxeriot/devices",
-                data: JSON.stringify(data),
+                data: point_data,
                 success: function(data)
                 {
+                    console.log(data);
                 },
-                error: function(err){
-
+                error: function(xhr, status, error){
+                    console.log(xhr);
+                    console.log(error);
                 }
             });
         },
@@ -166,6 +169,7 @@ var main_vm = new Vue({
                     else sensor[row['id']]++;
                 }
                 for (item in sensor){
+                    if (item == "") continue;
                     if (sensor[item] > 1) {
                         main_vm.is_relation_updating = false;
                         toastr.options = {
