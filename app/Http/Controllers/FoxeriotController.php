@@ -162,7 +162,7 @@ class FoxeriotController extends Controller
         {
             if ($sensor->DEOS_pointId !== null && $sensor->DEOS_pointId !== "")
             {
-                array_push($data, array("id" => $sensor->DEOS_pointId, "value" => $sensor->value));
+                array_push($data, array("id" => $sensor->DEOS_pointId, "value" => strval($sensor->value) ));
             }
         }
 
