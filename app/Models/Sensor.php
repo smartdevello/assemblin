@@ -10,7 +10,5 @@ class Sensor extends Model
     use HasFactory;
 
     protected $primaryKey = 'id';
-    protected $fillable = ['id'];
-    public $incrementing = false;
     public $timestamps = false;
 }

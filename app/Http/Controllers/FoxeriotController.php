@@ -46,7 +46,7 @@ class FoxeriotController extends Controller
                 $row = Sensor::updateOrCreate(
                     ['deviceId' => $device['deviceId'], 'type' => $sensor['variable']],
                     array(
-                        'id' => $sensor['id'],
+                        'sensorId' => $sensor['id'],
                         'tag' => implode(" ", $device['tags']),
                         'name' => $device['displayName'],
                         'type' => $sensor['variable'],
