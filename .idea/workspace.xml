@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="568e9bbd-19b3-4e02-983f-a9806117a18c" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/FoxeriotController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/FoxeriotController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -69,8 +68,8 @@
       <file leaf-file-name="FoxeriotController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FoxeriotController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="392">
-              <caret line="60" column="41" lean-forward="true" selection-start-line="60" selection-start-column="41" selection-end-line="60" selection-end-column="41" />
+            <state relative-caret-position="400">
+              <caret line="59" column="13" lean-forward="true" selection-start-line="59" selection-start-column="13" selection-end-line="59" selection-end-column="13" />
               <folding>
                 <element signature="e#40#68#0#PHP" expanded="true" />
               </folding>
@@ -383,12 +382,12 @@
       <workItem from="1619815889726" duration="20000" />
       <workItem from="1619816433404" duration="4158000" />
       <workItem from="1620222761756" duration="39512000" />
-      <workItem from="1620607667320" duration="16999000" />
+      <workItem from="1620607667320" duration="17616000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="82194000" />
+    <option name="totallyTimeSpent" value="82811000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -646,8 +645,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FoxeriotController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="60" column="41" lean-forward="true" selection-start-line="60" selection-start-column="41" selection-end-line="60" selection-end-column="41" />
+        <state relative-caret-position="400">
+          <caret line="59" column="13" lean-forward="true" selection-start-line="59" selection-start-column="13" selection-end-line="59" selection-end-column="13" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
           </folding>

@@ -42,23 +42,20 @@ class FoxeriotController extends Controller
         $res = json_decode($response, true);
 
         foreach($res['data'] as &$device){
-            $chunks = Sensor::where('deviceId', $device['deviceId']);
             foreach($device['latestObservations'] as &$sensor){
-                $row = $chunks->where('type', $sensor['variable'])->first();
-
-                if ($row === null) {
-                    $row = new Sensor();
-                    $row->id = $sensor['id'];
-                }
-                $row->deviceId = $device['deviceId'];
-                $row->tag = implode(" ", $device['tags']);
-                $row->name = $device['displayName'];
-                $row->type = $sensor['variable'];
-                $row->unit = $sensor['unit'];
-                $row->value = $sensor['value'];
-                $row->message_time = $sensor['message-time'];
-                $row->save();
-                return json_encode($row);
+                $row = Sensor::updateOrCreate(
+                    ['deviceId' => $device['deviceId'], 'type' => $sensor['variable']],
+                    array(
+                        'id' => $sensor['id'],
+                        'tag' => implode(" ", $device['tags']),
+                        'name' => $device['displayName'],
+                        'type' => $sensor['variable'],
+                        'unit' => $sensor['unit'],
+                        'value' => $sensor['value'],
+                        'message_time' => $sensor['message-time'],
+                        'value' => $sensor['value'],
+                    )
+                );
                 $sensor['DEOS_pointId'] = $row->DEOS_pointId;
             }
         }
