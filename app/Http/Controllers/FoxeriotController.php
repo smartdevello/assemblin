@@ -158,7 +158,7 @@ class FoxeriotController extends Controller
         //
 
         try{
-            foreach ($request as $item) {
+            foreach ($request->all() as $item) {
                 $row = Sensor::updateOrCreate(
                     ['deviceId' => $item['deviceId'], 'type' => $item['variable']],
                     array(
