@@ -117,14 +117,15 @@ var main_vm = new Vue({
             return $.ajax({
                 type: "PUT",
                 url: "http://hkasrv4.hameenkiinteistoautomaatio.fi/api/foxeriot/devices",
+                headers: {
+                    "Content-Type": "application/json"
+                },
                 data: JSON.stringify(point_data),
                 success: function(data)
                 {
-                    console.log(data);
+
                 },
                 error: function(xhr, status, error){
-                    console.log(xhr);
-                    console.log(error);
                 }
             });
         },
