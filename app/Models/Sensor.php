@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Sensor extends Model
 {
     use HasFactory;
-
-    protected $primaryKey = 'id';
-    protected $fillable = ['deviceId'];
+    protected $table = 'sensors';
     public $timestamps = false;
 }
