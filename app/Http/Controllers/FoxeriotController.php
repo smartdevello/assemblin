@@ -187,6 +187,7 @@ class FoxeriotController extends Controller
             return curl_error($ch);
         }
         curl_close($ch);
+        return 'ok';
         return $result;
 
 
