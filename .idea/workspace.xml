@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="568e9bbd-19b3-4e02-983f-a9806117a18c" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/FoxeriotController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/FoxeriotController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/main.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -46,8 +47,8 @@
       <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/js/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="138" column="41" lean-forward="true" selection-start-line="138" selection-start-column="41" selection-end-line="138" selection-end-column="41" />
+            <state relative-caret-position="367">
+              <caret line="120" column="17" lean-forward="true" selection-start-line="120" selection-start-column="17" selection-end-line="120" selection-end-column="17" />
               <folding>
                 <element signature="e#5317#6055#0" />
                 <element signature="e#4123#4533#0" />
@@ -62,8 +63,8 @@
       <file leaf-file-name="FoxeriotController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FoxeriotController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="164" column="64" lean-forward="true" selection-start-line="164" selection-start-column="64" selection-end-line="164" selection-end-column="64" />
+            <state relative-caret-position="267">
+              <caret line="161" column="29" selection-start-line="161" selection-start-column="29" selection-end-line="161" selection-end-column="29" />
               <folding>
                 <element signature="e#40#68#0#PHP" expanded="true" />
               </folding>
@@ -96,13 +97,13 @@
       <find>Update</find>
       <find>try</find>
       <find>DEOS</find>
-      <find>getDEOS_pointId</find>
       <find>update_relations</find>
       <find>update</find>
       <find>console.log</find>
       <find>is_relation_updating</find>
       <find>DEOSPoints</find>
       <find>/devices</find>
+      <find>getDEOS_pointId</find>
       <find>update_DEOS_pointId</find>
     </findStrings>
   </component>
@@ -253,8 +254,8 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1759" />
-    <option name="y" value="70" />
+    <option name="x" value="-54" />
+    <option name="y" value="58" />
     <option name="width" value="1932" />
     <option name="height" value="1045" />
   </component>
@@ -356,15 +357,15 @@
       <workItem from="1619815889726" duration="20000" />
       <workItem from="1619816433404" duration="4158000" />
       <workItem from="1620222761756" duration="39512000" />
-      <workItem from="1620607667320" duration="28138000" />
+      <workItem from="1620607667320" duration="28466000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="93333000" />
+    <option name="totallyTimeSpent" value="93661000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -619,8 +620,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="138" column="41" lean-forward="true" selection-start-line="138" selection-start-column="41" selection-end-line="138" selection-end-column="41" />
+        <state relative-caret-position="367">
+          <caret line="120" column="17" lean-forward="true" selection-start-line="120" selection-start-column="17" selection-end-line="120" selection-end-column="17" />
           <folding>
             <element signature="e#5317#6055#0" />
             <element signature="e#4123#4533#0" />
@@ -633,8 +634,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/FoxeriotController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="164" column="64" lean-forward="true" selection-start-line="164" selection-start-column="64" selection-end-line="164" selection-end-column="64" />
+        <state relative-caret-position="267">
+          <caret line="161" column="29" selection-start-line="161" selection-start-column="29" selection-end-line="161" selection-end-column="29" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
           </folding>
