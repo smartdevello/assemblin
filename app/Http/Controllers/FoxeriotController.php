@@ -58,6 +58,7 @@ class FoxeriotController extends Controller
                 $row->value = $sensor['value'];
                 $row->message_time = $sensor['message-time'];
                 $row->save();
+                return json_encode($row);
                 $sensor['DEOS_pointId'] = $row->DEOS_pointId;
             }
         }
@@ -140,12 +141,25 @@ class FoxeriotController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
-        $sensor = Sensor::find($id);
-        $sensor->DEOS_pointId = $request['DEOS_pointId'];
-        $sensor->save();
+
+        try{
+            $sensor = Sensor::where('deviceId', $request['deviceId'])->where('type', $request['variable'])->first();
+            $sensor->DEOS_pointId = $request['DEOS_pointId'];
+            $sensor->save();
+            return response()->json([
+                'success' => 'Sensor Info was updated successfully'
+            ], 201);
+
+        } catch (\Exception $e){
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 403);
+        }
+
+
     }
 
     /**
