@@ -130,7 +130,7 @@ var main_vm = new Vue({
             let point_data = [];
             for (device of this.devices.data){
                 for (observation of device.latestObservations){
-                    if (observation.DEOS_pointId !== null && observation.DEOS_pointId !== undefined && observation.DEOS_pointId !== ""){
+                    if (observation.DEOS_pointId !== null && observation.DEOS_pointId !== undefined){
                         let value = observation.manual_value ? String(observation.manual_value): String(observation.value);
                         data.push({
                             "id": observation.DEOS_pointId,
