@@ -9,5 +9,6 @@ class Sensor extends Model
 {
     use HasFactory;
     protected $table = 'sensors';
+    protected $fillable = ['deviceId', 'sensorId', 'type'];
     public $timestamps = false;
 }
