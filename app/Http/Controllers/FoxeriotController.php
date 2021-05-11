@@ -153,6 +153,46 @@ class FoxeriotController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function automatic_update()
+    {
+        $this->getDevices();
+        $sensors = Sensor::all();
+        $data = [];
+        foreach ($sensors as $sensor)
+        {
+            if ($sensor->DEOS_pointId !== null && $sensor->DEOS_pointId !== "")
+            {
+                array_push($data, array("id" => $sensor->DEOS_pointId, "value" => $sensor->value));
+            }
+        }
+
+        return $data;
+        $ch = curl_init();
+//        return $request;
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => $this->api_uri. '/assemblin/points/writebyid',
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_CUSTOMREQUEST => "PUT",
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "Accept: application/json"
+            ),
+        ));
+
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            return curl_error($ch);
+        }
+        curl_close($ch);
+        return $result;
+
+
+    }
     public function update(Request $request)
     {
         //

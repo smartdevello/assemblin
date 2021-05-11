@@ -67,7 +67,6 @@ class PointController extends Controller
         }
         curl_close($ch);
         return $result;
-        return json_decode($result);
     }
     public function getTrendValues(Request $request){
         $ch = curl_init();
