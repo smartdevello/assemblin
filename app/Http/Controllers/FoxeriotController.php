@@ -16,6 +16,21 @@ class FoxeriotController extends Controller
     {
         //
     }
+    public function getDEOS_pointId(Request $request)
+    {
+
+        try{
+            $row = Sensor::where('deviceId', $request['deviceId'])->where('type', $request['variable'])->first();
+            return response()->json([
+                'DEOS_pointId' => $row->DEOS_pointId
+            ], 200);
+
+        } catch (\Exception $e){
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 403);
+        }
+    }
     public function getDevices(){
         $curl = curl_init();
 
@@ -143,9 +158,13 @@ class FoxeriotController extends Controller
         //
 
         try{
-            $sensor = Sensor::where('deviceId', $request['deviceId'])->where('type', $request['variable'])->first();
-            $sensor->DEOS_pointId = $request['DEOS_pointId'];
-            $sensor->save();
+            $row = Sensor::updateOrCreate(
+                ['deviceId' => $request['deviceId'], 'type' => $request['variable']],
+                array(
+                    'DEOS_pointId' => $request['DEOS_pointId'],
+                )
+            );
+
             return response()->json([
                 'success' => 'Sensor Info was updated successfully'
             ], 201);
@@ -155,8 +174,6 @@ class FoxeriotController extends Controller
                 'error' => $e->getMessage()
             ], 403);
         }
-
-
     }
 
     /**

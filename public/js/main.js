@@ -35,6 +35,7 @@ var main_vm = new Vue({
                         for (observation of device.latestObservations){
                             // observation.manual_value = '';
                             // console.log(observation);
+                            observation.DEOS_pointId = "";
                         }
                     }
 
@@ -98,9 +99,9 @@ var main_vm = new Vue({
             for (device of this.devices.data){
                 for (observation of device.latestObservations){
                     // observation.manual_value = '';
-                    if (observation.manual_value !== undefined && observation.manual_value !== '' && observation.DEOS_pointname !== undefined){
+                    if (observation.manual_value !== undefined && observation.manual_value !== '' && observation.DEOS_pointId !== undefined){
                         data.push({
-                            "id": observation.DEOS_pointname,
+                            "id": observation.DEOS_pointId,
                             "value": String(observation.manual_value)
                         });
                     }

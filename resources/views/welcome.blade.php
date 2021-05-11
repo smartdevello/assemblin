@@ -110,7 +110,7 @@
                                 <div v-for="observation in device.latestObservations">
                                     <v-row>
                                         <v-col cols="12" sm="7" md="7" >
-                                            <v-select :items="DEOSPoints"  v-model="observation.DEOS_pointname" item-text="id" item-value="id" solo>
+                                            <v-select :items="DEOSPoints"  v-model="observation.DEOS_pointId" item-text="id" item-value="id" solo>
                                             </v-select>
                                         </v-col>
                                         <v-col cols="12" sm="5" md="5" >
