@@ -166,11 +166,9 @@ class FoxeriotController extends Controller
             }
         }
 
-        return $data;
         $ch = curl_init();
-//        return $request;
         curl_setopt_array($ch, array(
-            CURLOPT_URL => $this->api_uri. '/assemblin/points/writebyid',
+            CURLOPT_URL => 'https://172.21.8.245:8000/assemblin/points/writebyid',
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_CUSTOMREQUEST => "PUT",
             CURLOPT_POSTFIELDS => json_encode($data),
