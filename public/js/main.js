@@ -102,21 +102,23 @@ var main_vm = new Vue({
                 success: function(data)
                 {
                     main_vm.DEOSPoints = JSON.parse(data);
-                    // console.log(data);
+                    main_vm.DEOSPoints.push({
+                        "id": "",
+                        "value": ""
+                    });
                 },
                 error: function(err){
 
                 }
             });
         },
-        update_DEOS_pointId: function(deviceId, variable, DEOS_pointId){
+        update_DEOS_pointId: function(data){
             return $.ajax({
                 type: "PUT",
                 url: "http://hkasrv4.hameenkiinteistoautomaatio.fi/api/foxeriot/devices",
-                data: { "deviceId": deviceId, "variable": variable, "DEOS_pointId": DEOS_pointId},
+                data: data,
                 success: function(data)
                 {
-                    console.log(data);
                 },
                 error: function(err){
 
@@ -125,20 +127,27 @@ var main_vm = new Vue({
         },
         update_relations: function(){
             let data = [];
-
+            let point_data = [];
             for (device of this.devices.data){
                 for (observation of device.latestObservations){
-                    // observation.manual_value = '';
-                    if (observation.manual_value !== undefined && observation.manual_value !== '' && observation.DEOS_pointId !== undefined){
+                    if (observation.DEOS_pointId !== null && observation.DEOS_pointId !== undefined && observation.DEOS_pointId !== ""){
+                        let value = observation.manual_value ? String(observation.manual_value): String(observation.value);
                         data.push({
                             "id": observation.DEOS_pointId,
-                            "value": String(observation.manual_value)
+                            "value": value
+                        });
+                        point_data.push({
+                            "deviceId": device['deviceId'],
+                            "variable":observation['variable'],
+                            "DEOS_pointId": observation.DEOS_pointId
                         });
                         this.is_relation_updating = true;
-                        this.update_DEOS_pointId(device['deviceId'], observation['variable'], observation.DEOS_pointId);
+
                     }
                 }
             }
+            this.update_DEOS_pointId(point_data);
+
             if (data.length > 0) {
 
                 var settings = {

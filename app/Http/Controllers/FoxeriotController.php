@@ -158,13 +158,14 @@ class FoxeriotController extends Controller
         //
 
         try{
-            $row = Sensor::updateOrCreate(
-                ['deviceId' => $request['deviceId'], 'type' => $request['variable']],
-                array(
-                    'DEOS_pointId' => $request['DEOS_pointId'],
-                )
-            );
-
+            foreach ($request as $item) {
+                $row = Sensor::updateOrCreate(
+                    ['deviceId' => $item['deviceId'], 'type' => $item['variable']],
+                    array(
+                        'DEOS_pointId' => $request['DEOS_pointId'],
+                    )
+                );
+            }
             return response()->json([
                 'success' => 'Sensor Info was updated successfully'
             ], 201);
