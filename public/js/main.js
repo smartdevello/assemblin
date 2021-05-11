@@ -32,13 +32,30 @@ var main_vm = new Vue({
                 {
                     main_vm.devices = JSON.parse(data);
                     for (device of main_vm.devices.data){
+                        // console.log(device);
                         for (observation of device.latestObservations){
-                            // observation.manual_value = '';
-                            // console.log(observation);
-                            observation.DEOS_pointId = "";
+                            let res = main_vm.getDEOS_pointId(device['deviceId'], observation['variable']);
+                            if (res.status == 200) {
+                                let resdata = JSON.parse(res.responseText);
+                                observation.DEOS_pointId = resdata.DEOS_pointId ? resdata.DEOS_pointId : "";
+                            }
+
                         }
                     }
 
+                },
+                error: function(err){
+
+                }
+            });
+        },
+        getDEOS_pointId: function(deviceId, variable){
+            return $.ajax({
+                url: "http://hkasrv4.hameenkiinteistoautomaatio.fi/api/foxeriot/getDEOS_pointId",
+                data: { "deviceId": deviceId, "variable": variable},
+                success: function(data)
+                {
+                    // console.log(data);
                 },
                 error: function(err){
 
@@ -92,7 +109,20 @@ var main_vm = new Vue({
                 }
             });
         },
+        update_DEOS_pointId: function(deviceId, variable, DEOS_pointId){
+            return $.ajax({
+                type: "PUT",
+                url: "http://hkasrv4.hameenkiinteistoautomaatio.fi/api/foxeriot/devices",
+                data: { "deviceId": deviceId, "variable": variable, "DEOS_pointId": DEOS_pointId},
+                success: function(data)
+                {
+                    console.log(data);
+                },
+                error: function(err){
 
+                }
+            });
+        },
         update_relations: function(){
             let data = [];
 
@@ -104,10 +134,13 @@ var main_vm = new Vue({
                             "id": observation.DEOS_pointId,
                             "value": String(observation.manual_value)
                         });
+                        this.is_relation_updating = true;
+                        this.update_DEOS_pointId(device['deviceId'], observation['variable'], observation.DEOS_pointId);
                     }
                 }
             }
             if (data.length > 0) {
+
                 var settings = {
                     "url": "http://hkasrv4.hameenkiinteistoautomaatio.fi/api/points/writepointsbyid",
                     "method": "PUT",
@@ -117,13 +150,62 @@ var main_vm = new Vue({
                     },
                     "data": JSON.stringify(data),
                 };
+                let sensor = {};
+                for (row of data){
+                    if (sensor[row['id']] === undefined) sensor[row['id']] = 1;
+                    else sensor[row['id']]++;
+                }
+                for (item in sensor){
+                    if (sensor[item] > 1) {
+                        main_vm.is_relation_updating = false;
+                        toastr.options = {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": false,
+                            "positionClass": "toast-bottom-center",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        };
+                        toastr.error(item + ' is linked more than 2 sensors, Please check again.');
+                        return;
+                    }
+                }
 
                 $.ajax(settings).done(function (response) {
+                    main_vm.is_relation_updating = false;
+                    toastr.options = {
+                        "closeButton": false,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-bottom-center",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "5000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+                    toastr.success('Updated Successfully');
 
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    main_vm.is_relation_updating = false;
+                    toastr.error('Something went wrong');
                 });
             }
-
-
         },
         create_template: function() {
             this.is_creating_template = true;

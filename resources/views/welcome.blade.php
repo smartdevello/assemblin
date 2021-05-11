@@ -141,7 +141,7 @@
                         </div>
                     </v-col>
                 </v-row>
-                <v-row>
+                <v-row v-if="devices">
                     <v-col cols="12" sm="10" md="10">
 
                     </v-col>
