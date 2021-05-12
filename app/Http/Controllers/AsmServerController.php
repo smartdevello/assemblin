@@ -16,7 +16,7 @@ class AsmServerController extends Controller
         //
     }
 
-    public function getConfig()
+    public function getSERVERConfig()
     {
         try{
             $filepath = config()->get('constants.BASE_CONFIG_PATH') . 'asmserver/config.json';

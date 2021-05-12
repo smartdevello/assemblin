@@ -33,7 +33,7 @@ Route::middleware(['cors'])->group(function(){
 
     Route::put('foxeriot/devices', '\App\Http\Controllers\FoxeriotController@update');
 
-    Route::get('asm_server/config/', '\App\Http\Controllers\AsmServerController@getConfig');
+    Route::get('asm_server/config/getSERVERConfig', '\App\Http\Controllers\AsmServerController@getSERVERConfig');
     Route::get('asm_server/config/getRESTconfig', '\App\Http\Controllers\AsmServerController@getRESTconfig');
 
 });
