@@ -64,7 +64,7 @@ var main_vm = new Vue({
         },
         getAsmServerConfig: function(){
             $.ajax({
-                url: base_url + "api/asm_server/config/",
+                url: base_url + "api/asm_server/config/getSERVERConfig",
                 success: function(data)
                 {
 
