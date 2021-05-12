@@ -23,7 +23,7 @@ class AsmServerController extends Controller
             $myfile = fopen($filepath, "rw") or die("Unable to open file!");
             $content = fread($myfile, filesize($filepath));
             fclose($myfile);
-            return json_decode($content);
+            return json_encode($content);
         } catch (\Exception $e){
             return response()->json([
                 'error' => $e->getMessage()
