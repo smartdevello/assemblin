@@ -1,8 +1,9 @@
+var main_vm;
 $(document).ready(function(){
 
 
 
-var main_vm = new Vue({
+main_vm = new Vue({
     el: '#app',
     vuetify: new Vuetify(),
     data: {
