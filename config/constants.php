@@ -8,7 +8,8 @@
             'option_textarea' => '17',
         ],
         'BASE_CONFIG_PATH' => "C:\\xampp\\htdocs\\assemblin\\public\\assemblin_config\\",
-        'BASE_URL' => 'http://localhost/assemblin/'
+        'BASE_URL' => 'http://localhost/assemblin/',
+        'prefix_url' => '/assemblin',
     ];
 
 ?>

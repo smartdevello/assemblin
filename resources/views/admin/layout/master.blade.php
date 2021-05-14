@@ -22,7 +22,7 @@
     var base_url = "{{env('BASE_URL')}}";
 </script>
 <script>
-    const prefix_link = '/assemblin';
+    const prefix_link = "{{config()->get('constants.prefix_url')}}";
     const mainMenu = [
         {
             title: 'Dashboard',
