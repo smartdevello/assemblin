@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    @include('admin.layout.top');
-    <link href="{{asset('public/css/test.css')}}" rel="stylesheet">
+    @include('admin.layout.top')
+
+    @yield('style')
+
 </head>
 
 <body class="antialiased">
@@ -10,14 +12,14 @@
 
 <div id="app">
     <v-app >
-        @include('admin.layout.navigation');
+        @include('admin.layout.navigation')
         {{--@include('admin.layout.toolbar');--}}
-        @yield('content');
+        @yield('content')
     </v-app>
 </div>
 
 
-@include('admin.layout.bottom');
+@include('admin.layout.bottom')
 <script>
     var base_url = "{{env('BASE_URL')}}";
 </script>
@@ -26,7 +28,7 @@
     const mainMenu = [
         {
             title: 'Dashboard',
-            icon: 'dashboard',
+            icon: 'mdi-view-dashboard',
             link: prefix_link  + '/'
         },
         {
@@ -52,11 +54,11 @@
         },
         {
             title: 'Settings',
-            icon: 'settings',
+            icon: 'mdi-cog',
             link: prefix_link  + '/setting'
         }
     ];
 </script>
-@yield('script');
+@yield('script')
 </body>
 </html>

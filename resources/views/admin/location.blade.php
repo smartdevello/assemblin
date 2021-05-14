@@ -7,6 +7,7 @@
 <script>
     const main_vm = new Vue({
         el: '#app',
+        vuetify: new Vuetify(),
         data: {
             drawer: true,
             mainMenu: mainMenu,
