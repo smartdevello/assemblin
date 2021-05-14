@@ -1,0 +1,74 @@
+body{
+    background: #efefef !important;
+}
+.application .theme--light.navigation-drawer {
+    background-color: #325d88;
+}
+.application .theme--light.navigation-drawer .list {
+    background: #325d88 none repeat scroll 0 0;
+}
+.profile-img {
+    margin-top: 14px;
+    margin-left: 10px;
+    float: left;
+    background-size: auto 100%;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #81A633;
+}
+.brand > img {
+    height: 50px;
+}
+.rg-blue--text {
+    color: #325D88;
+}
+.rg-blue {
+    background-color: #283C5A!important;
+    border-color: #283C5A!important;
+}
+.rg-primary {
+    background-color: #d2823b!important;
+    border-color: #b56727!important;
+}
+#e3 .list--dense .list__tile .icon {
+    color: #efefef;
+}
+#e3 .list__tile__action {
+    min-width: 35px;
+}
+#e4 .list--dense .list__tile--active:first-child .icon {
+    color: blue
+}
+#e3 .list__tile__sub-title, #e3 .list__tile__title {
+    color: #efefef;
+}
+#e4 .list--group__header--active .list__tile {
+    color: #efefef;
+}
+#table .table thead th {
+    color: rgba(0,0,0,.75);
+    background-color: #D7E3EF;
+    font-weight: 600;
+}
+.tabs--grow .tabs__bar .tabs__li {
+    border: 1px solid #e2e2e2;
+}
+.input-group--selection-controls {
+    color: #81a633!important;
+}
+.dialog-danger .card__title {
+    background: #bf1919;
+    color: #fff;
+}
+.dialog-info  .card__title {
+    background: #325D88;
+    color: #fff;
+}
+.dialog {
+    width: 50%!important;
+}
+@media only screen and (max-width: 960px) {
+    .dialog {
+        width: 100% !important;
+    }
+}
