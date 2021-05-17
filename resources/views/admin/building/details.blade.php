@@ -2,8 +2,8 @@
 @section('content')
     <v-main v-if="mainMenu && deleteUrl">
         <v-container>
-            @if (empty($location))
-                <h1>Location not found</h1>
+            @if (empty($building))
+                <h1>Building not found</h1>
             @else
                 <template>
                     <div class="text-center">
@@ -11,9 +11,9 @@
                             @csrf
                             <v-card>
                                 <v-card-title class="headline grey lighten-2">
-                                    Edit Location
+                                    Edit Building
                                 </v-card-title>
-                                <v-text-field v-model="currentLocation" name="name" solo required></v-text-field>
+                                <v-text-field v-model="currentBuilding" name="name" solo required></v-text-field>
 
                                 <v-card-actions>
                                     <v-btn color="primary" text type="submit" form="update-form">Update</v-btn>
@@ -50,16 +50,16 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
-                location: ( <?php echo json_encode($location); ?> ),
-                currentLocation: "",
+                building: ( <?php echo json_encode($building); ?> ),
+                currentBuilding: "",
                 updateUrl: "",
                 deleteUrl: "",
                 openDelete: false
             },
             mounted: function() {
-                this.currentLocation = this.location.name;
-                this.updateUrl = `${prefix_link}/location/update/${this.location.id}`;
-                this.deleteUrl = `${prefix_link}/location/delete/${this.location.id}`;
+                this.currentBuilding = this.building.name;
+                this.updateUrl = `${prefix_link}/building/update/${this.building.id}`;
+                this.deleteUrl = `${prefix_link}/building/delete/${this.building.id}`;
             }
         })
 

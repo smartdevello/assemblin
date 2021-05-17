@@ -1,10 +1,10 @@
 @extends('admin.layout.master')
 @section('content')
-    <v-main v-if="!!locations">
+    <v-main v-if="!!buildings">
         <v-container>
             <v-row>
-                <v-card v-for="location in locations" :key="location.id" @click="openUpdateModal(location.id)" width="300" elevation="10" class="ma-2">
-                    <v-card-title>@{{ location . name }}</v-card-title>
+                <v-card v-for="building in buildings" :key="building.id" @click="openUpdateModal(building.id)" width="300" elevation="10" class="ma-2">
+                    <v-card-title>@{{ building . name }}</v-card-title>
                 </v-card>
             </v-row>
             <v-row>
@@ -19,9 +19,9 @@
                                 @csrf
                                 <v-card>
                                     <v-card-title class="headline grey lighten-2">
-                                        Add new location
+                                        Add New Building
                                     </v-card-title>
-                                    <v-text-field v-model="currentLocation" name="name" required class="pa-2"></v-text-field>
+                                    <v-text-field v-model="currentBuilding" name="name" required class="pa-2"></v-text-field>
 
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
@@ -45,15 +45,15 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
-                locations: ( <?php echo json_encode($locations); ?> ),
+                buildings: ( <?php echo json_encode($buildings); ?> ),
                 openNew: false,
-                currentLocation: "",
-                createUrl: `${prefix_link}/location/create`,
+                currentBuilding: "",
+                createUrl: `${prefix_link}/building/create`,
                 currentUrl: '',
             },
             methods: {
                 openUpdateModal: function(id) {
-                    window.location.href = `${prefix_link}/location/${id}`;
+                    window.location.href = `${prefix_link}/building/${id}`;
                 }
             }
         })
