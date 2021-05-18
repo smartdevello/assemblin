@@ -17,7 +17,7 @@ class CreateDeosPointsTable extends Migration
             $table->id();
 
             $table->string('name');
-            $table->string('sensor');
+            $table->string('value');
 
             $table->foreignId('controller_id');
             $table->foreign('controller_id')->references('id')->on('deos_controllers')->onDelete('cascade');
