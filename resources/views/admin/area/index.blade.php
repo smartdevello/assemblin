@@ -1,10 +1,10 @@
 @extends('admin.layout.master')
 @section('content')
-    <v-main v-if="!!buildings">
+    <v-main v-if="!!areas">
         <v-container>
             <v-row>
-                <v-card v-for="building in buildings" :key="building.id" @click="openUpdateModal(building.id)" width="300" elevation="10" class="ma-2">
-                    <v-card-title>@{{ building.name }}</v-card-title>
+                <v-card v-for="area in areas" :key="area.id" @click="openUpdateModal(area.id)" width="300" elevation="10" class="ma-2">
+                    <v-card-title>@{{ area.name }}</v-card-title>
                 </v-card>
             </v-row>
             <v-row>
@@ -19,10 +19,10 @@
                                 @csrf
                                 <v-card>
                                     <v-card-title class="headline grey lighten-2">
-                                        Add New Building
+                                        Add New Area
                                     </v-card-title>
-                                    <v-text-field v-model="currentBuilding" name="name" required class="pa-2"></v-text-field>
-                                    <v-select :items="locations" label="Select A Location" name="location_id" v-model="selectedLocation" item-text="name" item-value="id" solo required>
+                                    <v-text-field v-model="currentArea" name="name" required class="pa-2"></v-text-field>
+                                    <v-select :items="buildings" label="Select A Building"  name="building_id" v-model="selectedBuilding" item-text="name" item-value="id" solo required>
                                     </v-select>
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
@@ -46,16 +46,16 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
+                areas: ( <?php echo json_encode($areas); ?> ),
                 buildings: ( <?php echo json_encode($buildings); ?> ),
-                locations: ( <?php echo json_encode($locations); ?> ),
                 openNew: false,
-                currentBuilding: "",
-                createUrl: `${prefix_link}/building/create`,
+                currentArea: "",
+                createUrl: `${prefix_link}/area/create`,
                 currentUrl: '',
             },
             methods: {
                 openUpdateModal: function(id) {
-                    window.location.href = `${prefix_link}/building/${id}`;
+                    window.location.href = `${prefix_link}/area/${id}`;
                 }
             }
         })

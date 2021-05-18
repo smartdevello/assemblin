@@ -4,13 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Location;
+use App\Models\Building;
 
 class LocationController extends Controller
 {
     public function index()
     {
         $locations = Location::all();
-
+        foreach($locations as $location) {            
+            $buildings = Building::where('id', $location->id);
+            $location->buildings = $buildings;
+        }
+        // return dd($locations);
         return view('admin.location.index', compact('locations'));
     }
 
@@ -18,14 +23,12 @@ class LocationController extends Controller
     {
         $this->validate($request, ['name' => 'required']);
         Location::create(['name' => $request->name]);
-
         return back()->with('success', 'Created successfully');
     }
 
     public function show(Request $request, $id)
     {
         $location = Location::where('id', $id)->first();
-
         return view('admin.location.details', compact('location'));
     }
 

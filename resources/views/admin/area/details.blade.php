@@ -2,8 +2,8 @@
 @section('content')
     <v-main v-if="mainMenu && deleteUrl">
         <v-container>
-            @if (empty($building))
-                <h1>Building not found</h1>
+            @if (empty($area))
+                <h1>Area not found</h1>
             @else
                 <template>
                     <div class="text-center">
@@ -11,11 +11,11 @@
                             @csrf
                             <v-card class="mx-auto my-12">
                                 <v-card-title class="headline grey lighten-2">
-                                    Edit Building
+                                    Edit Area
                                 </v-card-title>
                                 <v-card-text>
-                                    <v-text-field v-model="currentBuilding" label="Building Name" name="name" required></v-text-field>                                
-                                    <v-select :items="locations" label="Select a Location" name="location_id" v-model="currentLocation" item-text="name" item-value="id" solo required>                                
+                                    <v-text-field v-model="currentArea" label="Area Name" name="name" required></v-text-field>
+                                    <v-select :items="buildings" label="Select a Building" name="building_id" v-model="currentBuilding" item-text="name" item-value="id" solo required>
                                 </v-card-text>
 
                                 <v-card-actions>
@@ -53,19 +53,20 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
-                locations:( <?php echo json_encode($locations); ?> ),
-                building: ( <?php echo json_encode($building); ?> ),
-                currentBuilding: "",
-                currentLocation: 0,
+                buildings:( <?php echo json_encode($buildings); ?> ),
+                area: ( <?php echo json_encode($area); ?> ),
+                currentArea: "",
+                currentBuilding: 0,
                 updateUrl: "",
                 deleteUrl: "",
                 openDelete: false
             },
             mounted: function() {
-                this.currentBuilding = this.building.name;
-                this.currentLocation = this.building.location_id;
-                this.updateUrl = `${prefix_link}/building/update/${this.building.id}`;
-                this.deleteUrl = `${prefix_link}/building/delete/${this.building.id}`;
+                this.currentArea = this.area.name;
+                this.currentBuilding = this.area.building_id;
+
+                this.updateUrl = `${prefix_link}/area/update/${this.area.id}`;
+                this.deleteUrl = `${prefix_link}/area/delete/${this.area.id}`;
             }
         })
 
