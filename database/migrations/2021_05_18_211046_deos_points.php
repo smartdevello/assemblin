@@ -18,12 +18,8 @@ class DeosPoints extends Migration
             $table->id();
             $table->string('name');
             $table->string('value');
-<<<<<<< HEAD:database/migrations/2021_05_18_211046_deos_points.php
             $table->unsignedBigInteger('controller_id')->nullable();
-=======
-
             $table->foreignId('controller_id');
->>>>>>> 184e4496f9e67c80282628b2db0e1c2791cdeca1:database/migrations/2021_05_18_170303_create_deos_points_table.php
             $table->foreign('controller_id')->references('id')->on('deos_controllers')->onDelete('cascade');
             $table->timestamps();
         });
