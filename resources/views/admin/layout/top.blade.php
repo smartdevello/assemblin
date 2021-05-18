@@ -15,11 +15,11 @@
 
 
 
-{{--<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>--}}
-{{--<script src="https://cdnjs.cloudflare.com/ajax/libs/vuetify/1.0.18/vuetify.min.js"></script>--}}
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script> --}}
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vuetify/1.0.18/vuetify.min.js"></script> --}}
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
 
-<script src="{{asset('public/js/jquery-3.x-git.min.js')}}"></script>
-<script src="{{asset('public/js/toastr.min.js')}}"></script>
+<script src="{{ asset('js/jquery-3.x-git.min.js') }}"></script>
+<script src="{{ asset('js/toastr.min.js') }}"></script>

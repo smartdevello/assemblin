@@ -9,9 +9,20 @@ use Illuminate\Notifications\Notifiable;
 class DEOS_controller extends Model
 {
     use HasFactory, Notifiable;
+
     protected $table = 'deos_controllers';
+
     protected $fillable = [
-        'name', 'area_id'
+        'name', 'ip_address', 'port_number', 'building_id'
     ];
 
+    public function building()
+    {
+        return $this->belongsTo(Building::class, 'building_id', 'id');
+    }
+
+    public function points()
+    {
+        return $this->hasMany(DeosPoint::class, 'controller_id', 'id');
+    }
 }

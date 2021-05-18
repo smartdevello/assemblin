@@ -14,6 +14,7 @@
 /public/assemblin_config
 /config/constants.php
 /storage/*.key
+/storage
 /vendor
 .env
 .env.backup

@@ -4,7 +4,8 @@
         <v-container>
             <v-row>
                 <v-card v-for="controller in controllers" :key="controller.id" @click="openUpdateModal(controller.id)" width="300" elevation="10" class="ma-2">
-                    <v-card-title>@{{ controller.name }}</v-card-title>
+                    <v-card-title>@{{ controller . name }}</v-card-title>
+                    <v-card-subtitle>@{{ controller . building . name }}</v-card-subtitle>
                 </v-card>
             </v-row>
             <v-row>
@@ -21,8 +22,10 @@
                                     <v-card-title class="headline grey lighten-2">
                                         Add New Controller
                                     </v-card-title>
-                                    <v-text-field v-model="currentController" name="name" required class="pa-2"></v-text-field>
-                                    <v-select :items="areas" label="Select an Area"  name="area_id" v-model="selectedArea" item-text="name" item-value="id" solo required>
+                                    <v-text-field placeholder="Name" name="name" required class="pa-2"></v-text-field>
+                                    <v-text-field placeholder="IP Address" name="ip_address" required class="pa-2"></v-text-field>
+                                    <v-text-field placeholder="Port Number" name="port_number" required class="pa-2"></v-text-field>
+                                    <v-select :items="buildings" label="Select A Building" name="building_id" item-text="name" item-value="id" solo required>
                                     </v-select>
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
@@ -46,10 +49,9 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
-                areas: ( <?php echo json_encode($areas); ?> ),
                 controllers: ( <?php echo json_encode($controllers); ?> ),
+                buildings: ( <?php echo json_encode($buildings); ?> ),
                 openNew: false,
-                currentController: "",
                 createUrl: `${prefix_link}/controller/create`,
                 currentUrl: '',
             },

@@ -15,11 +15,14 @@ class CreateDEOSControllersTable extends Migration
     {
         Schema::create('deos_controllers', function (Blueprint $table) {
             $table->id();
+
             $table->text('name');
             $table->string('ip_address');
             $table->string('port_number');
+
             $table->unsignedBigInteger('building_id');
             $table->foreign('building_id')->references('id')->on('buildings')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

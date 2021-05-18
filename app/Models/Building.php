@@ -14,4 +14,18 @@ class Building extends Model
         'name', 'location_id'
     ];
 
+    public function location()
+    {
+        return $this->belongsTo(Location::class, 'location_id', 'id');
+    }
+
+    public function areas()
+    {
+        return $this->hasMany(Area::class, 'building_id', 'id');
+    }
+
+    public function deos_controllers()
+    {
+        return $this->hasMany(DEOS_controller::class, 'building_id', 'id');
+    }
 }

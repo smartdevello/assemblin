@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAreasTable extends Migration
+class CreateDeosPointsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateAreasTable extends Migration
      */
     public function up()
     {
-        Schema::create('areas', function (Blueprint $table) {
+        Schema::create('deos_points', function (Blueprint $table) {
             $table->id();
 
-            $table->text('name');
-            $table->unsignedBigInteger('building_id');
-            $table->foreign('building_id')->references('id')->on('buildings')->onDelete('cascade');
+            $table->string('name');
+            $table->string('sensor');
+
+            $table->foreignId('controller_id');
+            $table->foreign('controller_id')->references('id')->on('deos_controllers')->onDelete('cascade');
 
             $table->timestamps();
         });
@@ -31,6 +33,6 @@ class CreateAreasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('areas');
+        Schema::dropIfExists('deos_points');
     }
 }

@@ -14,15 +14,46 @@
                                     Edit Building
                                 </v-card-title>
                                 <v-card-text>
-                                    <v-text-field v-model="currentBuilding" label="Building Name" name="name" required></v-text-field>                                
-                                    <v-select :items="locations" label="Select a Location" name="location_id" v-model="currentLocation" item-text="name" item-value="id" solo required>                                
+                                    <v-text-field v-model="building.name" label="Building Name" name="name" required></v-text-field>
+                                    <v-select :items="locations" label="Select a Location" name="location_id" v-model="currentLocation" item-text="name" item-value="id" solo required>
                                 </v-card-text>
 
                                 <v-card-actions>
                                     <v-btn color="primary" text type="submit" form="update-form">Update</v-btn>
                                     <v-btn color="red" @click="openDelete = true">Remove</v-btn>
                                 </v-card-actions>
-
+                            </v-card>
+                        </v-form>
+                        <v-form :action="deleteAreasUrl" method="POST" id="delete-area-form">
+                            @csrf
+                            <v-card class="mx-auto my-12">
+                                <v-card-text fluid v-for="area in building.areas" :key="area.id">
+                                    <v-checkbox v-model="areaSelected[area.id]">
+                                        <template v-slot:label>
+                                            <div>@{{ area . name }}</div>
+                                        </template>
+                                    </v-checkbox>
+                                </v-card-text>
+                                <input type="hidden" name="areaSelected" :value="JSON.stringify(areaSelected)">
+                                <v-card-actions>
+                                    <v-btn color="red" text type="submit" form="delete-area-form">Delete Selected Areas</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-form>
+                        <v-form :action="deleteControllersUrl" method="POST" id="delete-controller-form">
+                            @csrf
+                            <v-card class="mx-auto my-12">
+                                <v-card-text fluid v-for="controller in building.deos_controllers" :key="controller.id">
+                                    <v-checkbox v-model="controllerSelected[controller.id]">
+                                        <template v-slot:label>
+                                            <div>@{{ controller . name }}</div>
+                                        </template>
+                                    </v-checkbox>
+                                </v-card-text>
+                                <input type="hidden" name="controllerSelected" :value="JSON.stringify(controllerSelected)">
+                                <v-card-actions>
+                                    <v-btn color="red" text type="submit" form="delete-controller-form">Delete Selected Controllers</v-btn>
+                                </v-card-actions>
                             </v-card>
                         </v-form>
                     </div>
@@ -54,19 +85,23 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
-                locations:( <?php echo json_encode($locations); ?> ),
+                locations: ( <?php echo json_encode($locations); ?> ),
                 building: ( <?php echo json_encode($building); ?> ),
-                currentBuilding: "",
                 currentLocation: 0,
                 updateUrl: "",
                 deleteUrl: "",
-                openDelete: false
+                openDelete: false,
+                areaSelected: {},
+                controllerSelected: {},
+                deleteAreasUrl: "",
+                deleteControllersUrl: ""
             },
             mounted: function() {
-                this.currentBuilding = this.building.name;
                 this.currentLocation = this.building.location_id;
                 this.updateUrl = `${prefix_link}/building/update/${this.building.id}`;
                 this.deleteUrl = `${prefix_link}/building/delete/${this.building.id}`;
+                this.deleteAreasUrl = `${prefix_link}/building/${this.building.id}/delete-areas`;
+                this.deleteControllersUrl = `${prefix_link}/building/${this.building.id}/delete-controllers`;
             }
         })
 

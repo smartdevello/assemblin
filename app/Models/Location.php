@@ -13,4 +13,9 @@ class Location extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function buildings()
+    {
+        return $this->hasMany(Building::class, 'location_id', 'id');
+    }
 }

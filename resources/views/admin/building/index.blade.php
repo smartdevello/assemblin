@@ -4,10 +4,19 @@
         <v-container>
             <v-row>
                 <v-card v-for="building in buildings" :key="building.id" @click="openUpdateModal(building.id)" width="300" elevation="10" class="ma-2">
-                    <v-card-title>@{{ building.name }}</v-card-title>
-                    <v-card-subtitle v-for="area in building.areas" :key="area.id">
-                        @{{area.name}}
-                    </v-card-subtitle>
+                    <v-card-title>@{{ building . name }}</v-card-title>
+                    <v-row>
+                        <v-col cols="6">
+                            <v-card-subtitle v-for="area in building.areas" :key="area.id">
+                                @{{ area . name }}
+                            </v-card-subtitle>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-card-subtitle v-for="item in building.deos_controllers" :key="item.id">
+                                @{{ item . name }}
+                            </v-card-subtitle>
+                        </v-col>
+                    </v-row>
                 </v-card>
             </v-row>
             <v-row>
@@ -25,7 +34,7 @@
                                         Add New Building
                                     </v-card-title>
                                     <v-text-field v-model="currentBuilding" name="name" required class="pa-2"></v-text-field>
-                                    <v-select :items="locations" label="Select A Location" name="location_id" v-model="selectedLocation" item-text="name" item-value="id" solo required>
+                                    <v-select :items="locations" label="Select A Location" name="location_id" item-text="name" item-value="id" solo required>
                                     </v-select>
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
