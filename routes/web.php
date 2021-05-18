@@ -41,6 +41,8 @@ Route::group(['prefix' => 'location'], function ($router) {
     Route::post('create', [LocationController::class, 'create'])->name('location-create');
     Route::post('update/{id}', [LocationController::class, 'update'])->name('location-update');
     Route::post('delete/{id}', [LocationController::class, 'destroy'])->name('location-delete');
+    Route::post('delete_buildings/{id}', [LocationController::class, 'delete_buildings'])->name('location-delete_buildings');
+    
 });
 Route::group(['prefix' => 'building'], function ($router) {
     Route::get('', [BuildingController::class, 'index'])->name('buildings');

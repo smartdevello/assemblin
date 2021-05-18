@@ -28,7 +28,11 @@ class LocationController extends Controller
     public function show(Request $request, $id)
     {
         $location = Location::where('id', $id)->first();
-        return view('admin.location.details', compact('location'));
+        $buildings = Building::where('location_id', $location->id)->get();
+        foreach($buildings as $building){
+            $building->tobedeleted = false;
+        }
+        return view('admin.location.details', compact('location', 'buildings'));
     }
 
     public function update(Request $request, $id)
@@ -52,5 +56,9 @@ class LocationController extends Controller
         $result->delete();
 
         return redirect()->route('locations')->with('success', 'Deleted successfully');
+    }
+    public function delete_buildings(Request $request, $id)
+    {
+        return json_encode($request->all());
     }
 }

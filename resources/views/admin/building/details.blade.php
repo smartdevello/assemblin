@@ -22,6 +22,7 @@
                                     <v-btn color="primary" text type="submit" form="update-form">Update</v-btn>
                                     <v-btn color="red" @click="openDelete = true">Remove</v-btn>
                                 </v-card-actions>
+
                             </v-card>
                         </v-form>
                     </div>

@@ -14,7 +14,22 @@
                                     Edit Location
                                 </v-card-title>
                                 <v-text-field v-model="currentLocation" name="name" solo required></v-text-field>
-
+                                <v-card-text>
+                                    <v-form :action="delete_buildings_url" method="POST" id="delete_buildings-form" >
+                                        {{ csrf_field() }}
+                                        <v-card-text>Buildings</v-card-text>
+                                        <p>@{{buildings}}</p>
+                                        <v-card-text fluid v-for="building in buildings" :key="building.id">
+                                            <v-checkbox v-model="building.tobedeleted" name="tobedeleted[]" :value="building.tobedeleted">
+                                                <template v-slot:label>
+                                                    <div>@{{building.name}}</div>
+                                                </template>
+                                            </v-checkbox>
+                                            <input type="hidden" name="buildingids[]" :value="building.id">
+                                        </v-card-text>
+                                        <v-btn color="red" type="submit" form="delete_buildings-form">Delete Selected Buildings</v-btn>
+                                    </v-form>
+                                </v-card-text>
                                 <v-card-actions>
                                     <v-btn color="primary" text type="submit" form="update-form">Update</v-btn>
                                     <v-btn color="red" @click="openDelete = true">Remove</v-btn>
@@ -51,9 +66,11 @@
                 drawer: true,
                 mainMenu: mainMenu,
                 location: ( <?php echo json_encode($location); ?> ),
+                buildings: ( <?php echo json_encode($buildings); ?> ),
                 currentLocation: "",
                 updateUrl: "",
                 deleteUrl: "",
+                delete_buildings_url: "",
                 openDelete: false
             },
             mounted: function() {
@@ -61,6 +78,10 @@
                 this.currentLocation = this.location.name;
                 this.updateUrl = `${prefix_link}/location/update/${this.location.id}`;
                 this.deleteUrl = `${prefix_link}/location/delete/${this.location.id}`;
+                this.delete_buildings_url = `${prefix_link}/location/delete_buildings/${this.location.id}`;
+            },
+            methods: {
+
             }
         })
 
