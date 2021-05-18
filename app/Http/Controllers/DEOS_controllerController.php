@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\DeosPointExport;
 use App\Imports\DeosPointImport;
 use Illuminate\Http\Request;
 use App\Models\DEOS_controller;
