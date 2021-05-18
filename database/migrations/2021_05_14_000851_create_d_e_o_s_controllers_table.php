@@ -13,7 +13,7 @@ class CreateDEOSControllersTable extends Migration
      */
     public function up()
     {
-        Schema::create('DEOS_controllers', function (Blueprint $table) {
+        Schema::create('deos_controllers', function (Blueprint $table) {
             $table->id();
             $table->text('name');
             $table->unsignedBigInteger('area_id');
@@ -29,6 +29,6 @@ class CreateDEOSControllersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('DEOS_controllers');
+        Schema::dropIfExists('deos_controllers');
     }
 }
