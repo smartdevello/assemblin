@@ -9,7 +9,7 @@ class DEOS_point extends Model
 {
     use HasFactory;
 
-    protected $table = 'DEOS_points';
+    protected $table = 'deos_points';
     protected $primaryKey = 'id';
     protected $fillable = ['id'];
     public $incrementing = false;
