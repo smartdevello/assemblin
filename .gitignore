@@ -1,9 +1,20 @@
+.vscode
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# OSX hidden files
+.DS_Store
+
 /node_modules
 /public/hot
 /public/storage
 /public/assemblin_config
 /config/constants.php
 /storage/*.key
+/storage
 /vendor
 .env
 .env.backup
@@ -13,3 +24,4 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+composer.lock

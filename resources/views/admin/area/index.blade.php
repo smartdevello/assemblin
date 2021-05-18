@@ -4,10 +4,7 @@
         <v-container>
             <v-row>
                 <v-card v-for="area in areas" :key="area.id" @click="openUpdateModal(area.id)" width="300" elevation="10" class="ma-2">
-                    <v-card-title>@{{ area.name }}</v-card-title>
-                    <v-card-subtitle v-for="controller in area.controllers" :key="controller.id">
-                        @{{controller.name}}
-                    </v-card-subtitle>
+                    <v-card-title>@{{ area . name }}</v-card-title>
                 </v-card>
             </v-row>
             <v-row>
@@ -25,7 +22,7 @@
                                         Add New Area
                                     </v-card-title>
                                     <v-text-field v-model="currentArea" name="name" required class="pa-2"></v-text-field>
-                                    <v-select :items="buildings" label="Select A Building"  name="building_id" v-model="selectedBuilding" item-text="name" item-value="id" solo required>
+                                    <v-select :items="buildings" label="Select A Building" name="building_id" item-text="name" item-value="id" solo required>
                                     </v-select>
                                     <v-card-actions>
                                         <v-spacer></v-spacer>

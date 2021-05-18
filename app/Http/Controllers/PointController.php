@@ -32,13 +32,16 @@ class PointController extends Controller
 
         $res = json_decode($result, true);
         foreach ($res as $point){
-            $row = DEOS_point::find($point['id']);
+
+            $row = DEOS_point::where('name', $point['id'])->first();
             if ($row === null) {
-                $row = new DEOS_point();
-                $row->id = $point['id'];
+                DEOS_point::create([
+                    'name' => $point['id'],
+                    'value' => $point['value']
+                    ]);
+            } else {
+                $row->update(['value' => $point['value']]);
             }
-            $row->value = $point['value'];
-            $row->save();
         }
         return json_encode($res);
     }

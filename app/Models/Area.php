@@ -9,7 +9,13 @@ use Illuminate\Notifications\Notifiable;
 class Area extends Model
 {
     use HasFactory, Notifiable;
+
     protected $fillable = [
         'name', 'building_id'
     ];
+
+    public function building()
+    {
+        return $this->belongsTo(Building::class, 'building_id', 'id');
+    }
 }

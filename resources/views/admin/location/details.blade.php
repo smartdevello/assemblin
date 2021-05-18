@@ -9,16 +9,30 @@
                     <div class="text-center">
                         <v-form :action="updateUrl" method="POST" id="update-form">
                             @csrf
-                            <v-card>
+                            <v-card class="mx-auto my-12">
                                 <v-card-title class="headline grey lighten-2">
                                     Edit Location
                                 </v-card-title>
                                 <v-text-field v-model="currentLocation" name="name" solo required></v-text-field>
-
                                 <v-card-actions>
                                     <v-btn color="primary" text type="submit" form="update-form">Update</v-btn>
                                     <v-btn color="red" @click="openDelete = true">Remove</v-btn>
                                 </v-card-actions>
+                            </v-card>
+                        </v-form>
+                        <v-form :action="delete_buildings_url" method="POST" id="delete_buildings-form">
+                            @csrf
+                            <v-card v-if="buildings.length > 0" class="mx-auto my-12 pb-3">
+                                <v-card-text>Buildings</v-card-text>
+                                <v-card-text fluid v-for="building in buildings" :key="building.id">
+                                    <v-checkbox v-model="buildingSelected[building.id]">
+                                        <template v-slot:label>
+                                            <div>@{{ building . name }}</div>
+                                        </template>
+                                    </v-checkbox>
+                                </v-card-text>
+                                <input type="hidden" name="buildingSelected" :value="JSON.stringify(buildingSelected)">
+                                <v-btn color="red" type="submit" form="delete_buildings-form">Delete Selected Buildings</v-btn>
                             </v-card>
                         </v-form>
                     </div>
@@ -51,17 +65,21 @@
                 drawer: true,
                 mainMenu: mainMenu,
                 location: ( <?php echo json_encode($location); ?> ),
+                buildings: ( <?php echo json_encode($buildings); ?> ),
                 currentLocation: "",
                 updateUrl: "",
                 deleteUrl: "",
-                openDelete: false
+                delete_buildings_url: "",
+                openDelete: false,
+                buildingSelected: {}
             },
             mounted: function() {
-                
                 this.currentLocation = this.location.name;
                 this.updateUrl = `${prefix_link}/location/update/${this.location.id}`;
                 this.deleteUrl = `${prefix_link}/location/delete/${this.location.id}`;
-            }
+                this.delete_buildings_url = `${prefix_link}/location/delete_buildings/${this.location.id}`;
+            },
+            methods: {}
         })
 
     </script>
