@@ -19,19 +19,19 @@ class FoxeriotController extends Controller
     public function getDEOS_pointId(Request $request)
     {
 
-        try{
+        try {
             $row = Sensor::where('deviceId', $request['deviceId'])->where('type', $request['variable'])->first();
             return response()->json([
                 'DEOS_pointId' => $row->DEOS_pointId
             ], 200);
-
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()
             ], 403);
         }
     }
-    public function getDevices(){
+    public function getDevices()
+    {
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -56,8 +56,8 @@ class FoxeriotController extends Controller
 
         $res = json_decode($response, true);
 
-        foreach($res['data'] as &$device){
-            foreach($device['latestObservations'] as &$sensor){
+        foreach ($res['data'] as &$device) {
+            foreach ($device['latestObservations'] as &$sensor) {
                 $row = Sensor::updateOrCreate(
                     ['deviceId' => $device['deviceId'], 'type' => $sensor['variable']],
                     array(
@@ -75,14 +75,14 @@ class FoxeriotController extends Controller
             }
         }
         return json_encode($res);
-
     }
-    public function getObservations(Request $request){
 
+    public function getObservations(Request $request)
+    {
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://api.foxeriot.com/api/v1/get-observations?deviceId='.$request['deviceId'],
+            CURLOPT_URL => 'https://api.foxeriot.com/api/v1/get-observations?deviceId=' . $request['deviceId'],
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -158,11 +158,9 @@ class FoxeriotController extends Controller
         $this->getDevices();
         $sensors = Sensor::all();
         $data = [];
-        foreach ($sensors as $sensor)
-        {
-            if ($sensor->DEOS_pointId !== null && $sensor->DEOS_pointId !== "")
-            {
-                array_push($data, array("id" => $sensor->DEOS_pointId, "value" => strval($sensor->value) ));
+        foreach ($sensors as $sensor) {
+            if ($sensor->DEOS_pointId !== null && $sensor->DEOS_pointId !== "") {
+                array_push($data, array("id" => $sensor->DEOS_pointId, "value" => strval($sensor->value)));
             }
         }
 
@@ -188,14 +186,10 @@ class FoxeriotController extends Controller
         }
         curl_close($ch);
         return $result;
-
-
     }
     public function update(Request $request)
     {
-        //
-
-        try{
+        try {
             $res = [];
             foreach ($request->all() as $item) {
                 $row = Sensor::updateOrCreate(
@@ -207,8 +201,7 @@ class FoxeriotController extends Controller
                 array_push($res, $row);
             }
             return $res;
-
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()
             ], 403);
