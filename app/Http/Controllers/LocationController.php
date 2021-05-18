@@ -15,7 +15,7 @@ class LocationController extends Controller
             $buildings = Building::where('id', $location->id);
             $location->buildings = $buildings;
         }
-        // return dd($locations);
+        // return dd($locations[0]->buildings->id);
         return view('admin.location.index', compact('locations'));
     }
 

@@ -17,7 +17,7 @@ class CreateBuildingsTable extends Migration
             $table->id();
             $table->text('name');
             $table->unsignedBigInteger('location_id');
-            $table->foreign('location_id')->references('id')->on('locations');
+            $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
             $table->timestamps();
         });
     }
