@@ -3,6 +3,7 @@
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DEOS_controllerController;
 use App\Http\Controllers\LocationController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,7 +32,7 @@ Route::get('/test', function () {
 // Route::get('/area', '\App\Http\Controllers\AreaController@index');
 
 Route::get('', [DashboardController::class, 'index']);
-Route::get('/controller', '\App\Http\Controllers\DEOS_controllerController@index');
+// Route::get('/controller', '\App\Http\Controllers\DEOS_controllerController@index');
 Route::get('/setting', '\App\Http\Controllers\DashboardController@setting_index');
 
 Route::group(['prefix' => 'location'], function ($router) {
@@ -54,4 +55,11 @@ Route::group(['prefix' => 'area'], function ($router) {
     Route::post('create', [AreaController::class, 'create'])->name('area-create');
     Route::post('update/{id}', [AreaController::class, 'update'])->name('area-update');
     Route::post('delete/{id}', [AreaController::class, 'destroy'])->name('area-delete');
+});
+Route::group(['prefix' => 'controller'], function ($router) {
+    Route::get('', [DEOS_controllerController::class, 'index'])->name('controllers');
+    Route::get('/{id}', [DEOS_controllerController::class, 'show'])->name('controller-detail');
+    Route::post('create', [DEOS_controllerController::class, 'create'])->name('controller-create');
+    Route::post('update/{id}', [DEOS_controllerController::class, 'update'])->name('controller-update');
+    Route::post('delete/{id}', [DEOS_controllerController::class, 'destroy'])->name('controller-delete');
 });

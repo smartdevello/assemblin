@@ -15,6 +15,7 @@ class CreateDEOSControllersTable extends Migration
     {
         Schema::create('DEOS_controllers', function (Blueprint $table) {
             $table->id();
+            $table->text('name');
             $table->unsignedBigInteger('area_id');
             $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade');
             $table->timestamps();

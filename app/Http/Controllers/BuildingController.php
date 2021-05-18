@@ -133,6 +133,6 @@ class BuildingController extends Controller
         }
         $result->delete();
 
-        return redirect()->route('building')->with('success', 'Deleted successfully');
+        return redirect()->route('buildings')->with('success', 'Deleted successfully');
     }
 }

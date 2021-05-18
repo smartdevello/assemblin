@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\DEOS_controller;
+use App\Models\Area;
 
 class DEOS_controllerController extends Controller
 {
@@ -14,7 +16,10 @@ class DEOS_controllerController extends Controller
     public function index()
     {
         //
-        return view('admin.controller');
+        $controllers = DEOS_controller::all();
+        $areas = Area::all();
+        return view('admin.controller.index', compact('controllers', 'areas'));
+
     }
 
     /**
@@ -22,9 +27,25 @@ class DEOS_controllerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         //
+
+        $this->validate($request, 
+            [
+                'name' => 'required',
+                'area_id' => 'required'
+            ]
+        );
+
+        DEOS_controller::create(
+            [
+                'name' => $request->name,
+                'area_id' => $request->area_id
+            ]
+        );
+
+        return back()->with('success', 'Created successfully');
     }
 
     /**
@@ -47,6 +68,9 @@ class DEOS_controllerController extends Controller
     public function show($id)
     {
         //
+        $controller = DEOS_controller::where('id', $id)->first();
+        $areas = Area::all();
+        return view('admin.controller.details', compact('controller', 'areas'));
     }
 
     /**
@@ -70,6 +94,24 @@ class DEOS_controllerController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $this->validate($request, 
+            [
+                'name' => 'required',
+                'area_id' => 'required',
+            ]
+        );
+        $result = DEOS_controller::where('id', $id)->first();
+        if (!$result) {
+            return back()->with('error', 'Not found');
+        }
+        $result->update(
+            [
+                'name' => $request->name,
+                'area_id' => $request->area_id,
+            ]
+        );
+
+        return back()->with('success', 'Updated successfully');
     }
 
     /**
