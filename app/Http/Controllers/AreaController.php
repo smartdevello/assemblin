@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Building;
 use App\Models\Area;
+use App\Models\DEOS_controller;
 
 class AreaController extends Controller
 {
@@ -17,7 +18,10 @@ class AreaController extends Controller
     {
         //
         $buildings = Building::all();
-        $areas = area::all();
+        $areas = Area::all();
+        foreach ($areas as $area) {
+            $area->controllers = DEOS_controller::where('area_id', $area->id)->get();
+        }
         return view('admin.area.index', compact('areas', 'buildings'));
         
     }
@@ -128,6 +132,6 @@ class AreaController extends Controller
         }
         $result->delete();
 
-        return redirect()->route('area')->with('success', 'Deleted successfully');
+        return redirect()->route('areas')->with('success', 'Deleted successfully');
     }
 }

@@ -1,10 +1,10 @@
 @extends('admin.layout.master')
 @section('content')
-    <v-main v-if="!!areas">
+    <v-main v-if="!!controllers">
         <v-container>
             <v-row>
-                <v-card v-for="area in areas" :key="area.id" @click="openUpdateModal(area.id)" width="300" elevation="10" class="ma-2">
-                    <v-card-title>@{{ area.name }}</v-card-title>
+                <v-card v-for="controller in controllers" :key="controller.id" @click="openUpdateModal(controller.id)" width="300" elevation="10" class="ma-2">
+                    <v-card-title>@{{ controller.name }}</v-card-title>
                 </v-card>
             </v-row>
             <v-row>
@@ -19,10 +19,10 @@
                                 @csrf
                                 <v-card>
                                     <v-card-title class="headline grey lighten-2">
-                                        Add New Area
+                                        Add New Controller
                                     </v-card-title>
-                                    <v-text-field v-model="currentArea" name="name" required class="pa-2"></v-text-field>
-                                    <v-select :items="buildings" label="Select A Building"  name="building_id" v-model="selectedBuilding" item-text="name" item-value="id" solo required>
+                                    <v-text-field v-model="currentController" name="name" required class="pa-2"></v-text-field>
+                                    <v-select :items="areas" label="Select an Area"  name="area_id" v-model="selectedArea" item-text="name" item-value="id" solo required>
                                     </v-select>
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
@@ -47,15 +47,15 @@
                 drawer: true,
                 mainMenu: mainMenu,
                 areas: ( <?php echo json_encode($areas); ?> ),
-                buildings: ( <?php echo json_encode($buildings); ?> ),
+                controllers: ( <?php echo json_encode($controllers); ?> ),
                 openNew: false,
-                currentArea: "",
-                createUrl: `${prefix_link}/area/create`,
+                currentController: "",
+                createUrl: `${prefix_link}/controller/create`,
                 currentUrl: '',
             },
             methods: {
                 openUpdateModal: function(id) {
-                    window.location.href = `${prefix_link}/area/${id}`;
+                    window.location.href = `${prefix_link}/controller/${id}`;
                 }
             }
         })
