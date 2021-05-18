@@ -41,10 +41,12 @@
                                 <input type="hidden" name="pointSelected" :value="JSON.stringify(pointSelected)">
                                 <v-card-actions>
                                     <v-btn color="red" text type="submit" form="remove-points-form">Delete Selected Points</v-btn>
-                                    <v-btn color="primary" @click="openPoint = true">Add New Point</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-form>
+                        <v-card-actions>
+                            <v-btn color="primary" @click="openPoint = true">Add New Point</v-btn>
+                        </v-card-actions>
                         <v-form :action="importPointsUrl" method="POST" id="import-points-form" enctype="multipart/form-data">
                             @csrf
                             <v-card class="mx-auto my-12">
