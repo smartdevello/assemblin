@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDeosPointsTable extends Migration
+class DeosPoints extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateDeosPointsTable extends Migration
      */
     public function up()
     {
+        //
         Schema::create('deos_points', function (Blueprint $table) {
             $table->id();
-
             $table->string('name');
-            $table->string('sensor');
-
-            $table->foreignId('controller_id');
+            $table->string('value');
+            $table->unsignedBigInteger('controller_id');
             $table->foreign('controller_id')->references('id')->on('deos_controllers')->onDelete('cascade');
-
             $table->timestamps();
         });
     }
@@ -33,6 +31,7 @@ class CreateDeosPointsTable extends Migration
      */
     public function down()
     {
+        //
         Schema::dropIfExists('deos_points');
     }
 }
