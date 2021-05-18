@@ -12,10 +12,9 @@ class LocationController extends Controller
     {
         $locations = Location::all();
         foreach($locations as $location) {            
-            $buildings = Building::where('id', $location->id);
+            $buildings = Building::where('location_id', $location->id)->get();
             $location->buildings = $buildings;
         }
-        // return dd($locations[0]->buildings->id);
         return view('admin.location.index', compact('locations'));
     }
 

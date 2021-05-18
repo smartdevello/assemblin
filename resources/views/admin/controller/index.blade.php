@@ -1,13 +1,10 @@
 @extends('admin.layout.master')
 @section('content')
-    <v-main v-if="!!locations">
+    <v-main v-if="!!areas">
         <v-container>
             <v-row>
-                <v-card v-for="location in locations" :key="location.id" @click="openUpdateModal(location.id)" width="300" elevation="10" class="ma-2">
-                    <v-card-title>@{{ location . name }}</v-card-title>
-                    <v-card-subtitle v-for="building in location.buildings" :key="building.id">
-                        @{{building.name}}
-                    </v-card-subtitle>
+                <v-card v-for="area in areas" :key="area.id" @click="openUpdateModal(area.id)" width="300" elevation="10" class="ma-2">
+                    <v-card-title>@{{ area.name }}</v-card-title>
                 </v-card>
             </v-row>
             <v-row>
@@ -22,10 +19,11 @@
                                 @csrf
                                 <v-card>
                                     <v-card-title class="headline grey lighten-2">
-                                        Add new location
+                                        Add New Area
                                     </v-card-title>
-                                    <v-text-field v-model="currentLocation" name="name" required class="pa-2"></v-text-field>
-
+                                    <v-text-field v-model="currentArea" name="name" required class="pa-2"></v-text-field>
+                                    <v-select :items="buildings" label="Select A Building"  name="building_id" v-model="selectedBuilding" item-text="name" item-value="id" solo required>
+                                    </v-select>
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
                                         <v-btn color="primary" text type="submit" form="create-form">Submit</v-btn>
@@ -48,18 +46,16 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
-                locations: ( <?php echo json_encode($locations); ?> ),
+                areas: ( <?php echo json_encode($areas); ?> ),
+                buildings: ( <?php echo json_encode($buildings); ?> ),
                 openNew: false,
-                currentLocation: "",
-                createUrl: `${prefix_link}/location/create`,
+                currentArea: "",
+                createUrl: `${prefix_link}/area/create`,
                 currentUrl: '',
             },
-            mounted: function() {
-
-            },            
             methods: {
                 openUpdateModal: function(id) {
-                    window.location.href = `${prefix_link}/location/${id}`;
+                    window.location.href = `${prefix_link}/area/${id}`;
                 }
             }
         })
