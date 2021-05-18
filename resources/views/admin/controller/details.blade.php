@@ -28,7 +28,7 @@
                         </v-form>
                         <v-form :action="removePointsUrl" method="POST" id="remove-points-form">
                             @csrf
-                            <v-card class="mx-auto my-12">
+                            <v-card class="mx-auto my-12" v-if="controller.points.length > 0">
                                 <v-card-title>DEOS Points</v-card-title>
                                 <v-card-text fluid v-for="item in controller.points" :key="item.id">
                                     <v-checkbox v-model="pointSelected[item.id]">

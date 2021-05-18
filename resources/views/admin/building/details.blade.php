@@ -26,7 +26,7 @@
                         </v-form>
                         <v-form :action="deleteAreasUrl" method="POST" id="delete-area-form">
                             @csrf
-                            <v-card class="mx-auto my-12">
+                            <v-card class="mx-auto my-12" v-if="building.areas.length > 0">
                                 <v-card-text fluid v-for="area in building.areas" :key="area.id">
                                     <v-checkbox v-model="areaSelected[area.id]">
                                         <template v-slot:label>
@@ -42,7 +42,7 @@
                         </v-form>
                         <v-form :action="deleteControllersUrl" method="POST" id="delete-controller-form">
                             @csrf
-                            <v-card class="mx-auto my-12">
+                            <v-card class="mx-auto my-12" v-if="building.deos_controllers.length > 0">
                                 <v-card-text fluid v-for="controller in building.deos_controllers" :key="controller.id">
                                     <v-checkbox v-model="controllerSelected[controller.id]">
                                         <template v-slot:label>

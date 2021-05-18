@@ -5,7 +5,6 @@
             <v-row>
                 <v-card v-for="controller in controllers" :key="controller.id" @click="openUpdateModal(controller.id)" width="300" elevation="10" class="ma-2">
                     <v-card-title>@{{ controller . name }}</v-card-title>
-                    <v-card-subtitle>@{{ controller . building . name }}</v-card-subtitle>
                 </v-card>
             </v-row>
             <v-row>
