@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Building;
 use App\Models\Location;
+use App\Models\Area;
 
 class BuildingController extends Controller
 {
@@ -18,6 +19,10 @@ class BuildingController extends Controller
 
         //
         $buildings = Building::all();
+        foreach ($buildings as $building) {
+            $areas = Area::where('building_id', $building->id)->get();
+            $building->areas = $areas;
+        }
         $locations = Location::all();
         return view('admin.building.index', compact('buildings', 'locations'));
     }

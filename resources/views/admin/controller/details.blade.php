@@ -2,18 +2,21 @@
 @section('content')
     <v-main v-if="mainMenu && deleteUrl">
         <v-container>
-            @if (empty($location))
-                <h1>Location not found</h1>
+            @if (empty($area))
+                <h1>Area not found</h1>
             @else
                 <template>
                     <div class="text-center">
                         <v-form :action="updateUrl" method="POST" id="update-form">
                             @csrf
-                            <v-card>
+                            <v-card class="mx-auto my-12">
                                 <v-card-title class="headline grey lighten-2">
-                                    Edit Location
+                                    Edit Area
                                 </v-card-title>
-                                <v-text-field v-model="currentLocation" name="name" solo required></v-text-field>
+                                <v-card-text>
+                                    <v-text-field v-model="currentArea" label="Area Name" name="name" required></v-text-field>
+                                    <v-select :items="buildings" label="Select a Building" name="building_id" v-model="currentBuilding" item-text="name" item-value="id" solo required>
+                                </v-card-text>
 
                                 <v-card-actions>
                                     <v-btn color="primary" text type="submit" form="update-form">Update</v-btn>
@@ -50,17 +53,20 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
-                location: ( <?php echo json_encode($location); ?> ),
-                currentLocation: "",
+                buildings:( <?php echo json_encode($buildings); ?> ),
+                area: ( <?php echo json_encode($area); ?> ),
+                currentArea: "",
+                currentBuilding: 0,
                 updateUrl: "",
                 deleteUrl: "",
                 openDelete: false
             },
             mounted: function() {
-                
-                this.currentLocation = this.location.name;
-                this.updateUrl = `${prefix_link}/location/update/${this.location.id}`;
-                this.deleteUrl = `${prefix_link}/location/delete/${this.location.id}`;
+                this.currentArea = this.area.name;
+                this.currentBuilding = this.area.building_id;
+
+                this.updateUrl = `${prefix_link}/area/update/${this.area.id}`;
+                this.deleteUrl = `${prefix_link}/area/delete/${this.area.id}`;
             }
         })
 
