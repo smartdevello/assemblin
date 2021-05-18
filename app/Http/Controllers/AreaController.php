@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Building;
+use App\Models\Area;
 
 class AreaController extends Controller
 {
@@ -14,7 +16,10 @@ class AreaController extends Controller
     public function index()
     {
         //
-        return view('admin.area');
+        $buildings = Building::all();
+        $areas = area::all();
+        return view('admin.area.index', compact('areas', 'buildings'));
+        
     }
 
     /**
@@ -22,9 +27,24 @@ class AreaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         //
+        $this->validate($request, 
+            [
+                'name' => 'required',
+                'building_id' => 'required'
+            ]
+        );
+
+        Area::create(
+            [
+                'name' => $request->name,
+                'building_id' => $request->building_id
+            ]
+        );
+
+        return back()->with('success', 'Created successfully');
     }
 
     /**
@@ -47,6 +67,9 @@ class AreaController extends Controller
     public function show($id)
     {
         //
+        $area = Area::where('id', $id)->first();
+        $buildings = Building::all();
+        return view('admin.area.details', compact('area', 'buildings'));
     }
 
     /**
@@ -70,6 +93,24 @@ class AreaController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $this->validate($request, 
+            [
+                'name' => 'required',
+                'building_id' => 'required',
+            ]
+        );
+        $result = Area::where('id', $id)->first();
+        if (!$result) {
+            return back()->with('error', 'Not found');
+        }
+        $result->update(
+            [
+                'name' => $request->name,
+                'building_id' => $request->building_id,
+            ]
+        );
+
+        return back()->with('success', 'Updated successfully');
     }
 
     /**
@@ -81,5 +122,12 @@ class AreaController extends Controller
     public function destroy($id)
     {
         //
+        $result = Area::where('id', $id)->first();
+        if (!$result) {
+            return back()->with('error', 'Not found');
+        }
+        $result->delete();
+
+        return redirect()->route('area')->with('success', 'Deleted successfully');
     }
 }

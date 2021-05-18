@@ -4,19 +4,24 @@
     @include('admin.layout.top')
 
     @yield('style')
-
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
 </head>
 
 <body class="antialiased">
 
-
-<div id="app">
-    <v-app >
-        @include('admin.layout.navigation')
-        {{--@include('admin.layout.toolbar');--}}
-        @yield('content')
-    </v-app>
-</div>
+    <div id="app">
+        <div class="v-cloak">    
+            <v-app >
+                @include('admin.layout.navigation')
+                {{--@include('admin.layout.toolbar');--}}
+                @yield('content')
+            </v-app>
+        </div>
+    </div>
 
 
 @include('admin.layout.bottom')
