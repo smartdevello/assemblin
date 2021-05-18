@@ -20,6 +20,11 @@ class BuildingController extends Controller
         $buildings = Building::all();
         $locations = Location::all();
 
+        foreach ($buildings as $item) {
+            $item->areas;
+            $item->deos_controllers;
+        }
+
         return view('admin.building.index', compact('buildings', 'locations'));
     }
 

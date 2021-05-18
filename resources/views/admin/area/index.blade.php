@@ -5,7 +5,6 @@
             <v-row>
                 <v-card v-for="area in areas" :key="area.id" @click="openUpdateModal(area.id)" width="300" elevation="10" class="ma-2">
                     <v-card-title>@{{ area . name }}</v-card-title>
-                    <v-card-subtitle>@{{ area . building . name }}</v-card-subtitle>
                 </v-card>
             </v-row>
             <v-row>
