@@ -18,7 +18,7 @@ class DeosPoints extends Migration
             $table->id();
             $table->string('name');
             $table->string('value');
-            $table->unsignedBigInteger('controller_id');
+            $table->unsignedBigInteger('controller_id')->nullable();
             $table->foreign('controller_id')->references('id')->on('deos_controllers')->onDelete('cascade');
             $table->timestamps();
         });
