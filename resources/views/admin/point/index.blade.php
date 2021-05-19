@@ -3,10 +3,40 @@
     <v-main >
         <v-container>
             <v-row>
-                <v-card v-for="point in points" :key="point.id"  width="300" elevation="10" class="ma-2">
+                <v-card v-for="point in points" :key="point.id"   @click="openUpdateModal(point.id)" width="300" elevation="10" class="ma-2">
                     <v-card-title>@{{ point . label }}</v-card-title>
                     <v-card-title>@{{ point . name }}</v-card-title>
                 </v-card>
+            </v-row>
+            <v-row>
+                <template>
+                    <div class="text-center">
+                        <v-dialog v-model="openNew" width="500">
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on" class="ma-3">Add</v-btn>
+                            </template>
+
+                            <v-form :action="createUrl" method="POST" id="create-form">
+                                @csrf
+                                <v-card>
+                                    <v-card-title class="headline grey lighten-2">
+                                        Add new Point
+                                    </v-card-title>
+                                    <v-text-field v-model="currentPointLabel" name="label" label="DEOS page and sensor" required class="pa-2"></v-text-field>
+                                    <v-text-field v-model="currentPointName" name="name" label="Point Name" required class="pa-2"></v-text-field>
+
+                                    <v-select :items="controllers" label="Select A Controller" name="controller_id" item-text="name" item-value="id" solo required>
+                                    </v-select>
+
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn color="primary" text type="submit" form="create-form">Submit</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-form>
+                        </v-dialog>
+                    </div>
+                </template>
             </v-row>
         </v-container>
     </v-main>
@@ -21,6 +51,11 @@
                 drawer: true,
                 mainMenu: mainMenu,
                 points: ( <?php echo json_encode($points); ?> ),
+                controllers: ( <?php echo json_encode($controllers); ?> ),
+                createUrl: `${prefix_link}/point/create`,
+                openNew: false,
+                currentPointName: '',
+                currentPointLabel: ''
             },
             mounted: function() {
 
