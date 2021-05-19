@@ -34,7 +34,7 @@
                                     <v-checkbox v-model="pointSelected[item.id]">
                                         <template v-slot:label>
                                             <div class="mx-3">@{{ item . name }}</div>
-                                            <div class="mx-3">@{{ item . sensor }}</div>
+                                            <div class="mx-3">@{{ item . value }}</div>
                                         </template>
                                     </v-checkbox>
                                 </v-card-text>
@@ -86,7 +86,7 @@
                                 Add New Point
                             </v-card-title>
                             <v-text-field name="name" placeholder="name" required class="pa-2"></v-text-field>
-                            <v-text-field name="sensor" placeholder="sensor" required class="pa-2"></v-text-field>
+                            <v-text-field name="value" placeholder="value" required class="pa-2"></v-text-field>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="primary" text type="submit" form="add-point-form">Submit</v-btn>

@@ -23,6 +23,6 @@ class DEOS_controller extends Model
 
     public function points()
     {
-        return $this->hasMany(DeosPoint::class, 'controller_id', 'id');
+        return $this->hasMany(DEOS_point::class, 'controller_id', 'id');
     }
 }
