@@ -12,7 +12,7 @@ class DEOS_point extends Model
 
     protected $table = 'deos_points';
     protected $fillable = [
-        'name', 'value', 'controller_id'
+        'name', 'label', 'type', 'meta_property', 'meta_room', 'meta_sensor', 'meta_type', 'value', 'controller_id'
     ];
 
     public function controller()

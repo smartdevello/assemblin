@@ -16,7 +16,10 @@ class DEOS_controllerController extends Controller
     {
         $buildings = Building::all();
         $controllers = DEOS_controller::all();
-        foreach ($controllers as $item) $item->building;
+        foreach ($controllers as $item) {
+            $item->building;
+            $item->points;
+        }
 
         return view('admin.controller.index', compact('controllers', 'buildings'));
     }

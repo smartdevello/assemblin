@@ -42,6 +42,21 @@ class PointController extends Controller
         }
         return json_encode($res);
     }
+    public function WritePointsfromLocal(Request $request){
+        $row = DEOS_point::where('name', $request->id)->first();
+        if ($row === null) {
+            DEOS_point::create([
+                'name' => $request->id,
+                'value' => $request->value
+            ]);
+        } else {
+            $row->update(['value' => $request['value']]);
+        }
+        return response()->json([
+            'success' => 'created successfully'
+        ], 200);
+
+    }
     public function WritePointsbyid(Request $request)
     {
 

@@ -199,10 +199,10 @@
                 },
                 getAsmServerConfig: function() {
                     $.ajax({
-                        url: base_url + "/api/asm_server/config/getSERVERConfig",
-                        success: function(data) {                            
+                        url: "/api/asm_server/config/getSERVERConfig",
+                        success: function(data) {                        
                             main_vm.asm_serverconfig = JSON.parse(data);
-
+                            console.log(main_vm.asm_serverconfig);
                             for (let slave of main_vm.asm_serverconfig["Slaves"]) {
                                 main_vm.getAsmRestConfig(slave);
                             }
@@ -216,9 +216,9 @@
                     let ip = slave['IP'];
                     let name = slave['Name'];
                     let Port = slave['Port'];
-
+                    let controller_id = slave['controller_id'];
                     $.ajax({
-                        url: base_url + "/api/asm_server/config/getRESTconfig?name=" + name,
+                        url: "/api/asm_server/config/getRESTconfig?name=" + name + "&&controller_id=" + controller_id,
                         success: function(data) {
                             main_vm.asm_restconfig[name] = JSON.parse(data);
                             // console.log(main_vm.asm_restconfig[name]);
@@ -235,6 +235,23 @@
                         url: base_url + "/api/points",
                         success: function(data) {
                             main_vm.DEOSPoints = JSON.parse(data);
+                            for (let point of main_vm.DEOSPoints) {
+                                // WritePointsfromLocal
+                                // console.log(point);
+                                $.ajax({
+                                    url: "/api/points/WritePointsfromLocal",
+                                    type: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json"
+                                    },
+                                    data: JSON.stringify(point),
+                                    success: function(data) {
+
+                                    },
+                                    error: function(xhr, status, error) {}
+                                });
+                            }
+
                             main_vm.DEOSPoints.push({
                                 "id": "",
                                 "value": ""
