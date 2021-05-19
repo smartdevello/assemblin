@@ -58,6 +58,11 @@
             link: prefix_link  + '/controller'
         },
         {
+            title: 'Point',
+            icon: 'mdi-google-circles-extended',
+            link: prefix_link  + '/point'
+        },
+        {
             title: 'Settings',
             icon: 'mdi-cog',
             link: prefix_link  + '/setting'
