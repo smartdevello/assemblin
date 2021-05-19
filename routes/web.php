@@ -4,6 +4,7 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DEOS_controllerController;
+use App\Http\Controllers\DEOS_pointController;
 use App\Http\Controllers\LocationController;
 use Illuminate\Support\Facades\Route;
 
@@ -67,4 +68,16 @@ Route::group(['prefix' => 'controller'], function ($router) {
     Route::post('/{id}/remove-points', [DEOS_controllerController::class, 'deletePoints'])->name('controller-remove-points');
     Route::post('/{id}/import-points', [DEOS_controllerController::class, 'importPointsFromCsv'])->name('controller-import-points');
     Route::get('/{id}/export-points', [DEOS_controllerController::class, 'exportPointsFromCsv'])->name('controller-export-points');
+});
+
+Route::group(['prefix' => 'point'], function ($router) {
+    Route::get('', [DEOS_pointController::class, 'index'])->name('points');
+    Route::get('/{id}', [DEOS_pointController::class, 'show'])->name('point-detail');
+    Route::post('create', [DEOS_pointController::class, 'create'])->name('point-create');
+    Route::post('update/{id}', [DEOS_pointController::class, 'update'])->name('point-update');
+    Route::post('delete/{id}', [DEOS_pointController::class, 'destroy'])->name('point-delete');
+    Route::post('/{id}/add-point', [DEOS_pointController::class, 'createPoint'])->name('point-add-point');
+    Route::post('/{id}/remove-points', [DEOS_pointController::class, 'deletePoints'])->name('point-remove-points');
+    Route::post('/{id}/import-points', [DEOS_pointController::class, 'importPointsFromCsv'])->name('point-import-points');
+    Route::get('/{id}/export-points', [DEOS_pointController::class, 'exportPointsFromCsv'])->name('point-export-points');
 });
