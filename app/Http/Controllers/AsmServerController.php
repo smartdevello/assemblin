@@ -80,10 +80,7 @@ class AsmServerController extends Controller
                     if ($row === null)  {
                         $row = DEOS_point::create($data);
                     } else {
-                        $row->update([
-                            'label' => $point->Label
-                        ]);
-                        // return dd($row);
+                        $row->update($data);
                     }
                 }
 
