@@ -22,7 +22,7 @@ class DeosPoints extends Migration
             $table->string('meta_property')->nullable();
             $table->string('meta_room')->nullable();
             $table->string('meta_sensor')->nullable();
-
+            $table->string('meta_type')->nullable();
             $table->string('value')->nullable();
             $table->unsignedBigInteger('controller_id')->nullable();
             $table->foreign('controller_id')->references('id')->on('deos_controllers')->onDelete('cascade');
