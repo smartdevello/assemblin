@@ -200,8 +200,7 @@
                 getAsmServerConfig: function() {
                     $.ajax({
                         url: base_url + "/api/asm_server/config/getSERVERConfig",
-                        success: function(data) {
-                            console.log(data);
+                        success: function(data) {                            
                             main_vm.asm_serverconfig = JSON.parse(data);
                             console.log(main_vm.asm_serverconfig);
                             for (let slave of main_vm.asm_serverconfig["Slaves"]) {
