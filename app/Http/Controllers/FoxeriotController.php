@@ -55,7 +55,7 @@ class FoxeriotController extends Controller
         curl_close($curl);
 
         $res = json_decode($response, true);
-        // return dd($res);
+
         foreach ($res['data'] as &$device) {
             foreach ($device['latestObservations'] as &$sensor) {
                 $row = Sensor::where('deviceId', $device['deviceId'])->where('type', $sensor['variable'])->first();
@@ -72,6 +72,7 @@ class FoxeriotController extends Controller
                     'message_time' => $sensor['message-time'],                    
                 );
 
+                
                 if ($row === null) {
                     $row = Sensor::create($data);
                 } else {

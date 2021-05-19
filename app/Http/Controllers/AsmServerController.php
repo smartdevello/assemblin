@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\DEOS_controller;
+use App\Models\DEOS_point;
 
 class AsmServerController extends Controller
 {
@@ -59,6 +60,13 @@ class AsmServerController extends Controller
                 $myfile = fopen($filepath, "rw") or die("Unable to open file!");
                 $content = fread($myfile, filesize($filepath));
                 fclose($myfile);
+                $content = json_decode($content);
+                // return dd($content);
+
+                foreach($content->LP->Writeable as $point) {
+                    
+                }
+
                 return json_encode($content);
 
             }catch (\Exception $e){

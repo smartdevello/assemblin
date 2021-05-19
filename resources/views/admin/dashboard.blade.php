@@ -202,7 +202,7 @@
                         url: base_url + "/api/asm_server/config/getSERVERConfig",
                         success: function(data) {                            
                             main_vm.asm_serverconfig = JSON.parse(data);
-                            console.log(main_vm.asm_serverconfig);
+
                             for (let slave of main_vm.asm_serverconfig["Slaves"]) {
                                 main_vm.getAsmRestConfig(slave);
                             }
@@ -220,7 +220,7 @@
                     $.ajax({
                         url: base_url + "/api/asm_server/config/getRESTconfig?name=" + name,
                         success: function(data) {
-                            main_vm.asm_restconfig[name] = JSON.parse(JSON.parse(data));
+                            main_vm.asm_restconfig[name] = JSON.parse(data);
                             // console.log(main_vm.asm_restconfig[name]);
                         },
                         error: function(err) {

@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 class Sensor extends Model
 {
     use HasFactory, Notifiable;
-
+    protected $table = 'sensors';
     protected $fillable = [
         'deviceId', 'observationId', 'tag', 'name', 'type', 'unit', 'value', 'message_time', 'deos_pointId'
     ];    
