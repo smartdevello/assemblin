@@ -2,16 +2,16 @@
 
 namespace App\Exports;
 
-use App\Models\DeosPoint;
+use App\Models\DEOS_point;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
 class DeosPointExport implements FromCollection
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
-        return DeosPoint::all();
+        return DEOS_point::all();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\DeosPoint;
+use App\Models\DEOS_point;
 use Maatwebsite\Excel\Concerns\ToModel;
 
 class DeosPointImport implements ToModel
@@ -14,7 +14,7 @@ class DeosPointImport implements ToModel
      */
     public function model(array $row)
     {
-        return new DeosPoint([
+        return new DEOS_point([
             'name' => $row[0],
             'sensor' => $row[1]
         ]);
