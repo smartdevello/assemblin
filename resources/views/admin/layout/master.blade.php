@@ -26,7 +26,7 @@
 
 @include('admin.layout.bottom')
 <script>
-    var base_url = "{{env('BASE_URL')}}";
+    var base_url = "{{config()->get('constants.base_url')}}";
 </script>
 <script>
     const prefix_link = "{{config()->get('constants.prefix_url')}}";

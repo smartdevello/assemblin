@@ -230,9 +230,11 @@
 
                 },
                 getDEOSPoints: function() {
+                    console.log('starting');
                     return $.ajax({
                         url: base_url + "/api/points",
                         success: function(data) {
+                            console.log(data);
                             main_vm.DEOSPoints = JSON.parse(data);
                             main_vm.DEOSPoints.push({
                                 "id": "",
@@ -240,7 +242,7 @@
                             });
                         },
                         error: function(err) {
-
+                            console.log(err);
                         }
                     });
                 },
