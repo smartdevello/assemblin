@@ -199,7 +199,7 @@
                 },
                 getAsmServerConfig: function() {
                     $.ajax({
-                        url: base_url + "api/asm_server/config/getSERVERConfig",
+                        url: base_url + "/api/asm_server/config/getSERVERConfig",
                         success: function(data) {
 
                             main_vm.asm_serverconfig = JSON.parse(JSON.parse(data));
@@ -218,7 +218,7 @@
                     let Port = slave['Port'];
 
                     $.ajax({
-                        url: base_url + "api/asm_server/config/getRESTconfig?name=" + name,
+                        url: base_url + "/api/asm_server/config/getRESTconfig?name=" + name,
                         success: function(data) {
                             main_vm.asm_restconfig[name] = JSON.parse(JSON.parse(data));
                             // console.log(main_vm.asm_restconfig[name]);
@@ -230,11 +230,10 @@
 
                 },
                 getDEOSPoints: function() {
-                    console.log('starting');
+
                     return $.ajax({
                         url: base_url + "/api/points",
                         success: function(data) {
-                            console.log(data);
                             main_vm.DEOSPoints = JSON.parse(data);
                             main_vm.DEOSPoints.push({
                                 "id": "",
