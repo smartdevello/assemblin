@@ -22,10 +22,10 @@
                                     <v-card-title class="headline grey lighten-2">
                                         Add new Point
                                     </v-card-title>
-                                    <v-text-field v-model="currentPointLabel" name="label" label="DEOS page and sensor" required class="pa-2"></v-text-field>
-                                    <v-text-field v-model="currentPointName" name="name" label="Point Name" required class="pa-2"></v-text-field>
+                                    <v-text-field v-model="currentPointLabel" name="label" label="DEOS page and sensor" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
+                                    <v-text-field v-model="currentPointName" name="name" label="Point Name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
 
-                                    <v-select :items="controllers" label="Select A Controller" name="controller_id" item-text="name" item-value="id" solo required>
+                                    <v-select :items="controllers" label="Select A Controller" name="controller_id" item-text="name" item-value="id" solo required :rules="[ v => !!v || 'Field is required', ]">
                                     </v-select>
 
                                     <v-card-actions>

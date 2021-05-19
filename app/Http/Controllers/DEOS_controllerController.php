@@ -9,6 +9,7 @@ use App\Models\DEOS_controller;
 use App\Models\Building;
 use App\Models\DEOS_point;
 use Maatwebsite\Excel\Facades\Excel;
+use stdClass;
 
 class DEOS_controllerController extends Controller
 {
@@ -31,12 +32,77 @@ class DEOS_controllerController extends Controller
             'ip_address' => 'required',
             'port_number' => 'required',
             'building_id' => 'required|exists:buildings,id'
+        ],[
+            'name.required' => "Name field can't be empty",
+            'ip_address.required' => "IP Address can't be empty",
+            'port_number.required' => "Port Number can't be empty",
+            'building_id.required' => "You must select a building",
         ]);
-        DEOS_controller::create($request->all());
+
+        $controllers = DEOS_controller::all();
+        $request->port_number = count($controllers) + 8001;
+        $row = DEOS_controller::create([
+            'name' => $request->name,
+            'ip_address' => $request->ip_address,
+            'port_number' => count($controllers) + 8001,
+            'building_id' => $request->building_id
+        ]);
+        $this->updateConfigfiles();
 
         return back()->with('success', 'Created successfully');
     }
 
+    public function updateConfigfiles()
+    {
+
+        $filepath = config()->get('constants.BASE_CONFIG_PATH') . 'asmserver/config.json';
+        $content = file_get_contents($filepath);
+        $content = json_decode($content);
+
+        $controllers = DEOS_controller::all();
+
+        $content->Slaves = [];
+        foreach($controllers as $controller ){
+            $item = new stdClass();
+            $item->Name = $controller->name;
+            $item->ip_address = 'localhost';
+            $item->port_number = $controller->port_number;
+            array_push($content->Slaves, $item);
+        }
+        file_put_contents($filepath, json_encode($content));
+
+        foreach($controllers as $controller) {
+            $filepath = config()->get('constants.BASE_CONFIG_PATH') . 'asmrest/' . $controller->name . ".json";
+            $restconfig = new stdClass();
+            $restconfig->Address = '127.0.0.1';
+            $restconfig->Port = $controller->port_number;
+            $restconfig->Live = true;
+            $restconfig->Trend = true;
+            $restconfig->OpenEMS = new stdClass();
+            $restconfig->OpenEMS->IP = $controller->ip_address;
+            $restconfig->LP = new stdClass();
+            $restconfig->LP->CheckRights = false;
+            $restconfig->LP->Readable = [];
+            $restconfig->LP->Writeable = [];
+
+            $points = $controller->points;
+            foreach ($points as $point ) {
+                $item = new stdClass();
+                $item->Label = $point->label ?? '';
+                $item->Description = $point->name ?? '';
+                $item->Meta = new stdClass();
+                $item->Meta->property = $point->meta_property ?? '';
+                $item->Meta->room = $point->meta_room ?? '';
+                $item->Meta->sensor = $point->meta_sensor ?? '';
+                $item->Meta->type = $point->meta_type ?? '';
+                $item->Type = $point->type ?? '';
+                array_push($restconfig->LP->Writeable, $item);
+                array_push($restconfig->LP->Readable, $item);
+            }
+            file_put_contents($filepath, json_encode($restconfig));
+        }
+
+    }
     public function show($id)
     {
         $controller = DEOS_controller::where('id', $id)->first();
@@ -56,17 +122,22 @@ class DEOS_controllerController extends Controller
         }
         $result->update($request->all());
 
+        $this->updateConfigfiles();
         return back()->with('success', 'Updated successfully');
     }
 
     public function destroy($id)
     {
-        $result = DEOS_controller::where('id', $id)->first();
-        if (!$result) {
+        $controller = DEOS_controller::where('id', $id)->first();
+        if (!$controller) {
             return back()->with('error', 'Not found');
         }
-        $result->delete();
 
+        $filepath = config()->get('constants.BASE_CONFIG_PATH') . 'asmrest/' . $controller->name . ".json";
+        if (file_exists($filepath)) unlink($filepath);
+        $controller->delete();
+
+        $this->updateConfigfiles();
         return redirect()->route('controllers')->with('success', 'Deleted successfully');
     }
 

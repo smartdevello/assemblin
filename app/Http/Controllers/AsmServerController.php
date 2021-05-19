@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DEOS_controller;
 use App\Models\DEOS_point;
+use stdClass;
 
 class AsmServerController extends Controller
 {
@@ -22,10 +23,7 @@ class AsmServerController extends Controller
     {
         try{
             $filepath = config()->get('constants.BASE_CONFIG_PATH') . 'asmserver/config.json';
-            $myfile = fopen($filepath, "rw") or die("Unable to open file!");
-            $content = fread($myfile, filesize($filepath));
-            fclose($myfile);
-            
+            $content = file_get_contents($filepath);            
             $content = json_decode($content); 
 
             foreach($content->Slaves as &$controller){
@@ -34,7 +32,7 @@ class AsmServerController extends Controller
 
                 $data = [
                     'name' => $controller->Name ?? '',
-                    'ip_address' => $controller->IP ?? '',
+                    // 'ip_address' => $controller->IP ?? '',
                     'port_number' => $controller->Port ?? ''
                 ];
                 if ($row === null) {
@@ -52,7 +50,7 @@ class AsmServerController extends Controller
             ], 403);
         }
 
-    }
+    }    
     public function getRESTconfig(Request $request)
     {
         if (!empty($request['name']) ) {
