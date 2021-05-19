@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\DeosPoint;
+use App\Models\DEOS_point;
 
 class PointController extends Controller
 {
