@@ -10,6 +10,7 @@ class DEOS_point extends Model
 {
     use HasFactory, Notifiable;
 
+    protected $table = 'deos_points';
     protected $fillable = [
         'name', 'value', 'controller_id'
     ];
