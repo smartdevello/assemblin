@@ -13,9 +13,11 @@
                                 <v-card-title class="headline grey lighten-2">
                                     Edit Point
                                 </v-card-title>
-                                <v-text-field v-model="point.label" name="label" solo required></v-text-field>
-                                <v-text-field v-model="point.name" name="name" solo required></v-text-field>
-
+                                <v-card-text>
+                                    <v-text-field v-model="point.label" name="label" solo required></v-text-field>
+                                    <v-text-field v-model="point.name" name="name" solo required></v-text-field>
+                                    <v-select :items="controllers" label="Select a Controller" name="controller_id" v-model="point.controller_id" item-text="name" item-value="id" solo required>
+                                </v-card-text>
                                 <v-card-actions>
                                     <v-btn color="primary" text type="submit" form="update-form">Update</v-btn>
                                     <v-btn color="red" @click="openDelete = true">Remove</v-btn>
@@ -52,6 +54,7 @@
                 drawer: true,
                 mainMenu: mainMenu,
                 point: ( <?php echo json_encode($point); ?> ),
+                controllers: ( <?php echo json_encode($controllers); ?> ),
                 updateUrl: "",
                 deleteUrl: "",
                 openDelete: false,
