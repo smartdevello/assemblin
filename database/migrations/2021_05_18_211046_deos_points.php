@@ -16,17 +16,10 @@ class DeosPoints extends Migration
         //
         Schema::create('deos_points', function (Blueprint $table) {
             $table->id();
-<<<<<<< HEAD:database/migrations/2021_05_18_170303_create_deos_points_table.php
-
-            $table->string('name');
-            $table->string('value');
-
-=======
             $table->string('name')->nullable();
             $table->string('value')->nullable();
             $table->unsignedBigInteger('controller_id')->nullable();
             $table->foreign('controller_id')->references('id')->on('deos_controllers')->onDelete('cascade');
->>>>>>> 9aab86b90ebd6cd096411f222c3365ac338dc8df:database/migrations/2021_05_18_211046_deos_points.php
             $table->timestamps();
         });
     }
