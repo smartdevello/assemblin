@@ -11,8 +11,6 @@ class Sensor extends Model
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'deviceId', 'sensorId', 'tag', 'name', 'type', 'unit', 'value', 'message_time', 'DEOS_pointId'
-    ];
-
-    public $timestamps = false;
+        'deviceId', 'observationId', 'tag', 'name', 'type', 'unit', 'value', 'message_time', 'deos_pointId'
+    ];    
 }

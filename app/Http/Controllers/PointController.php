@@ -28,9 +28,22 @@ class PointController extends Controller
         curl_close($ch);
 
         $res = json_decode($result, true);
+<<<<<<< HEAD
         foreach ($res as $point) {
             if (DeosPoint::where('name', $point['id'])->count() <= 0) {
                 DeosPoint::create(['name' => $point['id'], 'value' => $point['value']]);
+=======
+        foreach ($res as $point){
+
+            $row = DEOS_point::where('name', $point['id'])->first();
+            if ($row === null) {
+                DEOS_point::create([
+                    'name' => $point['id'],
+                    'value' => $point['value']
+                    ]);
+            } else {
+                $row->update(['value' => $point['value']]);
+>>>>>>> 9aab86b90ebd6cd096411f222c3365ac338dc8df
             }
         }
         return json_encode($res);
