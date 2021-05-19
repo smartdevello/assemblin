@@ -76,8 +76,4 @@ Route::group(['prefix' => 'point'], function ($router) {
     Route::post('create', [DEOS_pointController::class, 'create'])->name('point-create');
     Route::post('update/{id}', [DEOS_pointController::class, 'update'])->name('point-update');
     Route::post('delete/{id}', [DEOS_pointController::class, 'destroy'])->name('point-delete');
-    Route::post('/{id}/add-point', [DEOS_pointController::class, 'createPoint'])->name('point-add-point');
-    Route::post('/{id}/remove-points', [DEOS_pointController::class, 'deletePoints'])->name('point-remove-points');
-    Route::post('/{id}/import-points', [DEOS_pointController::class, 'importPointsFromCsv'])->name('point-import-points');
-    Route::get('/{id}/export-points', [DEOS_pointController::class, 'exportPointsFromCsv'])->name('point-export-points');
 });

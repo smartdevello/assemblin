@@ -30,10 +30,11 @@
                                     <v-card-title class="headline grey lighten-2">
                                         Add New Controller
                                     </v-card-title>
-                                    <v-text-field placeholder="Name" name="name" required class="pa-2"></v-text-field>
-                                    <v-text-field placeholder="IP Address" name="ip_address" required class="pa-2"></v-text-field>
-                                    <v-text-field placeholder="Port Number" name="port_number" required class="pa-2"></v-text-field>
-                                    <v-select :items="buildings" label="Select A Building" name="building_id" item-text="name" item-value="id" solo required>
+
+                                    <v-text-field placeholder="Name" name="name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
+                                    <v-text-field placeholder="IP Address" name="ip_address" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
+                                    <v-text-field placeholder="Port Number" name="port_number" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
+                                    <v-select :items="buildings" label="Select A Building" name="building_id" item-text="name" item-value="id" solo required :rules="[ v => !!v || 'Field is required', ]">
                                     </v-select>
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
@@ -68,6 +69,8 @@
                     window.location.href = `${prefix_link}/controller/${id}`;
                 }
             }
+
+
         })
 
     </script>
