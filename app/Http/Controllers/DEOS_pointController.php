@@ -45,9 +45,12 @@ class DEOS_pointController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         //
+        $point = DEOS_point::where('id', $id)->first();        
+
+        return view('admin.point.details', compact('point'));
     }
 
     /**

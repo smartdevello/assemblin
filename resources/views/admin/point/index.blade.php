@@ -3,7 +3,8 @@
     <v-main >
         <v-container>
             <v-row>
-                <v-card v-for="point in points" :key="point.id" @click="openUpdateModal(point.id)" width="300" elevation="10" class="ma-2">
+                <v-card v-for="point in points" :key="point.id"  width="300" elevation="10" class="ma-2">
+                    <v-card-title>@{{ point . label }}</v-card-title>
                     <v-card-title>@{{ point . name }}</v-card-title>
                 </v-card>
             </v-row>
