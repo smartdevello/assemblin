@@ -17,16 +17,16 @@ class Sensors extends Migration
         Schema::create('sensors', function (Blueprint $table) {
             $table->id();
 
-            $table->string('sensorId');
-            $table->string('deviceId');
-            $table->string('tag');
-            $table->string('name');
-            $table->string('type');
-            $table->string('unit');
-            $table->float('value');
-            $table->dateTime('message_time');
+            $table->unsignedBigInteger('observationId')->nullable();
+            $table->string('deviceId')->nullable();
+            $table->string('tag')->nullable();
+            $table->string('name')->nullable();
+            $table->string('type')->nullable();
+            $table->string('unit')->nullable();
+            $table->float('value')->nullable();
+            $table->string('message_time')->nullable();
             
-            $table->unsignedBigInteger('deos_pointId');
+            $table->unsignedBigInteger('deos_pointId')->nullable();
             $table->foreign('deos_pointId')->references('id')->on('deos_points')->onDelete('cascade');
             $table->timestamps();
         });
