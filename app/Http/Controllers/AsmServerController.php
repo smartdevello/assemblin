@@ -26,9 +26,9 @@ class AsmServerController extends Controller
             $content = fread($myfile, filesize($filepath));
             fclose($myfile);
             
-            $content = json_decode($content);          
+            $content = json_decode($content); 
 
-            foreach($content->Slaves as $controller){
+            foreach($content->Slaves as &$controller){
                 $row = DEOS_controller::where('name', $controller->Name)->where('ip_address', $controller->IP)
                 ->where('port_number', $controller->Port)->first();
 
@@ -38,10 +38,11 @@ class AsmServerController extends Controller
                     'port_number' => $controller->Port ?? ''
                 ];
                 if ($row === null) {
-                    DEOS_controller::create($data);
+                    $row = DEOS_controller::create($data);
                 } else {
                     $row->update($data);
                 }
+                $controller->controller_id = $row->id;
                 
             }
             return json_encode($content);
@@ -61,10 +62,29 @@ class AsmServerController extends Controller
                 $content = fread($myfile, filesize($filepath));
                 fclose($myfile);
                 $content = json_decode($content);
-                // return dd($content);
 
                 foreach($content->LP->Writeable as $point) {
                     
+                    $row = DEOS_point::where('name', $point->Description)->first();
+                    $data = [
+                        'name' => $point->Description,
+                        'label' => $point->Label,
+                        'type' => $point->Type,
+                        'meta_property' => $point->Meta->property ?? '',
+                        'meta_room' => $point->Meta->room ?? '',
+                        'meta_sensor' => $point->Meta->sensor ?? '',
+                        'meta_type' => $point->Meta->type ?? '',
+                        'controller_id' => $request['controller_id']
+                    ];
+                    
+                    if ($row === null)  {
+                        $row = DEOS_point::create($data);
+                    } else {
+                        $row->update([
+                            'label' => $point->Label
+                        ]);
+                        // return dd($row);
+                    }
                 }
 
                 return json_encode($content);

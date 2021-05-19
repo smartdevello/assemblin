@@ -22,7 +22,8 @@ Route::middleware(['cors'])->group(function(){
     Route::get('points/readable', '\App\Http\Controllers\PointController@getReadablePoints');
     Route::get('points/writable', '\App\Http\Controllers\PointController@getWritablePoints');
     Route::put('points/writepointsbyid', '\App\Http\Controllers\PointController@WritePointsbyid');
-
+    Route::post('points/WritePointsfromLocal', '\App\Http\Controllers\PointController@WritePointsfromLocal');
+    
     Route::get('points/trends', '\App\Http\Controllers\PointController@getTrendPoints');
     Route::post('points/trends/values', '\App\Http\Controllers\PointController@getTrendValues');
 

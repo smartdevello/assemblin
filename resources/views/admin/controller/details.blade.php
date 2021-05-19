@@ -33,6 +33,7 @@
                                 <v-card-text fluid v-for="item in controller.points" :key="item.id">
                                     <v-checkbox v-model="pointSelected[item.id]">
                                         <template v-slot:label>
+                                            <div class="mx-3">@{{ item . label }}</div>
                                             <div class="mx-3">@{{ item . name }}</div>
                                             <div class="mx-3">@{{ item . value }}</div>
                                         </template>

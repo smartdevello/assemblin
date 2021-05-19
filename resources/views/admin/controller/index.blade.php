@@ -5,6 +5,15 @@
             <v-row>
                 <v-card v-for="controller in controllers" :key="controller.id" @click="openUpdateModal(controller.id)" width="300" elevation="10" class="ma-2">
                     <v-card-title>@{{ controller . name }}</v-card-title>
+
+                    <v-row>
+                        <v-col cols="6">
+                            <v-card-subtitle v-for="point in controller.points" :key="point.id">
+                                @{{ point . name }}
+                            </v-card-subtitle>
+                        </v-col>
+                    </v-row>
+
                 </v-card>
             </v-row>
             <v-row>
