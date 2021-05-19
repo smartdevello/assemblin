@@ -12,7 +12,5 @@ class Sensor extends Model
 
     protected $fillable = [
         'deviceId', 'observationId', 'tag', 'name', 'type', 'unit', 'value', 'message_time', 'deos_pointId'
-    ];
-
-    public $timestamps = false;
+    ];    
 }
