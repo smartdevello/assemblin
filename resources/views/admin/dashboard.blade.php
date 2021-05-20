@@ -21,7 +21,7 @@
         <v-container>
             <v-row>
                 <v-col cols="12" sm="8" md="8">
-                    <div v-if="devices" class="section_container sensors">
+                    <div class="section_container sensors">
                         <h1 class="section_title">Sensors</h1>
                         <v-row>
                             <v-col cols="12" sm="2" md="2">
@@ -39,89 +39,79 @@
                             <v-col cols="12" sm="2" md="2">
                                 Type
                             </v-col>
-                            <v-col cols="12" sm="1" md="1">
+                            <v-col cols="12" sm="2" md="2">
                                 Latest value
                             </v-col>
-                            <v-col cols="12" sm="1" md="1">
-                                Manual Value
-                            </v-col>
                         </v-row>
-                        <div v-for="device in devices.data">
-                            <div v-for="observation in device.latestObservations">
-                                <v-row>
-                                    <v-col cols="12" sm="2" md="2">
-                                        <v-text-field v-model="device.deviceId" solo></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="2" md="2">
-                                        <v-text-field v-model="observation.id" solo></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="2" md="2">
-                                        <v-text-field v-model="device.tags[0]" solo></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="2" md="2">
-                                        <v-text-field v-model="device.displayName" solo></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="2" md="2">
-                                        <v-text-field v-model="observation.variable" solo></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="1" md="1">
-                                        <v-text-field v-model="observation.value" solo></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="1" md="1">
-                                        <v-text-field v-model="observation.manual_value" solo></v-text-field>
-                                    </v-col>
-                                </v-row>
-                            </div>
+                        <div v-for="sensor in sensors">
+                            <v-row>
+                                <v-col cols="12" sm="2" md="2">
+                                    <v-text-field v-model="sensor.deviceId" solo></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="2" md="2">
+                                    <v-text-field v-model="sensor.observationId" solo></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="2" md="2">
+                                    <v-text-field v-model="sensor.tag" solo></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="2" md="2">
+                                    <v-text-field v-model="sensor.name" solo></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="2" md="2">
+                                    <v-text-field v-model="sensor.type" solo></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="2" md="2">
+                                    <v-text-field v-model="sensor.value" solo></v-text-field>
+                                </v-col>
+
+                            </v-row>
                         </div>
                     </div>
                 </v-col>
                 <v-col cols="12" sm="3" md="3">
-                    <div v-if="DEOSPoints" class="section_container DEOS">
+                    <div class="section_container DEOS">
                         <h1 class="section_title">DEOS</h1>
                         <v-row>
-                            <v-col cols="12" sm="8" md="8">
+                            <v-col cols="12" sm="6" md="6">
                                 DEOS point name
                             </v-col>
-                            <v-col cols="12" sm="4" md="4">
+                            <v-col cols="12" sm="6" md="6">
                                 DEOS Controller
                             </v-col>
                         </v-row>
-                        <div v-for="device in devices.data">
-                            <div v-for="observation in device.latestObservations">
+                        <div v-for="sensor in sensors">
                                 <v-row>
-                                    <v-col cols="12" sm="7" md="7">
-                                        <v-select :items="DEOSPoints" v-model="observation.point_name" item-text="id" item-value="id" solo>
+                                    <v-col cols="12" sm="6" md="6">
+                                        <v-select :items="points" v-model="sensor.point_id" item-text="name" item-value="id" solo>
                                         </v-select>
                                     </v-col>
-                                    <v-col cols="12" sm="5" md="5">
-                                        <v-select v-if="asm_serverconfig" :items="asm_serverconfig.Slaves" item-text="Name" item-value="Name" solo></v-select>
+                                    <v-col cols="12" sm="6" md="6">
+                                        <v-select :items="controllers" v-model="sensor.controller_id" item-text="name" item-value="id" solo>                                            
+                                        </v-select>
                                     </v-col>
                                 </v-row>
-                            </div>
                         </div>
                     </div>
                 </v-col>
                 <v-col cols="12" sm="1" md="1">
-                    <div v-if="devices" class="section_container Areas">
+                    <div class="section_container Areas">
                         <h1 class="section_title">Areas</h1>
                         <v-row>
-                            <v-col cols="12" sm="6" md="6">
+                            <v-col cols="12" sm="12" md="12">
                                 Area name
                             </v-col>
                         </v-row>
-                        <div v-for="device in devices.data">
-                            <div v-for="observation in device.latestObservations">
+                        <div v-for="sensor in sensors">
                                 <v-row>
                                     <v-col cols="12" sm="12" md="12">
                                         <v-text-field solo></v-text-field>
                                     </v-col>
                                 </v-row>
-                            </div>
                         </div>
                     </div>
                 </v-col>
             </v-row>
-            <v-row v-if="devices">
+            <v-row >
                 <v-col cols="12" sm="10" md="10">
 
                 </v-col>
@@ -141,17 +131,22 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
-                devices: null,
-                DEOSPoints: null,
+                sensors: ( <?php echo json_encode($sensors); ?> ),
+                points: ( <?php echo json_encode($points); ?> ),
+                controllers: ( <?php echo json_encode($controllers); ?> ),
+                areas: ( <?php echo json_encode($areas); ?> ),
                 asm_serverconfig: null,
                 asm_restconfig: {},
                 is_relation_updating: false
             },
 
             mounted: function() {
-                this.getFoxeriotDevices();
-                this.getDEOSPoints();
-                this.getAsmServerConfig();
+                for (let sensor of this.sensors) {
+                    console.log(sensor);
+                }
+                // this.getFoxeriotDevices();
+                // this.getDEOSPoints();
+                // this.getAsmServerConfig();
             },
             watch: {
                 devices: function() {
