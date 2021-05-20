@@ -38,7 +38,7 @@ class PointController extends Controller
         curl_close($ch);
         return json_decode($result);
     }
-    public function getTrendPoints()
+    public function getTrends()
     {
         $ch = curl_init();
 
@@ -53,7 +53,9 @@ class PointController extends Controller
             return curl_error($ch);
         }
         curl_close($ch);
-        return json_decode($result);
+        $result = json_decode($result);
+
+        return json_encode($result);
     }
     public function getReadablePoints()
     {
