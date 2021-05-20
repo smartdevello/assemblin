@@ -144,4 +144,21 @@ trait AssemblinInit {
         }
         return DEOS_point::all();
     }
+
+    public function writePointstoLocalDB(Request $request){
+
+        foreach($request->all() as $item) {
+            $row = DEOS_point::where('name', $item->name)->first();
+            if ($row === null) {
+                DEOS_point::create([
+                    'name' => $item->name,
+                    'value' => $item->value
+                ]);
+            } else {
+                $row->update(['value' => $item['value']]);
+            }
+        }
+
+        return DEOS_point::all();
+    }
 }
