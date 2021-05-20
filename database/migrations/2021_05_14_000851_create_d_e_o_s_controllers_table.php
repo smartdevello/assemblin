@@ -21,6 +21,7 @@ class CreateDEOSControllersTable extends Migration
             $table->string('port_number')->nullable();
 
             $table->unsignedBigInteger('building_id')->nullable();
+            $table->foreign('building_id')->references('id')->on('buildings')->onDelete('cascade');
             $table->timestamps();
         });
     }

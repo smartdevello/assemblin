@@ -1,7 +1,16 @@
 @extends('admin.layout.master')
 @section('content')
-    <v-main v-if="!!controllers">
+    <v-main >
         <v-container>
+            @if( \Session::has('success') ) 
+                <h3>{{ \Session::get('success') }}</h3>
+            @else
+                @if( count($errors) > 0)  
+                    @foreach($errors->all() as $error)
+                        <h3 style="color: red">{{ $error }}</h3>
+                    @endforeach
+                @endif
+            @endif
             <v-row>
                 <v-card v-for="controller in controllers" :key="controller.id" @click="openUpdateModal(controller.id)" width="300" elevation="10" class="ma-2">
                     <v-card-title>@{{ controller . name }}</v-card-title>
@@ -34,7 +43,7 @@
                                     <v-text-field placeholder="Name" name="name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
                                     <v-text-field placeholder="IP Address" name="ip_address" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
                                     <v-text-field placeholder="Port Number" name="port_number" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
-                                    <v-select :items="buildings" label="Select A Building" name="building_id" item-text="name" item-value="id" solo required :rules="[ v => !!v || 'Field is required', ]">
+                                    <v-select :items="buildings" label="Select A Building" name="building_id" item-text="name" item-value="id" solo required>
                                     </v-select>
                                     <v-card-actions>
                                         <v-spacer></v-spacer>

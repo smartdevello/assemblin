@@ -19,7 +19,9 @@ class AreaController extends Controller
 
     public function create(Request $request)
     {
-        $this->validate($request, ['name' => 'required', 'building_id' => 'required|exists:buildings,id']);
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
 
         Area::create(['name' => $request->name, 'building_id' => $request->building_id]);
 
@@ -35,7 +37,10 @@ class AreaController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->validate($request, ['building_id' => 'exists:buildings,id']);
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
+
 
         $result = Area::where('id', $id)->first();
         if (!$result) {

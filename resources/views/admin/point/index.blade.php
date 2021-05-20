@@ -2,6 +2,16 @@
 @section('content')
     <v-main >
         <v-container>
+            @if( \Session::has('success') ) 
+                <h3>{{ \Session::get('success') }}</h3>
+            @else
+                @if( count($errors) > 0)
+                    @foreach($errors->all() as $error)
+                        <h3 style="color: red">{{ $error }}</h3>
+                    @endforeach
+                @endif
+            @endif
+
             <v-row>
                 <v-card v-for="point in points" :key="point.id"   @click="openUpdateModal(point.id)" width="300" elevation="10" class="ma-2">
                     <v-card-title>@{{ point . label }}</v-card-title>
@@ -25,7 +35,7 @@
                                     <v-text-field v-model="currentPointLabel" name="label" label="DEOS page and sensor" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
                                     <v-text-field v-model="currentPointName" name="name" label="Point Name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
 
-                                    <v-select :items="controllers" label="Select A Controller" name="controller_id" item-text="name" item-value="id" solo required :rules="[ v => !!v || 'Field is required', ]">
+                                    <v-select :items="controllers" label="Select A Controller" name="controller_id" item-text="name" item-value="id" solo required >
                                     </v-select>
 
                                     <v-card-actions>

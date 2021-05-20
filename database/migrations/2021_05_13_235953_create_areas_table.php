@@ -17,7 +17,7 @@ class CreateAreasTable extends Migration
             $table->id();
 
             $table->text('name');
-            $table->unsignedBigInteger('building_id');
+            $table->unsignedBigInteger('building_id')->nullable();
             $table->foreign('building_id')->references('id')->on('buildings')->onDelete('cascade');
 
             $table->timestamps();
