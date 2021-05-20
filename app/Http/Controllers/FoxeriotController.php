@@ -20,24 +20,6 @@ class FoxeriotController extends Controller
     {
         //
     }
-    public function getDEOS_point_name(Request $request)
-    {
-
-        try {
-            
-            // foreach ($request->all() as $item) {
-            //     $row = Sensor::where('deviceId', $request['deviceId'])->where('type', $request['variable'])->first();
-
-            // }
-
-            return response()->json($request->all(), 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ], 403);
-        }
-    }
-
     /**
      * Show the form for creating a new resource.
      *

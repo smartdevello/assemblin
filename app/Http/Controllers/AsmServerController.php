@@ -42,7 +42,8 @@ class AsmServerController extends Controller
                 $controller->controller_id = $row->id;
                 
             }
-            return json_encode($content);
+            
+            return response()->json($content);
         } catch (\Exception $e){
             return response()->json([
                 'error' => $e->getMessage()
@@ -56,10 +57,9 @@ class AsmServerController extends Controller
         if (!empty($request['name']) ) {
             try{
                 $filepath = config()->get('constants.BASE_CONFIG_PATH') . 'asmrest/' . $request['name'] . ".json";
-                $myfile = fopen($filepath, "rw") or die("Unable to open file!");
-                $content = fread($myfile, filesize($filepath));
-                fclose($myfile);
-                $content = json_decode($content);
+                $content = file_get_contents($filepath);            
+                $content = json_decode($content); 
+
 
                 foreach($content->LP->Writeable as $point) {
                     
@@ -82,7 +82,7 @@ class AsmServerController extends Controller
                     }
                 }
 
-                return json_encode($content);
+                return response()->json($content);
 
             }catch (\Exception $e){
                 return response()->json([
