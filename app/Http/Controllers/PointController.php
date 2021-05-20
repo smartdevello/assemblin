@@ -40,7 +40,7 @@ class PointController extends Controller
                 $row->update(['value' => $point['value']]);
             }
         }
-        return json_encode($res);
+        return DEOS_point::all();
     }
     public function WritePointsfromLocal(Request $request){
         $row = DEOS_point::where('name', $request->id)->first();
