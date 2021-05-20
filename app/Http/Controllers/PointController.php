@@ -4,44 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\DEOS_point;
+use App\Http\Traits\AssemblinInit;
 
 class PointController extends Controller
 {
+    use AssemblinInit;
     public $api_uri = 'https://172.21.8.245:8000';
 
-    public function getPoints()
-    {
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, $this->api_uri . '/assemblin/points/byid');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 400);
-
-        $result = curl_exec($ch);
-        if (curl_errno($ch)) {
-            return curl_error($ch);
-        }
-        curl_close($ch);
-
-        $res = json_decode($result, true);
-        foreach ($res as $point) {
-
-            $row = DEOS_point::where('name', $point['id'])->first();
-            if ($row === null) {
-                DEOS_point::create([
-                    'name' => $point['id'],
-                    'value' => $point['value']
-                ]);
-            } else {
-                $row->update(['value' => $point['value']]);
-            }
-        }
-        return DEOS_point::all();
-    }
     public function WritePointsfromLocal(Request $request){
         $row = DEOS_point::where('name', $request->id)->first();
         if ($row === null) {
