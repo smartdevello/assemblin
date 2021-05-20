@@ -31,7 +31,8 @@ Route::middleware(['cors'])->group(function(){
 
     Route::group(['prefix' => 'point'], function ($router) {
         Route::get('', [PointController::class, 'getPoints'])->name('getPoints');
-        Route::get('readable', [PointController::class, 'getReadablePoints'])->name('getReadablePoints');
+        Route::post('writePointstoLocalDB', [PointController::class, 'writePointstoLocalDB'])->name('writePointstoLocalDB');
+        
     });    
 
 
