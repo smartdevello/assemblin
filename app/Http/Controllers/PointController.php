@@ -10,22 +10,7 @@ class PointController extends Controller
 {
     use AssemblinInit;
     public $api_uri = 'https://172.21.8.245:8000';
-
-    public function writePointstoLocalDB(Request $request){
-        $row = DEOS_point::where('name', $request->id)->first();
-        if ($row === null) {
-            DEOS_point::create([
-                'name' => $request->id,
-                'value' => $request->value
-            ]);
-        } else {
-            $row->update(['value' => $request['value']]);
-        }
-        return response()->json([
-            'success' => 'created successfully'
-        ], 200);
-
-    }
+    
     public function WritePointsbyid(Request $request)
     {
 
