@@ -31,14 +31,17 @@ class DEOS_pointController extends Controller
     {
         //
         $this->validate($request, [
-            'name' => 'required',
-            'label' => 'required',
-            'controller_id' => 'required'
+            'name' => 'required|unique:deos_points,name',
+            'label' => 'required'
+        ], [
+            'name.required' => "Name field can't be empty",
+            'name.unique' => $request->name . ' already exists in DB. ' . 'Name field should be unique',
+            'label.required' => "Description field can't be empty",
         ]);
+        
         DEOS_point::create([
             'name' => $request->name,
             'label' => $request->label,
-            'controller_id' => $request->controller_id
         ]);
         $this->updateConfigfiles();
         return back()->with('success', 'Created successfully');
@@ -92,12 +95,11 @@ class DEOS_pointController extends Controller
         
         //
         $this->validate($request, [
-            'controller_id' => 'required',
-            'name' => 'required',
+            'name' => 'required|unique:deos_points,name',
             'label' => 'required'
         ], [
-            'controller_id.required' => 'You must select a Controller',
             'name.required' => "Name field can't be empty",
+            'name.unique' => $request->name . ' already exists in DB. ' . 'Name field should be unique',
             'label.required' => "Description field can't be empty",
         ]);
 

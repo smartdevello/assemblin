@@ -33,7 +33,7 @@
                                     <v-card-title class="headline grey lighten-2">
                                         Add New Building
                                     </v-card-title>
-                                    <v-text-field v-model="currentBuilding" name="name" required class="pa-2"></v-text-field>
+                                    <v-text-field v-model="currentBuilding" name="name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
                                     <v-select :items="locations" label="Select A Location" name="location_id" item-text="name" item-value="id" solo required>
                                     </v-select>
                                     <v-card-actions>

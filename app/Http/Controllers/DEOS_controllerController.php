@@ -28,15 +28,14 @@ class DEOS_controllerController extends Controller
     public function create(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
+            'name' => 'required|unique:deos_controllers,name',
             'ip_address' => 'required',
             'port_number' => 'required',
-            'building_id' => 'required|exists:buildings,id'
         ],[
             'name.required' => "Name field can't be empty",
+            'name.unique' => $request->name . ' already exists in DB.' . ' Name field should be unique.',
             'ip_address.required' => "IP Address can't be empty",
             'port_number.required' => "Port Number can't be empty",
-            'building_id.required' => "You must select a building",
         ]);
 
         $controllers = DEOS_controller::all();
@@ -114,7 +113,16 @@ class DEOS_controllerController extends Controller
 
     public function update(Request $request, $id)
     {
-        // $this->validate($request, ['building_id' => 'exists:buildings,id']);
+        $this->validate($request, [
+            'name' => 'required',
+            'ip_address' => 'required',
+            'port_number' => 'required',
+        ],[
+            'name.required' => "Name field can't be empty",
+            'ip_address.required' => "IP Address can't be empty",
+            'port_number.required' => "Port Number can't be empty",
+        ]);
+        
 
         $result = DEOS_controller::where('id', $id)->first();
         if (!$result) {
@@ -143,8 +151,9 @@ class DEOS_controllerController extends Controller
 
     public function createPoint(Request $request, $id)
     {
-        $this->validate($request, ['name' => 'required', 'value' => 'required']);
-        DEOS_point::create(['name' => $request->name, 'value' => $request->value, 'controller_id' => $id]);
+        $this->validate($request, ['name' => 'required', 'label' => 'required']);
+
+        DEOS_point::create(['name' => $request->name, 'label' => $request->label, 'controller_id' => $id]);
 
         return back()->with('success', 'Created successfully');
     }

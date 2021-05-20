@@ -30,7 +30,9 @@ class BuildingController extends Controller
 
     public function create(Request $request)
     {
-        $this->validate($request, ['name' => 'required', 'location_id' => 'required']);
+        $this->validate($request, [
+            'name' => 'required'
+        ]);
 
         Building::create($request->all());
 
@@ -49,7 +51,9 @@ class BuildingController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->validate($request, ['location_id' => 'exists|locations,id']);
+        $this->validate($request, [
+            'name' => 'required'
+        ]);
 
         $result = Building::where('id', $id)->first();
         if (!$result) {

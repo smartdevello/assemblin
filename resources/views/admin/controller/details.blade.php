@@ -5,6 +5,15 @@
             @if (empty($controller))
                 <h1>Controller not found</h1>
             @else
+                @if( \Session::has('success') ) 
+                    <h3>{{ \Session::get('success') }}</h3>
+                @else
+                    @if( count($errors) > 0)  
+                        @foreach($errors->all() as $error)
+                            <h3 style="color: red">{{ $error }}</h3>
+                        @endforeach
+                    @endif
+                @endif
                 <template>
                     <div class="text-center">
                         <v-form :action="updateUrl" method="POST" id="update-form">
@@ -86,8 +95,9 @@
                             <v-card-title class="headline grey lighten-2">
                                 Add New Point
                             </v-card-title>
-                            <v-text-field name="name" placeholder="name" required class="pa-2"></v-text-field>
-                            <v-text-field name="value" placeholder="value" required class="pa-2"></v-text-field>
+                            
+                            <v-text-field  name="label" label="DEOS page and sensor" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
+                            <v-text-field  name="name"  label="Point Name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="primary" text type="submit" form="add-point-form">Submit</v-btn>
