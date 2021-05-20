@@ -42,8 +42,8 @@
                         </v-form>
                         <v-form :action="deleteControllersUrl" method="POST" id="delete-controller-form">
                             @csrf
-                            <v-card class="mx-auto my-12" v-if="building.deos_controllers.length > 0">
-                                <v-card-text fluid v-for="controller in building.deos_controllers" :key="controller.id">
+                            <v-card class="mx-auto my-12" v-if="building.controllers.length > 0">
+                                <v-card-text fluid v-for="controller in building.controllers" :key="controller.id">
                                     <v-checkbox v-model="controllerSelected[controller.id]">
                                         <template v-slot:label>
                                             <div>@{{ controller . name }}</div>

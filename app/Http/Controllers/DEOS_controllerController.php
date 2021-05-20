@@ -65,8 +65,8 @@ class DEOS_controllerController extends Controller
         foreach($controllers as $controller ){
             $item = new stdClass();
             $item->Name = $controller->name;
-            $item->ip_address = 'localhost';
-            $item->port_number = $controller->port_number;
+            $item->IP = 'localhost';
+            $item->Port = $controller->port_number;
             array_push($content->Slaves, $item);
         }
         file_put_contents($filepath, json_encode($content));
@@ -114,7 +114,7 @@ class DEOS_controllerController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->validate($request, ['building_id' => 'exists:buildings,id']);
+        // $this->validate($request, ['building_id' => 'exists:buildings,id']);
 
         $result = DEOS_controller::where('id', $id)->first();
         if (!$result) {

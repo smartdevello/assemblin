@@ -27,8 +27,7 @@ class AsmServerController extends Controller
             $content = json_decode($content); 
 
             foreach($content->Slaves as &$controller){
-                $row = DEOS_controller::where('name', $controller->Name)->where('ip_address', $controller->IP)
-                ->where('port_number', $controller->Port)->first();
+                $row = DEOS_controller::where('name', $controller->Name)->where('port_number', $controller->Port)->first();
 
                 $data = [
                     'name' => $controller->Name ?? '',
@@ -50,7 +49,8 @@ class AsmServerController extends Controller
             ], 403);
         }
 
-    }    
+    }
+    
     public function getRESTconfig(Request $request)
     {
         if (!empty($request['name']) ) {

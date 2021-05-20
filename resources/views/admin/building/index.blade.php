@@ -12,7 +12,7 @@
                             </v-card-subtitle>
                         </v-col>
                         <v-col cols="6">
-                            <v-card-subtitle v-for="item in building.deos_controllers" :key="item.id">
+                            <v-card-subtitle v-for="item in building.controllers" :key="item.id">
                                 @{{ item . name }}
                             </v-card-subtitle>
                         </v-col>
