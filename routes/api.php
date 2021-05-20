@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FoxeriotController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,17 +24,29 @@ Route::middleware(['cors'])->group(function(){
     Route::get('points/writable', '\App\Http\Controllers\PointController@getWritablePoints');
     Route::put('points/writepointsbyid', '\App\Http\Controllers\PointController@WritePointsbyid');
     Route::post('points/WritePointsfromLocal', '\App\Http\Controllers\PointController@WritePointsfromLocal');
-    
-
     Route::get('points/trends', '\App\Http\Controllers\PointController@getTrendPoints');
     Route::post('points/trends/values', '\App\Http\Controllers\PointController@getTrendValues');
 
-    Route::get('foxeriot/devices', '\App\Http\Controllers\FoxeriotController@getDevices');
+
+    Route::group(['prefix' => 'point'], function ($router) {
+
+    });    
+
+
+
+    Route::group(['prefix' => 'sensor'], function ($router) {
+        Route::get('', [FoxeriotController::class, 'getSensors'])->name('getSensors');
+        Route::post('updatePoints', [FoxeriotController::class, 'updateSensorsPoint'])->name('updateSensorsPoint');
+
+
+    });
+    Route::put('foxeriot/sensors/updatePoints', '\App\Http\Controllers\FoxeriotController@updateSensorsPoint');
+
     Route::get('foxeriot/observations', '\App\Http\Controllers\FoxeriotController@getObservations');
-    Route::get('foxeriot/getDEOS_pointId', '\App\Http\Controllers\FoxeriotController@getDEOS_pointId');
+    Route::post('foxeriot/getDEOS_point_name', '\App\Http\Controllers\FoxeriotController@getDEOS_point_name');
     Route::get('foxeriot/automatic_update', '\App\Http\Controllers\FoxeriotController@automatic_update');
 
-    Route::put('foxeriot/devices', '\App\Http\Controllers\FoxeriotController@update');
+    
 
     Route::get('asm_server/config/getSERVERConfig', '\App\Http\Controllers\AsmServerController@getSERVERConfig');
     Route::get('asm_server/config/getRESTconfig', '\App\Http\Controllers\AsmServerController@getRESTconfig');

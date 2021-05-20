@@ -26,8 +26,16 @@ class Sensors extends Migration
             $table->float('value')->nullable();
             $table->string('message_time')->nullable();
             
-            $table->unsignedBigInteger('deos_pointId')->nullable();
-            $table->foreign('deos_pointId')->references('id')->on('deos_points')->onDelete('cascade');
+            $table->unsignedBigInteger('point_id')->nullable();
+            $table->foreign('point_id')->references('id')->on('deos_points')->onDelete('cascade');
+            $table->string('point_name')->nullable();
+            $table->unsignedBigInteger('controller_id')->nullable();
+            $table->foreign('controller_id')->references('id')->on('deos_controllers')->onDelete('cascade');
+
+            $table->unsignedBigInteger('area_id')->nullable();
+            $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade');
+
+
             $table->timestamps();
         });
     }
