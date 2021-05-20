@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FoxeriotController;
+use App\Http\Controllers\PointController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,7 +30,7 @@ Route::middleware(['cors'])->group(function(){
 
 
     Route::group(['prefix' => 'point'], function ($router) {
-
+        Route::get('', [PointController::class, 'getPoints'])->name('getPoints');
     });    
 
 
