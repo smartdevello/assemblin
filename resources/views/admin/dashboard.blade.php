@@ -90,7 +90,7 @@
                             <div v-for="observation in device.latestObservations">
                                 <v-row>
                                     <v-col cols="12" sm="7" md="7">
-                                        <v-select :items="DEOSPoints" v-model="observation.DEOS_pointId" item-text="id" item-value="id" solo>
+                                        <v-select :items="DEOSPoints" v-model="observation.point_name" item-text="id" item-value="id" solo>
                                         </v-select>
                                     </v-col>
                                     <v-col cols="12" sm="5" md="5">
@@ -161,19 +161,54 @@
             methods: {
                 getFoxeriotDevices: function() {
                     return $.ajax({
-                        url: base_url + "/api/foxeriot/devices",
+                        url: "/api/foxeriot/devices",
                         success: function(data) {
                             main_vm.devices = JSON.parse(data);
                             for (device of main_vm.devices.data) {
-                                // console.log(device);
-                                for (observation of device.latestObservations) {
-                                    let res = main_vm.getDEOS_pointId(device['deviceId'], observation['variable']);
-                                    if (res.status == 200) {
-                                        let resdata = JSON.parse(res.responseText);
-                                        observation.DEOS_pointId = resdata.DEOS_pointId ? resdata.DEOS_pointId : "";
-                                    }
 
-                                }
+                                for (observation of device.latestObservations) observation.deviceId = device['deviceId'];
+                                console.log(device.latestObservations);
+                                
+                                $.ajax({
+                                        url: "/api/foxeriot/getDEOS_point_name",
+                                        type: "POST",
+                                        data: device.latestObservations,
+                                        success: function(res) {
+                                            console.log(res);
+                                        },
+                                        error: function(err) {
+                                            console.error(err);
+                                        }
+                                });
+                                // for (observation of device.latestObservations) {
+                                //     submitdata.push({
+                                //         "deviceId" : device['deviceId'],
+                                //         "variable": observation['variable']
+                                //     });
+                                //     // $.ajax({
+                                //     //     url: "/api/foxeriot/getDEOS_point_name",
+                                //     //     type: "POST",
+                                //     //     data: {
+                                //     //         "deviceId": device['deviceId'],
+                                //     //         "variable": variable
+                                //     //     },
+                                //     //     success: function(data) {
+                                //     //         console.log(data);
+                                //     //     },
+                                //     //     error: function(err) {
+                                //     //         console.error(err);
+                                //     //     }
+                                //     // });
+                                //     // let res = main_vm.getDEOS_point_name(device['deviceId'], observation['variable']);
+                                //     // debugger;
+                                //     // console.log(res);
+                                //     // if (res.status == 200) {
+                                //     //     let resdata = JSON.parse(res.responseText);
+                                //     //     observation.point_name = resdata.point_name ? resdata.point_name : "";
+                                //     // }
+
+                                // }
+  
                             }
 
                         },
@@ -182,18 +217,19 @@
                         }
                     });
                 },
-                getDEOS_pointId: function(deviceId, variable) {
-                    return $.ajax({
-                        url: base_url + "/api/foxeriot/getDEOS_pointId",
+                getDEOS_point_name: function(deviceId, variable) {
+                     $.ajax({
+                        url: "/api/foxeriot/getDEOS_point_name",
+                        type: "POST",
                         data: {
                             "deviceId": deviceId,
                             "variable": variable
                         },
                         success: function(data) {
-                            // console.log(data);
+                            console.log(data);
                         },
                         error: function(err) {
-
+                            console.error(err);
                         }
                     });
                 },
@@ -262,11 +298,11 @@
                         }
                     });
                 },
-                update_DEOS_pointId: function(point_data) {
+                update_DEOS_point_name: function(point_data) {
                     console.log(point_data);
                     return $.ajax({
                         type: "PUT",
-                        url: base_url + "/api/foxeriot/devices",
+                        url: "/api/foxeriot/devices",
                         headers: {
                             "Content-Type": "application/json"
                         },
@@ -282,16 +318,17 @@
                     let point_data = [];
                     for (device of this.devices.data) {
                         for (observation of device.latestObservations) {
-                            if (observation.DEOS_pointId !== null && observation.DEOS_pointId !== undefined) {
+                            if (observation.point_name !== null && observation.point_name !== undefined) {
+                                debugger;
                                 let value = observation.manual_value ? String(observation.manual_value) : String(observation.value);
                                 data.push({
-                                    "id": observation.DEOS_pointId,
+                                    "id": observation.point_name,
                                     "value": value
                                 });
                                 point_data.push({
                                     "deviceId": device['deviceId'],
                                     "variable": observation['variable'],
-                                    "DEOS_pointId": observation.DEOS_pointId
+                                    "point_name": observation.point_name
                                 });
                                 this.is_relation_updating = true;
 
@@ -299,7 +336,7 @@
                         }
                     }
 
-                    this.update_DEOS_pointId(point_data);
+                    this.update_DEOS_point_name(point_data);
 
                     if (data.length > 0) {
 
