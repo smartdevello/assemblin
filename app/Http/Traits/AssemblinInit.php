@@ -4,6 +4,7 @@ namespace App\Http\Traits;
 
 use App\Models\Sensor;
 use Illuminate\Http\Request;
+use App\Models\DEOS_controller;
 use App\Models\DEOS_point;
 
 trait AssemblinInit {
@@ -192,4 +193,85 @@ trait AssemblinInit {
         return json_encode($result);
     }
 
+
+    public function getSERVERConfig()
+    {
+        try{
+            $filepath = config()->get('constants.BASE_CONFIG_PATH') . 'asmserver/config.json';
+            $content = file_get_contents($filepath);            
+            $content = json_decode($content); 
+
+            foreach($content->Slaves as &$controller){
+                $row = DEOS_controller::where('name', $controller->Name)->where('port_number', $controller->Port)->first();
+
+                $data = [
+                    'name' => $controller->Name ?? '',
+                    // 'ip_address' => $controller->IP ?? '',
+                    'port_number' => $controller->Port ?? ''
+                ];
+                if ($row === null) {
+                    $row = DEOS_controller::create($data);
+                } else {
+                    $row->update($data);
+                }
+                $controller->controller_id = $row->id;
+                
+            }
+            
+            return response()->json($content);
+        } catch (\Exception $e){
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 403);
+        }
+
+    }
+
+    public function getRESTconfig(DEOS_controller $controller)
+    {
+        if (!empty($controller->name) ) {
+            try{
+                $filepath = config()->get('constants.BASE_CONFIG_PATH') . 'asmrest/' . $controller->name . ".json";
+                $content = file_get_contents($filepath);            
+                $content = json_decode($content); 
+
+                $controller->update([
+                    'ip_address' => $content->OpenEMS->IP
+                ]);
+
+                foreach($content->LP->Writeable as $point) {
+                    
+                    $row = DEOS_point::where('name', $point->Description)->first();
+                    $data = [
+                        'name' => $point->Description,
+                        'label' => $point->Label,
+                        'type' => $point->Type,
+                        'meta_property' => $point->Meta->property ?? '',
+                        'meta_room' => $point->Meta->room ?? '',
+                        'meta_sensor' => $point->Meta->sensor ?? '',
+                        'meta_type' => $point->Meta->type ?? '',
+                        'controller_id' => $controller->id
+                    ];
+                    
+                    if ($row === null)  {
+                        $row = DEOS_point::create($data);
+                    } else {
+                        $row->update($data);
+                    }
+                }
+
+                return response()->json($content);
+
+            }catch (\Exception $e){
+                return response()->json([
+                    'error' => $e->getMessage()
+                ], 403);
+            }
+
+        } else {
+            return response()->json([
+                'error' => 'Something went wrong!'
+            ], 404);
+        }
+    }
 }

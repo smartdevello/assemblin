@@ -2,20 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Area;
+use App\Models\DEOS_controller;
+use App\Models\DEOS_point;
 use Illuminate\Http\Request;
+use App\Models\Sensor;
+use App\Http\Traits\AssemblinInit;
 
 class DashboardController extends Controller
 {
+    use AssemblinInit;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         //
-        
-        return view('admin.dashboard');
+        $sensors = $this->getSensors();
+
+        $this->getSERVERConfig();
+        $controllers = DEOS_controller::all();
+        foreach($controllers as $controller)
+        {
+            $this->getRESTconfig($controller);
+        }
+        $points = DEOS_point::all();
+        $areas = Area::all();
+        return view('admin.dashboard', compact('sensors', 'points', 'controllers', 'areas'));
     }
 
     public function setting_index(){
