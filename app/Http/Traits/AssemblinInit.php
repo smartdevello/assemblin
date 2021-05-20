@@ -145,14 +145,15 @@ trait AssemblinInit {
         return DEOS_point::all();
     }
 
-    public function writePointstoLocalDB(Request $request){
+    public function writePointstoLocalDB(Request $request)
+    {
 
         foreach($request->all() as $item) {
-            $row = DEOS_point::where('name', $item->name)->first();
+            $row = DEOS_point::where('name', $item['name'])->first();
             if ($row === null) {
                 DEOS_point::create([
-                    'name' => $item->name,
-                    'value' => $item->value
+                    'name' => $item['name'],
+                    'value' => $item['value']
                 ]);
             } else {
                 $row->update(['value' => $item['value']]);
@@ -161,4 +162,34 @@ trait AssemblinInit {
 
         return DEOS_point::all();
     }
+
+    public function writePointsbyid(Request $request)
+    {
+
+        $ch = curl_init();
+        //        return $request;
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => $this->assemblin_api_uri . '/assemblin/points/writebyid',
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_CUSTOMREQUEST => "PUT",
+            CURLOPT_POSTFIELDS => json_encode($request->all()),
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "Accept: application/json"
+            ),
+        ));
+
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            return curl_error($ch);
+        }
+        curl_close($ch);
+        $result = json_encode($result);        
+        return json_encode($result);
+    }
+
 }

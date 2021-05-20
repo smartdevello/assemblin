@@ -10,34 +10,8 @@ class PointController extends Controller
 {
     use AssemblinInit;
     public $api_uri = 'https://172.21.8.245:8000';
-    
-    public function WritePointsbyid(Request $request)
-    {
-
-        $ch = curl_init();
-        //        return $request;
-        curl_setopt_array($ch, array(
-            CURLOPT_URL => $this->api_uri . '/assemblin/points/writebyid',
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_CUSTOMREQUEST => "PUT",
-            CURLOPT_POSTFIELDS => json_encode($request->all()),
-            CURLOPT_HTTPHEADER => array(
-                "Content-Type: application/json",
-                "Accept: application/json"
-            ),
-        ));
 
 
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-        $result = curl_exec($ch);
-        if (curl_errno($ch)) {
-            return curl_error($ch);
-        }
-        curl_close($ch);
-        return $result;
-    }
     public function getTrendValues(Request $request)
     {
         $ch = curl_init();
