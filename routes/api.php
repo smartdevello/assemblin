@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::middleware(['cors'])->group(function(){
-    Route::get('points', '\App\Http\Controllers\PointController@getPoints');
+
     Route::get('points/readable', '\App\Http\Controllers\PointController@getReadablePoints');
     Route::get('points/writable', '\App\Http\Controllers\PointController@getWritablePoints');
     Route::put('points/writepointsbyid', '\App\Http\Controllers\PointController@WritePointsbyid');
@@ -31,6 +31,7 @@ Route::middleware(['cors'])->group(function(){
 
     Route::group(['prefix' => 'point'], function ($router) {
         Route::get('', [PointController::class, 'getPoints'])->name('getPoints');
+        Route::get('readable', [PointController::class, 'getReadablePoints'])->name('getReadablePoints');
     });    
 
 
@@ -42,7 +43,6 @@ Route::middleware(['cors'])->group(function(){
 
     });
     Route::put('foxeriot/sensors/updatePoints', '\App\Http\Controllers\FoxeriotController@updateSensorsPoint');
-
     Route::get('foxeriot/observations', '\App\Http\Controllers\FoxeriotController@getObservations');
     Route::post('foxeriot/getDEOS_point_name', '\App\Http\Controllers\FoxeriotController@getDEOS_point_name');
     Route::get('foxeriot/automatic_update', '\App\Http\Controllers\FoxeriotController@automatic_update');
