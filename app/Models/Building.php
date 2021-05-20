@@ -24,7 +24,7 @@ class Building extends Model
         return $this->hasMany(Area::class, 'building_id', 'id');
     }
 
-    public function deos_controllers()
+    public function controllers()
     {
         return $this->hasMany(DEOS_controller::class, 'building_id', 'id');
     }

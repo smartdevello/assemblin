@@ -22,7 +22,7 @@ class BuildingController extends Controller
 
         foreach ($buildings as $item) {
             $item->areas;
-            $item->deos_controllers;
+            $item->controllers;
         }
 
         return view('admin.building.index', compact('buildings', 'locations'));
@@ -40,7 +40,7 @@ class BuildingController extends Controller
     public function show(Request $request, $id)
     {
         $building = Building::where('id', $id)->first();
-        $controllers = $building->deos_controllers;
+        $controllers = $building->controllers;
         $areas = $building->areas;
         $locations = Location::all();
 
@@ -62,11 +62,11 @@ class BuildingController extends Controller
 
     public function destroy($id)
     {
-        $result = Building::where('id', $id)->first();
-        if (!$result) {
+        $building = Building::where('id', $id)->first();
+        if (!$building) {
             return back()->with('error', 'Not found');
         }
-        $result->delete();
+        $building->delete();
 
         return redirect()->route('buildings')->with('success', 'Deleted successfully');
     }
