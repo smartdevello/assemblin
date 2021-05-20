@@ -22,9 +22,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::middleware(['cors'])->group(function(){
 
 
-    
-
-
     Route::group(['prefix' => 'point'], function ($router) {
         Route::get('', [PointController::class, 'getPoints'])->name('getPoints');
 
@@ -45,16 +42,19 @@ Route::middleware(['cors'])->group(function(){
         Route::get('', [FoxeriotController::class, 'getSensors'])->name('getSensors');
         Route::post('updatePoints', [FoxeriotController::class, 'updateSensorsPoint'])->name('updateSensorsPoint');
 
+    });
+
+    Route::group(['prefix' => 'observation'], function ($router) {
+        Route::get('', [FoxeriotController::class, 'getObservations'])->name('getObservations');      
 
     });
-    Route::put('foxeriot/sensors/updatePoints', '\App\Http\Controllers\FoxeriotController@updateSensorsPoint');
-    Route::get('foxeriot/observations', '\App\Http\Controllers\FoxeriotController@getObservations');
-    Route::post('foxeriot/getDEOS_point_name', '\App\Http\Controllers\FoxeriotController@getDEOS_point_name');
+
     Route::get('foxeriot/automatic_update', '\App\Http\Controllers\FoxeriotController@automatic_update');
 
     
-
-    Route::get('asm_server/config/getSERVERConfig', '\App\Http\Controllers\AsmServerController@getSERVERConfig');
-    Route::get('asm_server/config/getRESTconfig', '\App\Http\Controllers\AsmServerController@getRESTconfig');
+    Route::group(['prefix' => 'asm_server/config'], function ($router) {
+        Route::get('getSERVERConfig', [AsmServerController::class, 'getSERVERConfig'])->name('getSERVERConfig');
+        Route::get('getRESTconfig', [AsmServerController::class, 'getRESTconfig'])->name('getRESTconfig');
+    });    
 
 });
