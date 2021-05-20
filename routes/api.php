@@ -21,21 +21,25 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::middleware(['cors'])->group(function(){
 
-    Route::get('points/readable', '\App\Http\Controllers\PointController@getReadablePoints');
-    Route::get('points/writable', '\App\Http\Controllers\PointController@getWritablePoints');
-    Route::put('points/writepointsbyid', '\App\Http\Controllers\PointController@writePointsbyid');
-    Route::post('points/WritePointsfromLocal', '\App\Http\Controllers\PointController@WritePointsfromLocal');
-    Route::get('points/trends', '\App\Http\Controllers\PointController@getTrendPoints');
-    Route::post('points/trends/values', '\App\Http\Controllers\PointController@getTrendValues');
+
+    
 
 
     Route::group(['prefix' => 'point'], function ($router) {
         Route::get('', [PointController::class, 'getPoints'])->name('getPoints');
+
         Route::post('writePointstoLocalDB', [PointController::class, 'writePointstoLocalDB'])->name('writePointstoLocalDB');
         Route::post('writePointsbyid', [PointController::class, 'writePointsbyid'])->name('writePointsbyid');
+
+        Route::get('readable', [PointController::class, 'getReadablePoints'])->name('getReadablePoints');
+        Route::get('writable', [PointController::class, 'getWritablePoints'])->name('getWritablePoints');
+        
     });    
 
-
+    Route::group(['prefix' => 'trend'], function ($router) {
+        Route::get('', [PointController::class, 'getTrends'])->name('getTrends');
+        // Route::post('values',  [PointController::class, 'getTrendValues'])->name('getTrendValues');
+    });
 
     Route::group(['prefix' => 'sensor'], function ($router) {
         Route::get('', [FoxeriotController::class, 'getSensors'])->name('getSensors');
