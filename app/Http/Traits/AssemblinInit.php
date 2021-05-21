@@ -113,6 +113,28 @@ trait AssemblinInit {
         }
     }
 
+
+    public function checkPoints()
+    {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $this->assemblin_api_uri . '/assemblin/points/byid');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 400);
+
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            return curl_error($ch);
+        }
+        curl_close($ch);
+
+        $res = json_decode($result, true);
+        return json_encode($res);
+    }
     public function getPoints()
     {
         $ch = curl_init();
@@ -215,7 +237,7 @@ trait AssemblinInit {
 
         return DEOS_point::all();
     }
-    
+
     public function writePointsbyid(Request $request)
     {
 
