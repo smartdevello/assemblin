@@ -22,10 +22,16 @@
                                 <v-card-title class="headline grey lighten-2">
                                     Edit Point
                                 </v-card-title>
+                                <v-card-text></v-card-text>
                                 <v-card-text>
-                                    <v-text-field v-model="point.label" name="label" label = "DEOS page and sensor" solo required></v-text-field>
-                                    <v-text-field v-model="point.name" name="name" label="Name" solo required></v-text-field>
-                                    <v-select :items="controllers" label="Select a Controller" name="controller_id" v-model="point.controller_id" item-text="name" item-value="id" solo required>
+                                    <v-text-field v-model="point.label" name="label" label = "DEOS page and sensor" :rules="[ v => !!v || 'Field is required', ]" required></v-text-field>
+                                    <v-text-field v-model="point.name" name="name" label="Name" :rules="[ v => !!v || 'Field is required', ]" required></v-text-field>
+                                    <div>
+                                        <v-select :items="controllers" label="Select a Controller" name="controller_id" v-model="point.controller_id" item-text="name" item-value="id" solo required>
+                                    </div>
+                                    <div>
+                                        <v-select :items="areas" label="Select an Area" name="area_id" v-model="point.area_id" item-text="name" item-value="id" solo required>
+                                    </div>
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-btn color="primary" text type="submit" form="update-form">Update</v-btn>
@@ -64,6 +70,7 @@
                 mainMenu: mainMenu,
                 point: ( <?php echo json_encode($point); ?> ),
                 controllers: ( <?php echo json_encode($controllers); ?> ),
+                areas: ( <?php echo json_encode($areas); ?> ),
                 updateUrl: "",
                 deleteUrl: "",
                 openDelete: false,

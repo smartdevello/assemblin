@@ -82,11 +82,11 @@
                         <div v-for="sensor in sensors">
                                 <v-row>
                                     <v-col cols="12" sm="6" md="6">
-                                        <v-select :items="points" v-model="sensor.point_id" item-text="name" item-value="id" solo>
+                                        <v-select :items="points" v-model="sensor.point_id" item-text="name" item-value="id" solo @change="changePoint($event, sensor.id)">
                                         </v-select>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="6">
-                                        <v-select :items="controllers" v-model="sensor.controller_id" item-text="name" item-value="id" solo>                                            
+                                        <v-select :items="controllers" v-model="sensor.controller_id" item-text="name" item-value="id" solo @change="changeContoller($event, sensor.id)">
                                         </v-select>
                                     </v-col>
                                 </v-row>
@@ -104,7 +104,8 @@
                         <div v-for="sensor in sensors">
                                 <v-row>
                                     <v-col cols="12" sm="12" md="12">
-                                        <v-text-field solo></v-text-field>
+                                        <v-select :items="areas" v-model="sensor.area_id" item-text="name" item-value="id" solo>                                            
+                                        </v-select>
                                     </v-col>
                                 </v-row>
                         </div>
@@ -135,8 +136,6 @@
                 points: ( <?php echo json_encode($points); ?> ),
                 controllers: ( <?php echo json_encode($controllers); ?> ),
                 areas: ( <?php echo json_encode($areas); ?> ),
-                asm_serverconfig: null,
-                asm_restconfig: {},
                 is_relation_updating: false
             },
 
@@ -149,164 +148,31 @@
                 // this.getAsmServerConfig();
             },
             watch: {
-                devices: function() {
 
-                }
             },
             methods: {
-                getFoxeriotDevices: function() {
-                    return $.ajax({
-                        url: "/api/foxeriot/devices",
-                        success: function(data) {
-                            main_vm.devices = JSON.parse(data);
-                            for (device of main_vm.devices.data) {
 
-                                for (observation of device.latestObservations) observation.deviceId = device['deviceId'];
-                                console.log(device.latestObservations);
-                                
-                                $.ajax({
-                                        url: "/api/foxeriot/getDEOS_point_name",
-                                        type: "POST",
-                                        data: device.latestObservations,
-                                        success: function(res) {
-                                            console.log(res);
-                                        },
-                                        error: function(err) {
-                                            console.error(err);
-                                        }
-                                });
-                                // for (observation of device.latestObservations) {
-                                //     submitdata.push({
-                                //         "deviceId" : device['deviceId'],
-                                //         "variable": observation['variable']
-                                //     });
-                                //     // $.ajax({
-                                //     //     url: "/api/foxeriot/getDEOS_point_name",
-                                //     //     type: "POST",
-                                //     //     data: {
-                                //     //         "deviceId": device['deviceId'],
-                                //     //         "variable": variable
-                                //     //     },
-                                //     //     success: function(data) {
-                                //     //         console.log(data);
-                                //     //     },
-                                //     //     error: function(err) {
-                                //     //         console.error(err);
-                                //     //     }
-                                //     // });
-                                //     // let res = main_vm.getDEOS_point_name(device['deviceId'], observation['variable']);
-                                //     // debugger;
-                                //     // console.log(res);
-                                //     // if (res.status == 200) {
-                                //     //     let resdata = JSON.parse(res.responseText);
-                                //     //     observation.point_name = resdata.point_name ? resdata.point_name : "";
-                                //     // }
+                changeContoller: function (controller_id, sensor_id) {
 
-                                // }
-  
+                },
+                changePoint: function(point_id, sensor_id) {
+
+                    for (let sensor of this.sensors) {
+                        if (sensor.id != sensor_id && sensor.point_id == point_id) {
+                            sensor.point_id = null;
+                            sensor.controller_id = null;
+                            sensor.area_id = null;
+                        }
+                        if (sensor.id == sensor_id) {
+                            for (let point of this.points) {
+                                if (point.id == sensor.point_id) {
+                                    sensor.controller_id = point.controller_id;
+                                    sensor.area_id = point.area_id;
+                                }
                             }
-
-                        },
-                        error: function(err) {
-
                         }
-                    });
-                },
-                getDEOS_point_name: function(deviceId, variable) {
-                     $.ajax({
-                        url: "/api/foxeriot/getDEOS_point_name",
-                        type: "POST",
-                        data: {
-                            "deviceId": deviceId,
-                            "variable": variable
-                        },
-                        success: function(data) {
-                            console.log(data);
-                        },
-                        error: function(err) {
-                            console.error(err);
-                        }
-                    });
-                },
-                getAsmServerConfig: function() {
-                    $.ajax({
-                        url: "/api/asm_server/config/getSERVERConfig",
-                        success: function(data) {                        
-                            main_vm.asm_serverconfig = JSON.parse(data);
-                            console.log(main_vm.asm_serverconfig);
-                            for (let slave of main_vm.asm_serverconfig["Slaves"]) {
-                                main_vm.getAsmRestConfig(slave);
-                            }
-                        },
-                        error: function(err) {
-                            console.error(err);
-                        }
-                    });
-                },
-                getAsmRestConfig: function(slave) {
-                    let ip = slave['IP'];
-                    let name = slave['Name'];
-                    let Port = slave['Port'];
-                    let controller_id = slave['controller_id'];
-                    $.ajax({
-                        url: "/api/asm_server/config/getRESTconfig?name=" + name + "&&controller_id=" + controller_id,
-                        success: function(data) {
-                            main_vm.asm_restconfig[name] = JSON.parse(data);
-                            // console.log(main_vm.asm_restconfig[name]);
-                        },
-                        error: function(err) {
-                            console.error(err);
-                        }
-                    });
+                    }
 
-                },
-                getDEOSPoints: function() {
-
-                    return $.ajax({
-                        url: base_url + "/api/points",
-                        success: function(data) {
-                            main_vm.DEOSPoints = JSON.parse(data);
-                            for (let point of main_vm.DEOSPoints) {
-                                // WritePointsfromLocal
-                                // console.log(point);
-                                $.ajax({
-                                    url: "/api/points/WritePointsfromLocal",
-                                    type: "POST",
-                                    headers: {
-                                        "Content-Type": "application/json"
-                                    },
-                                    data: JSON.stringify(point),
-                                    success: function(data) {
-
-                                    },
-                                    error: function(xhr, status, error) {}
-                                });
-                            }
-
-                            main_vm.DEOSPoints.push({
-                                "id": "",
-                                "value": ""
-                            });
-                        },
-                        error: function(err) {
-                            console.log(err);
-                        }
-                    });
-                },
-                update_DEOS_point_name: function(point_data) {
-                    console.log(point_data);
-                    return $.ajax({
-                        type: "PUT",
-                        url: "/api/foxeriot/devices",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        data: JSON.stringify(point_data),
-                        success: function(data) {
-
-                        },
-                        error: function(xhr, status, error) {}
-                    });
                 },
                 update_relations: function() {
                     let data = [];
@@ -403,11 +269,8 @@
                     }
                 }
             },
-
             computed: {
-                // unique_url: function() {
-                //     return "https://kiinde.com/promo/" + this.coupon.code + "/a";
-                // }
+
             }
         });
 

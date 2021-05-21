@@ -22,14 +22,22 @@ class DashboardController extends Controller
     {
         //
         $sensors = $this->getSensors();
-
+        foreach($sensors as $sensor) {
+            $sensor->point;
+        }
         $this->getSERVERConfig();
         $controllers = DEOS_controller::all();
         foreach($controllers as $controller)
         {
             $this->getRESTconfig($controller);
         }
+
         $points = DEOS_point::all();
+        foreach ($points as $point) {
+            $point->controller;
+            $point->area;
+        }
+        
         $areas = Area::all();
         return view('admin.dashboard', compact('sensors', 'points', 'controllers', 'areas'));
     }

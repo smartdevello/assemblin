@@ -16,6 +16,18 @@
                 <v-card v-for="point in points" :key="point.id"   @click="openUpdateModal(point.id)" width="300" elevation="10" class="ma-2">
                     <v-card-title>@{{ point . label }}</v-card-title>
                     <v-card-title>@{{ point . name }}</v-card-title>
+                    <v-row>
+                        <v-col cols="6">
+                            <v-card-subtitle >
+                                @{{point.controller ? point.controller.name : ""}}
+                            </v-card-subtitle>
+                        </v-col>
+                        <v-col cols="6">
+                            <v-card-subtitle >
+                                @{{point.area ? point.area.name : ""}}
+                            </v-card-subtitle>
+                        </v-col>
+                    </v-row>
                 </v-card>
             </v-row>
             <v-row>
@@ -36,6 +48,9 @@
                                     <v-text-field v-model="currentPointName" name="name" label="Point Name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
 
                                     <v-select :items="controllers" label="Select A Controller" name="controller_id" item-text="name" item-value="id" solo required >
+                                    </v-select>
+
+                                    <v-select :items="areas" label="Select an Area" name="area_id" item-text="name" item-value="id" solo required >
                                     </v-select>
 
                                     <v-card-actions>
@@ -62,6 +77,7 @@
                 mainMenu: mainMenu,
                 points: ( <?php echo json_encode($points); ?> ),
                 controllers: ( <?php echo json_encode($controllers); ?> ),
+                areas: ( <?php echo json_encode($areas); ?> ),
                 createUrl: `${prefix_link}/point/create`,
                 openNew: false,
                 currentPointName: '',

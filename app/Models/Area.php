@@ -18,4 +18,8 @@ class Area extends Model
     {
         return $this->belongsTo(Building::class, 'building_id', 'id');
     }
+    public function points()
+    {
+        return $this->hasMany(DEOS_point::class, 'area_id', 'id');
+    }
 }
