@@ -55,7 +55,7 @@
                             </v-card>
                         </v-form>
                         <v-card-actions>
-                            <v-btn color="primary" @click="openPoint = true">Add New Point</v-btn>
+                            {{-- <v-btn color="primary" @click="openPoint = true">Add New Point</v-btn> --}}
                         </v-card-actions>
                         <v-form :action="importPointsUrl" method="POST" id="import-points-form" enctype="multipart/form-data">
                             @csrf
@@ -98,6 +98,12 @@
                             
                             <v-text-field  name="label" label="DEOS page and sensor" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
                             <v-text-field  name="name"  label="Point Name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
+                            <v-select :items="controllers" label="Select A Controller" name="controller_id" item-text="name" item-value="id" solo required >
+                            </v-select>
+
+                            <v-select :items="areas" label="Select an Area" name="area_id" item-text="name" item-value="id" solo required >
+                            </v-select>
+
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="primary" text type="submit" form="add-point-form">Submit</v-btn>
@@ -120,6 +126,8 @@
                 mainMenu: mainMenu,
                 buildings: ( <?php echo json_encode($buildings); ?> ),
                 controller: ( <?php echo json_encode($controller); ?> ),
+                controllers: ( <?php echo json_encode($controllers); ?> ),
+                areas: ( <?php echo json_encode($areas); ?> ),
                 currentBuilding: 0,
                 updateUrl: "",
                 deleteUrl: "",

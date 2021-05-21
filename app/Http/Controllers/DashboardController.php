@@ -23,7 +23,18 @@ class DashboardController extends Controller
         //
         $sensors = $this->getSensors();
         foreach($sensors as $sensor) {
-            $sensor->point;
+            $point = $sensor->point;
+            if ($point) {
+                if ($point->controller_id) {
+                    $controller = DEOS_controller::where('id', $point->controller_id)->first();
+                    $sensor->controller_id = $controller->id;
+                }
+                if ( $point->area_id) {
+                    $area = Area::where('id', $point->area_id)->first();
+                    $sensor->area_id = $area->id;
+                }
+            }
+            
         }
         $this->getSERVERConfig();
         $controllers = DEOS_controller::all();
@@ -37,7 +48,7 @@ class DashboardController extends Controller
             $point->controller;
             $point->area;
         }
-        
+
         $areas = Area::all();
         return view('admin.dashboard', compact('sensors', 'points', 'controllers', 'areas'));
     }
@@ -95,9 +106,31 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
+        $points_updated = false;
+        foreach($request->all() as $item)
+        {
+            $sensor = Sensor::where('id', $item['id'])->first();
+            $sensor->update([
+                "value" => $item["value"],
+                "point_id" => $item["point_id"] ?? null,                
+            ]);
+
+            if ($item['point_id']) {
+                $points_updated = true;
+                $point = DEOS_point::where('id', $item['point_id'])->first();
+                $point->update([
+                    'controller_id' => $item['controller_id'] ?? null,
+                    'area_id' => $item['area_id'] ?? null
+                ]);
+            }
+        }
+        if ($points_updated) {
+            $this->updateConfigfiles();
+        }
+        return $request->all();
     }
 
     /**
