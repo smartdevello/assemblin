@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Area;
 use Illuminate\Http\Request;
 use App\Models\DEOS_point;
 use App\Models\DEOS_controller;
@@ -18,8 +19,13 @@ class DEOS_pointController extends Controller
     {
         //
         $points = DEOS_point::all();
+        foreach($points as $point) {
+            $point->controller;
+            $point->area;
+        }
         $controllers = DEOS_controller::all();
-        return view('admin.point.index', compact('points', 'controllers'));
+        $areas = Area::all();
+        return view('admin.point.index', compact('points', 'controllers', 'areas'));
     }
 
     /**
@@ -42,6 +48,8 @@ class DEOS_pointController extends Controller
         DEOS_point::create([
             'name' => $request->name,
             'label' => $request->label,
+            'controller_id' => $request->controller_id,
+            'area_id' => $request->area_id
         ]);
         $this->updateConfigfiles();
         return back()->with('success', 'Created successfully');
@@ -69,7 +77,8 @@ class DEOS_pointController extends Controller
         //
         $point = DEOS_point::where('id', $id)->first();        
         $controllers = DEOS_controller::all();
-        return view('admin.point.details', compact('point', 'controllers'));
+        $areas = Area::all();
+        return view('admin.point.details', compact('point', 'controllers', 'areas'));
     }
 
     /**
@@ -94,17 +103,29 @@ class DEOS_pointController extends Controller
     {
         
         //
-        $this->validate($request, [
-            'name' => 'required|unique:deos_points,name',
-            'label' => 'required'
-        ], [
-            'name.required' => "Name field can't be empty",
-            'name.unique' => $request->name . ' already exists in DB. ' . 'Name field should be unique',
-            'label.required' => "Description field can't be empty",
-        ]);
-
-
         $point = DEOS_point::where('id', $id)->first();
+        if ($point->name != $request->name) {
+            $this->validate($request, [
+                'name' => 'required|unique:deos_points,name',
+                'label' => 'required'
+            ], [
+                'name.required' => "Name field can't be empty",
+                'name.unique' => $request->name . ' already exists in DB. ' . 'Name field should be unique',
+                'label.required' => "Description field can't be empty",
+            ]);
+        } else  {
+            $this->validate($request, [
+                'name' => 'required',
+                'label' => 'required'
+            ], [
+                'name.required' => "Name field can't be empty",
+                'label.required' => "Description field can't be empty",
+            ]);
+        }
+
+
+
+        
         if (!$point) {
             return back()->with('error', 'Not found');
         }

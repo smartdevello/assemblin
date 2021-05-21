@@ -12,6 +12,9 @@ class AreaController extends Controller
     {
         $buildings = Building::all();
         $areas = Area::all();
+        foreach($areas as $area) {
+            $area->points;
+        }
         foreach ($areas as $area) $area->building;
 
         return view('admin.area.index', compact('areas', 'buildings'));
