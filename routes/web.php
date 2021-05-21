@@ -29,6 +29,7 @@ Route::get('/test', function () {
 });
 
 Route::get('', [DashboardController::class, 'index']);
+
 Route::get('/setting', '\App\Http\Controllers\DashboardController@setting_index');
 
 Route::group(['prefix' => 'location'], function ($router) {

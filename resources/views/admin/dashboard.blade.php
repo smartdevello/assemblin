@@ -117,7 +117,7 @@
 
                 </v-col>
                 <v-col cols="12" sm="2" md="2">
-                    <v-btn :loading="is_relation_updating" :disabled="is_relation_updating" outlined @click="update_relations">Update</v-btn>
+                    <v-btn :loading="is_relation_updating" :disabled="is_relation_updating" outlined @click="update_All">Update</v-btn>
                 </v-col>
             </v-row>
         </v-container>
@@ -136,16 +136,13 @@
                 points: ( <?php echo json_encode($points); ?> ),
                 controllers: ( <?php echo json_encode($controllers); ?> ),
                 areas: ( <?php echo json_encode($areas); ?> ),
-                is_relation_updating: false
+                is_relation_updating: false,
+                update_dashboard_url : `${prefix_link}/api/dashboard/update`,
+                send_data_url : `${base_url}/api/point/writePointsbyid`,
             },
 
             mounted: function() {
-                for (let sensor of this.sensors) {
-                    console.log(sensor);
-                }
-                // this.getFoxeriotDevices();
-                // this.getDEOSPoints();
-                // this.getAsmServerConfig();
+
             },
             watch: {
 
@@ -172,6 +169,91 @@
                             }
                         }
                     }
+
+                },
+
+                sendDatatoAssemblin: function(){
+                    let submitdata = [];
+                    for (let sensor of this.sensors)
+                    {
+                        if (sensor.point_id)
+                        {
+                            point = this.points.find(point => point.id == sensor.point_id);
+                            submitdata.push({
+                                "id": point.name,
+                                "value": sensor.value
+                            });
+                        }
+                    }
+                    var settings = {
+                            "url": this.send_data_url,
+                            "method": "POST",
+                            "timeout": 0,
+                            "headers": {
+                                "Content-Type": "application/json"
+                            },
+                            "data": JSON.stringify(submitdata),
+                    };
+                    
+                    $.ajax(settings).done(function(response) {
+                            console.log(response);
+                    }).fail(function(jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                    });
+                    
+                },
+
+                update_All: function(){
+                    this.is_relation_updating = true;
+                    let submitdata = [];
+                    for (let sensor of this.sensors)
+                    {
+                        submitdata.push({
+                            "id" : sensor.id,
+                            "value" : sensor.value,
+                            "point_id" : sensor.point_id,
+                            "controller_id" : sensor.controller_id,
+                            "area_id" : sensor.area_id
+                        });
+                    }
+
+                    var settings = {
+                            "url": this.update_dashboard_url,
+                            "method": "POST",
+                            "timeout": 0,
+                            "headers": {
+                                "Content-Type": "application/json"
+                            },
+                            "data": JSON.stringify(submitdata),
+                    };
+                    
+                    $.ajax(settings).done(function(response) {
+                            main_vm.is_relation_updating = false;
+                            toastr.options = {
+                                "closeButton": false,
+                                "debug": false,
+                                "newestOnTop": false,
+                                "progressBar": false,
+                                "positionClass": "toast-bottom-center",
+                                "preventDuplicates": false,
+                                "onclick": null,
+                                "showDuration": "300",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            };
+                            main_vm.sendDatatoAssemblin();
+                            toastr.success('Updated Successfully');
+                        }).fail(function(jqXHR, textStatus, errorThrown) {
+                            main_vm.is_relation_updating = false;
+                            toastr.error('Something went wrong');
+                        });
+
+
 
                 },
                 update_relations: function() {

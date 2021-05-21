@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FoxeriotController;
 use App\Http\Controllers\PointController;
 use Illuminate\Http\Request;
@@ -21,6 +22,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::middleware(['cors'])->group(function(){
 
+    Route::group(['prefix' => 'dashboard'], function ($router) {
+        Route::post('update', [DashboardController::class, 'update'])->name('update_dashboard');
+    });
 
     Route::group(['prefix' => 'point'], function ($router) {
         Route::get('', [PointController::class, 'getPoints'])->name('getPoints');
