@@ -28,7 +28,8 @@ Route::middleware(['cors'])->group(function(){
 
     Route::group(['prefix' => 'point'], function ($router) {
         Route::get('', [PointController::class, 'getPoints'])->name('getPoints');
-
+        Route::get('checkPoints', [PointController::class, 'checkPoints'])->name('checkPoints');
+        
         Route::post('writePointstoLocalDB', [PointController::class, 'writePointstoLocalDB'])->name('writePointstoLocalDB');
         Route::post('writePointsbyid', [PointController::class, 'writePointsbyid'])->name('writePointsbyid');
 
