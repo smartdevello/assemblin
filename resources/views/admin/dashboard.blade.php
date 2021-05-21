@@ -262,7 +262,6 @@
                     for (device of this.devices.data) {
                         for (observation of device.latestObservations) {
                             if (observation.point_name !== null && observation.point_name !== undefined) {
-                                debugger;
                                 let value = observation.manual_value ? String(observation.manual_value) : String(observation.value);
                                 data.push({
                                     "id": observation.point_name,
