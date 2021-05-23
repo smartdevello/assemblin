@@ -99,6 +99,7 @@
                 buildingSelected: {}
             },
             mounted: function() {
+                console.log(this.location);
                 this.currentLocation = this.location.name;
 
                 if (! this.location.img_url ) {
