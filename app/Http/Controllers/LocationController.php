@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Location;
 use App\Models\Building;
+use Illuminate\Support\Facades\File;
 
 class LocationController extends Controller
 {
@@ -12,6 +13,10 @@ class LocationController extends Controller
     {
         $locations = Location::all();
         foreach ($locations as $location) {
+            if ($location->img_url)  {
+                $location->img_url = asset('images/' . $location->img_url);
+            }
+
             $buildings = Building::where('location_id', $location->id)->get();
             $location->buildings = $buildings;
         }
@@ -28,6 +33,9 @@ class LocationController extends Controller
     public function show(Request $request, $id)
     {
         $location = Location::where('id', $id)->first();
+        if ($location->img_url)  {
+            $location->img_url = asset('images/' . $location->img_url);
+        }
         $buildings = $location->buildings;
 
         return view('admin.location.details', compact('location', 'buildings'));
@@ -35,23 +43,54 @@ class LocationController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->validate($request, ['name' => 'required']);
-        $result = Location::where('id', $id)->first();
-        if (!$result) {
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
+        $location = Location::where('id', $id)->first();
+        if (!$location) {
             return back()->with('error', 'Not found');
         }
-        $result->update(['name' => $request->name]);
+        $imageName = "";
+        if ($request->image) {
+
+            //update image
+            $request->validate([
+                'image' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            ]);
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+            
+            //Remove previous image
+            if (!empty( $imageName ) && !empty( $location->img_url)) {
+
+                if (File::exists(public_path('images/' . $location->img_url))) {
+                    File::delete( public_path('images/' . $location->img_url) );
+                }
+            }
+        }
+        $location->update([
+            'name' => $request->name,
+            'img_url' => $request->image ? $imageName: null,
+        ]);
 
         return back()->with('success', 'Updated successfully');
     }
 
     public function destroy(Request $request, $id)
     {
-        $result = Location::where('id', $id)->first();
-        if (!$result) {
+        $location = Location::where('id', $id)->first();
+        if (!$location) {
             return back()->with('error', 'Not found');
         }
-        $result->delete();
+
+        //Delete Image file
+        if ( !empty($location->img_url)) {
+            if (File::exists(public_path('images/' . $location->img_url))) {
+                File::delete( public_path('images/' . $location->img_url) );
+            }
+        }
+        
+        $location->delete();
 
         return redirect()->route('locations')->with('success', 'Deleted successfully');
     }

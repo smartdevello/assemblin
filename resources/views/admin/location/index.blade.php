@@ -4,6 +4,13 @@
         <v-container>
             <v-row>
                 <v-card v-for="location in locations" :key="location.id" @click="openUpdateModal(location.id)" width="300" elevation="10" class="ma-2">
+                    <v-img
+                        :src="location.img_url"
+                        contain
+                        max-height="150"
+                        max-width="150"
+                    ></v-img>
+
                     <v-card-title>@{{ location . name }}</v-card-title>
                     <v-card-subtitle v-for="building in location.buildings" :key="building.id">
                         @{{building.name}}
@@ -55,7 +62,9 @@
                 currentUrl: '',
             },
             mounted: function() {
-
+                for (let location of this.locations) {
+                    if (!location.img_url ) location.img_url = "https://www.gravatar.com/avatar/HASH";                        
+                }
             },            
             methods: {
                 openUpdateModal: function(id) {

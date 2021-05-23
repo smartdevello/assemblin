@@ -22,6 +22,7 @@ class DashboardController extends Controller
     {
         //
         $sensors = $this->getSensors();
+        $sensors = Sensor::paginate(10);
         foreach($sensors as $sensor) {
             $point = $sensor->point;
             if ($point) {
@@ -50,7 +51,12 @@ class DashboardController extends Controller
         }
 
         $areas = Area::all();
-        return view('admin.dashboard', compact('sensors', 'points', 'controllers', 'areas'));
+        return view('admin.dashboard', [
+            'sensors' => $sensors,
+            'points' => $points,
+            'controllers' => $controllers,
+            'areas' => $areas
+        ]);
     }
 
     public function setting_index(){

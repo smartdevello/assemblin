@@ -13,6 +13,25 @@
                                 <v-card-title class="headline grey lighten-2">
                                     Edit Building
                                 </v-card-title>
+
+                                <v-img
+                                    :src="building.img_url"
+                                    contain
+                                    max-height="300"
+                                    max-width="500"
+                                >
+                                    <v-file-input
+                                        :rules = "image_rules"
+                                        accept="image/png, image/jpeg, image/bmp"
+                                        hide-input
+                                        truncate-length="50"
+                                        name="image"
+                                        prepend-icon="mdi-camera"
+                                        v-model="image"
+                                        @change = "Preview_image"
+                                    ></v-file-input>
+                                </v-img>
+
                                 <v-card-text>
                                     <v-text-field v-model="building.name" label="Building Name" name="name" required></v-text-field>
                                     <v-select :items="locations" label="Select a Location" name="location_id" v-model="currentLocation" item-text="name" item-value="id" solo required>
@@ -85,6 +104,10 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
+                image_rules: [
+                    value => !value || value.size > 2000000 || 'Image size should be greater than 2 MB!',
+                ],
+                image: null,
                 locations: ( <?php echo json_encode($locations); ?> ),
                 building: ( <?php echo json_encode($building); ?> ),
                 currentLocation: 0,
@@ -102,6 +125,17 @@
                 this.deleteUrl = `${prefix_link}/building/delete/${this.building.id}`;
                 this.deleteAreasUrl = `${prefix_link}/building/${this.building.id}/delete-areas`;
                 this.deleteControllersUrl = `${prefix_link}/building/${this.building.id}/delete-controllers`;
+
+                if (! this.building.img_url ) {
+                    this.building.img_url = "https://www.gravatar.com/avatar/HASH";
+                }
+                
+
+            },
+            methods: {
+                Preview_image: function(){
+                    this.building.img_url = URL.createObjectURL(this.image);
+                }
             }
         })
 

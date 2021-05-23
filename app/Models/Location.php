@@ -11,7 +11,7 @@ class Location extends Model
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name'
+        'name', 'img_url'
     ];
 
     public function buildings()
