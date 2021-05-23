@@ -14,7 +14,7 @@ class LocationController extends Controller
         $locations = Location::all();
         foreach ($locations as $location) {
             if ($location->img_url)  {
-                $location->img_url = asset('images/' . $location->img_url);
+                $location->img_url = asset('public/images/' . $location->img_url);
             }
 
             $buildings = Building::where('location_id', $location->id)->get();
