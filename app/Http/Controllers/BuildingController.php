@@ -7,6 +7,7 @@ use App\Models\Building;
 use App\Models\Location;
 use App\Models\Area;
 use App\Models\DEOS_controller;
+use Illuminate\Support\Facades\File;
 
 class BuildingController extends Controller
 {
@@ -20,9 +21,13 @@ class BuildingController extends Controller
         $buildings = Building::all();
         $locations = Location::all();
 
-        foreach ($buildings as $item) {
-            $item->areas;
-            $item->controllers;
+        foreach ($buildings as $building) {
+            $building->areas;
+            $building->controllers;
+
+            if ($building->img_url)  {
+                $building->img_url = asset('images/' . $building->img_url);
+            }
         }
 
         return view('admin.building.index', compact('buildings', 'locations'));
@@ -55,11 +60,34 @@ class BuildingController extends Controller
             'name' => 'required'
         ]);
 
-        $result = Building::where('id', $id)->first();
-        if (!$result) {
+        $building = Building::where('id', $id)->first();
+        if (!$building) {
             return back()->with('error', 'Not found');
         }
-        $result->update($request->all());
+
+        $imageName = "";
+        if ($request->image) {
+
+            //update image
+            $request->validate([
+                'image' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            ]);
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+            
+            //Remove previous image
+            if (!empty( $imageName ) && !empty( $building->img_url)) {
+
+                if (File::exists(public_path('images/' . $building->img_url))) {
+                    File::delete( public_path('images/' . $building->img_url) );
+                }
+            }
+        }
+        $building->update([
+            'name' => $request->name,
+            'location_id' => $request->location_id ? $request->location_id : null,
+            'img_url' => $request->image ? $imageName: null,
+        ]);
 
         return back()->with('success', 'Updated successfully');
     }
@@ -70,6 +98,15 @@ class BuildingController extends Controller
         if (!$building) {
             return back()->with('error', 'Not found');
         }
+
+        //Delete Image file
+        if ( !empty($building->img_url)) {
+            if (File::exists(public_path('images/' . $building->img_url))) {
+                File::delete( public_path('images/' . $building->img_url) );
+            }
+        }
+
+
         $building->delete();
 
         return redirect()->route('buildings')->with('success', 'Deleted successfully');

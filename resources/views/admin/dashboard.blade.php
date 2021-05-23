@@ -43,7 +43,7 @@
                                 Latest value
                             </v-col>
                         </v-row>
-                        <div v-for="sensor in sensors">
+                        <div v-for="sensor in sensors.data">
                             <v-row>
                                 <v-col cols="12" sm="2" md="2">
                                     <v-text-field v-model="sensor.deviceId" solo></v-text-field>
@@ -79,7 +79,7 @@
                                 DEOS Controller
                             </v-col>
                         </v-row>
-                        <div v-for="sensor in sensors">
+                        <div v-for="sensor in sensors.data">
                                 <v-row>
                                     <v-col cols="12" sm="6" md="6">
                                         <v-select :items="points" v-model="sensor.point_id" item-text="name" item-value="id" solo @change="changePoint($event, sensor.id)">
@@ -101,7 +101,7 @@
                                 Area name
                             </v-col>
                         </v-row>
-                        <div v-for="sensor in sensors">
+                        <div v-for="sensor in sensors.data">
                                 <v-row>
                                     <v-col cols="12" sm="12" md="12">
                                         <v-select :items="areas" v-model="sensor.area_id" item-text="name" item-value="id" solo>                                            
@@ -112,6 +112,15 @@
                     </div>
                 </v-col>
             </v-row>
+            <template>
+                <div class="text-center">
+                  <v-pagination
+                    v-model="page"
+                    :length="sensors.last_page"
+                  ></v-pagination>
+                </div>
+              </template>
+
             <v-row >
                 <v-col cols="12" sm="10" md="10">
 
@@ -126,26 +135,34 @@
 
 @section('script')
     <script>
+
+        var sensors_raw = <?php echo json_encode($sensors); ?>;
         const main_vm = new Vue({
             el: '#app',
             vuetify: new Vuetify(),
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
-                sensors: ( <?php echo json_encode($sensors); ?> ),
+                sensors: sensors_raw,
+                page: sensors_raw.current_page,
                 points: ( <?php echo json_encode($points); ?> ),
                 controllers: ( <?php echo json_encode($controllers); ?> ),
                 areas: ( <?php echo json_encode($areas); ?> ),
                 is_relation_updating: false,
                 update_dashboard_url : `${prefix_link}/api/dashboard/update`,
                 send_data_url : `${base_url}/api/point/writePointsbyid`,
+                
             },
 
             mounted: function() {
-
+                // console.log(sensors_raw);
+                this.page = this.sensors.current_page;
             },
             watch: {
-
+                page: function() {
+                    console.log('current_page is ' + this.page);
+                    window.location.href = "/?page=" + this.page;
+                }
             },
             methods: {
 
@@ -154,7 +171,7 @@
                 },
                 changePoint: function(point_id, sensor_id) {
 
-                    for (let sensor of this.sensors) {
+                    for (let sensor of this.sensors.data) {
                         if (sensor.id != sensor_id && sensor.point_id == point_id) {
                             sensor.point_id = null;
                             sensor.controller_id = null;
@@ -174,7 +191,7 @@
 
                 sendDatatoAssemblin: function(){
                     let submitdata = [];
-                    for (let sensor of this.sensors)
+                    for (let sensor of this.sensors.data)
                     {
                         if (sensor.point_id)
                         {
@@ -206,7 +223,7 @@
                 update_All: function(){
                     this.is_relation_updating = true;
                     let submitdata = [];
-                    for (let sensor of this.sensors)
+                    for (let sensor of this.sensors.data)
                     {
                         submitdata.push({
                             "id" : sensor.id,

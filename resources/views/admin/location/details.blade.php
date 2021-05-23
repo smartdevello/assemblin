@@ -7,13 +7,34 @@
             @else
                 <template>
                     <div class="text-center">
-                        <v-form :action="updateUrl" method="POST" id="update-form">
+                        <v-form :action="updateUrl" method="POST" id="update-form" enctype="multipart/form-data">
                             @csrf
                             <v-card class="mx-auto my-12">
                                 <v-card-title class="headline grey lighten-2">
                                     Edit Location
                                 </v-card-title>
-                                <v-text-field v-model="currentLocation" name="name" solo required></v-text-field>
+
+                                <v-img
+                                    :src="location.img_url"
+                                    contain
+                                    max-height="300"
+                                    max-width="500"
+                                >
+                                    <v-file-input
+                                        :rules = "image_rules"
+                                        accept="image/png, image/jpeg, image/bmp"
+                                        hide-input
+                                        truncate-length="50"
+                                        name="image"
+                                        prepend-icon="mdi-camera"
+                                        v-model="image"
+                                        @change = "Preview_image"
+                                    ></v-file-input>
+                                </v-img>
+
+
+
+                                <v-text-field v-model="location.name" name="name" solo required></v-text-field>
                                 <v-card-actions>
                                     <v-btn color="primary" text type="submit" form="update-form">Update</v-btn>
                                     <v-btn color="red" @click="openDelete = true">Remove</v-btn>
@@ -64,6 +85,10 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
+                image_rules: [
+                    value => !value || value.size > 2000000 || 'Image size should be greater than 2 MB!',
+                ],
+                image: null,
                 location: ( <?php echo json_encode($location); ?> ),
                 buildings: ( <?php echo json_encode($buildings); ?> ),
                 currentLocation: "",
@@ -75,11 +100,20 @@
             },
             mounted: function() {
                 this.currentLocation = this.location.name;
+
+                if (! this.location.img_url ) {
+                    this.location.img_url = "https://www.gravatar.com/avatar/HASH";
+                }
+                
                 this.updateUrl = `${prefix_link}/location/update/${this.location.id}`;
                 this.deleteUrl = `${prefix_link}/location/delete/${this.location.id}`;
                 this.delete_buildings_url = `${prefix_link}/location/delete_buildings/${this.location.id}`;
             },
-            methods: {}
+            methods: {
+                Preview_image: function(){
+                    this.location.img_url = URL.createObjectURL(this.image);
+                }
+            }
         })
 
     </script>
