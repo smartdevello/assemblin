@@ -51,6 +51,7 @@ class LocationController extends Controller
             return back()->with('error', 'Not found');
         }
         $imageName = "";
+
         if ($request->image) {
 
             //update image

@@ -5,9 +5,18 @@
             @if (empty($building))
                 <h1>Building not found</h1>
             @else
+                @if( \Session::has('success') ) 
+                    <h3>{{ \Session::get('success') }}</h3>
+                @else
+                    @if( count($errors) > 0)  
+                        @foreach($errors->all() as $error)
+                            <h3 style="color: red">{{ $error }}</h3>
+                        @endforeach
+                    @endif
+                @endif
                 <template>
                     <div class="text-center">
-                        <v-form :action="updateUrl" method="POST" id="update-form">
+                        <v-form :action="updateUrl" method="POST" id="update-form" enctype="multipart/form-data">
                             @csrf
                             <v-card class="mx-auto my-12">
                                 <v-card-title class="headline grey lighten-2">
