@@ -66,11 +66,11 @@ class BuildingController extends Controller
         }
 
         $imageName = "";
-        if ($request->image) {
 
+        if ($request->image) {            
             //update image
             $request->validate([
-                'image' => 'image|mimes:jpeg,png,jpg,gif,svg',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
             $imageName = time().'.'.$request->image->extension();
             $request->image->move(public_path('images'), $imageName);
