@@ -198,7 +198,7 @@
                             point = this.points.find(point => point.id == sensor.point_id);
                             submitdata.push({
                                 "id": point.name,
-                                "value": sensor.value
+                                "value": String(sensor.value)
                             });
                         }
                     }
@@ -211,9 +211,7 @@
                             },
                             "data": JSON.stringify(submitdata),
                     };
-                    console.log(submitdata);
-                    console.log(this.send_data_url);
-                    
+
                     $.ajax(settings).done(function(response) {
                             console.log(response);
                     }).fail(function(jqXHR, textStatus, errorThrown) {
