@@ -211,6 +211,8 @@
                             },
                             "data": JSON.stringify(submitdata),
                     };
+                    console.log(submitdata);
+                    console.log(this.send_data_url);
                     
                     $.ajax(settings).done(function(response) {
                             console.log(response);
