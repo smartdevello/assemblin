@@ -51,6 +51,10 @@ class BuildingController extends Controller
         $areas = $building->areas;
         $locations = Location::all();
 
+        if ($building->img_url)  {
+            $building->img_url = asset('images/' . $building->img_url);
+        }
+
         return view('admin.building.details', compact('building', 'locations'));
     }
 

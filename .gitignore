@@ -16,6 +16,7 @@
 /storage/*.key
 /storage
 /vendor
+/public/images
 .env
 .env.backup
 .phpunit.result.cache
