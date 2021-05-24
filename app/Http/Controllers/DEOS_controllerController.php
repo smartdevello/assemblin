@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\DEOS_pointImport;
-use App\Imports\DeosPointImport;
+
 use App\Models\Area;
 use Illuminate\Http\Request;
 use App\Models\DEOS_controller;
@@ -11,6 +10,7 @@ use App\Models\Building;
 use App\Models\DEOS_point;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Traits\AssemblinInit;
+use App\Imports\PointsImport;
 
 use stdClass;
 
@@ -128,10 +128,33 @@ class DEOS_controllerController extends Controller
         if (!$request->file('file')) {
             return back()->with('error', 'Empty file');
         }
-        $rows = Excel::toCollection(new DeosPointImport, $request->file('file'));
-        foreach ($rows[0] as $row) {
-            DEOS_point::create(['name' => $row[0], 'value' => $row[1], 'controller_id' => $id]);
+        $rows = Excel::toCollection(new PointsImport, $request->file('file'));       
+
+
+        foreach ($rows[0] as $index => $row) {
+            //If Header continue;
+            if ($index == 0) continue;
+            $data = [
+                'name' => $row[1],
+                'label' => $row[2],
+                'type' => $row[4],
+                'meta_property' => $row[5],
+                'meta_room' => $row[6],
+                'meta_sensor' => $row[7], 
+                'meta_type' => $row[8],
+                'value' => $row[3], 
+                'controller_id' => $id,
+
+            ];
+            $point = DEOS_point::where('name', $data['name'])->first();
+
+            if ( $point == null) {
+                $point = DEOS_point::create($data);
+            } else {
+                $point->update($data);
+            }
         }
+        $this->updateConfigfiles();
         return back()->with('success', 'Imported successfully');
     }
 
@@ -139,10 +162,11 @@ class DEOS_controllerController extends Controller
     {
         $points = DEOS_point::where('controller_id', $id)->get();
         $result = $points->map(function ($item) {
-            return [$item->name, $item->value, $item->controller->name];
+            return [$item->controller->name, $item->name, $item->label, $item->value,  $item->type, $item->meta_property, $item->meta_room, $item->meta_sensor, $item->meta_type];
         });
-        $result->prepend(['Name', 'Value', 'Controller Name']);
+        $result->prepend(['Controller Name', 'Point Name', 'Point Label', 'Value', 'Type','meta_property', 'meta_room', 'meta_sensor', 'meta_type']);
 
-        return $result->downloadExcel('points.xlsx');
+        $controller_name = $points[0]->controller->name;
+        return $result->downloadExcel($controller_name . '-' .time() . '.csv');
     }
 }

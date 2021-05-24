@@ -71,7 +71,7 @@ class BuildingController extends Controller
 
         $imageName = "";
 
-        if ($request->image) {            
+        if ($request->image) {
             //update image
             $request->validate([
                 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
