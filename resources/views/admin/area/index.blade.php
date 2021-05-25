@@ -1,10 +1,25 @@
 @extends('admin.layout.master')
 @section('content')
-    <v-main v-if="!!areas">
+    <v-main>
         <v-container>
+            @if( \Session::has('success') ) 
+                <h3>{{ \Session::get('success') }}</h3>
+            @elseif ( \Session::has('error'))
+                <h3 style="color: red">{{ \Session::get('error') }}</h3>
+            @else
+                @if( count($errors) > 0)  
+                    @foreach($errors->all() as $error)
+                        <h3 style="color: red">{{ $error }}</h3>
+                    @endforeach
+                @endif
+            @endif
             <v-row>
                 <v-card v-for="area in areas" :key="area.id" @click="openUpdateModal(area.id)" width="300" elevation="10" class="ma-2">
-                    <v-card-title>@{{ area . name }}</v-card-title>
+                    
+                    <v-row>
+                        <v-col cols = "6"> <v-card-title>@{{ area . name }}</v-card-title> </v-col>
+                        <v-col cols = "6"> <v-card-title>@{{ area . building.name }}</v-card-title> </v-col>
+                    </v-row>
                     <v-card-subtitle v-for="point in area.points" :key="point.id">
                         @{{ point . name }}
                     </v-card-subtitle>

@@ -2,6 +2,17 @@
 @section('content')
     <v-main v-if="!!locations">
         <v-container>
+            @if( \Session::has('success') ) 
+                <h3>{{ \Session::get('success') }}</h3>
+            @elseif ( \Session::has('error'))
+                <h3 style="color: red">{{ \Session::get('error') }}</h3>
+            @else
+                @if( count($errors) > 0)  
+                    @foreach($errors->all() as $error)
+                        <h3 style="color: red">{{ $error }}</h3>
+                    @endforeach
+                @endif
+            @endif
             <v-row>
                 <v-card v-for="location in locations" :key="location.id" @click="openUpdateModal(location.id)" width="300" elevation="10" class="ma-2">
                     <v-img

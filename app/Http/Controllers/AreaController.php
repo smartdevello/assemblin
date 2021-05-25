@@ -13,6 +13,7 @@ class AreaController extends Controller
         $buildings = Building::all();
         $areas = Area::all();
         foreach($areas as $area) {
+            $area->building;
             $area->points;
         }
         foreach ($areas as $area) $area->building;
@@ -24,11 +25,26 @@ class AreaController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
+            'building_id' => 'required'
         ]);
 
+        if (! $this->checkAreaValid($request) )
+        {
+            $building = Building::where('id', $request->building_id) -> first();
+            return back() -> with ('error', sprintf("The Building \"%s\" already has the area named \"%s\"", $building->name, $request->name));
+        }
         Area::create(['name' => $request->name, 'building_id' => $request->building_id]);
 
         return back()->with('success', 'Created successfully');
+    }
+
+    public function checkAreaValid ( Request $request)
+    {   
+        $samebuildingAreas = Area::where('building_id', $request->building_id)->get();
+        foreach ($samebuildingAreas as $area) {
+            if ( $area->name == $request->name) return false;
+        }
+        return true;
     }
 
     public function show($id)
@@ -42,8 +58,14 @@ class AreaController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
+            'building_id' => 'required'
         ]);
 
+        if (! $this->checkAreaValid($request) )
+        {
+            $building = Building::where('id', $request->building_id) -> first();
+            return back() -> with ('error', sprintf("The Building \"%s\" already has the area named \"%s\"", $building->name, $request->name));
+        }
 
         $result = Area::where('id', $id)->first();
         if (!$result) {

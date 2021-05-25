@@ -24,7 +24,7 @@ class BuildingController extends Controller
         foreach ($buildings as $building) {
             $building->areas;
             $building->controllers;
-
+            $building->location;
             if ($building->img_url)  {
                 $building->img_url = asset('images/' . $building->img_url);
             }
@@ -36,11 +36,16 @@ class BuildingController extends Controller
     public function create(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required'
+            'name' => 'required',
+            'location_id' => 'required'
         ]);
+        if ( !$this->checkBuildingValid( $request ) )
+        {
+            $location = Location::where('id', $request->location_id)->first();
+            return back()->with('error', sprintf("The Location \"%s\" already has the building named \"%s\" ", $location->name, $request->name));
+        }
 
         Building::create($request->all());
-
         return back()->with('success', 'Created successfully');
     }
 
@@ -58,12 +63,28 @@ class BuildingController extends Controller
         return view('admin.building.details', compact('building', 'locations'));
     }
 
+    public function checkBuildingValid(Request $request) 
+    {
+        $samelocationbuildings = Building::where('location_id', $request->location_id)->get();
+
+        foreach( $samelocationbuildings as $building) 
+        {
+            if ( $building->name == $request->name) return false;
+        }
+        return true;
+    }
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required'
+            'name' => 'required',
+            'location_id' => 'required'
         ]);
 
+        if ( !$this->checkBuildingValid( $request ) )
+        {
+            $location = Location::where('id', $request->location_id)->first();
+            return back()->with('error', sprintf("The Location \"%s\" already has the building named \"%s\" ", $location->name, $request->name));
+        }
         $building = Building::where('id', $id)->first();
         if (!$building) {
             return back()->with('error', 'Not found');
