@@ -82,6 +82,8 @@
                 openUpdateModal: function(id) {
                     window.location.href = `${prefix_link}/controller/${id}`;
                 }
+            },
+            mounted: function(){
             }
 
 

@@ -75,20 +75,22 @@ class BuildingController extends Controller
     }
     public function update(Request $request, $id)
     {
+        $building = Building::where('id', $id)->first();
+        if (!$building) {
+            return back()->with('error', 'Not found');
+        }
+
         $this->validate($request, [
             'name' => 'required',
             'location_id' => 'required'
         ]);
 
-        if ( !$this->checkBuildingValid( $request ) )
+        if ($building->name != $request->name && !$this->checkBuildingValid( $request ) )
         {
             $location = Location::where('id', $request->location_id)->first();
             return back()->with('error', sprintf("The Location \"%s\" already has the building named \"%s\" ", $location->name, $request->name));
         }
-        $building = Building::where('id', $id)->first();
-        if (!$building) {
-            return back()->with('error', 'Not found');
-        }
+
 
         $imageName = "";
 

@@ -15,7 +15,7 @@
             @endif
             <template>
                 <div class="text-center">
-                    <v-form :action="updateUrl" method="POST" id="update-form">
+                    <v-form :action="updateUrl" method="POST" id="update-form"  @submit="submitHandler">
                         @csrf
                         <v-card class="mx-auto my-12">
                             <v-card-title class="headline grey lighten-2">
@@ -26,10 +26,10 @@
                                 <v-text-field v-model="point.label" name="label" label = "DEOS page and sensor" :rules="[ v => !!v || 'Field is required', ]" required></v-text-field>
                                 <v-text-field v-model="point.name" name="name" label="Name" :rules="[ v => !!v || 'Field is required', ]" required></v-text-field>
                                 <div>
-                                    <v-select :items="controllers" label="Select a Controller" name="controller_id" v-model="point.controller_id" item-text="name" item-value="id" solo required>
+                                    <v-select :items="controllers" label="Select a Controller" name="controller_id" v-model="point.controller_id" item-text="name" item-value="id" solo required :rules = "controller_area_rules">
                                 </div>
                                 <div>
-                                    <v-select :items="areas" label="Select an Area" name="area_id" v-model="point.area_id" item-text="name" item-value="id" solo required>
+                                    <v-select :items="areas" label="Select an Area" name="area_id" v-model="point.area_id" item-text="name" item-value="id" solo required  :rules = "controller_area_rules">
                                 </div>
                             </v-card-text>
                             <v-card-actions>
@@ -72,13 +72,41 @@
                 updateUrl: "",
                 deleteUrl: "",
                 openDelete: false,
+                currentController: null,
+                currentArea: null,
+                controller_area_rules: []
             },
             mounted: function() {
 
                 this.updateUrl = `${prefix_link}/point/update/${this.point.id}`;
                 this.deleteUrl = `${prefix_link}/point/delete/${this.point.id}`;
+                                // console.log(sensors_raw);
+
+
+                for (let controller of this.controllers) {
+                    controller.name = controller.name + " ( " + controller.building.name + " ) ";
+                }
+                for (let area of this.areas)
+                {
+                    area.name = area.name + " ( " + area.building.name + " ) ";
+                }
+
             },
-            methods: {}
+            methods: {
+                submitHandler: function (e){
+                    let controller = this.controllers.find( v=> v.id == this.point.controller_id);
+                    let area = this.areas.find( v => v.id == this.point.area_id);
+                    if (controller.building.id != area.building.id) {
+                        this.controller_area_rules = [
+                            v => false || 'Controller and Area should belongs to same Building'
+                        ]
+                    } else {
+                        this.controller_area_rules = [];
+                        return true;
+                    }
+                    e.preventDefault();
+                },
+            }
         })
 
     </script>

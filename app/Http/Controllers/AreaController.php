@@ -56,22 +56,24 @@ class AreaController extends Controller
 
     public function update(Request $request, $id)
     {
+
+        $area = Area::where('id', $id)->first();
+        if (!$area) {
+            return back()->with('error', 'Not found');
+        }
+
         $this->validate($request, [
             'name' => 'required',
             'building_id' => 'required'
         ]);
 
-        if (! $this->checkAreaValid($request) )
+        if ( $area->name != $request->name && !$this->checkAreaValid($request) )
         {
             $building = Building::where('id', $request->building_id) -> first();
             return back() -> with ('error', sprintf("The Building \"%s\" already has the area named \"%s\"", $building->name, $request->name));
         }
 
-        $result = Area::where('id', $id)->first();
-        if (!$result) {
-            return back()->with('error', 'Not found');
-        }
-        $result->update($request->all());
+        $area->update($request->all());
 
         return back()->with('success', 'Updated successfully');
     }

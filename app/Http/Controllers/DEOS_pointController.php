@@ -25,8 +25,13 @@ class DEOS_pointController extends Controller
             $point->controller;
             $point->area;
         }
+
         $controllers = DEOS_controller::all();
+        foreach($controllers as $controller) $controller->building;
+
         $areas = Area::all();
+        foreach($areas as $area) $area->building;
+
         return view('admin.point.index', compact('points', 'controllers', 'areas'));
     }
 
@@ -91,6 +96,10 @@ class DEOS_pointController extends Controller
     {
         
         //
+        $point = DEOS_point::where('id', $id)->first();
+        if (!$point) {
+            return back()->with('error', 'Not found');
+        }
 
         $this->validate($request, [
             'name' => 'required',
@@ -104,18 +113,12 @@ class DEOS_pointController extends Controller
             'area_id.required' => "Must specify a Area"
         ]);
 
-
-        $point = DEOS_point::where('id', $id)->first();
-        if (!$point) {
-            return back()->with('error', 'Not found');
-        }
-
-        if (! $this->checkValidPoint_forController ($request )) {
+        if ( $point->name != $request->name && !$this->checkValidPoint_forController ($request)) {
             $controller = DEOS_controller::where('id', $request->controller_id)->first();
             return back()->with('error', sprintf("The Controller \"%s\" already has the point named \"%s\"", $controller->name , $request->name));
         }
 
-        if (! $this->checkValidPoint_forArea ($request )) {
+        if ($point->name != $request->name  && ! $this->checkValidPoint_forArea ($request )) {
             $area = Area::where('id', $request->area_id)->first();
             return back()->with('error', sprintf("The Area \"%s\" already has the point named \"%s\"", $area->name , $request->name));
         }
@@ -143,7 +146,9 @@ class DEOS_pointController extends Controller
         //
         $point = DEOS_point::where('id', $id)->first();        
         $controllers = DEOS_controller::all();
+        foreach ($controllers as $controller) $controller->building;
         $areas = Area::all();
+        foreach ( $areas as $area) $area->building;
         return view('admin.point.details', compact('point', 'controllers', 'areas'));
     }
 

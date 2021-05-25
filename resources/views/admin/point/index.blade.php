@@ -40,7 +40,7 @@
                                 <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on" class="ma-3">Add</v-btn>
                             </template>
 
-                            <v-form :action="createUrl" method="POST" id="create-form">
+                            <v-form :action="createUrl" method="POST" id="create_form" @submit="submitHandler">
                                 @csrf
                                 <v-card>
                                     <v-card-title class="headline grey lighten-2">
@@ -49,15 +49,15 @@
                                     <v-text-field v-model="currentPointLabel" name="label" label="DEOS page and sensor" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
                                     <v-text-field v-model="currentPointName" name="name" label="Point Name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
 
-                                    <v-select :items="controllers" label="Select A Controller" name="controller_id" item-text="name" item-value="id" solo required >
+                                    <v-select :items="controllers" label="Select A Controller" name="controller_id" item-text="name" item-value="id" solo required  v-model="currentController" :rules = "controller_area_rules">
                                     </v-select>
 
-                                    <v-select :items="areas" label="Select an Area" name="area_id" item-text="name" item-value="id" solo required >
+                                    <v-select :items="areas" label="Select an Area" name="area_id" item-text="name" item-value="id" solo required v-model="currentArea" :rules = "controller_area_rules">
                                     </v-select>
 
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
-                                        <v-btn color="primary" text type="submit" form="create-form">Submit</v-btn>
+                                        <v-btn color="primary" text type="submit" form="create_form">Submit</v-btn>
                                     </v-card-actions>
                                 </v-card>
                             </v-form>
@@ -83,14 +83,45 @@
                 createUrl: `${prefix_link}/point/create`,
                 openNew: false,
                 currentPointName: '',
-                currentPointLabel: ''
+                currentPointLabel: '',
+                currentController: null,
+                currentArea: null,
+                controller_area_rules: []
             },
             mounted: function() {
-
-            },            
+                // console.log(sensors_raw);
+                for (let controller of this.controllers) {
+                    controller.name = controller.name + " ( " + controller.building.name + " ) ";
+                }
+                for (let area of this.areas)
+                {
+                    area.name = area.name + " ( " + area.building.name + " ) ";
+                }
+            },           
             methods: {
+                submitHandler: function (e){
+
+                    let controller = this.controllers.find( v=> v.id == this.currentController);
+                    let area = this.areas.find( v => v.id == this.currentArea);
+                    if (controller.building.id != area.building.id) {
+                        this.controller_area_rules = [
+                            v => false || 'Controller and Area should belongs to same Building'
+                        ]
+                    } else {
+                        this.controller_area_rules = [];
+                        return true;
+                    }
+                    e.preventDefault();
+                },
                 openUpdateModal: function(id) {
                     window.location.href = `${prefix_link}/point/${id}`;
+                },
+                changeController: function (controller_id) {
+
+                },
+                changeArea: function (area_id) {
+
+
                 }
             }
         });
