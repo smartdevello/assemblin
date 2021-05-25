@@ -25,7 +25,15 @@ class LocationController extends Controller
 
     public function create(Request $request)
     {
-        $this->validate($request, ['name' => 'required']);
+        $this->validate($request, 
+            [
+                'name' => 'required|unique:locations,name',                 
+            ],
+            [
+                'name.required' => "Name field can't be empty",
+                'name.unique' => sprintf("The Location \"%s\" already exists", $request->name),
+            ]
+        );
         Location::create(['name' => $request->name]);
         return back()->with('success', 'Created successfully');
     }
@@ -43,9 +51,16 @@ class LocationController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'name' => 'required',
-        ]);
+        $this->validate($request, 
+            [
+                'name' => 'required|unique:locations,name',                 
+            ],
+            [
+                'name.required' => "Name field can't be empty",
+                'name.unique' => sprintf("The Location \"%s\" already exists", $request->name),
+            ]
+        );
+        
         $location = Location::where('id', $id)->first();
         if (!$location) {
             return back()->with('error', 'Not found');

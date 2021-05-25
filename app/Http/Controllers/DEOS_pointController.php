@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\DEOS_point;
 use App\Models\DEOS_controller;
 use stdClass;
+use Illuminate\Support\Facades\Validator;
+
 
 class DEOS_pointController extends Controller
 {
@@ -36,15 +38,29 @@ class DEOS_pointController extends Controller
     public function create(Request $request)
     {
         //
+
         $this->validate($request, [
-            'name' => 'required|unique:deos_points,name',
-            'label' => 'required'
+            'name' => 'required',
+            'label' => 'required',
+            'controller_id' => 'required',
+            'area_id' => 'required'
         ], [
             'name.required' => "Name field can't be empty",
-            'name.unique' => $request->name . ' already exists in DB. ' . 'Name field should be unique',
             'label.required' => "Description field can't be empty",
+            'controller_id.required' => "Must specify a Controller",
+            'area_id.required' => "Must specify a Area"
         ]);
         
+        if (! $this->checkValidPoint_forController ($request )) {
+            $controller = DEOS_controller::where('id', $request->controller_id)->first();
+            return back()->with('error', sprintf("The Controller \"%s\" already has the point named \"%s\"", $controller->name , $request->name));
+        }
+
+        if (! $this->checkValidPoint_forArea ($request )) {
+            $area = Area::where('id', $request->area_id)->first();
+            return back()->with('error', sprintf("The Area \"%s\" already has the point named \"%s\"", $area->name , $request->name));
+        }
+
         DEOS_point::create([
             'name' => $request->name,
             'label' => $request->label,
@@ -54,7 +70,63 @@ class DEOS_pointController extends Controller
         $this->updateConfigfiles();
         return back()->with('success', 'Created successfully');
     }
+    public function checkValidPoint_forController( Request $request) 
+    {
+        $samecontrollerPoints = DEOS_point::where('controller_id', $request->controller_id)->get();
+        foreach ($samecontrollerPoints as $point ) {
+            if ( $point->name == $request->name) return false;
+        }
+        return true;
+    }
+    public function checkValidPoint_forArea( Request $request) 
+    {
+        $samecontrollerPoints = DEOS_point::where('area_id', $request->area_id)->get();
+        foreach ($samecontrollerPoints as $point ) {
+            if ( $point->name == $request->name) return false;
+        }
+        return true;
+    }
 
+    public function update(Request $request, $id)
+    {
+        
+        //
+
+        $this->validate($request, [
+            'name' => 'required',
+            'label' => 'required',
+            'controller_id' => 'required',
+            'area_id' => 'required'
+        ], [
+            'name.required' => "Name field can't be empty",
+            'label.required' => "Description field can't be empty",
+            'controller_id.required' => "Must specify a Controller",
+            'area_id.required' => "Must specify a Area"
+        ]);
+
+
+        $point = DEOS_point::where('id', $id)->first();
+        if (!$point) {
+            return back()->with('error', 'Not found');
+        }
+
+        if (! $this->checkValidPoint_forController ($request )) {
+            $controller = DEOS_controller::where('id', $request->controller_id)->first();
+            return back()->with('error', sprintf("The Controller \"%s\" already has the point named \"%s\"", $controller->name , $request->name));
+        }
+
+        if (! $this->checkValidPoint_forArea ($request )) {
+            $area = Area::where('id', $request->area_id)->first();
+            return back()->with('error', sprintf("The Area \"%s\" already has the point named \"%s\"", $area->name , $request->name));
+        }
+        
+
+        $point->update($request->all());
+
+        $this->updateConfigfiles();
+
+        return back()->with('success', 'Updated Successfully');
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -66,12 +138,6 @@ class DEOS_pointController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show(Request $request, $id)
     {
         //
@@ -81,60 +147,14 @@ class DEOS_pointController extends Controller
         return view('admin.point.details', compact('point', 'controllers', 'areas'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        
-        //
-        $point = DEOS_point::where('id', $id)->first();
-        if ($point->name != $request->name) {
-            $this->validate($request, [
-                'name' => 'required|unique:deos_points,name',
-                'label' => 'required'
-            ], [
-                'name.required' => "Name field can't be empty",
-                'name.unique' => $request->name . ' already exists in DB. ' . 'Name field should be unique',
-                'label.required' => "Description field can't be empty",
-            ]);
-        } else  {
-            $this->validate($request, [
-                'name' => 'required',
-                'label' => 'required'
-            ], [
-                'name.required' => "Name field can't be empty",
-                'label.required' => "Description field can't be empty",
-            ]);
-        }
 
 
-
-        
-        if (!$point) {
-            return back()->with('error', 'Not found');
-        }
-        $point->update($request->all());
-
-        $this->updateConfigfiles();
-
-        return back()->with('success', 'Updated Successfully');
-    }
 
     public function updateConfigfiles()
     {

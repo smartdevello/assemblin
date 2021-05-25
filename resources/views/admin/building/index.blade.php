@@ -2,9 +2,19 @@
 @section('content')
     <v-main v-if="!!buildings">
         <v-container>
+            @if( \Session::has('success') ) 
+                <h3>{{ \Session::get('success') }}</h3>
+            @elseif ( \Session::has('error'))
+                <h3 style="color: red">{{ \Session::get('error') }}</h3>
+            @else
+                @if( count($errors) > 0)  
+                    @foreach($errors->all() as $error)
+                        <h3 style="color: red">{{ $error }}</h3>
+                    @endforeach
+                @endif
+            @endif
             <v-row>
                 <v-card v-for="building in buildings" :key="building.id" @click="openUpdateModal(building.id)" width="300" elevation="10" class="ma-2">
-
 
                     <v-img
                         :src="building.img_url"
@@ -12,7 +22,11 @@
                         max-height="150"
                         max-width="150"
                     ></v-img>
-                    <v-card-title>@{{ building . name }}</v-card-title>
+                    <v-row>
+                        <v-col cols = "6"> <v-card-title>@{{ building . name }}</v-card-title> </v-col>
+                        <v-col cols = "6"> <v-card-title>@{{ building . location.name }}</v-card-title> </v-col>
+                    </v-row>
+
                     <v-row>
                         <v-col cols="6">
                             <v-card-subtitle v-for="area in building.areas" :key="area.id">

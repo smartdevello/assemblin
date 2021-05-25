@@ -2,18 +2,17 @@
 @section('content')
     <v-main v-if="mainMenu && deleteUrl">
         <v-container>
-            @if (empty($building))
-                <h1>Building not found</h1>
+            @if( \Session::has('success') ) 
+                <h3>{{ \Session::get('success') }}</h3>
+            @elseif ( \Session::has('error'))
+                <h3 style="color: red">{{ \Session::get('error') }}</h3>
             @else
-                @if( \Session::has('success') ) 
-                    <h3>{{ \Session::get('success') }}</h3>
-                @else
-                    @if( count($errors) > 0)  
-                        @foreach($errors->all() as $error)
-                            <h3 style="color: red">{{ $error }}</h3>
-                        @endforeach
-                    @endif
+                @if( count($errors) > 0)  
+                    @foreach($errors->all() as $error)
+                        <h3 style="color: red">{{ $error }}</h3>
+                    @endforeach
                 @endif
+            @endif
                 <template>
                     <div class="text-center">
                         <v-form :action="updateUrl" method="POST" id="update-form" enctype="multipart/form-data">
@@ -100,7 +99,7 @@
                         </v-card>
                     </v-form>
                 </v-dialog>
-            @endif
+
         </v-container>
     </v-main>
 @endsection

@@ -29,19 +29,33 @@ class DEOS_controllerController extends Controller
         return view('admin.controller.index', compact('controllers', 'buildings'));
     }
 
+    public function checkControllerValid( Request $request)
+    {
+        $samebuildingcontrollers = DEOS_controller::where('building_id', $request->building_id)->get();
+        foreach($samebuildingcontrollers as $controller) {
+            if ( $controller-> name == $request->name) return false;
+        }
+        return true;
+    }
     public function create(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|unique:deos_controllers,name',
+            'name' => 'required',
             'ip_address' => 'required',
             'port_number' => 'required',
+            'building_id' => 'required'
         ],[
             'name.required' => "Name field can't be empty",
-            'name.unique' => $request->name . ' already exists in DB.' . ' Name field should be unique.',
             'ip_address.required' => "IP Address can't be empty",
             'port_number.required' => "Port Number can't be empty",
+            'building_id.required' => 'Controller must be belonged to a Building'
         ]);
 
+        if ( !$this->checkControllerValid ( $request )) {
+            $building = Building::where('id', $request->building_id) -> first();
+            return back()->with('error', sprintf("The Building  \"%s\" already have a controller named %s.", $building->name, $request->name));
+        }
+        
         $controllers = DEOS_controller::all();
         $request->port_number = count($controllers) + 8001;
         $row = DEOS_controller::create([
@@ -70,13 +84,20 @@ class DEOS_controllerController extends Controller
             'name' => 'required',
             'ip_address' => 'required',
             'port_number' => 'required',
+            'building_id' => 'required'
         ],[
             'name.required' => "Name field can't be empty",
             'ip_address.required' => "IP Address can't be empty",
             'port_number.required' => "Port Number can't be empty",
+            'building_id.required' => 'Controller must be belonged to a Building'
         ]);
         
 
+        if ( !$this->checkControllerValid ( $request )) {
+            $building = Building::where('id', $request->building_id) -> first();
+            return back()->with('error', sprintf("The Building  \"%s\" already have a controller named %s.", $building->name, $request->name));
+        }
+        
         $result = DEOS_controller::where('id', $id)->first();
         if (!$result) {
             return back()->with('error', 'Not found');

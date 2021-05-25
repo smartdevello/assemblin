@@ -4,6 +4,8 @@
         <v-container>
             @if( \Session::has('success') ) 
                 <h3>{{ \Session::get('success') }}</h3>
+            @elseif ( \Session::has('error'))
+                <h3 style="color: red">{{ \Session::get('error') }}</h3>
             @else
                 @if( count($errors) > 0)  
                     @foreach($errors->all() as $error)
@@ -13,8 +15,11 @@
             @endif
             <v-row>
                 <v-card v-for="controller in controllers" :key="controller.id" @click="openUpdateModal(controller.id)" width="300" elevation="10" class="ma-2">
-                    <v-card-title>@{{ controller . name }}</v-card-title>
-
+                    <v-row>
+                        <v-col cols = "6"> <v-card-title>@{{ controller . name }}</v-card-title> </v-col>
+                        <v-col cols = "6"> <v-card-title>@{{ controller . building . name }}</v-card-title> </v-col>
+                    </v-row>
+                    
                     <v-row>
                         <v-col cols="6">
                             <v-card-subtitle v-for="point in controller.points" :key="point.id">
