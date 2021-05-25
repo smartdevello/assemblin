@@ -97,9 +97,13 @@ class DEOS_pointController extends Controller
         
         //
         $point = DEOS_point::where('id', $id)->first();
+
+
         if (!$point) {
             return back()->with('error', 'Not found');
         }
+        $point->controller;
+        $point->area;
 
         $this->validate($request, [
             'name' => 'required',
@@ -113,12 +117,12 @@ class DEOS_pointController extends Controller
             'area_id.required' => "Must specify a Area"
         ]);
 
-        if ( $point->name != $request->name && !$this->checkValidPoint_forController ($request)) {
+        if ( !($point->name == $request->name && $point->controller->id == $request->controller_id && $point->area->id == $request->area_id ) && !$this->checkValidPoint_forController ($request)) {
             $controller = DEOS_controller::where('id', $request->controller_id)->first();
             return back()->with('error', sprintf("The Controller \"%s\" already has the point named \"%s\"", $controller->name , $request->name));
         }
 
-        if ($point->name != $request->name  && ! $this->checkValidPoint_forArea ($request )) {
+        if ( !($point->name == $request->name && $point->controller->id == $request->controller_id && $point->area->id == $request->area_id ) && ! $this->checkValidPoint_forArea ($request )) {
             $area = Area::where('id', $request->area_id)->first();
             return back()->with('error', sprintf("The Area \"%s\" already has the point named \"%s\"", $area->name , $request->name));
         }
