@@ -70,8 +70,9 @@ class DEOS_controllerController extends Controller
     }
     public function show($id)
     {
-        $controller = DEOS_controller::where('id', $id)->first();
+        $controller = DEOS_controller::where('id', $id)->first();        
         $buildings = Building::all();
+        foreach($buildings as $building) $building->location;
         $points = $controller->points;
         $controllers = DEOS_controller::all();
         $areas = Area::all();
@@ -82,6 +83,7 @@ class DEOS_controllerController extends Controller
     {
                 
         $controller = DEOS_controller::where('id', $id)->first();
+        $controller->building;
         if (!$controller) {
             return back()->with('error', 'Not found');
         }
@@ -99,7 +101,7 @@ class DEOS_controllerController extends Controller
         ]);
         
 
-        if ($controller->name != $request->name &&  !$this->checkControllerValid ( $request )) {
+        if ( !($controller->name == $request->name && $controller->building->id == $request->building_id ) &&  !$this->checkControllerValid ( $request )) {
             $building = Building::where('id', $request->building_id) -> first();
             return back()->with('error', sprintf("The Building  \"%s\" already have a controller named %s.", $building->name, $request->name));
         }

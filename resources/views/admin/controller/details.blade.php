@@ -143,6 +143,10 @@
                 this.addPointUrl = `${prefix_link}/controller/${this.controller.id}/add-point`;
                 this.removePointsUrl = `${prefix_link}/controller/${this.controller.id}/remove-points`;
                 this.importPointsUrl = `${prefix_link}/controller/${this.controller.id}/import-points`;
+
+                for (let building of this.buildings) {
+                    building.name = building.name + " ( " + building.location.name + " ) ";
+                }
             },
             methods: {
                 exportPoints: function() {
