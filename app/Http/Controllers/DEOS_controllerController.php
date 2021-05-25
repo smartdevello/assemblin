@@ -80,6 +80,12 @@ class DEOS_controllerController extends Controller
 
     public function update(Request $request, $id)
     {
+                
+        $controller = DEOS_controller::where('id', $id)->first();
+        if (!$controller) {
+            return back()->with('error', 'Not found');
+        }
+
         $this->validate($request, [
             'name' => 'required',
             'ip_address' => 'required',
@@ -93,16 +99,12 @@ class DEOS_controllerController extends Controller
         ]);
         
 
-        if ( !$this->checkControllerValid ( $request )) {
+        if ($controller->name != $request->name &&  !$this->checkControllerValid ( $request )) {
             $building = Building::where('id', $request->building_id) -> first();
             return back()->with('error', sprintf("The Building  \"%s\" already have a controller named %s.", $building->name, $request->name));
         }
-        
-        $result = DEOS_controller::where('id', $id)->first();
-        if (!$result) {
-            return back()->with('error', 'Not found');
-        }
-        $result->update($request->all());
+
+        $controller->update($request->all());
 
         $this->updateConfigfiles();
         return back()->with('success', 'Updated successfully');
