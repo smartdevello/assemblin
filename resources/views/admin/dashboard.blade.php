@@ -268,6 +268,9 @@
                         }).fail(function(jqXHR, textStatus, errorThrown) {
                             main_vm.is_relation_updating = false;
                             toastr.error('Something went wrong');
+                            console.log(jqXHR);
+                            console.log(textStatus);
+                            console.log(errorThrown);
                         });
 
 
