@@ -135,6 +135,7 @@ class DashboardController extends Controller
         }
         if ($points_updated) {
             $this->updateConfigfiles();
+            $this->restartAsmServices();
         }
         return $request->all();
     }
