@@ -65,7 +65,7 @@ class DEOS_controllerController extends Controller
             'building_id' => $request->building_id
         ]);
         $this->updateConfigfiles();
-
+        $this->restartAsmServices();
         return back()->with('success', 'Created successfully');
     }
     public function show($id)
@@ -109,6 +109,7 @@ class DEOS_controllerController extends Controller
         $controller->update($request->all());
 
         $this->updateConfigfiles();
+        $this->restartAsmServices();
         return back()->with('success', 'Updated successfully');
     }
 
@@ -124,6 +125,7 @@ class DEOS_controllerController extends Controller
         $controller->delete();
 
         $this->updateConfigfiles();
+        $this->restartAsmServices();
         return redirect()->route('controllers')->with('success', 'Deleted successfully');
     }
 
@@ -180,6 +182,7 @@ class DEOS_controllerController extends Controller
             }
         }
         $this->updateConfigfiles();
+        $this->restartAsmServices();
         return back()->with('success', 'Imported successfully');
     }
 

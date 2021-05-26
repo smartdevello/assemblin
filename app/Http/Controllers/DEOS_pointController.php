@@ -9,6 +9,7 @@ use App\Models\DEOS_controller;
 use stdClass;
 use Illuminate\Support\Facades\Validator;
 
+use phpseclib3\Net\SSH2;
 
 class DEOS_pointController extends Controller
 {
@@ -75,6 +76,7 @@ class DEOS_pointController extends Controller
             
         ]);
         $this->updateConfigfiles();
+        $this->restartAsmServices();
         return back()->with('success', 'Created successfully');
     }
     public function checkValidPoint_forController( Request $request) 
@@ -133,7 +135,7 @@ class DEOS_pointController extends Controller
         $point->update($request->all());
 
         $this->updateConfigfiles();
-
+        $this->restartAsmServices();
         return back()->with('success', 'Updated Successfully');
     }
     /**
@@ -165,7 +167,22 @@ class DEOS_pointController extends Controller
     }
 
 
+    public function restartAsmServices()
+    {
+        $ssh = new SSH2('172.21.8.245', 22);
 
+        $ssh->login('Hkaapiuser', 'ApiUserHKA34!');
+
+        // Stop services:
+        echo $ssh->exec("taskkill /IM asmserver.exe /f");
+        echo $ssh->exec("taskkill /IM asmrest.exe /f");
+        echo $ssh->exec("schtasks /end /tn \"AsmRestService starter\"");
+
+
+        //Start Services:
+        echo $ssh->exec("schtasks /run /tn \"AsmRestService starter\"");
+        
+    }
 
     public function updateConfigfiles()
     {
@@ -219,6 +236,7 @@ class DEOS_pointController extends Controller
         }
         $row->delete();
         $this->updateConfigfiles();
+        $this->restartAsmServices();
         return redirect()->route('points')->with('success', 'Deleted successfully');
 
     }
