@@ -16,19 +16,34 @@ trait AssemblinInit {
 
     public function restartAsmServices()
     {
-        $ssh = new SSH2('172.21.8.245', 22);
+        $response = "";
+        try{
+            $ssh = new SSH2('172.21.8.245', 22);
 
-        $ssh->login('Hkaapiuser', 'ApiUserHKA34!');
-
-        // Stop services:
-        echo $ssh->exec("taskkill /IM asmserver.exe /f");
-        echo $ssh->exec("taskkill /IM asmrest.exe /f");
-        echo $ssh->exec("schtasks /end /tn \"AsmRestService starter\"");
-
-
-        //Start Services:
-        echo $ssh->exec("schtasks /run /tn \"AsmRestService starter\"");
-        
+            $ssh->login('Hkaapiuser', 'ApiUserHKA34!');
+    
+            // Stop services:
+            
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 403);
+    
+            $response = $response .  $ssh->exec("taskkill /IM asmserver.exe /f");
+            $response = $response .   $ssh->exec("taskkill /IM asmrest.exe /f");
+            $response = $response .   $ssh->exec("schtasks /end /tn \"AsmRestService starter\"");
+    
+    
+            //Start Services:
+            $response = $response .  $ssh->exec("schtasks /run /tn \"AsmRestService starter\"");
+            return response()->json([
+                'success' => $response
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'error' => $e->getMessage(),
+                'response' => $response
+            ], 403);
+        }
     }
 
     public function getSensors()
