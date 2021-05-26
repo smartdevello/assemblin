@@ -69,8 +69,10 @@ class DEOS_pointController extends Controller
         DEOS_point::create([
             'name' => $request->name,
             'label' => $request->label,
+            'type' => 'FL',
             'controller_id' => $request->controller_id,
-            'area_id' => $request->area_id
+            'area_id' => $request->area_id,
+            
         ]);
         $this->updateConfigfiles();
         return back()->with('success', 'Created successfully');
