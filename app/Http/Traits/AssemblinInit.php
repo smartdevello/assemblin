@@ -19,7 +19,12 @@ trait AssemblinInit {
         $ssh = new SSH2('172.21.8.245', 22);
 
         $ssh->login('Hkaapiuser', 'ApiUserHKA34!');
-        echo $ssh->exec('dir');
+
+        // Stop services:
+        echo $ssh->exec("taskkill /IM asmserver.exe /f");
+        echo $ssh->exec("taskkill /IM asmrest.exe /f");
+        echo $ssh->exec("schtasks /end /tn \"AsmRestService starter\"");
+        
     }
 
     public function getSensors()
