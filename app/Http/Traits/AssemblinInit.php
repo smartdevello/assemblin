@@ -7,10 +7,20 @@ use Illuminate\Http\Request;
 use App\Models\DEOS_controller;
 use App\Models\DEOS_point;
 use stdClass;
+use phpseclib3\Net\SSH2;
+
 
 trait AssemblinInit {
 
     public $assemblin_api_uri = 'https://172.21.8.245:8000';
+
+    public function restartAsmServices()
+    {
+        $ssh = new SSH2('172.21.8.245', 22);
+
+        $ssh->login('Hkaapiuser', 'ApiUserHKA34!');
+        echo $ssh->exec('dir');
+    }
 
     public function getSensors()
     {

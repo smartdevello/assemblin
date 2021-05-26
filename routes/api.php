@@ -24,6 +24,7 @@ Route::middleware(['cors'])->group(function(){
 
     Route::group(['prefix' => 'dashboard'], function ($router) {
         Route::post('update', [DashboardController::class, 'update'])->name('update_dashboard');
+        Route::get('restartAsmServices', [DashboardController::class, 'restartAsmServices'])->name('restartAsmServices');        
     });
 
     Route::group(['prefix' => 'point'], function ($router) {
