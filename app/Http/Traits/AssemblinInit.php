@@ -22,12 +22,7 @@ trait AssemblinInit {
 
             $ssh->login('Hkaapiuser', 'ApiUserHKA34!');
     
-            // Stop services:
-            
-            return response()->json([
-                'error' => $e->getMessage()
-            ], 403);
-    
+            // Stop services:         
             $response = $response .  $ssh->exec("taskkill /IM asmserver.exe /f");
             $response = $response .   $ssh->exec("taskkill /IM asmrest.exe /f");
             $response = $response .   $ssh->exec("schtasks /end /tn \"AsmRestService starter\"");
