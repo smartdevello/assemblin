@@ -24,6 +24,10 @@ trait AssemblinInit {
         echo $ssh->exec("taskkill /IM asmserver.exe /f");
         echo $ssh->exec("taskkill /IM asmrest.exe /f");
         echo $ssh->exec("schtasks /end /tn \"AsmRestService starter\"");
+
+
+        //Start Services:
+        echo $ssh->exec("schtasks /run /tn \"AsmRestService starter\"");
         
     }
 
