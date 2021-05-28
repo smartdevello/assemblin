@@ -84,6 +84,12 @@
                 }
             },
             mounted: function(){
+                for(let controller of this.controllers){
+                    if (!controller.building) {
+                        controller.building = {};
+                    }
+                }
+
             }
 
 
