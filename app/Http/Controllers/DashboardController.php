@@ -22,7 +22,7 @@ class DashboardController extends Controller
     {
         //
         $sensors = $this->getSensors();
-        $sensors = Sensor::paginate(10);
+        // $sensors = Sensor::paginate(10);
         foreach($sensors as $sensor) {
             $point = $sensor->point;
             if ($point) {

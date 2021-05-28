@@ -13,13 +13,81 @@
             font-size: 25px;
             padding: 10px;
         }
+        div.v-text-field__details{
+            display: none !important;
+        }
 
+        .v-select__selections {
+            max-width: 100px !important;
+        }
     </style>
 @endsection
 @section('content')
     <v-main>
         <v-container>
-            <v-row>
+
+            <template>
+                <v-card>
+                    <v-card-title>
+                        Sensors
+                        <v-spacer></v-spacer>
+                        <v-text-field
+                          v-model="search"
+                          append-icon="mdi-magnify"
+                          label="Search"
+                          single-line
+                          hide-details
+                        ></v-text-field>
+                    </v-card-title>
+                  <v-data-table
+                    :headers="headers"
+                    :items="sensors"
+                    :search="search"
+                    :items-per-page="10"
+                    {{-- item-key="observationId" --}}
+                    {{-- show-group-by
+                    group-by="deviceId" --}}
+                    multi-sort
+                    :footer-props="{
+                        showFirstLastPage: true,
+                        firstIcon: 'mdi-arrow-collapse-left',
+                        lastIcon: 'mdi-arrow-collapse-right',
+                        prevIcon: 'mdi-minus',
+                        nextIcon: 'mdi-plus'
+                      }"
+                  >
+
+                    <template v-slot:item.value="{ item }">
+
+                        <v-text-field v-model="item.value" solo></v-text-field>
+                        {{-- <v-chip
+                        :color="getColor(item.value)"
+                        dark
+                        >
+                        @{{ item.value }}
+                        </v-chip> --}}
+                    </template>
+
+
+                    <template v-slot:item.point_id="{ item }">
+                        <v-select class="pa-0 ma-0" :items="points" v-model="item.point_id" item-text="name" item-value="id" solo @change="changePoint($event, item.id)">
+                        </v-select>
+                    </template>
+                    <template v-slot:item.controller_id="{ item }">
+                        <v-select :items="controllers" v-model="item.controller_id" item-text="name" item-value="id" solo @change="changeContoller($event, item.id)">
+                        </v-select>
+                    </template>
+                    <template v-slot:item.area_id="{ item }">
+                        <v-select :items="areas" v-model="item.area_id" item-text="name" item-value="id" solo>                                            
+                        </v-select>
+                    </template>
+
+                </v-data-table>
+                </v-card>
+              </template>
+
+
+            {{-- <v-row>
                 <v-col cols="12" sm="8" md="8">
                     <div class="section_container sensors">
                         <h1 class="section_title">Sensors</h1>
@@ -119,14 +187,14 @@
                     :length="sensors.last_page"
                   ></v-pagination>
                 </div>
-              </template>
+            </template> --}}
 
             <v-row >
                 <v-col cols="12" sm="10" md="10">
 
                 </v-col>
                 <v-col cols="12" sm="2" md="2">
-                    <v-btn :loading="is_relation_updating" :disabled="is_relation_updating" outlined @click="update_All">Update</v-btn>
+                    <v-btn class="blue text-center white--text mt-10" :loading="is_relation_updating" :disabled="is_relation_updating" outlined @click="update_All">Update</v-btn>
                 </v-col>
             </v-row>
         </v-container>
@@ -151,12 +219,31 @@
                 is_relation_updating: false,
                 update_dashboard_url : `${prefix_link}/api/dashboard/update`,
                 send_data_url : `${base_url}/api/point/writePointsbyid`,
-                
+
+
+
+                headers: [
+                    {
+                        text: 'Device ID',
+                        align: 'start',
+                        value: 'deviceId',
+                    },
+                    { text: 'Tag', value: 'tag' },
+                    { text: 'Name', value: 'name' },
+                    { text: 'Type', value: 'type' },
+                    { text: 'Latest value', value: 'value' },
+                    { text: 'DEOS Point', value: 'point_id' },
+                    { text: 'DEOS Controller', value: 'controller_id' },
+                    { text: 'Area', value: 'area_id' },
+                ],              
+                search: '',
+
             },
 
             mounted: function() {
                 // console.log(sensors_raw);
                 this.page = this.sensors.current_page;
+                console.log(this.sensors);
             },
             watch: {
                 page: function() {
@@ -165,13 +252,17 @@
                 }
             },
             methods: {
-
+                getColor (calories) {
+                    if (calories > 400) return 'red'
+                    else if (calories > 200) return 'orange'
+                    else return 'green'
+                },
                 changeContoller: function (controller_id, sensor_id) {
 
                 },
                 changePoint: function(point_id, sensor_id) {
 
-                    for (let sensor of this.sensors.data) {
+                    for (let sensor of this.sensors) {
                         if (sensor.id != sensor_id && sensor.point_id == point_id) {
                             sensor.point_id = null;
                             sensor.controller_id = null;
@@ -191,7 +282,7 @@
 
                 sendDatatoAssemblin: function(){
                     let submitdata = [];
-                    for (let sensor of this.sensors.data)
+                    for (let sensor of this.sensors)
                     {
                         if (sensor.point_id)
                         {
@@ -223,7 +314,7 @@
                 update_All: function(){
                     this.is_relation_updating = true;
                     let submitdata = [];
-                    for (let sensor of this.sensors.data)
+                    for (let sensor of this.sensors)
                     {
                         submitdata.push({
                             "id" : sensor.id,

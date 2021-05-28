@@ -46,26 +46,27 @@ class DEOS_pointController extends Controller
         //
 
         $this->validate($request, [
-            'name' => 'required',
+            'name' => 'required|unique:deos_points,name',                 
             'label' => 'required',
             'controller_id' => 'required',
             'area_id' => 'required'
         ], [
             'name.required' => "Name field can't be empty",
+            'name.unique' => sprintf("The Point \"%s\" already exists", $request->name),
             'label.required' => "Description field can't be empty",
             'controller_id.required' => "Must specify a Controller",
             'area_id.required' => "Must specify a Area"
         ]);
         
-        if (! $this->checkValidPoint_forController ($request )) {
-            $controller = DEOS_controller::where('id', $request->controller_id)->first();
-            return back()->with('error', sprintf("The Controller \"%s\" already has the point named \"%s\"", $controller->name , $request->name));
-        }
+        // if (! $this->checkValidPoint_forController ($request )) {
+        //     $controller = DEOS_controller::where('id', $request->controller_id)->first();
+        //     return back()->with('error', sprintf("The Controller \"%s\" already has the point named \"%s\"", $controller->name , $request->name));
+        // }
 
-        if (! $this->checkValidPoint_forArea ($request )) {
-            $area = Area::where('id', $request->area_id)->first();
-            return back()->with('error', sprintf("The Area \"%s\" already has the point named \"%s\"", $area->name , $request->name));
-        }
+        // if (! $this->checkValidPoint_forArea ($request )) {
+        //     $area = Area::where('id', $request->area_id)->first();
+        //     return back()->with('error', sprintf("The Area \"%s\" already has the point named \"%s\"", $area->name , $request->name));
+        // }
 
         DEOS_point::create([
             'name' => $request->name,
@@ -110,26 +111,27 @@ class DEOS_pointController extends Controller
         $point->area;
 
         $this->validate($request, [
-            'name' => 'required',
+            'name' => 'required|unique:deos_points,name',                 
             'label' => 'required',
             'controller_id' => 'required',
             'area_id' => 'required'
         ], [
             'name.required' => "Name field can't be empty",
+            'name.unique' => sprintf("The Point \"%s\" already exists", $request->name),
             'label.required' => "Description field can't be empty",
             'controller_id.required' => "Must specify a Controller",
             'area_id.required' => "Must specify a Area"
         ]);
 
-        if ( !($point->name == $request->name && $point->controller->id == $request->controller_id ) && !$this->checkValidPoint_forController ($request)) {
-            $controller = DEOS_controller::where('id', $request->controller_id)->first();
-            return back()->with('error', sprintf("The Controller \"%s\" already has the point named \"%s\"", $controller->name , $request->name));
-        }
+        // if ( !($point->name == $request->name && $point->controller->id == $request->controller_id ) && !$this->checkValidPoint_forController ($request)) {
+        //     $controller = DEOS_controller::where('id', $request->controller_id)->first();
+        //     return back()->with('error', sprintf("The Controller \"%s\" already has the point named \"%s\"", $controller->name , $request->name));
+        // }
 
-        if ( !($point->name == $request->name  && $point->area->id == $request->area_id ) && ! $this->checkValidPoint_forArea ($request )) {
-            $area = Area::where('id', $request->area_id)->first();
-            return back()->with('error', sprintf("The Area \"%s\" already has the point named \"%s\"", $area->name , $request->name));
-        }
+        // if ( !($point->name == $request->name  && $point->area->id == $request->area_id ) && ! $this->checkValidPoint_forArea ($request )) {
+        //     $area = Area::where('id', $request->area_id)->first();
+        //     return back()->with('error', sprintf("The Area \"%s\" already has the point named \"%s\"", $area->name , $request->name));
+        // }
         
 
         $point->update($request->all());
