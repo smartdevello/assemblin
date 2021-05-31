@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Area;
+use App\Models\Building;
 use Illuminate\Http\Request;
 use App\Models\DEOS_point;
 use App\Models\DEOS_controller;
+use App\Models\Location;
 use stdClass;
 use Illuminate\Support\Facades\Validator;
 
@@ -46,17 +48,32 @@ class DEOS_pointController extends Controller
         //
 
         $this->validate($request, [
-            'name' => 'required|unique:deos_points,name',                 
             'label' => 'required',
             'controller_id' => 'required',
             'area_id' => 'required'
         ], [
-            'name.required' => "Name field can't be empty",
-            'name.unique' => sprintf("The Point \"%s\" already exists", $request->name),
             'label.required' => "Description field can't be empty",
             'controller_id.required' => "Must specify a Controller",
             'area_id.required' => "Must specify a Area"
         ]);
+
+        try {
+            $controller = DEOS_controller::where('id', $request->controller_id)->first();
+            $building = Building::where('id', $controller->building_id)->first();            
+            $location = Location::where('id', $building->location_id)->first();
+            $request->name = $location->name . "_" . $building->name . "_" . $request->name;
+
+            $this->validate($request, [
+                'name' => 'required|unique:deos_points,name',
+            ], [
+                'name.required' => "Name field can't be empty",
+                'name.unique' => sprintf("The Point \"%s\" already exists", $request->name),
+            ]);
+
+        } catch(\Exception $e) {
+            return back()->with('error', 'Building or Location is not allocated for this point');
+        }
+
         
         // if (! $this->checkValidPoint_forController ($request )) {
         //     $controller = DEOS_controller::where('id', $request->controller_id)->first();
@@ -108,31 +125,38 @@ class DEOS_pointController extends Controller
             return back()->with('error', 'Not found');
         }
         $point->controller;
-        $point->area;
+        $point->area;     
+
 
         $this->validate($request, [
-            'name' => 'required|unique:deos_points,name',                 
             'label' => 'required',
             'controller_id' => 'required',
             'area_id' => 'required'
         ], [
-            'name.required' => "Name field can't be empty",
-            'name.unique' => sprintf("The Point \"%s\" already exists", $request->name),
             'label.required' => "Description field can't be empty",
             'controller_id.required' => "Must specify a Controller",
             'area_id.required' => "Must specify a Area"
         ]);
 
-        // if ( !($point->name == $request->name && $point->controller->id == $request->controller_id ) && !$this->checkValidPoint_forController ($request)) {
-        //     $controller = DEOS_controller::where('id', $request->controller_id)->first();
-        //     return back()->with('error', sprintf("The Controller \"%s\" already has the point named \"%s\"", $controller->name , $request->name));
-        // }
+        try {
+            $controller = DEOS_controller::where('id', $point->controller_id)->first();
+            $building = Building::where('id', $controller->building_id)->first();            
+            $location = Location::where('id', $building->location_id)->first();
+            $request->name = $location->name . "_" . $building->name . "_" . $request->name;
 
-        // if ( !($point->name == $request->name  && $point->area->id == $request->area_id ) && ! $this->checkValidPoint_forArea ($request )) {
-        //     $area = Area::where('id', $request->area_id)->first();
-        //     return back()->with('error', sprintf("The Area \"%s\" already has the point named \"%s\"", $area->name , $request->name));
-        // }
-        
+            $this->validate($request, [
+                'name' => 'required|unique:deos_points,name',
+            ], [
+                'name.required' => "Name field can't be empty",
+                'name.unique' => sprintf("The Point \"%s\" already exists", $request->name),
+            ]);
+
+        } catch(\Exception $e) {
+            return back()->with('error', 'Building or Location is not allocated for this point');
+        }
+
+
+       
 
         $point->update($request->all());
 
