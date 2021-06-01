@@ -364,6 +364,25 @@
                     $.ajax(settings).done(function(response) {
                             // setTimeout(main_vm.sendDatatoAssemblin, 500);
                             // main_vm.sendDatatoAssemblin();
+                            main_vm.is_relation_updating = false;
+                            toastr.options = {
+                                "closeButton": false,
+                                "debug": false,
+                                "newestOnTop": false,
+                                "progressBar": false,
+                                "positionClass": "toast-bottom-center",
+                                "preventDuplicates": false,
+                                "onclick": null,
+                                "showDuration": "300",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            };
+                            toastr.success('Updated Successfully');
                             console.log(response);
                         }).fail(function(jqXHR, textStatus, errorThrown) {
                             main_vm.is_relation_updating = false;
