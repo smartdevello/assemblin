@@ -247,11 +247,7 @@
             watch: {
             },
             methods: {
-                getColor (calories) {
-                    if (calories > 400) return 'red'
-                    else if (calories > 200) return 'orange'
-                    else return 'green'
-                },
+
                 changeContoller: function (controller_id, sensor_id) {
 
                 },
@@ -301,9 +297,33 @@
                     console.log(submitdata);
 
                     $.ajax(settings).done(function(response) {
+                        main_vm.is_relation_updating = false;
+                            toastr.options = {
+                                "closeButton": false,
+                                "debug": false,
+                                "newestOnTop": false,
+                                "progressBar": false,
+                                "positionClass": "toast-bottom-center",
+                                "preventDuplicates": false,
+                                "onclick": null,
+                                "showDuration": "300",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            };
+                            toastr.success('Updated Successfully');
                             console.log(response);
                     }).fail(function(jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR);
+                            console.log(jqXHR);
+                            main_vm.is_relation_updating = false;
+                            toastr.error('Something went wrong');
+                            console.log(jqXHR);
+                            console.log(textStatus);
+                            console.log(errorThrown);
                     });
                     
                 },
@@ -333,26 +353,7 @@
                     };
                     
                     $.ajax(settings).done(function(response) {
-                            main_vm.is_relation_updating = false;
-                            toastr.options = {
-                                "closeButton": false,
-                                "debug": false,
-                                "newestOnTop": false,
-                                "progressBar": false,
-                                "positionClass": "toast-bottom-center",
-                                "preventDuplicates": false,
-                                "onclick": null,
-                                "showDuration": "300",
-                                "hideDuration": "1000",
-                                "timeOut": "5000",
-                                "extendedTimeOut": "1000",
-                                "showEasing": "swing",
-                                "hideEasing": "linear",
-                                "showMethod": "fadeIn",
-                                "hideMethod": "fadeOut"
-                            };
                             main_vm.sendDatatoAssemblin();
-                            toastr.success('Updated Successfully');
                         }).fail(function(jqXHR, textStatus, errorThrown) {
                             main_vm.is_relation_updating = false;
                             toastr.error('Something went wrong');
