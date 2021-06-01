@@ -116,15 +116,17 @@ class DashboardController extends Controller
     public function update(Request $request)
     {
         //
+        $res = "";
         try{
             $points_updated = false;
+            $asm_points_data = [];
             foreach($request->all() as $item)
             {
-                $sensor = Sensor::where('id', $item['id'])->first();
-                $sensor->update([
-                    "value" => $item["value"],
-                    "point_id" => $item["point_id"] ?? null,                
-                ]);
+                // $sensor = Sensor::where('id', $item['id'])->first();
+                // $sensor->update([
+                //     "value" => $item["value"],
+                //     "point_id" => $item["point_id"] ?? null,                
+                // ]);
     
                 if ($item['point_id']) {
                     $points_updated = true;
@@ -133,11 +135,16 @@ class DashboardController extends Controller
                         'controller_id' => $item['controller_id'] ?? null,
                         'area_id' => $item['area_id'] ?? null
                     ]);
+                    $asm_points_data[] = [
+                        "id" => $item["point_name"],
+                        "value" => $item["value"]
+                    ];
                 }
             }
             if ($points_updated) {
                 $this->updateConfigfiles();
                 $this->restartAsmServices();
+                $res = $this->sendDatatoASM($asm_points_data);
             }
         }catch(Exception $e){
             return response()->json([
@@ -145,11 +152,37 @@ class DashboardController extends Controller
             ], 403);
         }
         return response()->json([
-            'success' => 'Updated Dashboard successfully'
+            'success' => $res
         ], 200);
 
     }
 
+    public function sendDatatoASM($data){
+        $ch = curl_init();
+        //        return $request;
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => $this->assemblin_api_uri . '/assemblin/points/writebyid',
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_CUSTOMREQUEST => "PUT",
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "Accept: application/json"
+            ),
+        ));
+
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            return curl_error($ch);
+        }
+        curl_close($ch);
+        $result = json_encode($result);        
+        return json_encode($result);
+    }
     /**
      * Remove the specified resource from storage.
      *
