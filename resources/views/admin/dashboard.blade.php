@@ -296,7 +296,7 @@
                     };
 
                     // console.log(this.send_data_url);
-                    console.log(submitdata);
+                    // console.log(submitdata);
 
                     $.ajax(settings).done(function(response) {
                         main_vm.is_relation_updating = false;
