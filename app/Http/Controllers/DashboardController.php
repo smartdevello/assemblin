@@ -8,6 +8,7 @@ use App\Models\DEOS_point;
 use Illuminate\Http\Request;
 use App\Models\Sensor;
 use App\Http\Traits\AssemblinInit;
+use Exception;
 
 class DashboardController extends Controller
 {
@@ -115,29 +116,38 @@ class DashboardController extends Controller
     public function update(Request $request)
     {
         //
-        $points_updated = false;
-        foreach($request->all() as $item)
-        {
-            $sensor = Sensor::where('id', $item['id'])->first();
-            $sensor->update([
-                "value" => $item["value"],
-                "point_id" => $item["point_id"] ?? null,                
-            ]);
-
-            if ($item['point_id']) {
-                $points_updated = true;
-                $point = DEOS_point::where('id', $item['point_id'])->first();
-                $point->update([
-                    'controller_id' => $item['controller_id'] ?? null,
-                    'area_id' => $item['area_id'] ?? null
+        try{
+            $points_updated = false;
+            foreach($request->all() as $item)
+            {
+                $sensor = Sensor::where('id', $item['id'])->first();
+                $sensor->update([
+                    "value" => $item["value"],
+                    "point_id" => $item["point_id"] ?? null,                
                 ]);
+    
+                if ($item['point_id']) {
+                    $points_updated = true;
+                    $point = DEOS_point::where('id', $item['point_id'])->first();
+                    $point->update([
+                        'controller_id' => $item['controller_id'] ?? null,
+                        'area_id' => $item['area_id'] ?? null
+                    ]);
+                }
             }
+            if ($points_updated) {
+                $this->updateConfigfiles();
+                $this->restartAsmServices();
+            }
+        }catch(Exception $e){
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 403);
         }
-        if ($points_updated) {
-            $this->updateConfigfiles();
-            $this->restartAsmServices();
-        }
-        return $request->all();
+        return response()->json([
+            'success' => 'Updated Dashboard successfully'
+        ], 200);
+
     }
 
     /**
