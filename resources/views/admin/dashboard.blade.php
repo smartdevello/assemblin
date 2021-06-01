@@ -286,7 +286,7 @@
                     }
 
                     var settings = {
-                        "url": this.send_data_url,
+                        "url": base_url + "/api/point/writePointsbyid",
                         "method": "POST",
                         "timeout": 0,
                         "headers": {
