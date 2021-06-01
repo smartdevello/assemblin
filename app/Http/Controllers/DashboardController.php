@@ -142,9 +142,10 @@ class DashboardController extends Controller
                 }
             }
             if ($points_updated) {
+                $res = $this->sendDatatoASM($asm_points_data);
                 $this->updateConfigfiles();
                 $this->restartAsmServices();
-                // $res = $this->sendDatatoASM($asm_points_data);
+                
             }
         }catch(Exception $e){
             return response()->json([
