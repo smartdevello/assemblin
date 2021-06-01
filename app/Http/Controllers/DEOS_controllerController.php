@@ -56,6 +56,7 @@ class DEOS_controllerController extends Controller
             return back()->with('error', sprintf("The Building  \"%s\" already have a controller named %s.", $building->name, $request->name));
         }
         
+        $this->stopAsmServices();
         $controllers = DEOS_controller::all();
         $request->port_number = count($controllers) + 8001;
         $row = DEOS_controller::create([
@@ -65,7 +66,7 @@ class DEOS_controllerController extends Controller
             'building_id' => $request->building_id
         ]);
         $this->updateConfigfiles();
-        $this->restartAsmServices();
+        $this->startAsmServices();
         return back()->with('success', 'Created successfully');
     }
     public function show($id)
@@ -107,9 +108,9 @@ class DEOS_controllerController extends Controller
         }
 
         $controller->update($request->all());
-
+        $this->stopAsmServices();
         $this->updateConfigfiles();
-        $this->restartAsmServices();
+        $this->startAsmServices();
         return back()->with('success', 'Updated successfully');
     }
 
@@ -121,11 +122,19 @@ class DEOS_controllerController extends Controller
         }
 
         $filepath = config()->get('constants.BASE_CONFIG_PATH') . 'asmrest/' . $controller->name . ".json";
-        if (file_exists($filepath)) unlink($filepath);
+        
+        $this->stopAsmServices();
+        try{
+            
+            if (file_exists($filepath)) unlink($filepath);
+        } catch (Exception $e) {
+
+        }
+        
         $controller->delete();
 
         $this->updateConfigfiles();
-        $this->restartAsmServices();
+        $this->startAsmServices();
         return redirect()->route('controllers')->with('success', 'Deleted successfully');
     }
 
@@ -152,13 +161,14 @@ class DEOS_controllerController extends Controller
 
     public function importPointsFromCsv(Request $request, $id)
     {
+        
         try{
             if (!$request->file('file')) {
                 return back()->with('error', 'Empty file');
             }
             $rows = Excel::toCollection(new PointsImport, $request->file('file'));       
     
-    
+            $this->stopAsmServices();
             foreach ($rows[0] as $index => $row) {
                 //If Header continue;
                 if ($index == 0) continue;
@@ -183,7 +193,7 @@ class DEOS_controllerController extends Controller
                 }
             }
             $this->updateConfigfiles();
-            $this->restartAsmServices();
+            $this->startAsmServices();
         } catch(Exception $e) {
             return back()->with('error', 'Something went wrong, Please import the same format of the exported file.');
         }

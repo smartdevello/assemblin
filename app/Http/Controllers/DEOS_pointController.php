@@ -85,6 +85,7 @@ class DEOS_pointController extends Controller
         //     return back()->with('error', sprintf("The Area \"%s\" already has the point named \"%s\"", $area->name , $request->name));
         // }
 
+        
         DEOS_point::create([
             'name' => $request->name,
             'label' => $request->label,
@@ -93,8 +94,9 @@ class DEOS_pointController extends Controller
             'area_id' => $request->area_id,
             
         ]);
+        $this->stopAsmServices();
         $this->updateConfigfiles();
-        $this->restartAsmServices();
+        $this->startAsmServices();
         return back()->with('success', 'Created successfully');
     }
     public function checkValidPoint_forController( Request $request) 
@@ -160,8 +162,9 @@ class DEOS_pointController extends Controller
 
         $point->update($request->all());
 
+        $this->stopAsmServices();
         $this->updateConfigfiles();
-        $this->restartAsmServices();
+        $this->startAsmServices();
         return back()->with('success', 'Updated Successfully');
     }
     /**
@@ -209,7 +212,50 @@ class DEOS_pointController extends Controller
         echo $ssh->exec("schtasks /run /tn \"AsmRestService starter\"");
         
     }
+    public function stopAsmServices() {
+        $response = "";
+        try{
+            $ssh = new SSH2('172.21.8.245', 22);
 
+            $ssh->login('Hkaapiuser', 'ApiUserHKA34!');
+    
+            // Stop services:         
+            $response = $response .  $ssh->exec("taskkill /IM asmserver.exe /f");
+            $response = $response .   $ssh->exec("taskkill /IM asmrest.exe /f");
+            $response = $response .   $ssh->exec("schtasks /end /tn \"AsmRestService starter\"");  
+ 
+            return response()->json([
+                'success' => $response
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'error' => $e->getMessage(),
+                'response' => $response
+            ], 403);
+        }
+    }
+    public function startAsmServices()
+    {
+        $response = "";
+        try{
+            $ssh = new SSH2('172.21.8.245', 22);
+
+            $ssh->login('Hkaapiuser', 'ApiUserHKA34!');   
+   
+    
+            //Start Services:
+            $response = $response .  $ssh->exec("schtasks /run /tn \"AsmRestService starter\"");
+            return response()->json([
+                'success' => $response
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'error' => $e->getMessage(),
+                'response' => $response
+            ], 403);
+        }
+
+    }
     public function updateConfigfiles()
     {
 
@@ -261,8 +307,9 @@ class DEOS_pointController extends Controller
             return back()->with('error', 'Not found');
         }
         $row->delete();
+        $this->stopAsmServices();
         $this->updateConfigfiles();
-        $this->restartAsmServices();
+        $this->startAsmServices();
         return redirect()->route('points')->with('success', 'Deleted successfully');
 
     }
