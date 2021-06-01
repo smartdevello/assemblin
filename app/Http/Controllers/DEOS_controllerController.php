@@ -11,7 +11,7 @@ use App\Models\DEOS_point;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Traits\AssemblinInit;
 use App\Imports\PointsImport;
-
+use Exception;
 use stdClass;
 
 class DEOS_controllerController extends Controller
@@ -152,37 +152,41 @@ class DEOS_controllerController extends Controller
 
     public function importPointsFromCsv(Request $request, $id)
     {
-        if (!$request->file('file')) {
-            return back()->with('error', 'Empty file');
-        }
-        $rows = Excel::toCollection(new PointsImport, $request->file('file'));       
-
-
-        foreach ($rows[0] as $index => $row) {
-            //If Header continue;
-            if ($index == 0) continue;
-            $data = [
-                'name' => $row[1],
-                'label' => $row[2],
-                'type' => $row[4],
-                'meta_property' => $row[5],
-                'meta_room' => $row[6],
-                'meta_sensor' => $row[7], 
-                'meta_type' => $row[8],
-                'value' => $row[3], 
-                'controller_id' => $id,
-
-            ];
-            $point = DEOS_point::where('name', $data['name'])->first();
-
-            if ( $point == null) {
-                $point = DEOS_point::create($data);
-            } else {
-                $point->update($data);
+        try{
+            if (!$request->file('file')) {
+                return back()->with('error', 'Empty file');
             }
+            $rows = Excel::toCollection(new PointsImport, $request->file('file'));       
+    
+    
+            foreach ($rows[0] as $index => $row) {
+                //If Header continue;
+                if ($index == 0) continue;
+                $data = [
+                    'name' => $row[1],
+                    'label' => $row[2],
+                    'type' => $row[4],
+                    'meta_property' => $row[5],
+                    'meta_room' => $row[6],
+                    'meta_sensor' => $row[7], 
+                    'meta_type' => $row[8],
+                    'value' => $row[3], 
+                    'controller_id' => $id,
+    
+                ];
+                $point = DEOS_point::where('name', $data['name'])->first();
+    
+                if ( $point == null) {
+                    $point = DEOS_point::create($data);
+                } else {
+                    $point->update($data);
+                }
+            }
+            $this->updateConfigfiles();
+            $this->restartAsmServices();
+        } catch(Exception $e) {
+            return back()->with('error', 'Something went wrong, Please import the same format of the exported file.');
         }
-        $this->updateConfigfiles();
-        $this->restartAsmServices();
         return back()->with('success', 'Imported successfully');
     }
 
