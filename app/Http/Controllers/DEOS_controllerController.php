@@ -121,7 +121,12 @@ class DEOS_controllerController extends Controller
         }
 
         $filepath = config()->get('constants.BASE_CONFIG_PATH') . 'asmrest/' . $controller->name . ".json";
-        if (file_exists($filepath)) unlink($filepath);
+
+        try{
+            if (file_exists($filepath)) unlink($filepath);
+        } catch (Exception $e) {
+        }
+        
         $controller->delete();
 
         $this->updateConfigfiles();
