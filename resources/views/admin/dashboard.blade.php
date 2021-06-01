@@ -243,13 +243,8 @@
             mounted: function() {
                 // console.log(sensors_raw);
                 this.page = this.sensors.current_page;
-                console.log(this.sensors);
             },
             watch: {
-                page: function() {
-                    console.log('current_page is ' + this.page);
-                    window.location.href = "/?page=" + this.page;
-                }
             },
             methods: {
                 getColor (calories) {
@@ -303,6 +298,8 @@
                             "data": JSON.stringify(submitdata),
                     };
 
+                    console.log(submitdata);
+                    
                     $.ajax(settings).done(function(response) {
                             console.log(response);
                     }).fail(function(jqXHR, textStatus, errorThrown) {
