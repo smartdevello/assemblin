@@ -291,6 +291,25 @@ trait AssemblinInit {
             file_put_contents($filepath, json_encode($restconfig));
         }
 
+
+
+        $filepath = config()->get('constants.BASE_CONFIG_PATH') . 'asmservice/opens.json';
+        $opensconfig = new stdClass();
+        $opensconfig->GetProcesses = "C:/assemblin/asmrest/getprosesses.cmd";
+        $opensconfig->Slaves = [];
+
+        foreach( $controllers as $controller) {
+            $item = new stdClass();
+            $item->Program = "C:/assemblin/asmrest/asmrest.exe";
+            $item->Config =  "-c=c:/assemblin/asmrest/" . $controller->name . ".json";
+            array_push( $opensconfig->Slaves, $item);
+        }
+
+        $item = new stdClass();
+        $item->Program = "C:/assemblin/asmserver/asmserver.exe";
+        $item->Config =  "-c=c:/assemblin/asmserver/config.json";
+        array_push($opensconfig->Slaves, $item);
+        file_put_contents($filepath, json_encode($opensconfig));
     }
 
     public function writePointstoLocalDB(Request $request)
