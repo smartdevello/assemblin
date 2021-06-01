@@ -291,13 +291,12 @@
                     var settings = {
                             "url": this.send_data_url,
                             "method": "POST",
-                            "timeout": 0,
                             "headers": {
                                 "Content-Type": "application/json"
                             },
                             "data": JSON.stringify(submitdata),
                     };
-                    
+
                     console.log(this.send_data_url);
                     console.log(submitdata);
 
