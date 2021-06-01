@@ -335,10 +335,17 @@
                     let submitdata = [];
                     for (let sensor of this.sensors)
                     {
+                        point_name = null;
+                        if ( sensor.point_id ) {
+                            point = this.points.find(point => point.id == sensor.point_id);
+                            point_name = point.name;
+                        }
+                        
                         submitdata.push({
                             "id" : sensor.id,
                             "value" : sensor.value,
                             "point_id" : sensor.point_id,
+                            "point_name" : point_name ?? null, 
                             "controller_id" : sensor.controller_id,
                             "area_id" : sensor.area_id
                         });
