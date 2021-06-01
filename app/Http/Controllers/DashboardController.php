@@ -122,11 +122,11 @@ class DashboardController extends Controller
             $asm_points_data = [];
             foreach($request->all() as $item)
             {
-                // $sensor = Sensor::where('id', $item['id'])->first();
-                // $sensor->update([
-                //     "value" => $item["value"],
-                //     "point_id" => $item["point_id"] ?? null,                
-                // ]);
+                $sensor = Sensor::where('id', $item['id'])->first();
+                $sensor->update([
+                    "value" => $item["value"],
+                    "point_id" => $item["point_id"] ?? null,                
+                ]);
     
                 if ($item['point_id']) {
                     $points_updated = true;
