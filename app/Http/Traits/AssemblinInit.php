@@ -14,6 +14,50 @@ trait AssemblinInit {
 
     public $assemblin_api_uri = 'https://172.21.8.245:8000';
 
+    public function stopAsmServices() {
+        $response = "";
+        try{
+            $ssh = new SSH2('172.21.8.245', 22);
+
+            $ssh->login('Hkaapiuser', 'ApiUserHKA34!');
+    
+            // Stop services:         
+            $response = $response .  $ssh->exec("taskkill /IM asmserver.exe /f");
+            $response = $response .   $ssh->exec("taskkill /IM asmrest.exe /f");
+            $response = $response .   $ssh->exec("schtasks /end /tn \"AsmRestService starter\"");  
+ 
+            return response()->json([
+                'success' => $response
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'error' => $e->getMessage(),
+                'response' => $response
+            ], 403);
+        }
+    }
+    public function startAsmServices()
+    {
+        $response = "";
+        try{
+            $ssh = new SSH2('172.21.8.245', 22);
+
+            $ssh->login('Hkaapiuser', 'ApiUserHKA34!');   
+   
+    
+            //Start Services:
+            $response = $response .  $ssh->exec("schtasks /run /tn \"AsmRestService starter\"");
+            return response()->json([
+                'success' => $response
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'error' => $e->getMessage(),
+                'response' => $response
+            ], 403);
+        }
+
+    }
     public function restartAsmServices()
     {
         $response = "";
