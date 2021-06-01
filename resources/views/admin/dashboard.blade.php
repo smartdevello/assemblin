@@ -355,8 +355,8 @@
                     };
                     
                     $.ajax(settings).done(function(response) {
-                            setTimeout(main_vm.sendDatatoAssemblin, 500);
-                            // main_vm.sendDatatoAssemblin();
+                            // setTimeout(main_vm.sendDatatoAssemblin, 500);
+                            main_vm.sendDatatoAssemblin();
                         }).fail(function(jqXHR, textStatus, errorThrown) {
                             main_vm.is_relation_updating = false;
                             toastr.error('Something went wrong');
