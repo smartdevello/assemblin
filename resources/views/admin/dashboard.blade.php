@@ -363,7 +363,8 @@
                     
                     $.ajax(settings).done(function(response) {
                             // setTimeout(main_vm.sendDatatoAssemblin, 500);
-                            main_vm.sendDatatoAssemblin();
+                            // main_vm.sendDatatoAssemblin();
+                            console.log(response);
                         }).fail(function(jqXHR, textStatus, errorThrown) {
                             main_vm.is_relation_updating = false;
                             toastr.error('Something went wrong');
