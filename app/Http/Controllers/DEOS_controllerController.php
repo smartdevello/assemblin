@@ -39,22 +39,20 @@ class DEOS_controllerController extends Controller
     }
     public function create(Request $request)
     {
+        
         $this->validate($request, [
-            'name' => 'required',
+            'name' => 'required|unique:deos_controllers,name',
             'ip_address' => 'required',
             'port_number' => 'required',
             'building_id' => 'required'
         ],[
             'name.required' => "Name field can't be empty",
+            'name.unique' => sprintf("The Controller \"%s\" already exists", $request->name),
             'ip_address.required' => "IP Address can't be empty",
             'port_number.required' => "Port Number can't be empty",
             'building_id.required' => 'Controller must be belonged to a Building'
         ]);
 
-        if ( !$this->checkControllerValid ( $request )) {
-            $building = Building::where('id', $request->building_id) -> first();
-            return back()->with('error', sprintf("The Building  \"%s\" already have a controller named %s.", $building->name, $request->name));
-        }
         
         $this->stopAsmServices();
         $controllers = DEOS_controller::all();
@@ -90,22 +88,18 @@ class DEOS_controllerController extends Controller
         }
 
         $this->validate($request, [
-            'name' => 'required',
+            'name' => 'required|unique:deos_controllers,name',
             'ip_address' => 'required',
             'port_number' => 'required',
             'building_id' => 'required'
         ],[
             'name.required' => "Name field can't be empty",
+            'name.unique' => sprintf("The Controller \"%s\" already exists", $request->name),
             'ip_address.required' => "IP Address can't be empty",
             'port_number.required' => "Port Number can't be empty",
             'building_id.required' => 'Controller must be belonged to a Building'
         ]);
-        
-
-        if ( !($controller->name == $request->name && $controller->building->id == $request->building_id ) &&  !$this->checkControllerValid ( $request )) {
-            $building = Building::where('id', $request->building_id) -> first();
-            return back()->with('error', sprintf("The Building  \"%s\" already have a controller named %s.", $building->name, $request->name));
-        }
+      
 
         $controller->update($request->all());
         $this->stopAsmServices();
