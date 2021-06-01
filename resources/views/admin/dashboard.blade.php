@@ -344,7 +344,7 @@
                         });
                     }
 
-                    settings = {
+                    var settings = {
                             "url": this.update_dashboard_url,
                             "method": "POST",
                             "timeout": 0,
@@ -355,68 +355,15 @@
                     };
                     
                     $.ajax(settings).done(function(response) {
-                        let submitdata = [];
-                        for (let sensor of this.sensors)
-                        {
-                            if (sensor.point_id)
-                            {
-                                point = this.points.find(point => point.id == sensor.point_id);
-                                submitdata.push({
-                                    "id": point.name,
-                                    "value": String(sensor.value)
-                                });
-                            }
-                        }
-
-                        settings1 = {
-                            "url": base_url + "/api/point/writePointsbyid",
-                            "method": "POST",
-                            "timeout": 0,
-                            "headers": {
-                                "Content-Type": "application/json"
-                            },
-                            "data": JSON.stringify(submitdata),
-                        };
-
-                        // console.log(this.send_data_url);
-                        // console.log(submitdata);
-
-                        $.ajax(settings1).done(function(response) {
-                            main_vm.is_relation_updating = false;
-                                toastr.options = {
-                                    "closeButton": false,
-                                    "debug": false,
-                                    "newestOnTop": false,
-                                    "progressBar": false,
-                                    "positionClass": "toast-bottom-center",
-                                    "preventDuplicates": false,
-                                    "onclick": null,
-                                    "showDuration": "300",
-                                    "hideDuration": "1000",
-                                    "timeOut": "5000",
-                                    "extendedTimeOut": "1000",
-                                    "showEasing": "swing",
-                                    "hideEasing": "linear",
-                                    "showMethod": "fadeIn",
-                                    "hideMethod": "fadeOut"
-                                };
-                                toastr.success('Updated Successfully');
-                                console.log(response);
+                            setTimeout(main_vm.sendDatatoAssemblin, 500);
+                            // main_vm.sendDatatoAssemblin();
                         }).fail(function(jqXHR, textStatus, errorThrown) {
-                                console.log(jqXHR);
-                                main_vm.is_relation_updating = false;
-                                toastr.error('Something went wrong');
-                                console.log(jqXHR);
-                                console.log(textStatus);
-                                console.log(errorThrown);
+                            main_vm.is_relation_updating = false;
+                            toastr.error('Something went wrong');
+                            console.log(jqXHR);
+                            console.log(textStatus);
+                            console.log(errorThrown);
                         });
-                    }).fail(function(jqXHR, textStatus, errorThrown) {
-                        main_vm.is_relation_updating = false;
-                        toastr.error('Something went wrong');
-                        console.log(jqXHR);
-                        console.log(textStatus);
-                        console.log(errorThrown);
-                    });
 
 
 
