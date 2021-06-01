@@ -297,9 +297,10 @@
                             },
                             "data": JSON.stringify(submitdata),
                     };
-
-                    console.log(submitdata);
                     
+                    console.log(this.send_data_url);
+                    console.log(submitdata);
+
                     $.ajax(settings).done(function(response) {
                             console.log(response);
                     }).fail(function(jqXHR, textStatus, errorThrown) {
