@@ -47,7 +47,7 @@
 
                                     <v-text-field placeholder="Name" name="name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
                                     <v-text-field placeholder="IP Address" name="ip_address" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
-                                    <v-text-field placeholder="Port Number" name="port_number" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
+                                    <v-text-field placeholder="Port Number" name="port_number" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]" readonly :value="nextId + 8000"></v-text-field>
                                     <v-select :items="buildings" label="Select A Building" name="building_id" item-text="name" item-value="id" solo required>
                                     </v-select>
                                     <v-card-actions>
@@ -74,6 +74,7 @@
                 mainMenu: mainMenu,
                 controllers: ( <?php echo json_encode($controllers); ?> ),
                 buildings: ( <?php echo json_encode($buildings); ?> ),
+                nextId: ( <?php echo json_encode($nextId); ?> ),
                 openNew: false,
                 createUrl: `${prefix_link}/controller/create`,
                 currentUrl: '',
