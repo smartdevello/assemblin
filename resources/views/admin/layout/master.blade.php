@@ -16,6 +16,7 @@
     <div id="app">
         <div class="v-cloak">    
             <v-app >
+                @include('admin.layout.header')
                 @include('admin.layout.navigation')
                 {{--@include('admin.layout.toolbar');--}}
                 @yield('content')
