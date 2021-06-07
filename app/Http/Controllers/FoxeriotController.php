@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\DEOS_point;
 use Illuminate\Http\Request;
 use App\Models\Sensor;
+use App\Models\DEOS_controller;
+use App\Models\Area;
 use App\Http\Traits\AssemblinInit;
 
 
@@ -72,13 +74,24 @@ class FoxeriotController extends Controller
      */
     public function automatic_update()
     {
-        $this->getDevices();
+        $this->getSensors();
         $sensors = Sensor::all();
         $data = [];
-        foreach ($sensors as $sensor) {
-            if ($sensor->point_name !== null && $sensor->point_name !== "") {
-                array_push($data, array("id" => $sensor->point_name, "value" => strval($sensor->value)));
+
+        foreach($sensors as $sensor) {
+            $point = $sensor->point;
+            if ($point) {
+                if ($point->controller_id) {
+                    $controller = DEOS_controller::where('id', $point->controller_id)->first();
+                    $sensor->controller_id = $controller->id;
+                }
+                if ( $point->area_id) {
+                    $area = Area::where('id', $point->area_id)->first();
+                    $sensor->area_id = $area->id;
+                }
+                array_push($data, array("id" => $point->name, "value" => strval($sensor->value)));
             }
+            
         }
 
         $ch = curl_init();
@@ -92,7 +105,6 @@ class FoxeriotController extends Controller
                 "Accept: application/json"
             ),
         ));
-
 
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
