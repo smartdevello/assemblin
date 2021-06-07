@@ -26,9 +26,10 @@ Route::get('/test', function () {
 
 Route::get('', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
-Route::get('/setting', '\App\Http\Controllers\DashboardController@setting_index');
 
-Route::group(['prefix' => 'location'], function ($router) {
+Route::get('/setting', '\App\Http\Controllers\DashboardController@setting_index')->middleware(['auth']);
+
+Route::group(['prefix' => 'location', 'middleware' => 'auth'], function ($router) {
     Route::get('', [LocationController::class, 'index'])->name('locations');
     Route::get('/{id}', [LocationController::class, 'show'])->name('location-detail');
     Route::post('create', [LocationController::class, 'create'])->name('location-create');
@@ -37,7 +38,7 @@ Route::group(['prefix' => 'location'], function ($router) {
     Route::post('delete_buildings/{id}', [LocationController::class, 'delete_buildings'])->name('location-delete_buildings');
 });
 
-Route::group(['prefix' => 'building'], function ($router) {
+Route::group(['prefix' => 'building', 'middleware' => 'auth'], function ($router) {
     Route::get('', [BuildingController::class, 'index'])->name('buildings');
     Route::get('/{id}', [BuildingController::class, 'show'])->name('building-detail');
     Route::post('create', [BuildingController::class, 'create'])->name('building-create');
@@ -47,7 +48,7 @@ Route::group(['prefix' => 'building'], function ($router) {
     Route::post('/{id}/delete-controllers', [BuildingController::class, 'deleteDeosControllers'])->name('building-delete-controllers');
 });
 
-Route::group(['prefix' => 'area'], function ($router) {
+Route::group(['prefix' => 'area', 'middleware' => 'auth'], function ($router) {
     Route::get('', [AreaController::class, 'index'])->name('areas');
     Route::get('/{id}', [AreaController::class, 'show'])->name('area-detail');
     Route::post('create', [AreaController::class, 'create'])->name('area-create');
@@ -55,7 +56,7 @@ Route::group(['prefix' => 'area'], function ($router) {
     Route::post('delete/{id}', [AreaController::class, 'destroy'])->name('area-delete');
 });
 
-Route::group(['prefix' => 'controller'], function ($router) {
+Route::group(['prefix' => 'controller', 'middleware' => 'auth'], function ($router) {
     Route::get('', [DEOS_controllerController::class, 'index'])->name('controllers');
     Route::get('/{id}', [DEOS_controllerController::class, 'show'])->name('controller-detail');
     Route::post('create', [DEOS_controllerController::class, 'create'])->name('controller-create');
@@ -67,7 +68,7 @@ Route::group(['prefix' => 'controller'], function ($router) {
     Route::get('/{id}/export-points', [DEOS_controllerController::class, 'exportPointsFromCsv'])->name('controller-export-points');
 });
 
-Route::group(['prefix' => 'point'], function ($router) {
+Route::group(['prefix' => 'point', 'middleware' => 'auth'], function ($router) {
     Route::get('', [DEOS_pointController::class, 'index'])->name('points');
     Route::get('/{id}', [DEOS_pointController::class, 'show'])->name('point-detail');
     Route::post('create', [DEOS_pointController::class, 'create'])->name('point-create');
