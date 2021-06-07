@@ -4,7 +4,7 @@
             <v-list-item @click="">
                 <v-list-item-content>
                     <v-list-item-title class="title">
-                        <v-icon >di-cog</v-icon>Assemblin
+                        <v-icon >mdi-di-cog</v-icon>HKA
                     </v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
