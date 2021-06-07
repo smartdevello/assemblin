@@ -90,8 +90,7 @@ class FoxeriotController extends Controller
                     $sensor->area_id = $area->id;
                 }
                 array_push($data, array("id" => $point->name, "value" => strval($sensor->value)));
-            }
-            
+            }            
         }
 
         $ch = curl_init();

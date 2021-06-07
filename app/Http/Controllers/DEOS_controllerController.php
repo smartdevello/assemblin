@@ -11,6 +11,9 @@ use App\Models\DEOS_point;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Traits\AssemblinInit;
 use App\Imports\PointsImport;
+use App\Models\Location;
+use Illuminate\Support\Facades\DB;
+
 use Exception;
 use stdClass;
 
@@ -25,8 +28,9 @@ class DEOS_controllerController extends Controller
             $item->building;
             $item->points;
         }
-
-        return view('admin.controller.index', compact('controllers', 'buildings'));
+        $statement = DB::select("SHOW TABLE STATUS LIKE 'deos_controllers'");
+        $nextId = $statement[0]->Auto_increment;
+        return view('admin.controller.index', compact('controllers', 'buildings', 'nextId'));
     }
 
     public function checkControllerValid( Request $request)
@@ -55,14 +59,16 @@ class DEOS_controllerController extends Controller
 
         
         $this->stopAsmServices();
-        $controllers = DEOS_controller::all();
-        $request->port_number = count($controllers) + 8001;
+
+        $statement = DB::select("SHOW TABLE STATUS LIKE 'deos_controllers'");
+        $nextId = $statement[0]->Auto_increment;
         $row = DEOS_controller::create([
             'name' => $request->name,
             'ip_address' => $request->ip_address,
-            'port_number' => count($controllers) + 8001,
+            'port_number' => $nextId + 8000,
             'building_id' => $request->building_id
         ]);
+        
         $this->updateConfigfiles();
         $this->startAsmServices();
         return back()->with('success', 'Created successfully');
@@ -90,13 +96,13 @@ class DEOS_controllerController extends Controller
         $this->validate($request, [
             'name' => 'required|unique:deos_controllers,name',
             'ip_address' => 'required',
-            'port_number' => 'required',
+            // 'port_number' => 'required',
             'building_id' => 'required'
         ],[
             'name.required' => "Name field can't be empty",
             'name.unique' => sprintf("The Controller \"%s\" already exists", $request->name),
             'ip_address.required' => "IP Address can't be empty",
-            'port_number.required' => "Port Number can't be empty",
+            // 'port_number.required' => "Port Number can't be empty",
             'building_id.required' => 'Controller must be belonged to a Building'
         ]);
       
@@ -157,17 +163,29 @@ class DEOS_controllerController extends Controller
     {
         
         try{
+
             if (!$request->file('file')) {
                 return back()->with('error', 'Empty file');
             }
-            $rows = Excel::toCollection(new PointsImport, $request->file('file'));       
-    
+
+            $controller = DEOS_controller::where('id', $id)->first();
+            $building = Building::where('id', $controller->building_id)->first();
+            if (!$building)  {
+                return back()->with('error', 'This Controller does not belong to any Building');
+            }
+            
+            $location = Location::where('id', $building->location_id)->first();
+            if (!$location)  {
+                return back()->with('error', 'This Controller does not belong to any Location');
+            }
+
+            $rows = Excel::toCollection(new PointsImport, $request->file('file'));    
             $this->stopAsmServices();
             foreach ($rows[0] as $index => $row) {
                 //If Header continue;
                 if ($index == 0) continue;
                 $data = [
-                    'name' => $row[1],
+                    'name' => sprintf("%s_%s_%s", $location->name, $building->name, $row[1]),
                     'label' => $row[2],
                     'type' => $row[4],
                     'meta_property' => $row[5],
@@ -196,12 +214,19 @@ class DEOS_controllerController extends Controller
 
     public function exportPointsFromCsv(Request $request, $id)
     {
-        $points = DEOS_point::where('controller_id', $id)->get();
-        $result = $points->map(function ($item) {
+        $controller = DEOS_controller::where('id', $id)->first();
+        $building = Building::where('id', $controller->building_id)->first();
+        $location = Location::where('id', $building->location_id)->first();
+        $points = DEOS_point::where('controller_id', $id)->get();        
+
+        $result = $points->map(function ($item) use($location, $building){                        
+            
+            if ($pos =  strrpos( $item->name, "_") ) {
+                $item->name = substr($item->name, $pos + 1);
+            }
             return [$item->controller->name, $item->name, $item->label, $item->value,  $item->type, $item->meta_property, $item->meta_room, $item->meta_sensor, $item->meta_type];
         });
-        $result->prepend(['Controller Name', 'Point Name', 'Point Label', 'Value', 'Type','meta_property', 'meta_room', 'meta_sensor', 'meta_type']);
-
+        $result->prepend(['Controller Name', 'Point Name', 'Point Label', 'Value', 'Type','meta_property', 'meta_room', 'meta_sensor', 'meta_type']);        
         $controller_name = $points[0]->controller->name;
         return $result->downloadExcel($controller_name . '-' .time() . '.csv');
     }
