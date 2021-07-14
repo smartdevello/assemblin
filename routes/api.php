@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FoxeriotController;
 use App\Http\Controllers\PointController;
+use App\Http\Controllers\LorawanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
