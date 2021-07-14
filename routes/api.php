@@ -26,6 +26,10 @@ Route::middleware(['cors'])->group(function(){
         Route::post('update', [DashboardController::class, 'update'])->name('update_dashboard');
         Route::get('restartAsmServices', [DashboardController::class, 'restartAsmServices'])->name('restartAsmServices');        
     });
+    
+    Route::group(['prefix' => 'lorawan'], function ($router) {
+        Route::post('receive_data', [LorawanController::class, 'receive_data'])->name('receive_data');
+    });
 
     Route::group(['prefix' => 'point'], function ($router) {
         Route::get('', [PointController::class, 'getPoints'])->name('getPoints');
