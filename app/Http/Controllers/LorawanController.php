@@ -87,6 +87,9 @@ class LorawanController extends Controller
         {
 
         }
-        return redirect()->route('buildings')->with('success', 'Deleted successfully');
+        file_put_contents("lora.json", json_encode($request));
+        return response()->json([
+            'success' => "Received Data"
+        ], 200);
     }
 }
