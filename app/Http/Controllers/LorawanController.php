@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Exception;
 
 class LorawanController extends Controller
 {
@@ -83,11 +84,19 @@ class LorawanController extends Controller
     }
     public function receive_data(Request $request)
     {
-        foreach($request->all() as $item)
-        {
 
+        try{
+            foreach($request->all() as $item)
+            {
+    
+            }
+            file_put_contents("lora.json", json_encode($request->all()));
+        }catch(Exception $e){
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 403);
         }
-        file_put_contents("lora.json", json_encode($request->all()));
+
         return response()->json([
             'success' => "Received Data"
         ], 200);
