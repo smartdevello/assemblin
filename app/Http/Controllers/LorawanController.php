@@ -87,7 +87,7 @@ class LorawanController extends Controller
         {
 
         }
-        file_put_contents("lora.json", json_encode($request));
+        file_put_contents("lora.json", json_encode($request->all()));
         return response()->json([
             'success' => "Received Data"
         ], 200);
