@@ -319,14 +319,15 @@ class LorawanController extends Controller
                             'name' => '',
                             'unit' => '',
                             'value' => strval($sensorValue),
-                            'message_time' => '',
+                            'message_time' => $request['DevEUI_uplink']['Time'],
                         );
         
                         Sensor::updateOrCreate(
                             ['deviceId' => $request['DevEUI_uplink']['DevEUI'], 'type' => $sensorKey] , $dbdata
                         ); 
                         
-
+                        Log::debug('An Lora data');
+                        Log::debug(print_r($dbdata, true));
                     }
                 } else {
                     $sensorKey = $key;
@@ -340,14 +341,14 @@ class LorawanController extends Controller
                         'name' => '',
                         'unit' => '',
                         'value' => strval($sensorValue),
-                        'message_time' => '',
+                        'message_time' => $request['DevEUI_uplink']['Time'],
                     );
-    
 
                     Sensor::updateOrCreate(
                         ['deviceId' => $request['DevEUI_uplink']['DevEUI'], 'type' => $sensorKey] , $dbdata
                     );   
-
+                    Log::debug('An Lora data');
+                    Log::debug(print_r($dbdata, true));
                 }
             }
             
