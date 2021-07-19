@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DEOS_controllerController;
 use App\Http\Controllers\DEOS_pointController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\LorawanController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +27,7 @@ Route::get('/test', function () {
 
 Route::get('', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
+Route::get('/lora', [LorawanController::class, 'index'])->middleware(['auth'])->name('lorawan');
 
 Route::get('/setting', '\App\Http\Controllers\DashboardController@setting_index')->middleware(['auth']);
 
