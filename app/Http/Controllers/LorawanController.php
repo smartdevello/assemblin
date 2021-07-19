@@ -90,7 +90,8 @@ class LorawanController extends Controller
             {
     
             }
-            file_put_contents("lora.json", json_encode($request->all()));
+            $request['DevEUI_uplink']['payload_hex'];
+            file_put_contents("lora.json", $request['DevEUI_uplink']['payload_hex']);
         }catch(Exception $e){
             return response()->json([
                 'error' => $e->getMessage()
