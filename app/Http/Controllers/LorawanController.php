@@ -230,7 +230,7 @@ class LorawanController extends Controller
         
         $request = json_decode(file_get_contents("lora.json"));
         $ELSYSdecoder = new ELSYSdecoder();
-        $hexvalue  = $ELSYSdecoder->hexToBytes($request['DevEUI_uplink']['payload_hex']);
+        $hexvalue  = $ELSYSdecoder->hexToBytes($request->DevEUI_uplink->payload_hex);
         
         $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);
         return $data;
@@ -241,43 +241,40 @@ class LorawanController extends Controller
                         $sensorValue = $val1;
 
                         $dbdata = array(
-                            'deviceId' => $request['DevEUI_uplink']['DevEUI'],
+                            'deviceId' => $request->DevEUI_uplink->DevEUI,
                             'type' => $sensorKey,
                             'observationId' => '',
                             'tag' => '',
                             'name' => '',
                             'unit' => '',
                             'value' => strval($sensorValue),
-                            'message_time' => $request['DevEUI_uplink']['Time'],
+                            'message_time' => $request->DevEUI_uplink->Time,
                         );
         
                         Sensor::updateOrCreate(
-                            ['deviceId' => $request['DevEUI_uplink']['DevEUI'], 'type' => $sensorKey] , $dbdata
-                        ); 
-                        
-                        Log::debug('An Lora data');
-                        Log::debug(print_r($dbdata, true));
+                            ['deviceId' => $request->DevEUI_uplink->DevEUI, 'type' => $sensorKey] , $dbdata
+                        );                       
+
                     }
                 } else {
                     $sensorKey = $key;
                     $sensorValue = $val;
 
                     $dbdata = array(
-                        'deviceId' => $request['DevEUI_uplink']['DevEUI'],
+                        'deviceId' => $request->DevEUI_uplink->DevEUI,
                         'type' => $sensorKey,
                         'observationId' => '',
                         'tag' => '',
                         'name' => '',
                         'unit' => '',
                         'value' => strval($sensorValue),
-                        'message_time' => $request['DevEUI_uplink']['Time'],
+                        'message_time' => $request->DevEUI_uplink->Time,
                     );
 
                     Sensor::updateOrCreate(
-                        ['deviceId' => $request['DevEUI_uplink']['DevEUI'], 'type' => $sensorKey] , $dbdata
+                        ['deviceId' => $request->DevEUI_uplink->DevEUI, 'type' => $sensorKey] , $dbdata
                     );   
-                    Log::debug('An Lora data');
-                    Log::debug(print_r($dbdata, true));
+
                 }
             }
 
@@ -353,7 +350,7 @@ class LorawanController extends Controller
 
         try{
             file_put_contents("lora.json", json_encode($request->all()));
-            
+
             $ELSYSdecoder = new ELSYSdecoder();
             $hexvalue  = $ELSYSdecoder->hexToBytes($request['DevEUI_uplink']['payload_hex']);
             $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);
