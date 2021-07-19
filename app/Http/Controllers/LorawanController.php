@@ -184,10 +184,11 @@ class ELSYSdecoder {
               case self::TYPE_EXT_TEMP2: //External temp 2
                   $temp = ($data[$i + 1] << 8) | ($data[$i + 2]);
                   $temp = $this->bin16dec($temp);
-                  if( is_numeric($obj['externalTemperature2'] ) ) {
+
+                  if(isset($obj['externalTemperature2'] ) &&  is_numeric($obj['externalTemperature2'] ) ) {
                       $obj['externalTemperature2'] = [$obj['externalTemperature2']];
                   } 
-                  if( is_array($obj['externalTemperature2']) ) {
+                  if(isset($obj['externalTemperature2'] ) &&  is_array($obj['externalTemperature2']) ) {
                       array_push($obj['externalTemperature2'], $temp/10);
 
                   } else {
