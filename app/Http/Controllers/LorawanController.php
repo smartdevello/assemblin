@@ -236,7 +236,7 @@ class LorawanController extends Controller
         $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);
 
             foreach ( $data as $key => $val ) {
-                                
+
                 if ( $key == 'externalTemperature2' ){
                     foreach ($val as $key1 => $val1){
                         $sensorKey = $key."_".strval($key1);
@@ -245,7 +245,7 @@ class LorawanController extends Controller
                         $dbdata = array(
                             'deviceId' => $request->DevEUI_uplink->DevEUI,
                             'type' => $sensorKey,
-                            'observationId' => '',
+                            'observationId' => null,
                             'tag' => '',
                             'name' => '',
                             'unit' => '',
@@ -265,7 +265,7 @@ class LorawanController extends Controller
                     $dbdata = array(
                         'deviceId' => $request->DevEUI_uplink->DevEUI,
                         'type' => $sensorKey,
-                        'observationId' => '',
+                        'observationId' => null,
                         'tag' => '',
                         'name' => '',
                         'unit' => '',
