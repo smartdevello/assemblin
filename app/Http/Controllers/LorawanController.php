@@ -94,7 +94,7 @@ class ELSYSdecoder {
                   break;
               case self::TYPE_VDD: //Battery level
                   $obj['vdd'] = (($data[$i + 1] << 8) | ($data[$i + 2])) / 1000;
-                  $obj['vdd'] = ((int)$obj['vdd'] * 10) / 10;
+                  $obj['vdd'] = round($obj['vdd'], 1);
                   $i += 2;
                   break;
               case self::TYPE_ANALOG1: //Analog input 1
