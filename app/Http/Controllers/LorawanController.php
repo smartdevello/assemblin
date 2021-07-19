@@ -308,7 +308,7 @@ class LorawanController extends Controller
             foreach ( $data as $key => $val ) {
                 if ( $key == 'externalTemperature2' ){
                     foreach ($val as $key1 => $val1){
-                        $sensorKey = $key."_".$key1;
+                        $sensorKey = $key."_".strval($key1);
                         $sensorValue = $val1;
 
                         $dbdata = array(
@@ -318,16 +318,15 @@ class LorawanController extends Controller
                             'tag' => '',
                             'name' => '',
                             'unit' => '',
-                            'value' => $sensorValue,
-                            'message_time' => $request['DevEUI_uplink']['Time'],
+                            'value' => strval($sensorValue),
+                            'message_time' => '',
                         );
         
                         Sensor::updateOrCreate(
                             ['deviceId' => $request['DevEUI_uplink']['DevEUI'], 'type' => $sensorKey] , $dbdata
                         ); 
                         
-                        Log::debug('An Lora data');
-                        Log::debug(print_r($dbdata, true));
+
                     }
                 } else {
                     $sensorKey = $key;
@@ -340,15 +339,15 @@ class LorawanController extends Controller
                         'tag' => '',
                         'name' => '',
                         'unit' => '',
-                        'value' => $sensorValue,
-                        'message_time' => $request['DevEUI_uplink']['Time'],
+                        'value' => strval($sensorValue),
+                        'message_time' => '',
                     );
+    
 
                     Sensor::updateOrCreate(
                         ['deviceId' => $request['DevEUI_uplink']['DevEUI'], 'type' => $sensorKey] , $dbdata
                     );   
-                    Log::debug('An Lora data');
-                    Log::debug(print_r($dbdata, true));
+
                 }
             }
             
