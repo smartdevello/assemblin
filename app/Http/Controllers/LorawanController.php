@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Sensor;
+use Illuminate\Support\Facades\Log;
+
 use Exception;
 
 class ELSYSdecoder {
@@ -296,14 +298,13 @@ class LorawanController extends Controller
     {
 
         try{
-            foreach($request->all() as $item)
-            {
-    
-            }
 
             $ELSYSdecoder = new ELSYSdecoder();
             $hexvalue  = $ELSYSdecoder->hexToBytes($request['DevEUI_uplink']['payload_hex']);
             $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);
+
+            file_put_contents("lora.json", json_encode($data));
+            
             foreach ( $data as $key => $val ) {
                 if ( $key == 'externalTemperature2' ){
                     foreach ($val as $key1 => $val1){
@@ -323,7 +324,10 @@ class LorawanController extends Controller
         
                         Sensor::updateOrCreate(
                             ['deviceId' => $request['DevEUI_uplink']['DevEUI'], 'type' => $sensorKey] , $dbdata
-                        );      
+                        ); 
+                        
+                        Log::debug('An Lora data');
+                        Log::debug(print_r($dbdata, true));
                     }
                 } else {
                     $sensorKey = $key;
@@ -339,14 +343,15 @@ class LorawanController extends Controller
                         'value' => $sensorValue,
                         'message_time' => $request['DevEUI_uplink']['Time'],
                     );
-    
+
                     Sensor::updateOrCreate(
                         ['deviceId' => $request['DevEUI_uplink']['DevEUI'], 'type' => $sensorKey] , $dbdata
                     );   
-                    
+                    Log::debug('An Lora data');
+                    Log::debug(print_r($dbdata, true));
                 }
             }
-            file_put_contents("lora.json", $request['DevEUI_uplink']['payload_hex']);
+            
         }catch(Exception $e){
             return response()->json([
                 'error' => $e->getMessage()
