@@ -120,7 +120,6 @@ trait AssemblinInit {
                     'observationId' => $sensor['id'],
                     'tag' => implode(" ", $device['tags']),
                     'name' => $device['displayName'],
-                    'type' => $sensor['variable'],
                     'unit' => $sensor['unit'] ?? '',
                     'value' => $sensor['value'],
                     'message_time' => $sensor['message-time'],                    
