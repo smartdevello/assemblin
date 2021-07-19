@@ -352,12 +352,13 @@ class LorawanController extends Controller
     {
 
         try{
-
+            file_put_contents("lora.json", json_encode($request->all()));
+            
             $ELSYSdecoder = new ELSYSdecoder();
             $hexvalue  = $ELSYSdecoder->hexToBytes($request['DevEUI_uplink']['payload_hex']);
             $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);
 
-            file_put_contents("lora.json", json_encode($request->all()));
+            
             
             // foreach ( $data as $key => $val ) {
             //     if ( $key == 'externalTemperature2' ){
