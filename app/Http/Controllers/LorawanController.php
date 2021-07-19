@@ -234,8 +234,9 @@ class LorawanController extends Controller
         $hexvalue  = $ELSYSdecoder->hexToBytes($request->DevEUI_uplink->payload_hex);
         
         $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);
-        return $data;
+
             foreach ( $data as $key => $val ) {
+                                
                 if ( $key == 'externalTemperature2' ){
                     foreach ($val as $key1 => $val1){
                         $sensorKey = $key."_".strval($key1);
@@ -278,6 +279,7 @@ class LorawanController extends Controller
 
                 }
             }
+            return $data;
 
     }
 
