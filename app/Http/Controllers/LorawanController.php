@@ -378,10 +378,10 @@ class LorawanController extends Controller
 
         try{
             file_put_contents("lora.json", json_encode($request->all()));
-
+            return $request->DevEUI_uplink;
             $ELSYSdecoder = new ELSYSdecoder();
             $hexvalue  = $ELSYSdecoder->hexToBytes($request->DevEUI_uplink->payload_hex);
-            return $request->DevEUI_uplink;
+            
             $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);
 
             foreach ( $data as $key => $val ) {
