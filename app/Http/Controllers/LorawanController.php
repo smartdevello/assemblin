@@ -38,6 +38,7 @@ class ELSYSdecoder {
     const TYPE_EXT_ANALOG_UV = 0x1B; // 4 bytes signed int (uV)
     const TYPE_TVOC = 0x1C; // 2 bytes (ppb)
     const TYPE_DEBUG = 0x3D; // 4bytes debug
+    const AES_KEY = '4ADB475FFCFBC1EE09BDB7CE4A47C555';
 
     public function bin16dec($bin) {
         $num = $bin & 0xFFFF;
@@ -217,6 +218,28 @@ class ELSYSdecoder {
         }
         return $obj;
     }
+
+    function encrypt($string, $key)
+    {
+
+        // openssl_encrypt encrypts different Mcrypt, the key length requirement, the encryption result does not exceed 16
+        $data = openssl_encrypt($string, 'AES-128-ECB', self::AES_KEY, OPENSSL_RAW_DATA);
+        $data = strtolower(bin2hex($data));
+        return $data;
+    }
+
+    /**
+     * @param string $ string The string to be decrypted
+     * @param string $ key key
+     * @return string
+     */
+    function decrypt($string, $key)
+    {
+        $decrypted = openssl_decrypt(hex2bin($string), 'AES-128-ECB', self::AES_KEY, OPENSSL_RAW_DATA);
+
+        return $decrypted;
+
+    }
 }
 
 class LorawanController extends Controller
@@ -358,7 +381,7 @@ class LorawanController extends Controller
 
             $ELSYSdecoder = new ELSYSdecoder();
             $hexvalue  = $ELSYSdecoder->hexToBytes($request->DevEUI_uplink->payload_hex);
-            
+            return $request->DevEUI_uplink;
             $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);
 
             foreach ( $data as $key => $val ) {
