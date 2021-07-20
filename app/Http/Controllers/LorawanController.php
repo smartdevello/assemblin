@@ -378,9 +378,9 @@ class LorawanController extends Controller
 
         try{
             file_put_contents("lora.json", json_encode($request->all()));
-            return gettype($request->DevEUI_uplink);
+            $request_data = $request->DevEUI_uplink;
             $ELSYSdecoder = new ELSYSdecoder();
-            $hexvalue  = $ELSYSdecoder->hexToBytes($request->DevEUI_uplink->payload_hex);
+            $hexvalue  = $ELSYSdecoder->hexToBytes($request_data['payload_hex']);
             
             $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);
 
@@ -392,18 +392,18 @@ class LorawanController extends Controller
                         $sensorValue = $val1;
 
                         $dbdata = array(
-                            'deviceId' => $request->DevEUI_uplink->DevEUI,
+                            'deviceId' => $request_data['DevEUI'],
                             'type' => $sensorKey,
                             'observationId' => null,
                             'tag' => '',
                             'name' => '',
                             'unit' => '',
                             'value' => strval($sensorValue),
-                            'message_time' => $request->DevEUI_uplink->Time,
+                            'message_time' => $request_data['Time'],
                         );
         
                         Sensor::updateOrCreate(
-                            ['deviceId' => $request->DevEUI_uplink->DevEUI, 'type' => $sensorKey] , $dbdata
+                            ['deviceId' => $request_data['DevEUI'], 'type' => $sensorKey] , $dbdata
                         );                       
 
                     }
@@ -412,19 +412,19 @@ class LorawanController extends Controller
                     $sensorValue = $val;
 
                     $dbdata = array(
-                        'deviceId' => $request->DevEUI_uplink->DevEUI,
+                        'deviceId' => $request_data['DevEUI'],
                         'type' => $sensorKey,
                         'observationId' => null,
                         'tag' => '',
                         'name' => '',
                         'unit' => '',
                         'value' => strval($sensorValue),
-                        'message_time' => $request->DevEUI_uplink->Time,
+                        'message_time' => $request_data['Time'],
                     );
-
+    
                     Sensor::updateOrCreate(
-                        ['deviceId' => $request->DevEUI_uplink->DevEUI, 'type' => $sensorKey] , $dbdata
-                    );   
+                        ['deviceId' => $request_data['DevEUI'], 'type' => $sensorKey] , $dbdata
+                    );  
 
                 }
             }
