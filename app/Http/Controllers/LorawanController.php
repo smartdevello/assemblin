@@ -241,6 +241,18 @@ class ELSYSdecoder {
 
     }
 }
+class Solidusdecoder extends ELSYSdecoder{
+
+    public function DecodeSolidusPayload($data) {
+        $obj = [];
+        $obj['vdd'] = $data[0] * 30;
+        $obj['temperature'] = $data[1] -128;
+        $obj['MSB'] = round ( $data[2] / 240, 3);
+        $obj['LSB'] = round( $data[3] / 240, 3);
+        return $obj;
+    }
+
+}
 
 class LorawanController extends Controller
 {
@@ -379,10 +391,19 @@ class LorawanController extends Controller
         try{
             file_put_contents("lora.json", json_encode($request->all()));
             $request_data = $request->DevEUI_uplink;
-            $ELSYSdecoder = new ELSYSdecoder();
-            $hexvalue  = $ELSYSdecoder->hexToBytes($request_data['payload_hex']);
-            
-            $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);
+
+            if ( $request_data['DevEUI'] == "A81758FFFE04EF1F" ) {
+                $ELSYSdecoder = new ELSYSdecoder();
+                $hexvalue  = $ELSYSdecoder->hexToBytes($request_data['payload_hex']);
+                
+                $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);  
+            } else if ( $request_data['DevEUI'] == "47EABD48004A0044" ) {
+                $Solidusdecoder = new Solidusdecoder();
+                $hexvalue = $Solidusdecoder->hexToBytes($request_data['payload_hex']);
+
+                $data = $Solidusdecoder->DecodeSolidusPayload($hexvalue);
+            }
+
 
             foreach ( $data as $key => $val ) {
 
