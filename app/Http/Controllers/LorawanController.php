@@ -253,6 +253,16 @@ class Solidusdecoder extends ELSYSdecoder{
     }
 
 }
+class IOTSUdecoder extends ELSYSdecoder{
+    public function DecodeIOTSUPayload($data) {
+        $obj = [];
+        $obj['vdd'] = $data[0] * 20;
+        $obj['humidity #1'] = $data[2] >> 1;
+        $obj['temperature #1'] = $data[3] / 10;
+        $obj['co2 #1'] = $data[4] * 10 + 400;
+        return $obj;
+    }
+}
 
 class LorawanController extends Controller
 {
@@ -402,6 +412,11 @@ class LorawanController extends Controller
                 $hexvalue = $Solidusdecoder->hexToBytes($request_data['payload_hex']);
 
                 $data = $Solidusdecoder->DecodeSolidusPayload($hexvalue);
+            } else if ( $request_data['DevEUI'] == "70B3D55680000A6D" ) {
+                $IOTSUdecoder = new IOTSUdecoder();
+                $hexvalue = $IOTSUdecoder->hexToBytes($request_data['payload_hex']);
+                
+                $data = $IOTSUdecoder->DecodeIOTSUPayload($hexvalue);
             }
 
 
