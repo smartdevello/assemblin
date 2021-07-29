@@ -415,7 +415,7 @@ class LorawanController extends Controller
             } else if ( $request_data['DevEUI'] == "70B3D55680000A6D" ) {
                 $IOTSUdecoder = new IOTSUdecoder();
                 $hexvalue = $IOTSUdecoder->hexToBytes($request_data['payload_hex']);
-                
+
                 $data = $IOTSUdecoder->DecodeIOTSUPayload($hexvalue);
             }
 
@@ -435,6 +435,7 @@ class LorawanController extends Controller
                             'name' => '',
                             'unit' => '',
                             'value' => strval($sensorValue),
+                            'fport' => $request_data['FPort'],
                             'message_time' => $request_data['Time'],
                         );
         
@@ -455,6 +456,7 @@ class LorawanController extends Controller
                         'name' => '',
                         'unit' => '',
                         'value' => strval($sensorValue),
+                        'fport' => $request_data['FPort'],
                         'message_time' => $request_data['Time'],
                     );
     
