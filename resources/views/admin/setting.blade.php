@@ -22,7 +22,7 @@
                                     Update Device Interval
                                 </v-card-title>
                                 <v-card-text>
-                                    <v-select :items="devices" label="Select a Device" name="deviceId" v-model="currentDevice" item-text="deviceId" item-value="deviceId" solo @change="changeDevice($event) required>
+                                    <v-select :items="devices" label="Select a Device" name="deviceId" v-model="currentDevice" item-text="deviceId" item-value="deviceId" solo required @change="changeDevice($event)" >
                                 </v-card-text>
                                 <v-card-text>
                                     <v-select :items="devices" label="Select a Device" name="deviceId" v-model="currentDevice" item-text="deviceId" item-value="deviceId" solo required>
