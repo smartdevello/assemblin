@@ -81,7 +81,9 @@ class SettingController extends Controller
     {
         //
     }
-
+    public function setting_index(){
+        return view('admin.setting');
+    }
     public function update_device_interval(Request $request)
     {
 
