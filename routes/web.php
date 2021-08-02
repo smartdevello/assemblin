@@ -6,6 +6,7 @@ use App\Http\Controllers\DEOS_controllerController;
 use App\Http\Controllers\DEOS_pointController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LorawanController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,7 +30,15 @@ Route::get('', [DashboardController::class, 'index'])->middleware(['auth'])->nam
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 Route::get('/lora', [LorawanController::class, 'index'])->middleware(['auth'])->name('lorawan');
 
-Route::get('/setting', '\App\Http\Controllers\DashboardController@setting_index')->middleware(['auth']);
+// Route::get('/setting', '\App\Http\Controllers\DashboardController@setting_index')->middleware(['auth']);
+Route::group(['prefix' => 'setting', 'middleware' => 'auth'], function ($router) {
+    Route::get('', [SettingController::class, 'setting_index'])->name('setting_index');
+    // Route::get('/{id}', [LocationController::class, 'show'])->name('location-detail');
+    // Route::post('create', [LocationController::class, 'create'])->name('location-create');
+    // Route::post('update/{id}', [LocationController::class, 'update'])->name('location-update');
+    // Route::post('delete/{id}', [LocationController::class, 'destroy'])->name('location-delete');
+    // Route::post('delete_buildings/{id}', [LocationController::class, 'delete_buildings'])->name('location-delete_buildings');
+});
 
 Route::group(['prefix' => 'location', 'middleware' => 'auth'], function ($router) {
     Route::get('', [LocationController::class, 'index'])->name('locations');

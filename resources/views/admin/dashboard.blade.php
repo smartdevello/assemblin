@@ -220,8 +220,6 @@
                 update_dashboard_url : `${prefix_link}/api/dashboard/update`,
                 send_data_url : `${base_url}/api/point/writePointsbyid`,
 
-
-
                 headers: [
                     {
                         text: 'Device ID',
