@@ -83,7 +83,7 @@ class SettingController extends Controller
         //
     }
     public function setting_index(){
-        $devices = DB::table('sensors')->select('deviceId', 'type', 'fport')->groupBy('deviceId')->get();
+        $devices = DB::select("select DISTINCT `deviceId` from `sensors`");        
         return view('admin.setting', [
             'devices' => $devices
         ]);
