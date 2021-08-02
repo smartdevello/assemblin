@@ -49,10 +49,12 @@
             drawer: true,
             mainMenu: mainMenu,
             updateIntervalUrl: "",
+            devices: ( <?php echo json_encode($devices); ?> ),           
 
         },
         mounted: function() {
             this.updateIntervalUrl = `${prefix_link}/setting/update_device_interval`;
+            console.log(this.devices);
         },
         methods: {        
         

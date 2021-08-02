@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SettingController extends Controller
 {
@@ -82,7 +83,10 @@ class SettingController extends Controller
         //
     }
     public function setting_index(){
-        return view('admin.setting');
+        $devices = DB::table('sensors')->select('deviceId', 'type', 'fport')->groupBy('deviceId')->get();
+        return view('admin.setting', [
+            'devices' => $devices
+        ]);
     }
     public function update_device_interval(Request $request)
     {
