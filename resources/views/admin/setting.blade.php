@@ -22,6 +22,10 @@
                                     Update Device Interval
                                 </v-card-title>
                                 <v-card-text>
+                                    <v-select :items="devices" label="Select a Device" name="deviceId" v-model="currentDevice" item-text="deviceId" item-value="deviceId" solo required>
+                                </v-card-text>
+
+                                <v-card-text>
                                     {{-- <v-text-field v-model="controller.name" label="Controller Name" name="name" required></v-text-field>
                                     <v-text-field v-model="controller.ip_address" label="IP Address" name="ip_address" required></v-text-field>
                                     <v-text-field v-model="controller.port_number" label="Port Number" name="port_number" required readonly></v-text-field>
@@ -49,6 +53,7 @@
             drawer: true,
             mainMenu: mainMenu,
             updateIntervalUrl: "",
+            currentDevice : "",
             devices: ( <?php echo json_encode($devices); ?> ),
             types:            ( <?php echo json_encode($types); ?> ),
 
