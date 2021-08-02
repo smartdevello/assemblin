@@ -33,8 +33,9 @@ Route::get('/lora', [LorawanController::class, 'index'])->middleware(['auth'])->
 // Route::get('/setting', '\App\Http\Controllers\DashboardController@setting_index')->middleware(['auth']);
 Route::group(['prefix' => 'setting', 'middleware' => 'auth'], function ($router) {
     Route::get('', [SettingController::class, 'setting_index'])->name('setting_index');
-    // Route::get('/{id}', [LocationController::class, 'show'])->name('location-detail');
-    // Route::post('create', [LocationController::class, 'create'])->name('location-create');
+    Route::post('update_device_interval', [SettingController::class, 'update_device_interval'])->name('update_device_interval');
+    
+    // Route::get('/{id}', [LocationController::class, 'show'])->name('location-detail');    
     // Route::post('update/{id}', [LocationController::class, 'update'])->name('location-update');
     // Route::post('delete/{id}', [LocationController::class, 'destroy'])->name('location-delete');
     // Route::post('delete_buildings/{id}', [LocationController::class, 'delete_buildings'])->name('location-delete_buildings');
