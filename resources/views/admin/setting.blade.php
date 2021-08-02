@@ -22,9 +22,11 @@
                                     Update Device Interval
                                 </v-card-title>
                                 <v-card-text>
+                                    <v-select :items="devices" label="Select a Device" name="deviceId" v-model="currentDevice" item-text="deviceId" item-value="deviceId" solo @change="changeDevice($event) required>
+                                </v-card-text>
+                                <v-card-text>
                                     <v-select :items="devices" label="Select a Device" name="deviceId" v-model="currentDevice" item-text="deviceId" item-value="deviceId" solo required>
                                 </v-card-text>
-
                                 <v-card-text>
                                     {{-- <v-text-field v-model="controller.name" label="Controller Name" name="name" required></v-text-field>
                                     <v-text-field v-model="controller.ip_address" label="IP Address" name="ip_address" required></v-text-field>
@@ -55,16 +57,18 @@
             updateIntervalUrl: "",
             currentDevice : "",
             devices: ( <?php echo json_encode($devices); ?> ),
-            types:            ( <?php echo json_encode($types); ?> ),
-
+            alltypes:  ( <?php echo json_encode($types); ?> ),
+            types: "",
         },
         mounted: function() {
             this.updateIntervalUrl = `${prefix_link}/setting/update_device_interval`;
             console.log(this.devices);
-            console.log(this.types);
+            console.log(this.alltypes);
         },
         methods: {        
-        
+            changeDevice: function(deviceId){
+                console.log(deviceId);
+            }
         },
     })
 </script>
