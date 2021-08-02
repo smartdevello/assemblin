@@ -58,7 +58,7 @@
             currentDevice : "",
             devices: ( <?php echo json_encode($devices); ?> ),
             alltypes:  ( <?php echo json_encode($types); ?> ),
-            types: "",
+            types: [],
         },
         mounted: function() {
             this.updateIntervalUrl = `${prefix_link}/setting/update_device_interval`;
@@ -67,7 +67,7 @@
         },
         methods: {        
             changeDevice: function(deviceId){
-                this.types = alltypes[deviceId];
+                this.types = this.alltypes[deviceId];
             }
         },
     })
