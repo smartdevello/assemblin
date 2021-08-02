@@ -96,6 +96,27 @@ class SettingController extends Controller
     }
     public function update_device_interval(Request $request)
     {
+        $elsys_payloads = [
+            '3E061F00000001FE', '3E061F00000002FE', '3E061F00000003FE', '3E061F00000004FE',
+            '3E061F00000005FE', '3E061F00000006FE', '3E061F00000007FE', '3E061F00000008FE',
+            '3E061F00000009FE', '3E061F0000000AFE', '3E061F0000000BFE', '3E061F0000000CFE'
+        ];
 
+        $this->validate($request, [
+            'deviceId' => 'required',
+            'type' => 'required',
+            'interval' => 'required'
+        ], [
+            'deviceId.required' => "Need to select a device",
+            'type.required' => "Must specify a sensor type",
+            'interval.required' => "Must specify an interval"
+        ]);
+
+        if ($request->deviceId == 'A81758FFFE04EF1F') {
+            // If device is Elsys
+        } else {
+            return back()->with('error', 'Building or Location is not allocated for this point');
+        }        
+        return back()->with('success', 'Updated Successfully');
     }
 }
