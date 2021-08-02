@@ -25,7 +25,7 @@
                                     <v-select :items="devices" label="Select a Device" name="deviceId" v-model="currentDevice" item-text="deviceId" item-value="deviceId" solo required @change="changeDevice($event)" >
                                 </v-card-text>
                                 <v-card-text>
-                                    <v-select :items="devices" label="Select a Device" name="deviceId" v-model="currentDevice" item-text="deviceId" item-value="deviceId" solo required>
+                                    <v-select :items="types" label="Select a type" name="type" v-model="currentType" item-text="type" item-value="type" solo required>
                                 </v-card-text>
                                 <v-card-text>
                                     {{-- <v-text-field v-model="controller.name" label="Controller Name" name="name" required></v-text-field>
@@ -67,7 +67,7 @@
         },
         methods: {        
             changeDevice: function(deviceId){
-                console.log(deviceId);
+                this.types = alltypes[deviceId];
             }
         },
     })
