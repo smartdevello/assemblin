@@ -51,8 +51,11 @@
             updateIntervalUrl: "",
 
         },
-        methods: {
+        mounted: function() {
             this.updateIntervalUrl = `${prefix_link}/setting/update_device_interval`;
+        },
+        methods: {        
+        
         },
     })
 </script>
