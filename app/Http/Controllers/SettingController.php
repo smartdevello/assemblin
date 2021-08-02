@@ -83,9 +83,15 @@ class SettingController extends Controller
         //
     }
     public function setting_index(){
-        $devices = DB::select("select DISTINCT `deviceId` from `sensors`");        
+        $devices = DB::select("select DISTINCT `deviceId` from `sensors`");
+        $types = [];
+        foreach($devices as $device){
+            $sql = "select DISTINCT `type` from `sensors` WHERE `deviceId` = '" . $device->deviceId ."'";
+            $types[$device->deviceId] = DB::select($sql);
+        }
         return view('admin.setting', [
-            'devices' => $devices
+            'devices' => $devices,
+            'types' => $types
         ]);
     }
     public function update_device_interval(Request $request)
