@@ -67,52 +67,28 @@
             types: [],
             intervals: [
                 {
-                    text: "5 mins",
-                    value: 5
-                },
-                {
                     text: "10 mins",
-                    value: 10
+                    value: 2
                 },
                 {
                     text: "15 mins",
-                    value: 15
-                },
-                {
-                    text: "20 mins",
-                    value: 20
-                },
-                {
-                    text: "25 mins",
-                    value: 25
+                    value: 3
                 },
                 {
                     text: "30 mins",
-                    value: 30
-                },
-                {
-                    text: "35 mins",
-                    value: 35
-                },
-                {
-                    text: "40 mins",
-                    value: 40
-                },
-                {
-                    text: "45 mins",
-                    value: 45
-                },
-                {
-                    text: "50 mins",
-                    value: 50
-                },
-                {
-                    text: "55 mins",
-                    value: 55
+                    value: 6
                 },
                 {
                     text: "60 mins",
-                    value: 60
+                    value: 12
+                },
+                {
+                    text: "120 mins",
+                    value: 24
+                },
+                {
+                    text: "360 mins",
+                    value: 72
                 }
             ]
         },
