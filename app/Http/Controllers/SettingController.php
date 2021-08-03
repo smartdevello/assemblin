@@ -94,14 +94,53 @@ class SettingController extends Controller
             'types' => $types
         ]);
     }
+    public function sendIntervalto_API($DevEUI, $Payload, $FPort)
+    {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://api-eu.thingpark.com/thingpark/lrc/rest/downlink?DevEUI=' . $DevEUI. '&FPort='. $FPort . '&Payload=' . $Payload,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        return $response;
+    }
     public function update_device_interval(Request $request)
     {
         $elsys_payloads = [
-            '3E061F00000001FE', '3E061F00000002FE', '3E061F00000003FE', '3E061F00000004FE',
-            '3E061F00000005FE', '3E061F00000006FE', '3E061F00000007FE', '3E061F00000008FE',
-            '3E061F00000009FE', '3E061F0000000AFE', '3E061F0000000BFE', '3E061F0000000CFE'
+            '2' => '3E061F00000002FE',
+            '3' => '3E061F00000003FE',
+            '6' => '3E061F00000006FE',
+            '12' => '3E061F0000000CFE',
+            '24' => '3E061F00000018FE',
+            '72' => '3E061F00000048FE'
         ];
 
+        $IOTSU_payloads = [
+            '2' => '0x010100',
+            '3' => '0x010101',
+            '6' => '0x010102',
+            '12' => '0x010103',
+            '24' => '0x010104',
+            '72' => '0x010106'
+        ];
+
+        $Solidus_payloads = [
+            '2' => 'A10010',
+            '3' => 'A10015',
+            '6' => 'A10030',
+            '12' => 'A10060',
+            '24' => 'A100120',
+            '72' => 'A1003600'
+        ];
         $this->validate($request, [
             'deviceId' => 'required',
             'type' => 'required',
@@ -112,11 +151,24 @@ class SettingController extends Controller
             'interval.required' => "Must specify an interval"
         ]);
 
+        $payload = [];
+        $FPort = 0;
         if ($request->deviceId == 'A81758FFFE04EF1F') {
             // If device is Elsys
+            $payload = $elsys_payloads;
+            $FPort = 5;
+        } else if ($request->deviceId == '47EABD48004A0044' ){
+            // If device is Solidus
+            $payload = $Solidus_payloads;
+            $FPort = 8;
+        } else if ($request->deviceId == '70B3D55680000A6D'){
+            // If device is IOTSUS
+            $payload = $IOTSU_payloads;
+            $FPort = 1;
         } else {
-            return back()->with('error', 'Building or Location is not allocated for this point');
-        }        
-        return back()->with('success', 'Updated Successfully');
+            return back()->with('error', 'Unknown DeviceID');
+        }
+        $response = $this->sendIntervalto_API($request->deviceId, $payload[$request->interval], $FPort);
+        return back()->with('success', $response);
     }
 }
