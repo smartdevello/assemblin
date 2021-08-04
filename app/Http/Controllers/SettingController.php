@@ -156,11 +156,11 @@ class SettingController extends Controller
         if ($request->deviceId == 'A81758FFFE04EF1F') {
             // If device is Elsys
             $payload = $elsys_payloads;
-            $FPort = 5;
+            $FPort = 6;
         } else if ($request->deviceId == '47EABD48004A0044' ){
             // If device is Solidus
             $payload = $Solidus_payloads;
-            $FPort = 8;
+            $FPort = 1;
         } else if ($request->deviceId == '70B3D55680000A6D'){
             // If device is IOTSUS
             $payload = $IOTSU_payloads;
