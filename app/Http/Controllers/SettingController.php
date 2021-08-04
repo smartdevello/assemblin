@@ -143,11 +143,11 @@ class SettingController extends Controller
         ];
         $this->validate($request, [
             'deviceId' => 'required',
-            'type' => 'required',
+            // 'type' => 'required',
             'interval' => 'required'
         ], [
             'deviceId.required' => "Need to select a device",
-            'type.required' => "Must specify a sensor type",
+            // 'type.required' => "Must specify a sensor type",
             'interval.required' => "Must specify an interval"
         ]);
 
