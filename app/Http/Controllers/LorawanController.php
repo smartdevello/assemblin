@@ -249,7 +249,7 @@ class Solidusdecoder extends ELSYSdecoder{
         $obj['temperature'] = $data[1] -128;
         $obj['MSB'] = round ( $data[2] / 240, 3);
         $obj['LSB'] = round( $data[3] / 240, 3);
-        $obj['Pressure'] = $obj['MSB'] - $obj['LSB'];
+        $obj['Pressure'] = $obj['LSB'] -  $obj['MSB'];
         return $obj;
     }
 
