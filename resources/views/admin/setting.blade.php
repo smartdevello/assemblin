@@ -24,9 +24,9 @@
                                 <v-card-text>
                                     <v-select :items="devices" label="Select a Device" name="deviceId" v-model="currentDevice" item-text="deviceId" item-value="deviceId" solo required @change="changeDevice($event)" >
                                 </v-card-text>
-                                <v-card-text>
+                                {{-- <v-card-text>
                                     <v-select :items="types" label="Select a type" name="type" v-model="currentType" item-text="type" item-value="type" solo required>
-                                </v-card-text>
+                                </v-card-text> --}}
                                 <v-card-text>
                                     <v-select :items="intervals" label="Select an interval" name="interval" v-model="currentInterval" item-text="text" item-value="value" solo required>
                                 </v-card-text>
@@ -68,27 +68,27 @@
             intervals: [
                 {
                     text: "10 mins",
-                    value: 2
+                    value: '2'
                 },
                 {
                     text: "15 mins",
-                    value: 3
+                    value: '3'
                 },
                 {
                     text: "30 mins",
-                    value: 6
+                    value: '6'
                 },
                 {
                     text: "60 mins",
-                    value: 12
+                    value: '12'
                 },
                 {
                     text: "120 mins",
-                    value: 24
+                    value: '24'
                 },
                 {
                     text: "360 mins",
-                    value: 72
+                    value: '72'
                 }
             ]
         },
