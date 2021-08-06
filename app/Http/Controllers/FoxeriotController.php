@@ -113,7 +113,11 @@ class FoxeriotController extends Controller
             return curl_error($ch);
         }
         curl_close($ch);
-        return $result;
+
+        return response()->json([
+            'success' => $result,
+            'data' => $data
+        ], 200);        
     }
     /**
      * Remove the specified resource from storage.

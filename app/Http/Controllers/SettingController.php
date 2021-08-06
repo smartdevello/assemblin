@@ -169,6 +169,6 @@ class SettingController extends Controller
             return back()->with('error', 'Unknown DeviceID');
         }
         $response = $this->sendIntervalto_API($request->deviceId, $payload[$request->interval], $FPort);
-        return back()->with('success', $response);
+        return back()->with('success', 'Updated successfully');
     }
 }
