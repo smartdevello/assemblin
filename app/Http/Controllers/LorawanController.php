@@ -401,6 +401,29 @@ class LorawanController extends Controller
     {
         //
     }
+    public function receive_csvfile()
+    {
+        $filename = "myfile.csv";
+        $command = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=005B&REZEPT=TK01_lampotilat&FROMTIME=1627768800000&TOTIME=1627776000000&' > " . $filename ;
+
+        if ( file_exists($filename ) ) {
+            unlink($filename);
+        }
+        shell_exec($command);
+
+        $file = fopen($filename,"r");
+        $index = 0;
+        while(! feof($file))
+        {
+            $index++;
+            $row = fgetcsv($file, 0, ';');
+            // if ($index == 1) continue;
+            print_r($row);
+            
+        }
+
+        fclose($file);
+    }
     public function receive_data(Request $request)
     {
 
@@ -424,7 +447,6 @@ class LorawanController extends Controller
 
                 $data = $IOTSUdecoder->DecodeIOTSUPayload($hexvalue);
             }
-
 
             foreach ( $data as $key => $val ) {
 
