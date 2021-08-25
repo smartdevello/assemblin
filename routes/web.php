@@ -8,7 +8,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LorawanController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -88,6 +88,10 @@ Route::group(['prefix' => 'point', 'middleware' => 'auth'], function ($router) {
     Route::post('delete/{id}', [DEOS_pointController::class, 'destroy'])->name('point-delete');
 });
 
+Route::post('/tokens/create', function (Request $request) {
+    $token = $request->user()->createToken($request->token_name);
 
+    return ['token' => $token->plainTextToken];
+});
 
 require __DIR__.'/auth.php';
