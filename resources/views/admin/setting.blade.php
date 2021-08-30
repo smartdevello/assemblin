@@ -42,6 +42,53 @@
 
                 <v-row>
                     <template>
+                        <v-card
+                          class="mx-auto"
+                          max-width="400"
+                        >
+                          <v-toolbar
+                            color="purple"
+                            dark
+                          >
+                            <v-app-bar-nav-icon></v-app-bar-nav-icon>
+                      
+                            <v-toolbar-title>Tokens</v-toolbar-title>                      
+                            <v-spacer></v-spacer>                     
+
+                          </v-toolbar>                     
+                     
+                          <v-list
+                            flat
+                            subheader
+                            three-line
+                          >
+                      
+                            <v-list-item-group
+                              v-model="selected_tokens"
+                              multiple
+                              active-class=""
+                            >
+                              <template v-for="(token, index) in all_tokens">
+                                <v-list-item :key="index">
+                                    <template v-slot:default="{ active }">
+                                    <v-list-item-action>
+                                        <v-checkbox :input-value="active"></v-checkbox>
+                                    </v-list-item-action>
+                        
+                                    <v-list-item-content>
+                                        <v-list-item-title v-text="token.plainTextToken"></v-list-item-title>
+                                    </v-list-item-content>
+                                    </template>
+                                </v-list-item>
+                              </template>
+
+                            </v-list-item-group>                            
+                          </v-list>
+                        </v-card>
+                      </template>
+                </v-row>
+                <v-row>
+                    <template>
                         <div class="text-center">
                             <v-dialog v-model="openNewTokenForm" width="500">
                                 <template v-slot:activator="{ on, attrs }">
@@ -89,6 +136,7 @@
             alltypes:  ( <?php echo json_encode($types); ?> ),
             all_tokens: ( <?php echo json_encode($all_tokens); ?> ),
             types: [],
+            selected_tokens[],
             intervals: [
                 {
                     text: "10 mins",
