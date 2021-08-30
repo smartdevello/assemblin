@@ -89,7 +89,7 @@ class SettingController extends Controller
             $sql = "select DISTINCT `type` from `sensors` WHERE `deviceId` = '" . $device->deviceId ."'";
             $types[$device->deviceId] = DB::select($sql);
         }
-        $user = auth()->user();
+        $user = auth('sanctum')->user();
 
         $all_tokens =[];
         foreach($user->tokens as $token){
