@@ -89,9 +89,12 @@ class SettingController extends Controller
             $sql = "select DISTINCT `type` from `sensors` WHERE `deviceId` = '" . $device->deviceId ."'";
             $types[$device->deviceId] = DB::select($sql);
         }
+        $user = auth()->user();
+
         return view('admin.setting', [
             'devices' => $devices,
-            'types' => $types
+            'types' => $types,
+            'all_tokens' => $user->tokens,
         ]);
     }
     public function sendIntervalto_API($DevEUI, $Payload, $FPort)

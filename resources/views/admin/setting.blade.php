@@ -31,13 +31,6 @@
                                     <v-select :items="intervals" label="Select an interval" name="interval" v-model="currentInterval" item-text="text" item-value="value" solo required>
                                 </v-card-text>
 
-                                <v-card-text>
-                                    {{-- <v-text-field v-model="controller.name" label="Controller Name" name="name" required></v-text-field>
-                                    <v-text-field v-model="controller.ip_address" label="IP Address" name="ip_address" required></v-text-field>
-                                    <v-text-field v-model="controller.port_number" label="Port Number" name="port_number" required readonly></v-text-field>
-                                    <v-select :items="buildings" label="Select a Building" name="building_id" v-model="currentBuilding" item-text="name" item-value="id" solo required> --}}
-                                </v-card-text>
-
                                 <v-card-actions>
                                     <v-btn color="primary" text type="submit" form="update-Interval_form">Update</v-btn>
                                     {{-- <v-btn color="red" @click="openDelete = true">Remove</v-btn> --}}
@@ -46,6 +39,34 @@
                         </v-form>
                     </div>
                 </template>
+
+                <v-row>
+                    <template>
+                        <div class="text-center">
+                            <v-dialog v-model="openNewTokenForm" width="500">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on" class="ma-3">Add</v-btn>
+                                </template>
+    
+                                <v-form :action="createTokenUrl" method="POST" id="create_token_form">
+                                    @csrf
+                                    <v-card>
+                                        <v-card-title class="headline grey lighten-2">
+                                            Add New API Token
+                                        </v-card-title>
+                                        <v-text-field name="token_name" required class="pa-2"></v-text-field>
+    
+                                        <v-card-actions>
+                                            <v-spacer></v-spacer>
+                                            <v-btn color="primary" text type="submit" form="create_token_form">Submit</v-btn>
+                                        </v-card-actions>
+                                    </v-card>
+                                </v-form>
+                            </v-dialog>
+                        </div>
+                    </template>
+                </v-row>
+
         </v-container>
     </v-main>
 @endsection
@@ -59,11 +80,14 @@
             drawer: true,
             mainMenu: mainMenu,
             updateIntervalUrl: "",
+            createTokenUrl: "",
             currentDevice : "",
             currentType: "",
             currentInterval: 0,
+            openNewTokenForm: false,
             devices: ( <?php echo json_encode($devices); ?> ),
             alltypes:  ( <?php echo json_encode($types); ?> ),
+            all_tokens: ( <?php echo json_encode($all_tokens); ?> ),
             types: [],
             intervals: [
                 {
@@ -94,6 +118,7 @@
         },
         mounted: function() {
             this.updateIntervalUrl = `${prefix_link}/setting/update_device_interval`;
+            this.createTokenUrl = `${prefix_link}/tokens/create`;
             console.log(this.devices);
             console.log(this.alltypes);
         },
