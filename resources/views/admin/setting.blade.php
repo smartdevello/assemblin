@@ -43,72 +43,67 @@
                 <v-row>
                     <template>
                         <v-card
-                          class="mx-auto"
                         >
                           <v-toolbar
                             color="purple"
                             dark
-                          >
-                            <v-app-bar-nav-icon></v-app-bar-nav-icon>
-                      
+                          >                     
                             <v-toolbar-title>Tokens</v-toolbar-title>                      
-                            <v-spacer></v-spacer>                     
-
                           </v-toolbar>                     
                      
-                          <v-list
-                            flat
-                            subheader
-                            three-line
-                          >
-                      
-                            <v-list-item-group
-                              v-model="selected_tokens"
-                              multiple
-                              active-class=""
+                            <v-list
+                                flat
+                                subheader
+                                three-line
                             >
-                              <template v-for="(token, index) in all_tokens">
-                                <v-list-item :key="index">
-                                    <template v-slot:default="{ active }">
-                                    <v-list-item-action>
-                                        <v-checkbox :input-value="active"></v-checkbox>
-                                    </v-list-item-action>
                         
-                                    <v-list-item-content>
-                                        <v-list-item-title v-text="token.plainTextToken"></v-list-item-title>
-                                    </v-list-item-content>
-                                    </template>
-                                </v-list-item>
-                              </template>
+                                <v-list-item-group
+                                v-model="selected_tokens"
+                                multiple
+                                active-class=""
+                                >
+                                <template v-for="(token, index) in all_tokens">
+                                    <v-list-item :key="index">
+                                        <template v-slot:default="{ active }">
+                                        <v-list-item-action>
+                                            <v-checkbox :input-value="active"></v-checkbox>
+                                        </v-list-item-action>
+                            
+                                        <v-list-item-content>
+                                            <v-list-item-title v-text="token.plainTextToken"></v-list-item-title>
+                                        </v-list-item-content>
+                                        </template>
+                                    </v-list-item>
+                                </template>
 
-                            </v-list-item-group>                            
-                          </v-list>
+                                </v-list-item-group>                            
+                            </v-list>
+                            <div class="text-center">
+                                <v-dialog v-model="openNewTokenForm" width="500">
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on" class="ma-3">Add</v-btn>
+                                    </template>
+        
+                                    <v-form :action="createTokenUrl" method="POST" id="create_token_form">
+                                        @csrf
+                                        <v-card>
+                                            <v-card-title class="headline grey lighten-2">
+                                                Add New API Token
+                                            </v-card-title>
+                                            <v-text-field name="token_name" required class="pa-2"></v-text-field>
+        
+                                            <v-card-actions>
+                                                <v-spacer></v-spacer>
+                                                <v-btn color="primary" text type="submit" form="create_token_form">Submit</v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </v-form>
+                                </v-dialog>
+                            </div>
+
                         </v-card>
                       </template>
-                      <template>
-                        <div class="text-center">
-                            <v-dialog v-model="openNewTokenForm" width="500">
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on" class="ma-3">Add</v-btn>
-                                </template>
-    
-                                <v-form :action="createTokenUrl" method="POST" id="create_token_form">
-                                    @csrf
-                                    <v-card>
-                                        <v-card-title class="headline grey lighten-2">
-                                            Add New API Token
-                                        </v-card-title>
-                                        <v-text-field name="token_name" required class="pa-2"></v-text-field>
-    
-                                        <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn color="primary" text type="submit" form="create_token_form">Submit</v-btn>
-                                        </v-card-actions>
-                                    </v-card>
-                                </v-form>
-                            </v-dialog>
-                        </div>
-                    </template>
+
                 </v-row>
         </v-container>
     </v-main>
