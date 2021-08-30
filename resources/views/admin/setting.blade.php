@@ -44,7 +44,6 @@
                     <template>
                         <v-card
                           class="mx-auto"
-                          max-width="400"
                         >
                           <v-toolbar
                             color="purple"
@@ -86,9 +85,7 @@
                           </v-list>
                         </v-card>
                       </template>
-                </v-row>
-                <v-row>
-                    <template>
+                      <template>
                         <div class="text-center">
                             <v-dialog v-model="openNewTokenForm" width="500">
                                 <template v-slot:activator="{ on, attrs }">
@@ -113,7 +110,6 @@
                         </div>
                     </template>
                 </v-row>
-
         </v-container>
     </v-main>
 @endsection
