@@ -43,6 +43,7 @@
                 <v-row>
                     <template>
                         <v-card
+                            class="mx-auto my-12"
                         >
                           <v-toolbar
                             color="purple"
