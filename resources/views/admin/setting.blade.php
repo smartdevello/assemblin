@@ -44,6 +44,7 @@
                     <template>
                         <v-card
                             class="my-12"
+                            fluid
                         >
                           <v-toolbar
                             color="purple"
