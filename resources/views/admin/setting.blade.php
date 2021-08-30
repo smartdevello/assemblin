@@ -40,7 +40,7 @@
                     </div>
                 </template>
 
-                <v-row>
+
                     <template
                     class="my-12"
                     fluid
@@ -105,11 +105,8 @@
                                     </v-form>
                                 </v-dialog>
                             </div>
-
                         </v-card>
                       </template>
-
-                </v-row>
         </v-container>
     </v-main>
 @endsection
