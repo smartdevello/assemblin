@@ -93,7 +93,7 @@ class SettingController extends Controller
 
         $all_tokens =[];
         foreach($user->tokens as $token){
-            $all_tokens = [
+            $all_tokens[] = [
                 "id" => $token->id,
                 "name" => $token->name,
                 "plainTextToken" => $token->plainTextToken,
@@ -102,7 +102,7 @@ class SettingController extends Controller
         return view('admin.setting', [
             'devices' => $devices,
             'types' => $types,
-            'all_tokens' => all_tokens,
+            'all_tokens' => $all_tokens,
         ]);
     }
     public function sendIntervalto_API($DevEUI, $Payload, $FPort)
