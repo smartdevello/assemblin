@@ -136,7 +136,7 @@
             alltypes:  ( <?php echo json_encode($types); ?> ),
             all_tokens: ( <?php echo json_encode($all_tokens); ?> ),
             types: [],
-            selected_tokens[],
+            selected_tokens: [],
             intervals: [
                 {
                     text: "10 mins",
