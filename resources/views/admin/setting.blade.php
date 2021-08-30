@@ -41,7 +41,10 @@
                 </template>
 
                 <v-row>
-                    <template>
+                    <template
+                    class="my-12"
+                    fluid
+                    >
                         <v-card
                             class="my-12"
                             fluid
