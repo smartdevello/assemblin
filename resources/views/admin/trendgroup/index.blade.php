@@ -131,7 +131,7 @@
                     { text: 'Update interval', value: 'update_interval' },
                     { text: 'Query period', value: 'query_period' },
                     { text: 'Token / Password', value: 'token' },
-                    { text: "", value: "controls", sortable: false }
+                    { text: "Action", value: "controls", sortable: false }
                 ],              
                 search: '',
                 createNew: false, 
