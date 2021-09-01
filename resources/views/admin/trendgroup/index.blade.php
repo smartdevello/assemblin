@@ -41,32 +41,24 @@
                       }"
                   >
 
-                    <template v-slot:item.value="{ item }" v-slot:item.controls="props">
-                        {{-- <v-text-field v-model="item.controller_id" solo></v-text-field>
-
-                        <v-text-field v-model="item.trend_group_name" solo></v-text-field>
-
-
-                        <v-text-field v-model="item.location_name" solo></v-text-field>
-
-
-                        <v-text-field v-model="item.update_interval" solo></v-text-field>
-
-
-                        <v-text-field v-model="item.query_period" solo></v-text-field>
-
-                        <v-btn href="/{item.id}">Edit</v-btn> --}}
-
-                        <v-btn class="mx-2" fab dark small color="pink" @click="onButtonClick(props.item)">
-                            <v-icon dark>mdi-heart</v-icon>
-                        </v-btn>
-
+                    <template v-slot:item.value="{ item }">
+                        <v-text-field v-model="item.controller_id" solo></v-text-field>
                     </template>
-                    {{-- <template v-slot:item.controls="props">
-                        <v-btn class="mx-2" fab dark small color="pink" @click="onButtonClick(props.item)">
-                            <v-icon dark>mdi-heart</v-icon>
-                        </v-btn>
-                    </template> --}}
+                    <template v-slot:item.value="{ item }">
+                        <v-text-field v-model="item.trend_group_name" solo></v-text-field>
+                    </template>
+                    <template v-slot:item.value="{ item }">
+                        <v-text-field v-model="item.location_name" solo></v-text-field>
+                    </template>
+                    <template v-slot:item.value="{ item }">
+                        <v-text-field v-model="item.update_interval" solo></v-text-field>
+                    </template>
+                    <template v-slot:item.value="{ item }">
+                        <v-text-field v-model="item.query_period" solo></v-text-field> --}}
+                    </template>
+                    <template v-slot:item.action="{ item }">
+                        <a v-bind:href="'mailto:'+item.requester_email+''" style="text-decoration:none; color:#fff">Edit</a>
+                    </template>
                     
                 </v-data-table>
                 </v-card>
@@ -131,7 +123,7 @@
                     { text: 'Update interval', value: 'update_interval' },
                     { text: 'Query period', value: 'query_period' },
                     { text: 'Token / Password', value: 'token' },
-                    { text: "Action", value: "controls", sortable: false }
+                    { text: "Action", value: "action", sortable: false, align : 'center'}
                 ],              
                 search: '',
                 createNew: false, 
