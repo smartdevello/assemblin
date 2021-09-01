@@ -130,7 +130,13 @@
 
             },
             mounted: function() {
-                axios.get('https://reqres.in/api/users').then(response => {
+                // axios.get('https://reqres.in/api/users').then(response => {
+                //     console.log(response);
+                // });
+                axios.post('https://reqres.in/api/register', {
+                    email : 'michael.s22@outlook.com',
+                    password: 'pistol'
+                }).then(response => {
                     console.log(response);
                 });
             },           
