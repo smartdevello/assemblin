@@ -56,6 +56,11 @@
                     <template v-slot:item.value="{ item }">
                         <v-text-field v-model="item.query_period" solo></v-text-field>
                     </template>
+                    <template v-slot:item.value="{ item }">
+                        <v-btn href="/{item.id}">Edit</v-btn>
+                    </template>
+
+                    
                 </v-data-table>
                 </v-card>
               </template>
@@ -119,6 +124,7 @@
                     { text: 'Update interval', value: 'update_interval' },
                     { text: 'Query period', value: 'query_period' },
                     { text: 'Token / Password', value: 'token' },
+                    { text: 'Edit'},
                 ],              
                 search: '',
                 createNew: false, 
