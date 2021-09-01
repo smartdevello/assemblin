@@ -42,7 +42,7 @@
                   >
 
                     <template v-slot:item.value="{ item }">
-                        <v-text-field v-model="item.controller_id" solo></v-text-field>
+                        {{-- <v-text-field v-model="item.controller_id" solo></v-text-field>
 
                         <v-text-field v-model="item.trend_group_name" solo></v-text-field>
 
@@ -55,8 +55,18 @@
 
                         <v-text-field v-model="item.query_period" solo></v-text-field>
 
+                        <v-btn href="/{item.id}">Edit</v-btn> --}}
 
-                        <v-btn href="/{item.id}">Edit</v-btn>
+                        <tr>
+                            <td>{{item.controller_id}}</td>
+                            <td>{{item.trend_group_name}}</td>
+                            <td>
+                                <v-btn class="mx-2" fab dark small color="pink" @click="onButtonClick(item.id)">
+                                    <v-icon dark>mdi-heart</v-icon>
+                                </v-btn>
+                            </td>
+                          </tr>
+
                     </template>
 
                     
