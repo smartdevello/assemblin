@@ -418,7 +418,8 @@ class LorawanController extends Controller
         {
             $index++;
             $row = fgetcsv($file, 0, ';');
-            $output[] = $row;            
+            if (is_array($row)) 
+                $output[] = $row;            
         }
         fclose($file);
 
