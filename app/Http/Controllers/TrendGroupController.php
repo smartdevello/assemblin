@@ -76,6 +76,9 @@ class TrendGroupController extends Controller
     public function show($id)
     {
         //
+        $trend_group = TrendGroup::where('id', $id)->first();
+        return view('admin.trendgroup.details', ['trend_group' => $trend_group]);
+
     }
 
     /**
