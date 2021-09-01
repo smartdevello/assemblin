@@ -62,7 +62,11 @@
                         </v-btn>
 
                     </template>
-
+                    {{-- <template v-slot:item.controls="props">
+                        <v-btn class="mx-2" fab dark small color="pink" @click="onButtonClick(props.item)">
+                            <v-icon dark>mdi-heart</v-icon>
+                        </v-btn>
+                    </template> --}}
                     
                 </v-data-table>
                 </v-card>
