@@ -43,20 +43,19 @@
 
                     <template v-slot:item.value="{ item }">
                         <v-text-field v-model="item.controller_id" solo></v-text-field>
-                    </template>
-                    <template v-slot:item.value="{ item }">
+
                         <v-text-field v-model="item.trend_group_name" solo></v-text-field>
-                    </template>
-                    <template v-slot:item.value="{ item }">
+
+
                         <v-text-field v-model="item.location_name" solo></v-text-field>
-                    </template>
-                    <template v-slot:item.value="{ item }">
+
+
                         <v-text-field v-model="item.update_interval" solo></v-text-field>
-                    </template>
-                    <template v-slot:item.value="{ item }">
+
+
                         <v-text-field v-model="item.query_period" solo></v-text-field>
-                    </template>
-                    <template v-slot:item.value="{ item }">
+
+
                         <v-btn href="/{item.id}">Edit</v-btn>
                     </template>
 
