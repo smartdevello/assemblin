@@ -41,19 +41,19 @@
                       }"
                   >
 
-                    <template v-slot:item.value="{ item }">
+                    <template v-slot:item.controller_id="{ item }">
                         <v-text-field v-model="item.controller_id" solo></v-text-field>
-                    </template>
-                    <template v-slot:item.value="{ item }">
+                    </template>                   
+                    <template v-slot:item.trend_group_name="{ item }">
                         <v-text-field v-model="item.trend_group_name" solo></v-text-field>
                     </template>
-                    <template v-slot:item.value="{ item }">
+                    <template v-slot:item.location_name="{ item }">
                         <v-text-field v-model="item.location_name" solo></v-text-field>
                     </template>
-                    <template v-slot:item.value="{ item }">
+                    <template v-slot:item.update_interval="{ item }">
                         <v-text-field v-model="item.update_interval" solo></v-text-field>
                     </template>
-                    <template v-slot:item.value="{ item }">
+                    <template v-slot:item.query_period="{ item }">
                         <v-text-field v-model="item.query_period" solo></v-text-field> --}}
                     </template>
                     <template v-slot:item.action="{ item }">
