@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TrendGroup;
 use Illuminate\Http\Request;
 
 class TrendGroupController extends Controller
@@ -14,6 +15,8 @@ class TrendGroupController extends Controller
     public function index()
     {
         //
+        $trend_groups = TrendGroup::all();
+        return view('admin.trendgroup.index', ['trend_groups' => $trend_groups]);
     }
 
     /**
