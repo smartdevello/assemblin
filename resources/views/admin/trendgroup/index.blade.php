@@ -146,12 +146,12 @@
                 updateItem(item){
                     this.loading = true;
                     item.updateloading = true;
-                    console.log(item);
+
                     let url = '/trendgroup/update/' + item.id;
                     axios.post(url, item).then(response=>{
                         this.loading = false;
                         item.updateloading = false;
-                        console.log(response);
+                        console.log(this.trend_groups);
                     }).catch(err => {
                         this.loading = false;
                         item.updateloading = false;
@@ -162,7 +162,18 @@
                 deleteItem(item){
                     this.loading = true;
                     item.deleteloading = true;
-                    console.log(item);
+
+                    let url = '/trendgroup/delete/' + item.id;
+                    axios.post(url).then(response=>{
+                        this.loading = false;
+                        item.updateloading = false;
+                        
+                    }).catch(err => {
+                        this.loading = false;
+                        item.updateloading = false;
+                        console.log(err);
+                    });
+
                 }
             }
         });

@@ -144,5 +144,15 @@ class TrendGroupController extends Controller
     public function destroy($id)
     {
         //
+        $row = TrendGroup::where('id', $id)->first();
+        if (!$row) {
+            return response()->json([
+                'error' => 'not found',
+            ], 404);
+        }
+        $row->delete();
+        return response()->json([
+            'success' => true
+        ]);
     }
 }
