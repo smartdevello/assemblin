@@ -147,9 +147,17 @@
                     this.loading = true;
                     item.updateloading = true;
                     console.log(item);
-                    let url = '/trendgroup/update' + item.id;
-                    console.log(url);
-                    
+                    let url = '/trendgroup/update/' + item.id;
+                    axios.post(url, item).then(response=>{
+                        this.loading = false;
+                        item.updateloading = false;
+                        console.log(response);
+                    }).catch(err => {
+                        this.loading = false;
+                        item.updateloading = false;
+                        console.log(err);
+                    });
+
                 },
                 deleteItem(item){
                     this.loading = true;
