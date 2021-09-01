@@ -76,8 +76,12 @@
                                     </v-card-title>
 
                                     <v-text-field name="controller_id" label="Controller ID (in HEX)" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
-                                    <v-text-field name="trend_group_name" label="Trend Group Name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>                                    
-{{-- 
+                                    <v-text-field name="trend_group_name" label="Trend group name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>                                    
+                                    <v-text-field name="location_name" label="Location name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>                                    
+                                    <v-text-field name="update_interval" label="Update interval" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>                                    
+                                    <v-text-field name="query_period" label="Query period" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>                                    
+
+{{--                                     <v-text-field name="trend_group_name" label="Trend Group Name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>                                    
                                     <v-select :items="locations" label="Select A Location" name="location_id" item-text="name" item-value="id" solo required>
                                     </v-select> --}}
                                     <v-card-actions>
