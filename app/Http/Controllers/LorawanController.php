@@ -412,17 +412,17 @@ class LorawanController extends Controller
         shell_exec($command);
 
         $file = fopen($filename,"r");
-        $output = "";
+        $output = [];
         $index = 0;
         while(! feof($file))
         {
             $index++;
             $row = fgetcsv($file, 0, ';');
-            $output .= $row;            
+            $output[] = $row;            
         }
         fclose($file);
-        
-        return str_getcsv($output, ';');
+
+        return $output;
     }
     public function receive_data(Request $request)
     {
