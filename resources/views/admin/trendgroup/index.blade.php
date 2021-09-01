@@ -69,6 +69,9 @@
             el: '#app',
             vuetify: new Vuetify(),
             data: {
+                drawer: true,
+                mainMenu: mainMenu,
+                trend_groups: ( <?php echo json_encode($trend_groups); ?> ),
                 headers: [
                     {
                         text: 'Controller ID (in HEX)',
