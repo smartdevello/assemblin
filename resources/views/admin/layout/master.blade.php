@@ -67,7 +67,13 @@
             title: 'Settings',
             icon: 'mdi-cog',
             link: prefix_link  + '/setting'
-        }
+        },
+        {
+            title: 'Trend Group',
+            icon: 'mdi-group',
+            link: prefix_link  + '/trendgroup'
+        },
+
     ];
 </script>
 @yield('script')

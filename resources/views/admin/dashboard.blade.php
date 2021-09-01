@@ -44,9 +44,6 @@
                     :items="sensors"
                     :search="search"
                     :items-per-page="10"
-                    {{-- item-key="observationId" --}}
-                    {{-- show-group-by
-                    group-by="deviceId" --}}
                     multi-sort
                     :footer-props="{
                         showFirstLastPage: true,
@@ -60,12 +57,7 @@
                     <template v-slot:item.value="{ item }">
 
                         <v-text-field v-model="item.value" solo></v-text-field>
-                        {{-- <v-chip
-                        :color="getColor(item.value)"
-                        dark
-                        >
-                        @{{ item.value }}
-                        </v-chip> --}}
+
                     </template>
 
 
@@ -85,110 +77,6 @@
                 </v-data-table>
                 </v-card>
               </template>
-
-
-            {{-- <v-row>
-                <v-col cols="12" sm="8" md="8">
-                    <div class="section_container sensors">
-                        <h1 class="section_title">Sensors</h1>
-                        <v-row>
-                            <v-col cols="12" sm="2" md="2">
-                                Device ID
-                            </v-col>
-                            <v-col cols="12" sm="2" md="2">
-                                Sensor ID
-                            </v-col>
-                            <v-col cols="12" sm="2" md="2">
-                                Tag
-                            </v-col>
-                            <v-col cols="12" sm="2" md="2">
-                                Name
-                            </v-col>
-                            <v-col cols="12" sm="2" md="2">
-                                Type
-                            </v-col>
-                            <v-col cols="12" sm="2" md="2">
-                                Latest value
-                            </v-col>
-                        </v-row>
-                        <div v-for="sensor in sensors.data">
-                            <v-row>
-                                <v-col cols="12" sm="2" md="2">
-                                    <v-text-field v-model="sensor.deviceId" solo></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="2" md="2">
-                                    <v-text-field v-model="sensor.observationId" solo></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="2" md="2">
-                                    <v-text-field v-model="sensor.tag" solo></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="2" md="2">
-                                    <v-text-field v-model="sensor.name" solo></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="2" md="2">
-                                    <v-text-field v-model="sensor.type" solo></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="2" md="2">
-                                    <v-text-field v-model="sensor.value" solo></v-text-field>
-                                </v-col>
-
-                            </v-row>
-                        </div>
-                    </div>
-                </v-col>
-                <v-col cols="12" sm="3" md="3">
-                    <div class="section_container DEOS">
-                        <h1 class="section_title">DEOS</h1>
-                        <v-row>
-                            <v-col cols="12" sm="6" md="6">
-                                DEOS point name
-                            </v-col>
-                            <v-col cols="12" sm="6" md="6">
-                                DEOS Controller
-                            </v-col>
-                        </v-row>
-                        <div v-for="sensor in sensors.data">
-                                <v-row>
-                                    <v-col cols="12" sm="6" md="6">
-                                        <v-select :items="points" v-model="sensor.point_id" item-text="name" item-value="id" solo @change="changePoint($event, sensor.id)">
-                                        </v-select>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="6">
-                                        <v-select :items="controllers" v-model="sensor.controller_id" item-text="name" item-value="id" solo @change="changeContoller($event, sensor.id)">
-                                        </v-select>
-                                    </v-col>
-                                </v-row>
-                        </div>
-                    </div>
-                </v-col>
-                <v-col cols="12" sm="1" md="1">
-                    <div class="section_container Areas">
-                        <h1 class="section_title">Areas</h1>
-                        <v-row>
-                            <v-col cols="12" sm="12" md="12">
-                                Area name
-                            </v-col>
-                        </v-row>
-                        <div v-for="sensor in sensors.data">
-                                <v-row>
-                                    <v-col cols="12" sm="12" md="12">
-                                        <v-select :items="areas" v-model="sensor.area_id" item-text="name" item-value="id" solo>                                            
-                                        </v-select>
-                                    </v-col>
-                                </v-row>
-                        </div>
-                    </div>
-                </v-col>
-            </v-row>
-            <template>
-                <div class="text-center">
-                  <v-pagination
-                    v-model="page"
-                    :length="sensors.last_page"
-                  ></v-pagination>
-                </div>
-            </template> --}}
-
             <v-row >
                 <v-col cols="12" sm="10" md="10">
 
