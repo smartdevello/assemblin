@@ -41,7 +41,7 @@
                       }"
                   >
 
-                    <template v-slot:item.value="{ item }">
+                    <template v-slot:item.value="{ item }" v-slot:item.controls="props">
                         {{-- <v-text-field v-model="item.controller_id" solo></v-text-field>
 
                         <v-text-field v-model="item.trend_group_name" solo></v-text-field>
@@ -57,15 +57,9 @@
 
                         <v-btn href="/{item.id}">Edit</v-btn> --}}
 
-                        <tr>
-                            <td>{item.controller_id}</td>
-                            <td>{item.trend_group_name}</td>
-                            <td>
-                                <v-btn class="mx-2" fab dark small color="pink" @click="onButtonClick(item.id)">
-                                    <v-icon dark>mdi-heart</v-icon>
-                                </v-btn>
-                            </td>
-                          </tr>
+                        <v-btn class="mx-2" fab dark small color="pink" @click="onButtonClick(props.item)">
+                            <v-icon dark>mdi-heart</v-icon>
+                        </v-btn>
 
                     </template>
 
@@ -133,7 +127,7 @@
                     { text: 'Update interval', value: 'update_interval' },
                     { text: 'Query period', value: 'query_period' },
                     { text: 'Token / Password', value: 'token' },
-                    { text: 'Edit'},
+                    { text: "", value: "controls", sortable: false }
                 ],              
                 search: '',
                 createNew: false, 
