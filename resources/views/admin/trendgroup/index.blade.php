@@ -151,7 +151,6 @@
                     axios.post(url, item).then(response=>{
                         this.loading = false;
                         item.updateloading = false;
-                        console.log(this.trend_groups);
                     }).catch(err => {
                         this.loading = false;
                         item.updateloading = false;
@@ -167,7 +166,12 @@
                     axios.post(url).then(response=>{
                         this.loading = false;
                         item.updateloading = false;
-                        
+                        for ( i = this.trend_groups.length - 1; i>=0 ;i--){
+                            if (this.trend_groups[i].id == item.id) {
+                                this.trend_groups.splice(i, 1);
+                                break;
+                            }                                
+                        }
                     }).catch(err => {
                         this.loading = false;
                         item.updateloading = false;
