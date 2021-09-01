@@ -57,7 +57,7 @@
                         <v-text-field v-model="item.query_period" solo></v-text-field> --}}
                     </template>
                     <template v-slot:item.action="{ item }">
-                        <a v-bind:href="'mailto:'+item.requester_email+''" style="text-decoration:none; color:#fff">Edit</a>
+                        <a v-bind:href="'trendgroup/edit/'+item.id+''" color="success">Edit</a>
                     </template>
                     
                 </v-data-table>
