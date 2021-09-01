@@ -31,6 +31,7 @@
                     :items="trend_groups"
                     :search="search"
                     :items-per-page="10"
+                    :loading="loading" loading-text="Loading... Please wait"                    
                     multi-sort
                     :footer-props="{
                         showFirstLastPage: true,
@@ -54,10 +55,11 @@
                         <v-text-field v-model="item.update_interval" solo></v-text-field>
                     </template>
                     <template v-slot:item.query_period="{ item }">
-                        <v-text-field v-model="item.query_period" solo></v-text-field> --}}
+                        <v-text-field v-model="item.query_period" solo></v-text-field>
                     </template>
                     <template v-slot:item.action="{ item }">
-                        <a v-bind:href="'trendgroup/edit/'+item.id+''" color="success">Edit</a>
+                        <v-btn color="success" @click="updateItem(item)" :loading="item.loading" :disabled="loading">Update</v-btn>
+                        <v-btn color="error" @click="deleteItem(item)" :loading="item.loading" :disabled="loading">Delete</v-btn>                        
                     </template>
                     
                 </v-data-table>
@@ -84,10 +86,6 @@
                                     <v-text-field name="location_name" label="Location name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>                                    
                                     <v-text-field name="update_interval" label="Update interval" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>                                    
                                     <v-text-field name="query_period" label="Query period" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>                                    
-
-{{--                                     <v-text-field name="trend_group_name" label="Trend Group Name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>                                    
-                                    <v-select :items="locations" label="Select A Location" name="location_id" item-text="name" item-value="id" solo required>
-                                    </v-select> --}}
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
                                         <v-btn color="primary" text type="submit" form="create-form">Submit</v-btn>
@@ -111,6 +109,7 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
+                loading: false,
                 trend_groups: ( <?php echo json_encode($trend_groups); ?> ),
                 headers: [
                     {
@@ -134,6 +133,16 @@
 
             },           
             methods: {
+                updateItem(item){
+                    this.loading = true;
+                    item.loading = true;
+
+                },
+                deleteItem(item){
+                    this.loading = true;
+                    item.loading = true;
+                    
+                }
             }
         });
     </script>
