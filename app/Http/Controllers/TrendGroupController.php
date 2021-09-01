@@ -102,6 +102,37 @@ class TrendGroupController extends Controller
     public function update(Request $request, $id)
     {
         //
+
+        $trend_group = TrendGroup::where('id', $id)->first();
+
+
+        if (!$trend_group) {
+            return response()->json([
+                'error' => 'not found',
+            ], 404);
+        }
+
+        $this->validate($request, [
+            'controller_id' => 'required',
+            'trend_group_name' => 'required',
+            'location_name' => 'required',
+            'update_interval' => 'required',
+            'query_period' => 'required',
+        ], [
+            'controller_id.required' => "Controller ID field can't be empty",
+            'trend_group_name.required' => "Trend group name can't be empty",
+            'location_name.required' => "Location name can't be empty",
+            'update_interval.required' => "Must specify update interval",
+            'query_period.required' => "Must specify query period"
+
+        ]);
+       
+
+        $trend_group->update($request->all());
+        return response()->json([
+            'success' => true
+        ]);
+
     }
 
     /**
