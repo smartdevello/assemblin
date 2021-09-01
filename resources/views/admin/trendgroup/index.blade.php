@@ -58,8 +58,8 @@
                         <v-btn href="/{item.id}">Edit</v-btn> --}}
 
                         <tr>
-                            <td>{{item.controller_id}}</td>
-                            <td>{{item.trend_group_name}}</td>
+                            <td>{item.controller_id}</td>
+                            <td>{item.trend_group_name}</td>
                             <td>
                                 <v-btn class="mx-2" fab dark small color="pink" @click="onButtonClick(item.id)">
                                     <v-icon dark>mdi-heart</v-icon>
