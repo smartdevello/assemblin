@@ -169,16 +169,27 @@ class TrendGroupController extends Controller
         shell_exec($command);
 
         $file = fopen($filename,"r");
+        $output = [];
         $index = 0;
         while(! feof($file))
         {
             $index++;
             $row = fgetcsv($file, 0, ';');
-            // if ($index == 1) continue;
-            print_r($row);
-            
+            if (is_array($row)) 
+                $output[] = $row;         
         }
-
         fclose($file);
+
+        foreach($output as $index => $arr)
+        {
+            if ( $index == 0) {
+
+            } else {
+
+            }
+            foreach($arr as $key => $value){
+
+            }
+        }
     }
 }
