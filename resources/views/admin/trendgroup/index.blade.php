@@ -133,23 +133,28 @@
                 // axios.get('https://reqres.in/api/users').then(response => {
                 //     console.log(response);
                 // });
-                axios.post('https://reqres.in/api/register', {
-                    email : 'michael.s22@outlook.com',
-                    password: 'pistol'
-                }).then(response => {
-                    console.log(response);
-                });
+                // axios.post('https://reqres.in/api/register', {
+                //     email : 'michael.s22@outlook.com',
+                //     password: 'pistol'
+                // }).then(response => {
+                //     console.log(response);
+                // }).catch(err => {
+
+                // });
             },           
             methods: {
                 updateItem(item){
                     this.loading = true;
                     item.updateloading = true;
-
+                    console.log(item);
+                    let url = '/trendgroup/update' + item.id;
+                    console.log(url);
+                    
                 },
                 deleteItem(item){
                     this.loading = true;
                     item.deleteloading = true;
-
+                    console.log(item);
                 }
             }
         });
