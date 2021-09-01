@@ -58,8 +58,8 @@
                         <v-text-field v-model="item.query_period" solo></v-text-field>
                     </template>
                     <template v-slot:item.action="{ item }">
-                        <v-btn color="success" @click="updateItem(item)" :loading="item.loading" :disabled="loading">Update</v-btn>
-                        <v-btn color="error" @click="deleteItem(item)" :loading="item.loading" :disabled="loading">Delete</v-btn>                        
+                        <v-btn color="success" @click="updateItem(item)" :loading="item.updateloading" :disabled="loading">Update</v-btn>
+                        <v-btn color="error" @click="deleteItem(item)" :loading="item.deleteloading" :disabled="loading">Delete</v-btn>                        
                     </template>
                     
                 </v-data-table>
@@ -130,18 +130,20 @@
 
             },
             mounted: function() {
-
+                axios.get('https://reqres.in/api/users').then(response => {
+                    console.log(response);
+                });
             },           
             methods: {
                 updateItem(item){
                     this.loading = true;
-                    item.loading = true;
+                    item.updateloading = true;
 
                 },
                 deleteItem(item){
                     this.loading = true;
-                    item.loading = true;
-                    
+                    item.deleteloading = true;
+
                 }
             }
         });
