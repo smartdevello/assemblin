@@ -7,6 +7,7 @@ use App\Http\Controllers\DEOS_pointController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LorawanController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\TrendGroupController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 /*
@@ -86,6 +87,14 @@ Route::group(['prefix' => 'point', 'middleware' => 'auth'], function ($router) {
     Route::post('create', [DEOS_pointController::class, 'create'])->name('point-create');
     Route::post('update/{id}', [DEOS_pointController::class, 'update'])->name('point-update');
     Route::post('delete/{id}', [DEOS_pointController::class, 'destroy'])->name('point-delete');
+});
+
+Route::group(['prefix' => 'trendgroup', 'middleware' => 'auth'], function ($router) {
+    Route::get('', [TrendGroupController::class, 'index'])->name('groups');
+    Route::get('/{id}', [TrendGroupController::class, 'show'])->name('group-detail');
+    Route::post('create', [TrendGroupController::class, 'create'])->name('group-create');
+    Route::post('update/{id}', [TrendGroupController::class, 'update'])->name('group-update');
+    Route::post('delete/{id}', [TrendGroupController::class, 'destroy'])->name('group-delete');
 });
 
 Route::post('/tokens/create', function (Request $request) {
