@@ -19,7 +19,7 @@ class CreateCsvTrendDataTable extends Migration
             $table->foreign('trend_group_id')->references('id')->on('trend_groups')->onDelete('cascade');
             $table->timestamp('timestamp')->nullable();
             $table->string('sensor_name')->nullable();
-            $table->bigInteger('sensor_value');
+            $table->float('sensor_value')->nullable();
             $table->timestamps();
         });
     }
