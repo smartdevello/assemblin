@@ -206,7 +206,7 @@ class TrendGroupController extends Controller
 
                         $csv_trend_data = Csv_Trend_Data::create([
                             'trend_group_id' => $trend_group->id,
-                            'timestamp' => $timestamp,
+                            'timestamp' => date('Y-m-d H:i:s', strtotime($timestamp)),
                             'sensor_name' => $csv_data[0][$key],
                             'sensor_value' => floatval ( str_replace(",", "", $value) )
                         ]);
