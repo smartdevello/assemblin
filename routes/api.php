@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FoxeriotController;
 use App\Http\Controllers\PointController;
 use App\Http\Controllers\LorawanController;
+use App\Http\Controllers\TrendGroupController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -67,6 +68,11 @@ Route::middleware(['cors'])->group(function(){
     Route::group(['prefix' => 'asm_server/config'], function ($router) {
         Route::get('getSERVERConfig', [AsmServerController::class, 'getSERVERConfig'])->name('getSERVERConfig');
         Route::get('getRESTconfig', [AsmServerController::class, 'getRESTconfig'])->name('getRESTconfig');
-    });    
+    });
 
+    
+    Route::group(['prefix' => 'trendgroup'], function ($router) {        
+        Route::post('', [FoxeriotController::class, 'receive_csv'])->name('receive_csv');
+
+    });
 });
