@@ -51,26 +51,17 @@ trait TrendDataTrait
                         $timestamp = strtotime( trim($arr[0]). " " . trim($arr[1]));
                     } else if ($key !=0 && $key !=1) {
                         if ( empty( $csv_data[0][$key] ) || empty( $value ) ) continue;
+ 
+                        $data = [
+                            'trend_group_id' => $trend_group->id,
+                            'timestamp' => date('Y-m-d H:i:s', $timestamp),
+                            'sensor_name' => $csv_data[0][$key],
+                            'sensor_value' => number_format(round( floatval ( str_replace(",", ".", $value) ), 1)  , 1, '.', '')
+                        ];
+                        $csv_trend_data = Csv_Trend_Data::updateOrCreate(
+                            ['trend_group_id'=> $trend_group->id, 'sensor_name' => $csv_data[0][$key]], $data
+                        );
 
-                        $csv_trend_data = Csv_Trend_Data::where([
-                            ['trend_group_id', '=' , $trend_group->id],
-                            ['sensor_name', '=', $csv_data[0][$key]],
-                        ])->first();
-
-                        if (!$csv_trend_data){
-                            $csv_trend_data = Csv_Trend_Data::create([
-                                'trend_group_id' => $trend_group->id,
-                                'timestamp' => date('Y-m-d H:i:s', $timestamp),
-                                'sensor_name' => $csv_data[0][$key],
-                                'sensor_value' => number_format(round( floatval ( str_replace(",", ".", $value) ), 1)  , 1, '.', '')
-                            ]);
-                        } else {
-                            $csv_trend_data->update([
-                                'timestamp' => date('Y-m-d H:i:s', $timestamp),
-                                'sensor_value' => number_format ( round( floatval ( str_replace(",", ".", $value) ), 1), 1, '.', '')
-                            ]);
-
-                        }
                         if ($csv_trend_data)
                             $output[] = $csv_trend_data;
 
