@@ -31,6 +31,6 @@ class CreateCsvTrendDataTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('csv__trend__data');
+        Schema::dropIfExists('csv_trend_data');
     }
 }
