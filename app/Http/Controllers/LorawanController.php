@@ -406,7 +406,7 @@ class LorawanController extends Controller
         $filename = "myfile.csv";
         $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=005B&REZEPT=TK01_lampotilat&FROMTIME=%d&TOTIME=%d&' > " . $filename ;
         $to_time = time();
-        $from_time = $to_time - 1440 * 60;
+        $from_time = $to_time - 864000 * 60;
         $command = sprintf($format, $from_time, $to_time);
         if ( file_exists($filename ) ) {
             unlink($filename);
