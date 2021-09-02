@@ -45,7 +45,9 @@ class HKA_Everymin_Job extends Command
         $all_jobs = HKA_Scheduled_JOb::all();
         foreach($all_jobs as $job){
             $next_run = strtotime( $job->next_run);
-            if ( time() < $next_run) {
+            file_put_contents('cron.txt', sprintf("next_run %s\n", $next_run), FILE_APPEND | LOCK_EX);
+            file_put_contents('cron.txt', sprintf("current_time %s\n", time()), FILE_APPEND | LOCK_EX);
+            if ( time() > $next_run) {
                 if ($job->job_name == 'trend_group') {
                     $trend_group = TrendGroup::where('id', $job->job_id)->first();
                     if ($trend_group ) {
