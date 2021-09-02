@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TrendGroup;
 use Illuminate\Http\Request;
-
+use App\Models\Csv_Trend_Data;
 class TrendGroupController extends Controller
 {
     /**
@@ -159,9 +159,19 @@ class TrendGroupController extends Controller
     // Get csv file data and save it to csv_trend_data table
     public function receive_csv(Request $request)
     {
+        $trend_group = TrendGroup::where([
+            ['controller_id', '=' , $request->controller_id],
+            ['trend_group_name', '=', $request->trend_group_name]
+        ])->first();
+
+        if (!$trend_group) {
+            return response()->json([
+                'error' => "The Trend group does not exist on DB."
+            ], 404);
+        }
         $filename = "myfile.csv";
         $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $filename ;
-        $command = sprintf($format, $request->controller_id, $request->trend_group, $request->from_time, $request->to_time);
+        $command = sprintf($format, $request->controller_id, $request->trend_group_name, $request->from_time, $request->to_time);
 
         if ( file_exists($filename ) ) {
             unlink($filename);
@@ -169,27 +179,45 @@ class TrendGroupController extends Controller
         shell_exec($command);
 
         $file = fopen($filename,"r");
-        $output = [];
+        $csv_data = [];
         $index = 0;
         while(! feof($file))
         {
             $index++;
             $row = fgetcsv($file, 0, ';');
             if (is_array($row)) 
-                $output[] = $row;         
+                $csv_data[] = $row;         
         }
         fclose($file);
 
-        foreach($output as $index => $arr)
+        $output = [];
+        foreach($csv_data as $index => $arr)
         {
-            if ( $index == 0) {
+            if ($index !=0) {
+                $timestamp = 0;
 
-            } else {
+                if ( count($arr) < 3 ) continue;
+                foreach($arr as $key => $value) {
 
+                    if ($key == 1){
+                        $timestamp = strtotime( trim($arr[0]). " " . trim($arr[1]));
+                    } else if ($key !=0 && $key !=1) {
+                        if ( empty( $csv_data[0][$key] ) || empty( $value ) ) continue;
+
+                        $csv_trend_data = Csv_Trend_Data::create([
+                            'trend_group_id' => $trend_group->id,
+                            'timestamp' => $timestamp,
+                            'sensor_name' => $csv_data[0][$key],
+                            'sensor_value' => $value
+                        ]);
+                        if ($csv_trend_data) 
+                            $output[] = $csv_trend_data;
+                    }
+                }
             }
-            foreach($arr as $key => $value){
 
-            }
         }
+        return response()->json($output);
     }
+
 }
