@@ -190,7 +190,6 @@ class TrendGroupController extends Controller
         }
         fclose($file);
 
-        return $csv_data;
         $output = [];
         foreach($csv_data as $index => $arr)
         {
@@ -207,7 +206,7 @@ class TrendGroupController extends Controller
 
                         $csv_trend_data = Csv_Trend_Data::create([
                             'trend_group_id' => $trend_group->id,
-                            'timestamp' => date('Y-m-d H:i:s', strtotime($timestamp)),
+                            'timestamp' => date('Y-m-d H:i:s', $timestamp),
                             'sensor_name' => $csv_data[0][$key],
                             'sensor_value' => floatval ( str_replace(",", "", $value) )
                         ]);
