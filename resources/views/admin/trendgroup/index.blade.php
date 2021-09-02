@@ -176,6 +176,7 @@
                         item.updateloading = false;
                         if (err.response){
                             data = err.response.data;
+                            console.log(data);
                             toastr.error('Something went wrong');
                             console.log(err.response.status);
                             console.log(err.response.headers);
