@@ -59,6 +59,12 @@ trait TrendDataTrait
                                 'sensor_name' => $csv_data[0][$key],
                                 'sensor_value' => floatval ( str_replace(",", "", $value) )
                             ]);
+                        } else {
+                            $csv_trend_data->update([
+                                'timestamp' => date('Y-m-d H:i:s', $timestamp),
+                                'sensor_value' => floatval ( str_replace(",", "", $value) )
+                            ]);
+
                         }
                         if ($csv_trend_data)
                             $output[] = $csv_trend_data;
