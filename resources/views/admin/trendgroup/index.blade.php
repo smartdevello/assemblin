@@ -181,7 +181,7 @@
                             for (key in data.errors) {
                                 if (Array.isArray ( data.errors[key] )) {
                                     data.errors[key].forEach(element => {
-                                        msg += element;
+                                        msg += element + "\n";
                                     });
                                 }
                             }
