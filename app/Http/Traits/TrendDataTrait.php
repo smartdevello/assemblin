@@ -10,9 +10,11 @@ trait TrendDataTrait
     public function receive_csv_save_db(Request $request, $trend_group)
     {
                 
-        $filename = "myfile.csv";
+        $filename = sprintf("trend_group_%d.csv", $trend_group->id);
+        $to_time = time();
+        $from_time = $to_time() - $trend_group->query_period * 60;
         $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $filename ;
-        $command = sprintf($format, $request->controller_id, $request->trend_group_name, $request->from_time, $request->to_time);
+        $command = sprintf($format, $request->controller_id, $request->trend_group_name, $from_time, $to_time);
 
         if ( file_exists($filename ) ) {
             unlink($filename);
@@ -47,9 +49,7 @@ trait TrendDataTrait
 
                         $csv_trend_data = Csv_Trend_Data::where([
                             ['trend_group_id', '=' , $trend_group->id],
-                            ['timestamp', '=', date('Y-m-d H:i:s', $timestamp)],
                             ['sensor_name', '=', $csv_data[0][$key]],
-                            ['sensor_value', '=', floatval ( str_replace(",", "", $value) ) ],
                         ])->first();
 
                         if (!$csv_trend_data){
