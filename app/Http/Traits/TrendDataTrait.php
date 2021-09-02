@@ -17,7 +17,7 @@ trait TrendDataTrait
         //Convet it to milisecond;
         $from_time *=1000;
         $to_time *= 1000;
-        
+
         $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $filename ;
         $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
 
@@ -62,12 +62,12 @@ trait TrendDataTrait
                                 'trend_group_id' => $trend_group->id,
                                 'timestamp' => date('Y-m-d H:i:s', $timestamp),
                                 'sensor_name' => $csv_data[0][$key],
-                                'sensor_value' => floatval ( str_replace(",", "", $value) )
+                                'sensor_value' => round( floatval ( str_replace(",", ".", $value) ), 1)
                             ]);
                         } else {
                             $csv_trend_data->update([
                                 'timestamp' => date('Y-m-d H:i:s', $timestamp),
-                                'sensor_value' => floatval ( str_replace(",", "", $value) )
+                                'sensor_value' => round( floatval ( str_replace(",", ".", $value) ), 1)
                             ]);
 
                         }
