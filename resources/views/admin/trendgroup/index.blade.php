@@ -152,11 +152,31 @@
                         this.loading = false;
                         item.updateloading = false;
                         console.log(response);
+                        toastr.options = {
+                                "closeButton": false,
+                                "debug": false,
+                                "newestOnTop": false,
+                                "progressBar": false,
+                                "positionClass": "toast-bottom-center",
+                                "preventDuplicates": false,
+                                "onclick": null,
+                                "showDuration": "300",
+                                "hideDuration": "1000",
+                                "timeOut": "5000",
+                                "extendedTimeOut": "1000",
+                                "showEasing": "swing",
+                                "hideEasing": "linear",
+                                "showMethod": "fadeIn",
+                                "hideMethod": "fadeOut"
+                            };
+                        toastr.success('Updated Successfully');
+
                     }).catch(err => {
                         this.loading = false;
                         item.updateloading = false;
                         if (err.response){
-                            console.log(err.response.data);
+                            data = err.response.data;
+                            toastr.error('Something went wrong');
                             console.log(err.response.status);
                             console.log(err.response.headers);
                         }
