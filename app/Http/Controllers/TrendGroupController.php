@@ -208,7 +208,7 @@ class TrendGroupController extends Controller
                             'trend_group_id' => $trend_group->id,
                             'timestamp' => $timestamp,
                             'sensor_name' => $csv_data[0][$key],
-                            'sensor_value' => $value
+                            'sensor_value' => floatval ( str_replace(",", "", $value) )
                         ]);
                         if ($csv_trend_data) 
                             $output[] = $csv_trend_data;
