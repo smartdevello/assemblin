@@ -403,19 +403,19 @@ class LorawanController extends Controller
     }
     public function receive_csvfile()
     {
-        if (!isset($_GET['controller_id']) || !isset($_GET['trend_group_name']) ) 
+        if (!isset($_GET['controller_id']) || !isset($_GET['trend_group_name']) || !isset($_GET['query_period'])) 
             return response()->json([
                 'error' => 'Parameters are missing'
             ], 401);
 
-
+        $query_period = $_GET['query_period'];
         $controller_id = $_GET['controller_id'];
         $trend_group_name = $_GET['trend_group_name'];
 
         $filename = "myfile.csv";
         $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $filename ;
         $to_time = time();
-        $from_time = $to_time - 1440 * 60;
+        $from_time = $to_time - $query_period * 60;
         $from_time *= 1000;
         $to_time *= 1000;
         $command = sprintf($format, $controller_id, $trend_group_name, $from_time, $to_time);
