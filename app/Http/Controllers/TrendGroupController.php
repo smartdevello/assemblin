@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\TrendGroup;
 use Illuminate\Http\Request;
-use App\Models\Csv_Trend_Data;
 use App\Http\Traits\TrendDataTrait;
+use App\Models\HKA_Scheduled_JOb;
 
 class TrendGroupController extends Controller
 {
@@ -50,13 +50,19 @@ class TrendGroupController extends Controller
         ]);
       
         
-        TrendGroup::create([
+        $trend_group = TrendGroup::create([
             'controller_id' => $request->controller_id,
             'trend_group_name' => $request->trend_group_name,
             'location_name' =>  $request->location_name,
             'update_interval' => $request->update_interval,
             'query_period' => $request->query_period,
             
+        ]);
+
+        $job = HKA_Scheduled_JOb::create([
+            'job_name' => 'trend_group',
+            'job_id' => $trend_group->id,
+            'next_run' => date('Y-m-d H:i:s', time() + $trend_group->update_interval * 60)
         ]);
         return back()->with('success', 'Created successfully');
     }
@@ -116,7 +122,7 @@ class TrendGroupController extends Controller
                 'error' => 'not found',
             ], 404);
         }
-        
+
         $this->validate($request, [
             'controller_id' => 'required',
             'trend_group_name' => 'required',
@@ -135,6 +141,26 @@ class TrendGroupController extends Controller
        
 
         $trend_group->update($request->all());
+        $job = HKA_Scheduled_JOb::where([
+            ['job_name', '=' , 'trend_group'],
+            ['job_id', '=', $trend_group->id]
+        ])->first();
+
+        if ($job) {
+            $job->update([
+                'job_name' => 'trend_group',
+                'job_id' => $trend_group->id,
+                'next_run' => date('Y-m-d H:i:s', time() + $trend_group->update_interval * 60)
+            ]);
+        } else {
+            $job = HKA_Scheduled_JOb::create([
+                'job_name' => 'trend_group',
+                'job_id' => $trend_group->id,
+                'next_run' => date('Y-m-d H:i:s', time() + $trend_group->update_interval * 60)
+            ]);
+        }
+
+
         return response()->json([
             'success' => true
         ]);

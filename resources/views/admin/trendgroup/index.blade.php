@@ -176,7 +176,6 @@
                         item.updateloading = false;
                         if (err.response){
                             data = err.response.data;
-                            console.log(data);
                             msg = '';
                             for (key in data.errors) {
                                 if (Array.isArray ( data.errors[key] )) {
@@ -187,8 +186,6 @@
                             }
                             console.log(data.errors);
                             toastr.error(msg);
-                            // console.log(err.response.status);
-                            // console.log(err.response.headers);
                         }
                     });
 
