@@ -151,6 +151,7 @@
                     axios.post(url, item).then(response=>{
                         this.loading = false;
                         item.updateloading = false;
+                        console.log(response);
                     }).catch(err => {
                         this.loading = false;
                         item.updateloading = false;
