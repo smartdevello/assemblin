@@ -177,8 +177,16 @@
                         if (err.response){
                             data = err.response.data;
                             console.log(data);
+                            msg = '';
+                            for (item in data.errors) {
+                                if (Array.isArray ( item )) {
+                                    item.array.forEach(element => {
+                                        msg += element;
+                                    });
+                                }
+                            }
                             console.log(data.errors);
-                            toastr.error(data.errors.message);
+                            toastr.error(msg);
                             // console.log(err.response.status);
                             // console.log(err.response.headers);
                         }
