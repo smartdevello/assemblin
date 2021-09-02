@@ -163,6 +163,15 @@ class TrendGroupController extends Controller
     // Get csv file data and save it to csv_trend_data table
     public function receive_csv(Request $request)
     {
+
+        $this->validate($request, [
+            'controller_id' => 'required',
+            'trend_group_name' => 'required',
+        ], [
+            'controller_id.required' => "Controller ID should be provided.",
+            'trend_group_name.required' => "Trend group name should be provided.",
+        ]);
+
         $trend_group = TrendGroup::where([
             ['controller_id', '=' , $request->controller_id],
             ['trend_group_name', '=', $request->trend_group_name]
