@@ -19,7 +19,7 @@ class CreateTrendGroupsTable extends Migration
             $table->string('controller_id')->nullable();
             $table->string('trend_group_name')->nullable();
             $table->string('location_name')->nullable();
-            $table->unsignedBigInteger('update_interval')->nullable();
+            $table->bigInteger('update_interval')->nullable();
             $table->bigInteger('query_period')->nullable();
             $table->timestamps();
         });
