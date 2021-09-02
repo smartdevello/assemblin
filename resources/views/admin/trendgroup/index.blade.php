@@ -178,7 +178,7 @@
                             data = err.response.data;
                             console.log(data);
                             msg = '';
-                            for (item in data.errors) {
+                            for (item of data.errors) {
                                 if (Array.isArray ( item )) {
                                     item.array.forEach(element => {
                                         msg += element;
