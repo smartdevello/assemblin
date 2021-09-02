@@ -50,6 +50,9 @@ class HKA_Everymin_Job extends Command
                     $trend_group = TrendGroup::where('id', $job->job_id)->first();
                     if ($trend_group ) {
                         file_put_contents('cron.txt', "run it once\n", FILE_APPEND | LOCK_EX);
+                        $job->update([
+                            'next_run' => date('Y-m-d H:i:s', time() + $trend_group->update_interval * 60)
+                        ]);
                         // $this->receive_csv_save_db($trend_group);
                     } else {
                         $job->delete();
