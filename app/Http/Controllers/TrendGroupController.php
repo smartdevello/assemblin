@@ -37,15 +37,16 @@ class TrendGroupController extends Controller
             'controller_id' => 'required',
             'trend_group_name' => 'required',
             'location_name' => 'required',
-            'update_interval' => 'required',
-            'query_period' => 'required',
+            'update_interval' => 'required|integer',
+            'query_period' => 'required|integer',
         ], [
             'controller_id.required' => "Controller ID field can't be empty",
             'trend_group_name.required' => "Trend group name can't be empty",
             'location_name.required' => "Location name can't be empty",
             'update_interval.required' => "Must specify update interval",
-            'query_period.required' => "Must specify query period"
-
+            'update_interval.integer' => "Update interval must be integer",
+            'query_period.required' => "Must specify query period",
+            'query_period.integer' => "Query Period must be integer",
         ]);
       
         
@@ -115,20 +116,21 @@ class TrendGroupController extends Controller
                 'error' => 'not found',
             ], 404);
         }
-
+        
         $this->validate($request, [
             'controller_id' => 'required',
             'trend_group_name' => 'required',
             'location_name' => 'required',
-            'update_interval' => 'required',
-            'query_period' => 'required',
+            'update_interval' => 'required|integer',
+            'query_period' => 'required|integer',
         ], [
             'controller_id.required' => "Controller ID field can't be empty",
             'trend_group_name.required' => "Trend group name can't be empty",
             'location_name.required' => "Location name can't be empty",
             'update_interval.required' => "Must specify update interval",
-            'query_period.required' => "Must specify query period"
-
+            'update_interval.integer' => "Update interval must be integer",
+            'query_period.required' => "Must specify query period",
+            'query_period.integer' => "Query Period must be integer",
         ]);
        
 
@@ -182,7 +184,7 @@ class TrendGroupController extends Controller
                 'error' => "The Trend group does not exist on DB."
             ], 404);
         }
-        $output = $this->receive_csv_save_db($request, $trend_group);
+        $output = $this->receive_csv_save_db($trend_group);
         return response()->json($output);
     }
 
