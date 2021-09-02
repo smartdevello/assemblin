@@ -37,7 +37,7 @@ class HKA_Everymin_Job extends Command
      */
     public function handle()
     {
-        
+        file_put_contents('cron.txt', "run it once\n", FILE_APPEND | LOCK_EX);
         $this->info('Successfully run.');
     }
 }
