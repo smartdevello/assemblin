@@ -176,7 +176,8 @@
                         item.updateloading = false;
                         if (err.response){
                             data = err.response.data;
-                            // console.log(data);
+                            console.log(data);
+                            console.log(data.errors);
                             toastr.error(data.errors.message);
                             // console.log(err.response.status);
                             // console.log(err.response.headers);
