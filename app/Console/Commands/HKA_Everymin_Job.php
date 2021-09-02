@@ -2,7 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\HKA_Scheduled_JOb;
+use App\Models\TrendGroup;
 use Illuminate\Console\Command;
+use App\Http\Traits\TrendDataTrait;
 
 class HKA_Everymin_Job extends Command
 {
@@ -11,6 +14,7 @@ class HKA_Everymin_Job extends Command
      *
      * @var string
      */
+    use TrendDataTrait;
     protected $signature = 'hka_job:everymin';
 
     /**
@@ -37,7 +41,23 @@ class HKA_Everymin_Job extends Command
      */
     public function handle()
     {
-        file_put_contents('cron.txt', "run it once\n", FILE_APPEND | LOCK_EX);
+        // file_put_contents('cron.txt', "run it once\n", FILE_APPEND | LOCK_EX);
+        $all_jobs = HKA_Scheduled_JOb::all();
+        foreach($all_jobs as $job){
+            $next_run = strtotime( $job->next_run);
+            if ( time() < $next_run) {
+                if ($job->job_name == 'trend_group') {
+                    $trend_group = TrendGroup::where('id', $job->job_id)->first();
+                    if ($trend_group ) {
+                        file_put_contents('cron.txt', "run it once\n", FILE_APPEND | LOCK_EX);
+                        // $this->receive_csv_save_db($trend_group);
+                    } else {
+                        $job->delete();
+                    }
+                }
+                
+            }
+        }
         $this->info('Successfully run.');
     }
 }
