@@ -62,12 +62,12 @@ trait TrendDataTrait
                                 'trend_group_id' => $trend_group->id,
                                 'timestamp' => date('Y-m-d H:i:s', $timestamp),
                                 'sensor_name' => $csv_data[0][$key],
-                                'sensor_value' => round( floatval ( str_replace(",", ".", $value) ), 1)
+                                'sensor_value' => number_format(round( floatval ( str_replace(",", ".", $value) ), 1)  , 1, '.', '')
                             ]);
                         } else {
                             $csv_trend_data->update([
                                 'timestamp' => date('Y-m-d H:i:s', $timestamp),
-                                'sensor_value' => round( floatval ( str_replace(",", ".", $value) ), 1)
+                                'sensor_value' => number_format ( round( floatval ( str_replace(",", ".", $value) ), 1), 1, '.', '')
                             ]);
 
                         }
