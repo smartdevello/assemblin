@@ -72,7 +72,7 @@ Route::middleware(['cors'])->group(function(){
 
     
     Route::group(['prefix' => 'trendgroup'], function ($router) {        
-        Route::post('', [FoxeriotController::class, 'receive_csv'])->name('receive_csv');
+        Route::post('', [TrendGroupController::class, 'receive_csv'])->name('receive_csv');
 
     });
 });
