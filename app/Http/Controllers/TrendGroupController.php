@@ -190,6 +190,7 @@ class TrendGroupController extends Controller
         }
         fclose($file);
 
+        return $csv_data;
         $output = [];
         foreach($csv_data as $index => $arr)
         {
