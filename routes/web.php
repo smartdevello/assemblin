@@ -101,9 +101,8 @@ Route::post('/tokens/create', function (Request $request) {
     $user = $request->user();    
     $token = $user->createToken($request->token_name);
     $plainToken = $token->plainTextToken;
-
-    $token_id = $token->id;
     return $token;
+    $token_id = $token->id;    
     return [
         'id' => $token_id, 
         'plainToken' => $plainToken
