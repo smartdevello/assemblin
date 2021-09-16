@@ -128,7 +128,7 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function(){
     });
 
     Route::group(['prefix' => 'point'], function ($router) {
-        Route::get('', [PointController::class, 'getPoints'])->name('getPoints');
+        Route::get('getPoints', [PointController::class, 'getPoints'])->name('getPoints');
         Route::get('checkPoints', [PointController::class, 'checkPoints'])->name('checkPoints');
         
         Route::post('writePointstoLocalDB', [PointController::class, 'writePointstoLocalDB'])->name('writePointstoLocalDB');
