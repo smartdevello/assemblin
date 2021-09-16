@@ -23,7 +23,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware(['cors'])->group(function(){
+Route::middleware(['cors', 'auth:sanctum'])->group(function(){
 
     Route::group(['prefix' => 'dashboard'], function ($router) {
         Route::post('update', [DashboardController::class, 'update'])->name('update_dashboard');
@@ -73,12 +73,6 @@ Route::middleware(['cors'])->group(function(){
 
     
     Route::group(['prefix' => 'trendgroup'], function ($router) {        
-        Route::post('', [TrendGroupController::class, 'receive_csv'])->name('receive_csv');
-
+        Route::post('/receive_csv', [TrendGroupController::class, 'receive_csv'])->name('receive_csv');
     });
-
-
-});
-Route::middleware('auth:sanctum')->get('/test', function() {
-    return 'Hello World';
 });
