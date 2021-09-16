@@ -110,5 +110,8 @@ Route::post('/tokens/create', function (Request $request) {
     ]);
     return redirect()->route('setting_index');
 });
+Route::middleware('auth:sanctum')->get('/test', function() {
+    return 'Hello World';
+});
 
 require __DIR__.'/auth.php';
