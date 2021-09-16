@@ -79,6 +79,3 @@ Route::middleware(['cors'])->group(function(){
 
 
 });
-Route::middleware('auth:sanctum')->get('/test', function() {
-    return 'Hello World';
-});
