@@ -32,7 +32,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['au
 Route::get('/lora', [LorawanController::class, 'index'])->middleware(['auth'])->name('lorawan');
 
 // Route::get('/setting', '\App\Http\Controllers\DashboardController@setting_index')->middleware(['auth']);
-Route::group(['prefix' => 'setting', 'middleware' => 'auth'], function ($router) {
+Route::group(['prefix' => '/setting', 'middleware' => 'auth'], function ($router) {
     Route::get('', [SettingController::class, 'setting_index'])->name('setting_index');
     Route::post('update_device_interval', [SettingController::class, 'update_device_interval'])->name('update_device_interval');
     
@@ -98,8 +98,9 @@ Route::group(['prefix' => 'trendgroup', 'middleware' => 'auth'], function ($rout
 });
 
 Route::post('/tokens/create', function (Request $request) {
-    $user = $request->user();
+    $user = $request->user();    
     $token = $user->createToken($request->token_name);
+    return ['token' => $token->plainTextToken];
     return redirect()->route('setting_index');
 });
 
