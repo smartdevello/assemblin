@@ -91,7 +91,7 @@
 
 @section('script')
     <script>
-
+        var token = '{!! csrf_token() !!}';
         var sensors_raw = <?php echo json_encode($sensors); ?>;
         const main_vm = new Vue({
             el: '#app',
@@ -176,7 +176,7 @@
                         "method": "POST",
                         "timeout": 0,
                         "headers": {
-                            "Content-Type": "application/json"
+                            "Content-Type": "application/json",
                         },
                         "data": JSON.stringify(submitdata),
                     };
@@ -242,7 +242,8 @@
                             "method": "POST",
                             "timeout": 0,
                             "headers": {
-                                "Content-Type": "application/json"
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": token,
                             },
                             "data": JSON.stringify(submitdata),
                     };
