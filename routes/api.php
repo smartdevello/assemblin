@@ -76,4 +76,8 @@ Route::middleware(['cors'])->group(function(){
         Route::post('', [TrendGroupController::class, 'receive_csv'])->name('receive_csv');
 
     });
+
+    Route::middleware('auth:sanctum')->get('/test', function() {
+        return 'Hello World';
+    });
 });
