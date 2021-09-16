@@ -4,6 +4,7 @@ use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DEOS_controllerController;
 use App\Http\Controllers\DEOS_pointController;
+use App\Http\Controllers\PointController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LorawanController;
 use App\Http\Controllers\SettingController;
@@ -140,18 +141,18 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function(){
     });    
 
     Route::group(['prefix' => 'trend'], function ($router) {
-        Route::get('', [PointController::class, 'getTrends'])->name('getTrends');
+        Route::get('getTrends', [PointController::class, 'getTrends'])->name('getTrends');
         // Route::post('values',  [PointController::class, 'getTrendValues'])->name('getTrendValues');
     });
 
     Route::group(['prefix' => 'sensor'], function ($router) {
-        Route::get('', [FoxeriotController::class, 'getSensors'])->name('getSensors');
+        Route::get('getSensors', [FoxeriotController::class, 'getSensors'])->name('getSensors');
         Route::post('updatePoints', [FoxeriotController::class, 'updateSensorsPoint'])->name('updateSensorsPoint');
 
     });
 
     Route::group(['prefix' => 'observation'], function ($router) {
-        Route::get('', [FoxeriotController::class, 'getObservations'])->name('getObservations');      
+        Route::get('getObservations', [FoxeriotController::class, 'getObservations'])->name('getObservations');      
 
     });
 
