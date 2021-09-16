@@ -177,6 +177,7 @@
                         "timeout": 0,
                         "headers": {
                             "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": token,
                         },
                         "data": JSON.stringify(submitdata),
                     };
@@ -313,7 +314,8 @@
                             "method": "PUT",
                             "timeout": 0,
                             "headers": {
-                                "Content-Type": "application/json"
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": token,
                             },
                             "data": JSON.stringify(data),
                         };
