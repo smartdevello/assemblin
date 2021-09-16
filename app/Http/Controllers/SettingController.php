@@ -96,9 +96,7 @@ class SettingController extends Controller
             $all_tokens[] = [
                 "id" => $token->id,
                 "name" => $token->name,
-                "plainTextToken" => $token->token,
-                "abilities" => $token->abilities,
-                "last_used_at" => $token->last_used_at,
+                "plainTextToken" => $token->plainTextToken,
             ];
         }
         return view('admin.setting', [
