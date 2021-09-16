@@ -36,7 +36,7 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function(){
     });
 
     Route::group(['prefix' => 'point'], function ($router) {
-        Route::get('', [PointController::class, 'getPoints'])->name('getPoints');
+        Route::get('getPoints', [PointController::class, 'getPoints'])->name('getPoints');
         Route::get('checkPoints', [PointController::class, 'checkPoints'])->name('checkPoints');
         
         Route::post('writePointstoLocalDB', [PointController::class, 'writePointstoLocalDB'])->name('writePointstoLocalDB');
@@ -48,18 +48,18 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function(){
     });    
 
     Route::group(['prefix' => 'trend'], function ($router) {
-        Route::get('', [PointController::class, 'getTrends'])->name('getTrends');
+        Route::get('getTrends', [PointController::class, 'getTrends'])->name('getTrends');
         // Route::post('values',  [PointController::class, 'getTrendValues'])->name('getTrendValues');
     });
 
     Route::group(['prefix' => 'sensor'], function ($router) {
-        Route::get('', [FoxeriotController::class, 'getSensors'])->name('getSensors');
+        Route::get('getSensors', [FoxeriotController::class, 'getSensors'])->name('getSensors');
         Route::post('updatePoints', [FoxeriotController::class, 'updateSensorsPoint'])->name('updateSensorsPoint');
 
     });
 
     Route::group(['prefix' => 'observation'], function ($router) {
-        Route::get('', [FoxeriotController::class, 'getObservations'])->name('getObservations');      
+        Route::get('getObservations', [FoxeriotController::class, 'getObservations'])->name('getObservations');      
 
     });
 
@@ -72,7 +72,7 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function(){
     });
 
     
-    Route::group(['prefix' => 'trendgroup'], function ($router) {        
+    Route::group(['prefix' => 'trendgroup'], function ($router) {  
         Route::post('/receive_csv', [TrendGroupController::class, 'receive_csv'])->name('receive_csv');
     });
 });
