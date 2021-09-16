@@ -162,6 +162,7 @@
             this.createTokenUrl = `${prefix_link}/tokens/create`;
             console.log(this.devices);
             console.log(this.alltypes);
+            console.log(this.all_tokens);
         },
         methods: {        
             changeDevice: function(deviceId){
