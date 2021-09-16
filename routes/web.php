@@ -100,7 +100,7 @@ Route::group(['prefix' => 'trendgroup', 'middleware' => 'auth'], function ($rout
 Route::post('/tokens/create', function (Request $request) {
     $user = $request->user();    
     $token = $user->createToken($request->token_name);
-    return ['token' => $token->plainTextToken];
+    $plainToken = $token->plainTextToken;
     return redirect()->route('setting_index');
 });
 
