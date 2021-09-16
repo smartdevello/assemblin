@@ -105,8 +105,8 @@
                 controllers: ( <?php echo json_encode($controllers); ?> ),
                 areas: ( <?php echo json_encode($areas); ?> ),
                 is_relation_updating: false,
-                update_dashboard_url : `${prefix_link}/api/dashboard/update`,
-                send_data_url : `${base_url}/api/point/writePointsbyid`,
+                update_dashboard_url : `${prefix_link}/dashboard/update`,
+                send_data_url : `${base_url}/point/writePointsbyid`,
 
                 headers: [
                     {
@@ -172,7 +172,7 @@
                     }
 
                     var settings = {
-                        "url": base_url + "/api/point/writePointsbyid",
+                        "url": base_url + "/point/writePointsbyid",
                         "method": "POST",
                         "timeout": 0,
                         "headers": {
@@ -308,7 +308,7 @@
                     if (data.length > 0) {
 
                         var settings = {
-                            "url": base_url + "/api/points/writepointsbyid",
+                            "url": base_url + "/points/writepointsbyid",
                             "method": "PUT",
                             "timeout": 0,
                             "headers": {
