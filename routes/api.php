@@ -73,6 +73,6 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function(){
 
     
     Route::group(['prefix' => 'trendgroup'], function ($router) {  
-        Route::post('/receive_csv', [TrendGroupController::class, 'receive_csv'])->name('receive_csv');
+        Route::post('', [TrendGroupController::class, 'receive_csv'])->name('receive_csv');
     });
 });
