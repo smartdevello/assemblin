@@ -236,7 +236,7 @@
                             "area_id" : sensor.area_id
                         });
                     }
-
+                    console.log(submitdata);
                     var settings = {
                             "url": this.update_dashboard_url,
                             "method": "POST",
