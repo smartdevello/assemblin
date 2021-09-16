@@ -23,7 +23,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware(['cors', 'auth:sanctum'])->group(function(){
+Route::middleware(['cors'])->group(function(){
 
     Route::group(['prefix' => 'dashboard'], function ($router) {
         Route::post('update', [DashboardController::class, 'update'])->name('update_dashboard');
