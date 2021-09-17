@@ -108,7 +108,9 @@
                                         </v-card>
                                     </v-form>
                                 </v-dialog>
+                                <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on" class="ma-3">Remove Selected</v-btn>
                             </div>
+
                         </v-card>
                       </template>
         </v-container>
