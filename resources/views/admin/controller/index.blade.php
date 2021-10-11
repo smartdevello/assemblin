@@ -33,7 +33,7 @@
             <v-row>
                 <template>
                     <div class="text-center">
-                        <v-dialog v-model="openNew" width="500">
+                        <v-dialog v-model="openNew" width="500" height="700">
                             <template v-slot:activator="{ on, attrs }">
                                 <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on" class="ma-3">Add</v-btn>
                             </template>
