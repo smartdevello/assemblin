@@ -85,7 +85,7 @@ class DEOS_controllerController extends Controller
     {
         $controller = DEOS_controller::where('id', $id)->first();
         if (!isset($controller->longitude))  $controller->longitude = "";
-        
+
         $buildings = Building::all();
         foreach($buildings as $building) $building->location;
         $points = $controller->points;
@@ -104,7 +104,7 @@ class DEOS_controllerController extends Controller
         }
 
         $this->validate($request, [
-            'name' => 'required|unique:deos_controllers,name',
+            'name' => 'required',
             'ip_address' => 'required',
             // 'port_number' => 'required',
             'building_id' => 'required',
@@ -112,7 +112,7 @@ class DEOS_controllerController extends Controller
             'latitude' => 'numeric|between:-90.00,90.00'
         ],[
             'name.required' => "Name field can't be empty",
-            'name.unique' => sprintf("The Controller \"%s\" already exists", $request->name),
+            // 'name.unique' => sprintf("The Controller \"%s\" already exists", $request->name),
             'ip_address.required' => "IP Address can't be empty",
             // 'port_number.required' => "Port Number can't be empty",
             'building_id.required' => 'Controller must be belonged to a Building',
