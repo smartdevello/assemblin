@@ -23,7 +23,7 @@ class DEOS_pointController extends Controller
     public function index()
     {
         //
-        $points = DEOS_point::all();
+        $points = DEOS_point::where('meta_type', '!=', 'weather_forcast')->get();
         foreach($points as $point) {
             $point->controller;
             $point->area;
