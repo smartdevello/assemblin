@@ -87,9 +87,13 @@
                 }
             },
             mounted: function(){
-                for(let controller of this.controllers) {
+                for (let controller of this.controllers) {
                     if (!controller.building) {
                         controller.building = {};
+                    }
+                    for (index = 0; index < controller.points.length(); index++)
+                    {
+                        controller.points.splice(index, 1);
                     }
                 }
 
