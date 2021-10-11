@@ -84,7 +84,6 @@ class DEOS_controllerController extends Controller
     public function show($id)
     {
         $controller = DEOS_controller::where('id', $id)->first();
-        if (!isset($controller->longitude))  $controller->longitude = "";
 
         $buildings = Building::all();
         foreach($buildings as $building) $building->location;
