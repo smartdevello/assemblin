@@ -84,8 +84,9 @@ class HKA_Everymin_Job extends Command
                                 //Skip first or last data among 50 , so we need only middle 48 data
                                 if ($index == 0 || $index == 49) continue;
 
-                                $label = sprintf('fmi.f:I%03d', $index + $dataset_index * 100);
-                                                                
+                                if ($dataset_index == 0)  $label = sprintf('fmi.f:I%02d', $index);
+                                else $label = sprintf('fmi.f:I%03d', $index + $dataset_index * 100);
+
                                 $point = DEOS_point::where([
                                     ['name', '=' , $key . $index],
                                     ['label', '=', $label]
