@@ -27,8 +27,8 @@
                                     <v-text-field v-model="controller.port_number" label="Port Number" name="port_number" required readonly></v-text-field>
                                     <v-select :items="buildings" label="Select a Building" name="building_id" v-model="currentBuilding" item-text="name" item-value="id" solo required></v-select>
 
-                                    <v-text-field  v-model="controller.longitude" label="Longitude" name="longitude"></v-text-field>
-                                    <v-text-field  v-model="controller.latitude" label ="Latitude" name="latitude"></v-text-field>
+                                    <v-text-field  v-model="controller.longitude" label="Longitude (Optional)" name="longitude"></v-text-field>
+                                    <v-text-field  v-model="controller.latitude" label ="Latitude (Optional)" name="latitude"></v-text-field>
                                 </v-card-text>
 
                                 <v-card-actions>
