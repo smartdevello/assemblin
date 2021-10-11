@@ -183,6 +183,11 @@ class TrendGroupController extends Controller
             ], 404);
         }
         $row->delete();
+
+        $row = HKA_Scheduled_JOb::where('job_id', $id)->first();
+        if ($row){
+            $row->delete();
+        }
         return response()->json([
             'success' => true
         ]);

@@ -13,7 +13,7 @@ class DEOS_controller extends Model
     protected $table = 'deos_controllers';
 
     protected $fillable = [
-        'name', 'ip_address', 'port_number', 'building_id'
+        'name', 'ip_address', 'port_number', 'building_id', 'longitude', 'latitude'
     ];
 
     public function building()
