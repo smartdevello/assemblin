@@ -83,17 +83,18 @@ class HKA_Everymin_Job extends Command
                             foreach($data as $index => $item){
                                 //Skip first or last data among 50 , so we need only middle 48 data
                                 if ($index == 0 || $index == 49) continue;
-                                $label = sprintf('fmi.f:I%03d', $index + $dataset_index * 100);
 
+                                $label = sprintf('fmi.f:I%03d', $index + $dataset_index * 100);
+                                                                
                                 $point = DEOS_point::where([
-                                    ['name', '=' , $key],
+                                    ['name', '=' , $key . $index],
                                     ['label', '=', $label]
                                 ])->first();
 
                                 if ($point !=null) {
 
                                     $point->update([
-                                        'name' => $key,
+                                        'name' => $key . $index,
                                         'label' => $label, 
                                         'type' => 'FL',
                                         'value' => $item['value'],
@@ -104,7 +105,7 @@ class HKA_Everymin_Job extends Command
                                 } else {
 
                                     DEOS_point::create([
-                                        'name' => $key,
+                                        'name' => $key . $index,
                                         'label' => $label, 
                                         'type' => 'FL',
                                         'value' => $item['value'],
