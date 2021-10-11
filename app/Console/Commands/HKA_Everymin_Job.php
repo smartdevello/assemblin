@@ -74,7 +74,8 @@ class HKA_Everymin_Job extends Command
                         ]);
 
                         //perform relevant actions
-                        $forecast_data = $this->getWeatherData();
+
+                        $forecast_data = $this->getWeatherData($controller->longitude, $controller->latitude);
                         //Create or Update Weather Points (Actually DEOS Points)
                         $dataset_index = 0;
                         foreach ($forecast_data as $key => $data)
