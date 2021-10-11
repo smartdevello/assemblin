@@ -441,6 +441,44 @@ trait AssemblinInit {
         }
     }
 
+    public function sendWeatherForcasttoDEOS(){
+        $points = DEOS_point::where('meta_type', '=', 'weather_forcast')->get();
+        $data = [];
+        foreach ($points as $point)
+        {
+            array_push($data, array("id" => $point->name, "value" => strval($point->value)));
+        }
+        
+        $ch = curl_init();
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => 'https://172.21.8.245:8000/assemblin/points/writebyid',
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_CUSTOMREQUEST => "PUT",
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "Accept: application/json"
+            ),
+        ));
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            curl_close($ch);
+            return response()->json([
+                'error' => curl_error($ch)
+            ], 403);
+        }
+
+        curl_close($ch);
+
+        return response()->json([
+            'success' => $result,
+            'data' => $data
+        ], 200);     
+    }
     public function automatic_update()
     {
         $this->getSensors();
