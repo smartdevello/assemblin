@@ -6,6 +6,11 @@ use App\Models\HKA_Scheduled_JOb;
 use App\Models\TrendGroup;
 use Illuminate\Console\Command;
 use App\Http\Traits\TrendDataTrait;
+use App\Http\Traits\WeatherForcastTrait;
+use App\Http\Traits\AssemblinInit;
+
+use App\Models\DEOS_controller;
+use App\Models\DEOS_point;
 
 class HKA_Everymin_Job extends Command
 {
@@ -15,6 +20,9 @@ class HKA_Everymin_Job extends Command
      * @var string
      */
     use TrendDataTrait;
+    use AssemblinInit;
+    use WeatherForcastTrait;
+
     protected $signature = 'hka_job:everymin';
 
     /**
@@ -56,6 +64,67 @@ class HKA_Everymin_Job extends Command
                     } else {
                         $job->delete();
                     }
+                } else if ( $job->job_name == 'weather_forecast') {
+                    //Check if the controller exists for weather_forcast
+                    $controller = DEOS_controller::where('id', $job->job_id)->first();
+                    if ($controller && isset($controller->longitude) && isset($controller->latitude)) {
+                        // Update Job next schedule time
+                        $job->update([
+                            'next_run' => date('Y-m-d H:i:s', time() + 3600)
+                        ]);
+
+                        //perform relevant actions
+                        $forecast_data = $this->getWeatherData();
+                        //Create or Update Weather Points (Actually DEOS Points)
+                        $dataset_index = 0;
+                        foreach ($forecast_data as $key => $data)
+                        {
+                            foreach($data as $index => $item){
+                                //Skip first or last data among 50 , so we need only middle 48 data
+                                if ($index == 0 || $index == 49) continue;
+                                $label = sprintf('fmi.f:I%03d', $index + $dataset_index * 100);
+
+                                $point = DEOS_point::where([
+                                    ['name', '=' , $key],
+                                    ['label', '=', $label]
+                                ])->first();
+
+                                if ($point !=null) {
+
+                                    $point->update([
+                                        'name' => $key,
+                                        'label' => $label, 
+                                        'type' => 'FL',
+                                        'value' => $item['value'],
+                                        'controller_id' => $controller->id,
+                                        'meta_type' => 'weather_forcast'                                    
+                                    ]);
+
+                                } else {
+
+                                    DEOS_point::create([
+                                        'name' => $key,
+                                        'label' => $label, 
+                                        'type' => 'FL',
+                                        'value' => $item['value'],
+                                        'controller_id' => $controller->id,
+                                        'meta_type' => 'weather_forcast'                                    
+                                    ]);
+
+                                }
+
+                            }
+                            $dataset_index++;
+                        }
+                    } else {
+                        $job->delete();
+                    }
+                } else if ($job->job_name  == "automatic_update"){
+
+                    $job->update([
+                        'next_run' => date('Y-m-d H:i:s', time() + 5 * 60)
+                    ]);
+                    $this->automatic_update();
                 }
                 
             }

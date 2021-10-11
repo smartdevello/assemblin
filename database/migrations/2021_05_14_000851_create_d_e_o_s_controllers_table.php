@@ -19,6 +19,8 @@ class CreateDEOSControllersTable extends Migration
             $table->text('name')->nullable();
             $table->string('ip_address')->nullable();
             $table->string('port_number')->nullable();
+            $table->float('longitude')->nullable();
+            $table->float('latitude')->nullable();
 
             $table->unsignedBigInteger('building_id')->nullable();
             $table->foreign('building_id')->references('id')->on('buildings')->onDelete('cascade');

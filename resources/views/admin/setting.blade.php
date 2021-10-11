@@ -90,7 +90,7 @@
                             <div class="text-center">
                                 <v-dialog v-model="openNewTokenForm" width="500">
                                     <template v-slot:activator="{ on, attrs }">
-                                        <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on" class="ma-3">Add</v-btn>
+                                        <v-btn color="green lighten-2" dark v-bind="attrs" v-on="on" class="ma-3">Add</v-btn>
                                     </template>
         
                                     <v-form :action="createTokenUrl" method="POST" id="create_token_form">

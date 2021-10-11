@@ -3,6 +3,7 @@
 namespace App\Http\Traits;
 
 use App\Models\Sensor;
+use App\Models\Area;
 use Illuminate\Http\Request;
 use App\Models\DEOS_controller;
 use App\Models\DEOS_point;
@@ -438,5 +439,57 @@ trait AssemblinInit {
                 'error' => 'Something went wrong!'
             ], 404);
         }
+    }
+
+    public function automatic_update()
+    {
+        $this->getSensors();
+        $sensors = Sensor::all();
+        $data = [];
+
+        foreach($sensors as $sensor) {
+            $point = $sensor->point;
+            if ($point) {
+                if ($point->controller_id) {
+                    $controller = DEOS_controller::where('id', $point->controller_id)->first();
+                    $sensor->controller_id = $controller->id;
+                }
+                if ( $point->area_id) {
+                    $area = Area::where('id', $point->area_id)->first();
+                    $sensor->area_id = $area->id;
+                }
+                array_push($data, array("id" => $point->name, "value" => strval($sensor->value)));
+            }
+        }
+
+        $ch = curl_init();
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => 'https://172.21.8.245:8000/assemblin/points/writebyid',
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_CUSTOMREQUEST => "PUT",
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "Accept: application/json"
+            ),
+        ));
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        $result = curl_exec($ch);
+        if (curl_errno($ch)) {
+            curl_close($ch);
+            return response()->json([
+                'error' => curl_error($ch)
+            ], 403);
+        }
+
+        curl_close($ch);
+
+        return response()->json([
+            'success' => $result,
+            'data' => $data
+        ], 200);        
     }
 }

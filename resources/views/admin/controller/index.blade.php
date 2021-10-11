@@ -48,8 +48,10 @@
                                     <v-text-field placeholder="Name" name="name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
                                     <v-text-field placeholder="IP Address" name="ip_address" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
                                     <v-text-field placeholder="Port Number" name="port_number" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]" readonly :value="nextId + 8000"></v-text-field>
-                                    <v-select :items="buildings" label="Select A Building" name="building_id" item-text="name" item-value="id" solo required>
+                                    <v-select :items="buildings" label="Select A Building" name="building_id" item-text="name" item-value="id" solo required>                                        
                                     </v-select>
+                                    <v-text-field placeholder="Longitude (Optional)" name="longitude" class="pa-2" ></v-text-field>
+                                    <v-text-field placeholder="Laitude (Optional)" name="latitude" class="pa-2" ></v-text-field>
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
                                         <v-btn color="primary" text type="submit" form="create-form">Submit</v-btn>
