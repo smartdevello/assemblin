@@ -24,6 +24,6 @@ class DEOS_controller extends Model
     public function points()
     {
         
-        return $this->hasMany(DEOS_point::class, 'controller_id', 'id')->where('deos_points.meta_type', '!=', 'weather_forcast');
+        return $this->hasMany(DEOS_point::class, 'controller_id', 'id');
     }
 }
