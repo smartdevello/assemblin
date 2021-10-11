@@ -146,6 +146,8 @@
                 this.removePointsUrl = `${prefix_link}/controller/${this.controller.id}/remove-points`;
                 this.importPointsUrl = `${prefix_link}/controller/${this.controller.id}/import-points`;
 
+                if (this.longitude == null) this.longitude = "";
+                if (this.latitude == null) this.latitude = "";
                 for (let building of this.buildings) {
                     building.name = building.name + " ( " + building.location.name + " ) ";
                 }
