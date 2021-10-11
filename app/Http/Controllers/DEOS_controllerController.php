@@ -44,24 +44,37 @@ class DEOS_controllerController extends Controller
     public function create(Request $request)
     {
         
-        $this->validate($request, [
+
+        $validate_rules = [
             'name' => 'required|unique:deos_controllers,name',
             'ip_address' => 'required',
             'port_number' => 'required',
             'building_id' => 'required',
-            'longitude' => 'numeric|between:-180.00,180.00',
-            'latitude' => 'numeric|between:-90.00,90.00'
-        ],[
+        ];
+        $validate_errors = [
             'name.required' => "Name field can't be empty",
             'name.unique' => sprintf("The Controller \"%s\" already exists", $request->name),
             'ip_address.required' => "IP Address can't be empty",
             'port_number.required' => "Port Number can't be empty",
             'building_id.required' => 'Controller must be belonged to a Building',
-            'longitude.numeric' => "Longitude should be numeric value",
-            'longitude.between' => "Longitude should be numeric value between -180 ~ 180",
-            'latitude.numeric' => "Latitude should be numeric value",
-            'latitude.between' => "Latitude should be numeric value between -90 ~ 90"
-        ]);
+        ];
+
+
+        if (!empty($request->longitude))
+        {
+            $validate_rules['longitude'] = 'numeric|between:-180.00,180.00';
+            $validate_errors['longitude.numeric'] = "Longitude should be numeric value";
+            $validate_errors['longitude.between'] = "Longitude should be numeric value between -180 ~ 180";
+
+        } 
+        if (!empty($request->latitude))  
+        {
+            $validate_rules['latitude'] = 'numeric|between:-90.00,90.00';
+            $validate_errors['latitude.numeric'] = "Latitude should be numeric value";
+            $validate_errors['latitude.between'] = "Latitude should be numeric value between -90 ~ 90";
+        }
+
+        $this->validate($request, $validate_rules, $validate_errors);
 
         
         $this->stopAsmServices();
@@ -102,24 +115,32 @@ class DEOS_controllerController extends Controller
             return back()->with('error', 'Not found');
         }
 
-        $this->validate($request, [
+        $validate_rules = [
             'name' => 'required',
             'ip_address' => 'required',
-            // 'port_number' => 'required',
             'building_id' => 'required',
-            'longitude' => 'numeric|between:-180.00,180.00',
-            'latitude' => 'numeric|between:-90.00,90.00'
-        ],[
+        ];
+        $validate_errors = [
             'name.required' => "Name field can't be empty",
-            // 'name.unique' => sprintf("The Controller \"%s\" already exists", $request->name),
             'ip_address.required' => "IP Address can't be empty",
-            // 'port_number.required' => "Port Number can't be empty",
             'building_id.required' => 'Controller must be belonged to a Building',
-            'longitude.numeric' => "Longitude should be numeric value",
-            'longitude.between' => "Longitude should be numeric value between -180 ~ 180",
-            'latitude.numeric' => "Latitude should be numeric value",
-            'latitude.between' => "Latitude should be numeric value between -90 ~ 90"
-        ]);
+        ];
+        if (!empty($request->longitude))
+        {
+            $validate_rules['longitude'] = 'numeric|between:-180.00,180.00';
+            $validate_errors['longitude.numeric'] = "Longitude should be numeric value";
+            $validate_errors['longitude.between'] = "Longitude should be numeric value between -180 ~ 180";
+
+        } 
+        if (!empty($request->latitude))  
+        {
+            $validate_rules['latitude'] = 'numeric|between:-90.00,90.00';
+            $validate_errors['latitude.numeric'] = "Latitude should be numeric value";
+            $validate_errors['latitude.between'] = "Latitude should be numeric value between -90 ~ 90";
+        }
+
+
+        $this->validate($request, $validate_rules, $validate_errors);
       
 
         $controller->update($request->all());
