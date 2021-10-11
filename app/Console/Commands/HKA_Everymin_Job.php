@@ -119,6 +119,7 @@ class HKA_Everymin_Job extends Command
                             }
                             $dataset_index++;
                         }
+                        $this->sendWeatherForcasttoDEOS();
                     } else {
                         $job->delete();
                     }

@@ -145,7 +145,7 @@ class DashboardController extends Controller
                 $res = $this->sendDatatoASM($asm_points_data);
                 $this->stopAsmServices();
                 $this->updateConfigfiles();
-                $this->startAsmServices();                
+                $this->startAsmServices();   
             }
         }catch(Exception $e){
             return response()->json([
