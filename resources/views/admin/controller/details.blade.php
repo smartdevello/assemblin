@@ -26,7 +26,7 @@
                                     <v-text-field v-model="controller.ip_address" label="IP Address" name="ip_address" required></v-text-field>
                                     <v-text-field v-model="controller.port_number" label="Port Number" name="port_number" required readonly></v-text-field>
                                     <v-select :items="buildings" label="Select a Building" name="building_id" v-model="currentBuilding" item-text="name" item-value="id" solo required></v-select>
-                                    <v-checkbox v-model="controller.enable_weather_forcast" :value="controller.enable_weather_forcast == 'true'?1:0" label="Enable Weather Forcast" name="enable_weather_forcast"></v-checkbox>
+                                    <v-checkbox v-model="controller.enable_weather_forcast" :value="controller.enable_weather_forcast == true?1:0" label="Enable Weather Forcast" name="enable_weather_forcast"></v-checkbox>
                                     
                                     <v-text-field v-show="controller.enable_weather_forcast"  v-model="controller.longitude" label="Longitude (Optional)" name="longitude"></v-text-field>
                                     <v-text-field v-show="controller.enable_weather_forcast"  v-model="controller.latitude" label ="Latitude (Optin" name="latitude"></v-text-field>
