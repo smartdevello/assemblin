@@ -151,10 +151,10 @@ class DEOS_controllerController extends Controller
             'latitude' => $request->latitude,
             'enable_weather_forcast' => isset($request->enable_weather_forcast)?true: false,
         ]);
-        // $this->stopAsmServices();
-        // $this->updateConfigfiles();
-        // $this->startAsmServices();
-        return back()->with('success', json_encode($request->all()));
+        $this->stopAsmServices();
+        $this->updateConfigfiles();
+        $this->startAsmServices();
+        return back()->with('success', 'Updated Successfully');
     }
 
     public function destroy($id)
