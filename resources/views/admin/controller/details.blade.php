@@ -149,6 +149,14 @@
                 for (let building of this.buildings) {
                     building.name = building.name + " ( " + building.location.name + " ) ";
                 }
+                
+                index = this.controller.points.length - 1;
+                    while (index >= 0) {
+                        if (this.controller.points[index].meta_type == 'weather_forcast') {
+                            this.controller.points.splice(index, 1);
+                        }
+                        index -= 1;
+                    }
             },
             methods: {
                 exportPoints: function() {
