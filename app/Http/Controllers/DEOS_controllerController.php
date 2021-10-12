@@ -141,12 +141,16 @@ class DEOS_controllerController extends Controller
 
 
         $this->validate($request, $validate_rules, $validate_errors);
-      
-        if (isset($request->enable_weather_forcast)) 
-            $request->enable_weather_forcast = 1;
-        else $request->enable_weather_forcast = 0;
 
-        $controller->update($request->all());
+        $controller->update([
+            'name' => $request->name,
+            'ip_address' => $request->ip_address,
+            'port_number' => $request->port_number,
+            'building_id' => $request->building_id,
+            'longitude' => $request->longitude,
+            'latitude' => $request->latitude,
+            'enable_weather_forcast' => isset($request->enable_weather_forcast)?true: false,
+        ]);
         // $this->stopAsmServices();
         // $this->updateConfigfiles();
         // $this->startAsmServices();
