@@ -28,7 +28,7 @@
                                     <v-select :items="buildings" label="Select a Building" name="building_id" v-model="currentBuilding" item-text="name" item-value="id" solo required></v-select>
 
                                     <v-text-field  v-model="controller.longitude" label="Longitude (Optional)" name="longitude"></v-text-field>
-                                    <v-text-field  v-model="controller.latitude" label ="Latitude (Optional)" name="latitude"></v-text-field>
+                                    <v-text-field  v-model="controller.latitude" label ="Latitude (Optin" name="latitude"></v-text-field>
                                 </v-card-text>
 
                                 <v-card-actions>
