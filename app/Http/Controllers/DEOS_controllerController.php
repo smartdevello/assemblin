@@ -147,10 +147,10 @@ class DEOS_controllerController extends Controller
         else $request->enable_weather_forcast = 0;
 
         $controller->update($request->all());
-        $this->stopAsmServices();
-        $this->updateConfigfiles();
-        $this->startAsmServices();
-        return back()->with('success', 'Updated successfully');
+        // $this->stopAsmServices();
+        // $this->updateConfigfiles();
+        // $this->startAsmServices();
+        return back()->with('success', json_encode($request->all()));
     }
 
     public function destroy($id)
