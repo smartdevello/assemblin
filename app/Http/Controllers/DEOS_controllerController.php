@@ -151,6 +151,9 @@ class DEOS_controllerController extends Controller
             'latitude' => $request->latitude,
             'enable_weather_forcast' => isset($request->enable_weather_forcast)?true: false,
         ]);
+        if (isset($request->enable_weather_forcast)) {
+            DB::table('hka_scheduled_jobs')->where('job_name', 'weather_forecast')->update(['job_id' => $controller->id]);
+        }
         $this->stopAsmServices();
         $this->updateConfigfiles();
         $this->startAsmServices();
