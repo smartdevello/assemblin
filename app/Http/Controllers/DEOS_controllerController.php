@@ -142,11 +142,11 @@ class DEOS_controllerController extends Controller
 
         $this->validate($request, $validate_rules, $validate_errors);
       
-        if (isset($request->enable_weather_forcast) && $request->enable_weather_forcast == "true")
+        if (isset($request->enable_weather_forcast)) 
             $request->enable_weather_forcast = 1;
         else $request->enable_weather_forcast = 0;
 
-        // $controller->update($request->all());
+        $controller->update($request->all());
         // $this->stopAsmServices();
         // $this->updateConfigfiles();
         // $this->startAsmServices();
