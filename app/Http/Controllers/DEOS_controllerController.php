@@ -151,6 +151,8 @@ class DEOS_controllerController extends Controller
             'latitude' => $request->latitude,
             'enable_weather_forcast' => isset($request->enable_weather_forcast)?true: false,
         ]);
+
+        // Update scheduled job controller, so it can reference the current controller's coordinate
         if (isset($request->enable_weather_forcast)) {
             DB::table('hka_scheduled_jobs')->where('job_name', 'weather_forecast')->update(['job_id' => $controller->id]);
         }

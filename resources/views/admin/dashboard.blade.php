@@ -129,6 +129,17 @@
             mounted: function() {
                 // console.log(sensors_raw);
                 this.page = this.sensors.current_page;
+
+                //Remove All weather_forcast points from dashboard.
+                index = this.points.length - 1;
+                while (index >= 0) {
+                    if (this.points[index].meta_type == 'weather_forcast') {
+                        this.points.splice(index, 1);
+                    }
+                    index -= 1;
+                }
+
+
             },
             watch: {
             },
