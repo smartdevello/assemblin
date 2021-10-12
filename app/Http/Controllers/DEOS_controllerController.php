@@ -146,7 +146,7 @@ class DEOS_controllerController extends Controller
             $request->enable_weather_forcast = 1;
         else $request->enable_weather_forcast = 0;
 
-        $controller->update($request->all());
+        // $controller->update($request->all());
         // $this->stopAsmServices();
         // $this->updateConfigfiles();
         // $this->startAsmServices();
