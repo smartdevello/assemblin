@@ -28,7 +28,8 @@
                                     <v-select :items="buildings" label="Select a Building" name="building_id" v-model="currentBuilding" item-text="name" item-value="id" solo required></v-select>
                                     <v-checkbox 
                                         v-model="controller.enable_weather_forcast" label="Enable Weather Forcast" name="enable_weather_forcast"
-                                        :input-value="controller.enable_weather_forcast"
+                                        :true-value="1"
+                                        :false-value="0"
                                         >
                                     </v-checkbox>
                                     
