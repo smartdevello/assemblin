@@ -90,11 +90,13 @@
                     if (!controller.building) {
                         controller.building = {};
                     }
-                    controller.points.forEach( (item, index, object) => {
-                        if (item.meta_type == "weather_forcast") {
-                            object.splice(index, 1);
+                    index = controller.points.length - 1;
+                    while (index >= 0) {
+                        if (controller.points[index].meta_type == 'weather_forcast') {
+                            controller.points.splice(index, 1);
                         }
-                    });
+                        index -= 1;
+                    }
                 }
 
             }
