@@ -10,7 +10,6 @@ use App\Models\DEOS_controller;
 use App\Models\Location;
 use stdClass;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Traits\WeatherForcastTrait;
 use phpseclib3\Net\SSH2;
 
 class DEOS_pointController extends Controller
@@ -21,7 +20,7 @@ class DEOS_pointController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     use WeatherForcastTrait;
+
     public function index()
     {
         //

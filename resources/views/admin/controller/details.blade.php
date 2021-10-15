@@ -33,7 +33,7 @@
                                     </v-checkbox>
                                     
                                     <v-text-field v-show="controller.enable_weather_forcast"  v-model="controller.longitude" label="Longitude (Optional)" name="longitude"></v-text-field>
-                                    <v-text-field v-show="controller.enable_weather_forcast"  v-model="controller.latitude" label ="Latitude (Optin" name="latitude"></v-text-field>
+                                    <v-text-field v-show="controller.enable_weather_forcast"  v-model="controller.latitude" label ="Latitude (Optional)" name="latitude"></v-text-field>
                                 </v-card-text>
 
                                 <v-card-actions>
