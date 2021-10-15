@@ -10,6 +10,7 @@ use App\Models\Building;
 use App\Models\DEOS_point;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Traits\AssemblinInit;
+use App\Http\Traits\WeatherForcastTrait;
 use App\Imports\PointsImport;
 use App\Models\Location;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +22,7 @@ use stdClass;
 class DEOS_controllerController extends Controller
 {
     use AssemblinInit;
+    use WeatherForcastTrait;
     public function index()
     {
         $buildings = Building::all();
