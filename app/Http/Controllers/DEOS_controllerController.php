@@ -13,6 +13,7 @@ use App\Http\Traits\AssemblinInit;
 use App\Imports\PointsImport;
 use App\Models\Location;
 use Illuminate\Support\Facades\DB;
+use App\Models\HKA_Scheduled_JOb;
 
 use Exception;
 use stdClass;
@@ -75,10 +76,7 @@ class DEOS_controllerController extends Controller
         }
 
         $this->validate($request, $validate_rules, $validate_errors);
-
-        
-        $this->stopAsmServices();
-
+      
         $statement = DB::select("SHOW TABLE STATUS LIKE 'deos_controllers'");
         $nextId = $statement[0]->Auto_increment;
         $row = DEOS_controller::create([
@@ -89,7 +87,8 @@ class DEOS_controllerController extends Controller
             'longitude' => $request->longitude,
             'latitude' => $request->latitude
         ]);
-        
+
+        $this->stopAsmServices();        
         $this->updateConfigfiles();
         $this->startAsmServices();
         return back()->with('success', 'Created successfully');
@@ -142,6 +141,16 @@ class DEOS_controllerController extends Controller
 
         $this->validate($request, $validate_rules, $validate_errors);
 
+        if (isset($request->enable_weather_forcast)) {
+            // Disable all controllers to have weather_forcast functionalities
+            // so only 1 controller to have weather functionality
+            $controllers = DEOS_controller::all();
+            foreach ($controllers as $item) {
+                $item->update([
+                    'enable_weather_forcast' => false
+                ]);
+            }
+        }
         $controller->update([
             'name' => $request->name,
             'ip_address' => $request->ip_address,
@@ -154,7 +163,58 @@ class DEOS_controllerController extends Controller
 
         // Update scheduled job controller, so it can reference the current controller's coordinate
         if (isset($request->enable_weather_forcast)) {
-            DB::table('hka_scheduled_jobs')->where('job_name', 'weather_forecast')->update(['job_id' => $controller->id]);
+            $job = HKA_Scheduled_JOb::where('job_name', 'weather_forecast')->first();
+            $job->update([
+                'next_run' => date('Y-m-d H:i:s', time() + 60 * 60),
+                'job_id' =>$controller->id
+            ]);
+
+            $forecast_data = $this->getWeatherData($controller->longitude, $controller->latitude);
+            //Create or Update Weather Points (Actually DEOS Points)
+            $dataset_index = 0;
+            foreach ($forecast_data as $key => $data)
+            {
+                foreach($data as $index => $item){
+                    //Skip first or last data among 50 , so we need only middle 48 data
+                    if ($index == 0 || $index == 49) continue;
+
+                    if ($dataset_index == 0)  $label = sprintf('fmi.f:I%02d', $index);
+                    else $label = sprintf('fmi.f:I%03d', $index + $dataset_index * 100);
+
+                    $point = DEOS_point::where([
+                        ['name', '=' , $key . $index],
+                        ['label', '=', $label]
+                    ])->first();
+
+                    if ($point !=null) {
+
+                        $point->update([
+                            'name' => $key . $index,
+                            'label' => $label, 
+                            'type' => 'FL',
+                            'value' => $item['value'],
+                            'controller_id' => $controller->id,
+                            'meta_type' => 'weather_forcast'                                    
+                        ]);
+
+                    } else {
+
+                        DEOS_point::create([
+                            'name' => $key . $index,
+                            'label' => $label, 
+                            'type' => 'FL',
+                            'value' => $item['value'],
+                            'controller_id' => $controller->id,
+                            'meta_type' => 'weather_forcast'                                    
+                        ]);
+
+                    }
+
+                }
+                $dataset_index++;
+            }
+            $this->sendWeatherForcasttoDEOS();
+
         }
         $this->stopAsmServices();
         $this->updateConfigfiles();
