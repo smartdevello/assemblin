@@ -65,10 +65,13 @@
                                             <div class="mx-4">@{{ token . plainTextToken }}</div>
                                             <v-btn
                                                  color="primary" text class="mx-4" type="button"
-                                                 v-clipboard:copy="token.plainTextToken"
+                                                 {{-- v-clipboard:copy="token.plainTextToken"
                                                  v-clipboard:success="onCopy"
-                                                 v-clipboard:error="onCopyError"
+                                                 v-clipboard:error="onCopyError" --}}
                                                 >Copy Key</v-btn>
+
+                                            <v-clipboard-text-field label='Clipboard Field'/>
+
                                         </template>
                                     </v-checkbox>
                                 </v-card-text>
