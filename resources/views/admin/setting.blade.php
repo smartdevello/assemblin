@@ -70,8 +70,8 @@
                                                  v-clipboard:error="onCopyError" --}}
                                                 >Copy Key</v-btn>
 
-                                            <v-clipboard-text-field label='Clipboard Field'/>
-
+                                            {{-- <v-clipboard-text-field label='Clipboard Field'/> --}}
+                                            <button-counter></button-counter>
                                         </template>
                                     </v-checkbox>
                                 </v-card-text>
@@ -111,7 +111,7 @@
 
 @section('script');
 <script>    
-    Vue.use(VuetifyClipboard);
+    
     const main_vm = new Vue({
         el: '#app',
         vuetify: new Vuetify(),
@@ -178,7 +178,14 @@
 
         },
     });
-    
+    Vue.component('button-counter', {
+    data: function () {
+        return {
+        count: 0
+        }
+    },
+    template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+    });
 
 </script>
 @endsection
