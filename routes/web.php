@@ -117,8 +117,9 @@ Route::post('/tokens/remove', function (Request $request) {
     foreach (json_decode($request->selected_tokens) as $key => $val) {
         if ($val != true) continue;
         $items[] = $key;
-    }   
-    return redirect()->route('setting_index')->with('success', $request->selected_tokens);
+    }
+    PersonalAccessToken::whereIn('id', $items)->delete();
+    return redirect()->route('setting_index');
 });
 
 Route::middleware('auth:sanctum')->get('/test', function() {
