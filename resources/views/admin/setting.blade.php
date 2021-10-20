@@ -63,6 +63,7 @@
                                         <template v-slot:label>
                                             <div class="mx-4">@{{ token.name}}</div>
                                             <div class="mx-4">@{{ token . plainTextToken }}</div>
+                                            <v-btn color="primary" text class="mx-4" @click="copyKey(token.plainTextToken)">Copy Key</v-btn>
                                         </template>
                                     </v-checkbox>
                                 </v-card-text>
