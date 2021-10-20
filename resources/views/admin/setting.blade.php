@@ -110,8 +110,7 @@
 @endsection
 
 @section('script');
-<script>
-    import VuetifyClipboard from 'vuetify-clipboard-input';
+<script>    
     const main_vm = new Vue({
         el: '#app',
         vuetify: new Vuetify(),
@@ -179,6 +178,6 @@
         },
     });
     main_vm.use(VuetifyClipboard);
-    
+
 </script>
 @endsection
