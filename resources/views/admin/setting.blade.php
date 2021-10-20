@@ -71,7 +71,12 @@
                                                 >Copy Key</v-btn>
 
                                             {{-- <v-clipboard-text-field label='Clipboard Field'/> --}}
-                                            <button-counter></button-counter>
+                                            {{-- <button-counter></button-counter> --}}
+
+                                            <my-global-component inline-template>
+                                                <h2>{{ title }}</h2>
+                                            </my-global-component>
+                                            
                                         </template>
                                     </v-checkbox>
                                 </v-card-text>
@@ -111,14 +116,13 @@
 
 @section('script');
 <script>    
-    Vue.component('button-counter', {
-        data: function () {
-            return {
-            count: 0
-            }
-        },
-        template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
-    });
+Vue.component('my-global-component', {
+  data() {
+    return {
+      title: 'Hello, I am a global component',
+    };
+  },
+});
 
     const main_vm = new Vue({
         el: '#app',
