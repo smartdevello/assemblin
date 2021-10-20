@@ -214,8 +214,8 @@
             ref='input'
             :label='label'
             :textarea='textarea'
-            append-icon='mdi-content_copy'
-            :append-icon-cb='mdi-copy'
+            append-icon="mdi-content_copy"
+            :append-icon-cb="mdi-copy"
             v-model='value'
             :attrs='$attrs'
         />`,
