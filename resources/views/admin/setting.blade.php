@@ -70,13 +70,9 @@
                                                  v-clipboard:error="onCopyError" --}}
                                                 >Copy Key</v-btn>
 
-                                            {{-- <v-clipboard-text-field label='Clipboard Field'/> --}}
+                                            <v-clipboard-text-field label='Clipboard Field'/>
                                             {{-- <button-counter></button-counter> --}}
 
-                                            <my-global-component inline-template>
-                                                <h2>{{ title }}</h2>
-                                            </my-global-component>
-                                            
                                         </template>
                                     </v-checkbox>
                                 </v-card-text>
@@ -116,13 +112,46 @@
 
 @section('script');
 <script>    
-Vue.component('my-global-component', {
-  data() {
-    return {
-      title: 'Hello, I am a global component',
-    };
-  },
-});
+    Vue.component('v-clipboard-text-field', {
+        name: 'VClipboardTextField',
+        props: {
+            'label': {
+                type: String,
+                required: false,
+            },
+            'textarea': {
+                type: Boolean,
+                required: false,
+                default: false,
+            },
+        },
+        data() {
+            return {
+                value: '',
+            };
+        },
+        created() {
+            console.log(this);
+        },
+        methods: {
+            copy() {
+                const input = this.$refs.input;
+                input.focus();
+                document.execCommand('selectAll');
+                this.copied = document.execCommand('copy');
+            },
+        },
+        template: `<v-text-field
+            ref='input'
+            :label='label'
+            :textarea='textarea'
+            append-icon='content_copy'
+            :append-icon-cb='copy'
+            v-model='value'
+            :attrs='$attrs'
+        />`,
+
+    });
 
     const main_vm = new Vue({
         el: '#app',
