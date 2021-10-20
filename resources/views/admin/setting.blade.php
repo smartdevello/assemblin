@@ -114,6 +114,7 @@
     const main_vm = new Vue({
         el: '#app',
         vuetify: new Vuetify(),
+        vuetify-clipboard-input: new VuetifyClipboard(),
         data: {
             drawer: true,
             mainMenu: mainMenu,
