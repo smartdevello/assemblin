@@ -62,15 +62,13 @@
                                     <v-checkbox v-model="selected_tokens[token.id]">
                                         <template v-slot:label>
                                             <div class="mx-4">@{{ token.name}}</div>
-                                            <div class="mx-4">@{{ token . plainTextToken }}</div>
+                                            <div class="mx-4" :ref="`token` + index">@{{ token . plainTextToken }}</div>
                                             <v-btn
                                                  color="primary" text class="mx-4" type="button"
-                                                 {{-- v-clipboard:copy="token.plainTextToken"
-                                                 v-clipboard:success="onCopy"
-                                                 v-clipboard:error="onCopyError" --}}
+                                                @click="copyText(index)"
                                                 >Copy Key</v-btn>
 
-                                            <v-clipboard-text-field class="mx-4"/>
+                                            {{-- <v-clipboard-text-field class="mx-4"/> --}}
                                             {{-- <button-counter></button-counter> --}}
 
                                         </template>
@@ -211,11 +209,8 @@
             changeDevice: function(deviceId){
                 this.types = this.alltypes[deviceId];
             },
-            onCopy: function(e){
-                console.log(e.text);
-            },
-            onCopyError: function(e){
-                
+            copyText: function(index){
+                console.log(index);
             }
 
         },
