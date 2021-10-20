@@ -111,10 +111,10 @@
 
 @section('script');
 <script>
+    import VuetifyClipboard from 'vuetify-clipboard-input';
     const main_vm = new Vue({
         el: '#app',
         vuetify: new Vuetify(),
-        vuetify-clipboard-input: new VuetifyClipboard(),
         data: {
             drawer: true,
             mainMenu: mainMenu,
@@ -177,6 +177,8 @@
             }
 
         },
-    })
+    });
+    main_vm.use(VuetifyClipboard);
+    
 </script>
 @endsection
