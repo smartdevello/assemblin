@@ -60,19 +60,19 @@
                             <v-card class="mx-auto my-12" >
                                 <v-card-text fluid v-for="(token, index) in all_tokens" :key="index">
                                     <v-checkbox v-model="selected_tokens[token.id]">
-                                        <template v-slot:label>
-                                            <div class="mx-4">@{{ token.name}}</div>
-                                            <div class="mx-4">@{{ token . plainTextToken }}</div>
-                                            <v-btn
-                                                 color="primary" text class="mx-4" type="button"
-                                                @click="copyText(index)"
-                                                >Copy Key</v-btn>
-
-                                            {{-- <v-clipboard-text-field class="mx-4"/> --}}
-                                            {{-- <button-counter></button-counter> --}}
-
-                                        </template>
                                     </v-checkbox>
+                                    <template v-slot:label>
+                                        <div class="mx-4">@{{ token.name}}</div>
+                                        <div class="mx-4">@{{ token . plainTextToken }}</div>
+                                        <v-btn
+                                             color="primary" text class="mx-4" type="button"
+                                            @click="copyText(index)"
+                                            >Copy Key</v-btn>
+
+                                        {{-- <v-clipboard-text-field class="mx-4"/> --}}
+                                        {{-- <button-counter></button-counter> --}}
+
+                                    </template>
                                 </v-card-text>
                                 <input type="hidden" name="selected_tokens" :value="JSON.stringify(selected_tokens)">
                                 <v-card-actions>
