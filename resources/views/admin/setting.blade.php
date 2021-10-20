@@ -139,14 +139,15 @@
                 input.focus();
                 document.execCommand('selectAll');
                 this.copied = document.execCommand('copy');
+                console.log(this.copied);
             },
         },
         template: `<v-text-field
             ref='input'
             :label='label'
             :textarea='textarea'
-            append-icon='content_copy'
-            :append-icon-cb='copy'
+            append-icon='mdi-content_copy'
+            :append-icon-cb='mdi-copy'
             v-model='value'
             :attrs='$attrs'
         />`,
