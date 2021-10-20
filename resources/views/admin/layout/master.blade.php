@@ -11,7 +11,7 @@
     </style>
 </head>
 
-<body class="antialiased">
+<body class="antialiased" style="visibility: hidden">
 
     <div id="app">
         <div class="v-cloak">    
@@ -77,5 +77,10 @@
     ];
 </script>
 @yield('script')
+<style>
+    body {
+        visibility: visible !important;
+    }
+</style>
 </body>
 </html>
