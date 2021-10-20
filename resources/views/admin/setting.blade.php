@@ -81,7 +81,7 @@
                                             <v-list-item-content>
                                                 <v-list-item-title v-text="token.plainTextToken"></v-list-item-title>
                                             </v-list-item-content>
-                                            <v-text-field v-model="token.plainTextToken"></v-text-field>
+                                            <v-btn @click="copyKey(token.plainTextToken)"></v-btn>
                                         </template>
                                     </v-list-item>
                                 </template>
@@ -174,6 +174,9 @@
         methods: {        
             changeDevice: function(deviceId){
                 this.types = this.alltypes[deviceId];
+            },
+            copyKey: function(key){
+                console.log(key);
             }
         },
     })
