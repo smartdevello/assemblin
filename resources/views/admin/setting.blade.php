@@ -57,7 +57,7 @@
                           </v-toolbar>                     
                           <v-form :action="removeTokensUrl" method="POST" id="remove-tokens-form">
                             @csrf
-                            <v-card class="mx-auto my-12" v-if="controller.points.length > 0">
+                            <v-card class="mx-auto my-12" >
                                 <v-card-title>DEOS Points</v-card-title>
                                 <v-card-text fluid v-for="(token, index) in all_tokens" :key="index">
                                     <v-checkbox v-model="selected_tokens[token.id]">
@@ -127,7 +127,7 @@
                                         </v-card>
                                     </v-form>
                                 </v-dialog>
-                                <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on" class="ma-3">Remove Selected</v-btn>
+                                {{-- <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on" class="ma-3">Remove Selected</v-btn> --}}
                             </div>
 
                         </v-card>
