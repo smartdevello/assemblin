@@ -62,7 +62,7 @@
                                     <v-checkbox v-model="selected_tokens[token.id]">
                                         <template v-slot:label>
                                             <div class="mx-4">@{{ token.name}}</div>
-                                            <div class="mx-4" :ref="`token` + index">@{{ token . plainTextToken }}</div>
+                                            <div class="mx-4">@{{ token . plainTextToken }}</div>
                                             <v-btn
                                                  color="primary" text class="mx-4" type="button"
                                                 @click="copyText(index)"
@@ -210,7 +210,17 @@
                 this.types = this.alltypes[deviceId];
             },
             copyText: function(index){
-                console.log(index);
+                const el = document.createElement('textarea');
+                el.value = this.all_tokens[index].plainTextToken;
+                el.setAttribute('readonly', '');
+                el.style.position = 'absolute';
+                el.style.left = '-9999px';
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+                console.log(this.all_tokens[index].plainTextToken);
+
             }
 
         },
