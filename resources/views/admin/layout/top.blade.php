@@ -13,13 +13,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 
-
-
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script> --}}
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vuetify/1.0.18/vuetify.min.js"></script> --}}
-
 <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-clipboards@1.3.0/dist/vue-clipboards.js"></script>
 
 {{-- <script src="{{ asset('js/jquery-3.x-git.min.js') }}"></script> --}}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

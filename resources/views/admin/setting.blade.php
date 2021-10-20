@@ -63,7 +63,12 @@
                                         <template v-slot:label>
                                             <div class="mx-4">@{{ token.name}}</div>
                                             <div class="mx-4">@{{ token . plainTextToken }}</div>
-                                            <v-btn color="primary" text class="mx-4" @click="copyKey(token.plainTextToken)">Copy Key</v-btn>
+                                            <v-btn
+                                                 color="primary" text class="mx-4" type="button"
+                                                 v-clipboard:copy="token.plainTextToken"
+                                                 v-clipboard:success="onCopy"
+                                                 v-clipboard:error="onCopyError"
+                                                >Copy Key</v-btn>
                                         </template>
                                     </v-checkbox>
                                 </v-card-text>
@@ -160,9 +165,13 @@
             changeDevice: function(deviceId){
                 this.types = this.alltypes[deviceId];
             },
-            copyKey: function(key){
-                console.log(key);
+            onCopy: function(e){
+                console.log(e.text);
+            },
+            onCopyError: function(e){
+                
             }
+
         },
     })
 </script>
