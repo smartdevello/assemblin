@@ -22,4 +22,4 @@
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-<link rel="stylesheet" href="//cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
+{{-- <link rel="stylesheet" href="//cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css"> --}}
