@@ -15,7 +15,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-<script type="module" src='https://cdn.jsdelivr.net/npm/vuetify-clipboard-input@1.0.1/index.min.js'></script>
+
+<script src='https://unpkg.com/vuetify-clipboard-input'></script>
 
 
 {{-- <script src="{{ asset('js/jquery-3.x-git.min.js') }}"></script> --}}
