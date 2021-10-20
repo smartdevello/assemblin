@@ -111,6 +111,7 @@
 
 @section('script');
 <script>    
+    Vue.use(VuetifyClipboard);
     const main_vm = new Vue({
         el: '#app',
         vuetify: new Vuetify(),
@@ -177,7 +178,7 @@
 
         },
     });
-    main_vm.use(VuetifyClipboard);
+    
 
 </script>
 @endsection
