@@ -111,7 +111,15 @@
 
 @section('script');
 <script>    
-    
+    Vue.component('button-counter', {
+        data: function () {
+            return {
+            count: 0
+            }
+        },
+        template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+    });
+
     const main_vm = new Vue({
         el: '#app',
         vuetify: new Vuetify(),
@@ -178,14 +186,7 @@
 
         },
     });
-    Vue.component('button-counter', {
-    data: function () {
-        return {
-        count: 0
-        }
-    },
-    template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
-    });
+
 
 </script>
 @endsection
