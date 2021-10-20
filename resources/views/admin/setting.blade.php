@@ -70,17 +70,18 @@
                                 <template v-for="(token, index) in all_tokens">
                                     <v-list-item :key="index">
                                         <template v-slot:default="{ active }">
-                                        <v-list-item-action>
-                                            <v-checkbox :input-value="active"></v-checkbox>
-                                        </v-list-item-action>
+                                            <v-list-item-action>
+                                                <v-checkbox :input-value="active"></v-checkbox>
+                                            </v-list-item-action>
 
-                                        <v-list-item-content>
-                                            <v-list-item-title v-text="token.name"></v-list-item-title>
-                                        </v-list-item-content>
+                                            <v-list-item-content>
+                                                <v-list-item-title v-text="token.name"></v-list-item-title>
+                                            </v-list-item-content>
 
-                                        <v-list-item-content>
-                                            <v-list-item-title v-text="token.plainTextToken"></v-list-item-title>
-                                        </v-list-item-content>
+                                            <v-list-item-content>
+                                                <v-list-item-title v-text="token.plainTextToken"></v-list-item-title>
+                                                <v-text-field v-model="token.plainTextToken"></v-text-field>
+                                            </v-list-item-content>
                                         </template>
                                     </v-list-item>
                                 </template>
