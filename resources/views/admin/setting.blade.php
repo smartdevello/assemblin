@@ -81,7 +81,7 @@
                                             <v-list-item-content>
                                                 <v-list-item-title v-text="token.plainTextToken"></v-list-item-title>
                                             </v-list-item-content>
-                                            <v-btn color="primary" text @click="copyKey(token.plainTextToken)">Copy Key</v-btn>
+                                            <v-btn color="primary" text @click="copyKey(token)" >Copy Key</v-btn>
                                         </template>
                                     </v-list-item>
                                 </template>
