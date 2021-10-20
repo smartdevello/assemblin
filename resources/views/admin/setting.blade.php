@@ -70,7 +70,7 @@
                                                  v-clipboard:error="onCopyError" --}}
                                                 >Copy Key</v-btn>
 
-                                            <v-clipboard-text-field label='Clipboard Field'/>
+                                            <v-clipboard-text-field class="mx-4"/>
                                             {{-- <button-counter></button-counter> --}}
 
                                         </template>
@@ -145,8 +145,8 @@
             ref='input'
             :label='label'
             :textarea='textarea'
-            append-icon='mdi-content_copy'
-            :append-icon-cb='mdi-copy'
+            append-icon='content_copy'
+            :append-icon-cb='copy'
             v-model='value'
             :attrs='$attrs'
         />`,
