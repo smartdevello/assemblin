@@ -80,8 +80,8 @@
 
                                             <v-list-item-content>
                                                 <v-list-item-title v-text="token.plainTextToken"></v-list-item-title>
-                                                <v-text-field v-model="token.plainTextToken"></v-text-field>
                                             </v-list-item-content>
+                                            <v-text-field v-model="token.plainTextToken"></v-text-field>
                                         </template>
                                     </v-list-item>
                                 </template>
