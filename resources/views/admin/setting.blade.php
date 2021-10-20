@@ -55,8 +55,26 @@
                           >                     
                             <v-toolbar-title>Tokens</v-toolbar-title>                      
                           </v-toolbar>                     
-                     
-                            <v-list
+                          <v-form :action="removeTokensUrl" method="POST" id="remove-tokens-form">
+                            @csrf
+                            <v-card class="mx-auto my-12" v-if="controller.points.length > 0">
+                                <v-card-title>DEOS Points</v-card-title>
+                                <v-card-text fluid v-for="(token, index) in all_tokens" :key="index">
+                                    <v-checkbox v-model="selected_tokens[token.id]">
+                                        <template v-slot:label>
+                                            <div class="mx-4">@{{ token.name}}</div>
+                                            <div class="mx-4">@{{ token . plainTextToken }}</div>
+                                        </template>
+                                    </v-checkbox>
+                                </v-card-text>
+                                <input type="hidden" name="selected_tokens" :value="JSON.stringify(selected_tokens)">
+                                <v-card-actions>
+                                    <v-btn color="red" text type="submit" form="remove-tokens-form">Delete Selected Tokens</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-form>
+
+                            {{-- <v-list
                                 flat
                                 subheader
                                 three-line
@@ -87,7 +105,7 @@
                                 </template>
 
                                 </v-list-item-group>                            
-                            </v-list>
+                            </v-list> --}}
                             <div class="text-center">
                                 <v-dialog v-model="openNewTokenForm" width="500">
                                     <template v-slot:activator="{ on, attrs }">
@@ -128,6 +146,7 @@
             mainMenu: mainMenu,
             updateIntervalUrl: "",
             createTokenUrl: "",
+            removeTokensUrl: "",
             currentDevice : "",
             currentType: "",
             currentInterval: 0,
@@ -167,6 +186,7 @@
         mounted: function() {
             this.updateIntervalUrl = `${prefix_link}/setting/update_device_interval`;
             this.createTokenUrl = `${prefix_link}/tokens/create`;
+            this.removeTokensUrl = `${prefix_link}/tokens/remove`;
             console.log(this.devices);
             console.log(this.alltypes);
             console.log(this.all_tokens);
