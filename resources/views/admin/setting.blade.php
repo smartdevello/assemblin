@@ -58,8 +58,8 @@
                           <v-form :action="removeTokensUrl" method="POST" id="remove-tokens-form">
                             @csrf
                             <v-card class="mx-auto my-12" >
-                                <v-card-text fluid v-for="(token, index) in all_tokens" :key="index">
-                                    <v-checkbox v-model="selected_tokens[token.id]">
+                                <v-card-text fluid v-for="(token, index) in all_tokens" :key="index" class="d-flex align-center">
+                                    <v-checkbox v-model="selected_tokens[token.id]" class="mx-4">
                                     </v-checkbox>
 
                                         <div class="mx-4">@{{ token.name}}</div>
