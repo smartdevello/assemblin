@@ -50,14 +50,15 @@ class TrendGroupController extends Controller
         ]);
       
         
-        $trend_group = TrendGroup::create([
-            'controller_id' => $request->controller_id,
-            'trend_group_name' => $request->trend_group_name,
-            'location_name' =>  $request->location_name,
-            'update_interval' => $request->update_interval,
-            'query_period' => $request->query_period,
-            'send_to_ftp' => $request->send_to_ftp
-        ]);
+        $trend_group = TrendGroup::create($request->all());
+        // $trend_group = TrendGroup::create([
+        //     'controller_id' => $request->controller_id,
+        //     'trend_group_name' => $request->trend_group_name,
+        //     'location_name' =>  $request->location_name,
+        //     'update_interval' => $request->update_interval,
+        //     'query_period' => $request->query_period,
+        //     'send_to_ftp' => $request->send_to_ftp
+        // ]);
 
         $job = HKA_Scheduled_JOb::create([
             'job_name' => 'trend_group',
