@@ -48,7 +48,7 @@ class TrendGroupController extends Controller
             'query_period.required' => "Must specify query period",
             'query_period.integer' => "Query Period must be integer",
         ]);     
-        dd($request->all());        
+
         $trend_group = TrendGroup::create([
             'controller_id' => $request->controller_id,
             'trend_group_name' => $request->trend_group_name,
