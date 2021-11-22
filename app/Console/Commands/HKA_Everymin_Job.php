@@ -60,7 +60,11 @@ class HKA_Everymin_Job extends Command
                         $job->update([
                             'next_run' => date('Y-m-d H:i:s', time() + $trend_group->update_interval * 60)
                         ]);
-                        $this->receive_csv_save_db($trend_group);
+                        if ($trend_group->send_to_ftp == false)
+                            $this->receive_csv_save_db($trend_group);
+                        else {
+                            $this->receive_csv_and_savefile_sendto_external_ftp($trend_group);
+                        }
                     } else {
                         $job->delete();
                     }
