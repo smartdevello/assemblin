@@ -10,7 +10,8 @@ trait TrendDataTrait
     public function receive_csv_and_savefile_sendto_external_ftp($trend_group)
     {
         $now = date('Y_m_d_H_i_', time());
-        $filename = sprintf("storage/%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id);
+        $date = date('Y_m_d', time());
+        $filename = sprintf("storage/%s/%s%s%s.csv", $date, $now, $trend_group->trend_group_name, $trend_group->controller_id);
 
         $to_time = time();
         $from_time = $to_time - $trend_group->query_period * 60;
@@ -25,6 +26,11 @@ trait TrendDataTrait
         if ( file_exists($filename ) ) {
             unlink($filename);
         }
+        $folder_path = sprintf("storage/%s", $date);
+        if (!file_exists($folder_path)) {
+            mkdir($folder_path, 0777, true);
+        }
+        
         shell_exec($command);
 
     }
