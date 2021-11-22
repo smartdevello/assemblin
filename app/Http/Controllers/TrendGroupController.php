@@ -38,7 +38,7 @@ class TrendGroupController extends Controller
             'trend_group_name' => 'required',
             'location_name' => 'required',
             'update_interval' => 'required|integer',
-            'query_period' => 'required|integer',
+            'query_period' => 'required|integer',            
         ], [
             'controller_id.required' => "Controller ID field can't be empty",
             'trend_group_name.required' => "Trend group name can't be empty",
@@ -56,7 +56,7 @@ class TrendGroupController extends Controller
             'location_name' =>  $request->location_name,
             'update_interval' => $request->update_interval,
             'query_period' => $request->query_period,
-            
+            'send_to_ftp' => $request->send_to_ftp
         ]);
 
         $job = HKA_Scheduled_JOb::create([
