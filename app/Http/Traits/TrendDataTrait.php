@@ -10,7 +10,7 @@ trait TrendDataTrait
     public function receive_csv_and_savefile_sendto_external_ftp($trend_group)
     {
         $now = date('Y_m_d_H_i_', time());
-        $filename = sprintf("%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id);
+        $filename = sprintf("storage/%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id);
 
         $to_time = time();
         $from_time = $to_time - $trend_group->query_period * 60;
