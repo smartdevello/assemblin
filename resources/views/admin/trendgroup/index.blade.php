@@ -90,7 +90,7 @@
                                     <v-text-field name="location_name" label="Location name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>                                    
                                     <v-text-field name="update_interval" label="Update interval" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>                                    
                                     <v-text-field name="query_period" label="Query period" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>                                    
-                                    <v-checkbox name="send_to_ftp" label="Send CSV to FTP?" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-checkbox>
+                                    <v-checkbox name="send_to_ftp" label="Send CSV to FTP?" ></v-checkbox>
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
                                         <v-btn color="primary" text type="submit" form="create-form">Submit</v-btn>
