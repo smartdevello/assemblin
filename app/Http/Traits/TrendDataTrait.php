@@ -7,6 +7,27 @@ use App\Models\Csv_Trend_Data;
 trait TrendDataTrait
 {
 
+    public function receive_csv_and_savefile_sendto_external_ftp($trend_group)
+    {
+        $now = date('Y_m_d_H_i_', time());
+        $filename = sprintf("%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id);
+
+        $to_time = time();
+        $from_time = $to_time - $trend_group->query_period * 60;
+
+        //Convet it to milisecond;
+        $from_time *=1000;
+        $to_time *= 1000;
+
+        $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $filename ;
+        $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
+
+        if ( file_exists($filename ) ) {
+            unlink($filename);
+        }
+        shell_exec($command);
+
+    }
     public function receive_csv_save_db($trend_group)
     {
                 

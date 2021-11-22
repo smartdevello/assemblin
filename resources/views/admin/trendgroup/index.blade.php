@@ -57,6 +57,10 @@
                     <template v-slot:item.query_period="{ item }">
                         <v-text-field v-model="item.query_period" solo></v-text-field>
                     </template>
+                    <template v-slot:item.send_to_ftp="{ item }">
+                        <v-checkbox v-model="item.send_to_ftp"></v-checkbox>
+                    </template>
+
                     <template v-slot:item.action="{ item }">
                         <v-btn color="success" @click="updateItem(item)" :loading="item.updateloading" :disabled="loading">Update</v-btn>
                         <v-btn color="error" @click="deleteItem(item)" :loading="item.deleteloading" :disabled="loading">Delete</v-btn>                        
@@ -121,7 +125,7 @@
                     { text: 'Location name', value: 'location_name' },
                     { text: 'Update interval', value: 'update_interval' },
                     { text: 'Query period', value: 'query_period' },
-                    { text: 'Token / Password', value: 'token' },
+                    { text: 'Send To FTP', value: 'send_to_ftp' },
                     { text: "Action", value: "action", sortable: false, align : 'center'}
                 ],              
                 search: '',
@@ -198,7 +202,7 @@
                     axios.post(url).then(response=>{
                         this.loading = false;
                         item.updateloading = false;
-                        for ( i = this.trend_groups.length - 1; i>=0 ;i--){
+                        for ( i = this.trend_groups.length - 1; i>=0 ;i--){                            
                             if (this.trend_groups[i].id == item.id) {
                                 this.trend_groups.splice(i, 1);
                                 break;

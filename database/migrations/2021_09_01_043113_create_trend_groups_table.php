@@ -21,6 +21,7 @@ class CreateTrendGroupsTable extends Migration
             $table->string('location_name')->nullable();
             $table->bigInteger('update_interval')->nullable();
             $table->bigInteger('query_period')->nullable();
+            $table->boolean('send_to_ftp')->nullable();
             $table->timestamps();
         });
     }

@@ -11,6 +11,7 @@ class TrendGroup extends Model
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'controller_id', 'trend_group_name', 'location_name', 'update_interval', 'query_period', 'token'
+        'controller_id', 'trend_group_name', 'location_name', 'update_interval', 'query_period', 'send_to_ftp'
     ];
+    
 }
