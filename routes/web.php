@@ -112,7 +112,7 @@ Route::post('/tokens/create', function (Request $request) {
     return redirect()->route('setting_index');
 });
 Route::post('/tokens/remove', function (Request $request) {
-    $request['selected_tokens'];
+    
     $items = [];
     foreach (json_decode($request->selected_tokens) as $key => $val) {
         if ($val != true) continue;
