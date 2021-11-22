@@ -38,7 +38,7 @@ class TrendGroupController extends Controller
             'trend_group_name' => 'required',
             'location_name' => 'required',
             'update_interval' => 'required|integer',
-            'query_period' => 'required|integer',            
+            'query_period' => 'required|integer',
         ], [
             'controller_id.required' => "Controller ID field can't be empty",
             'trend_group_name.required' => "Trend group name can't be empty",
@@ -47,10 +47,8 @@ class TrendGroupController extends Controller
             'update_interval.integer' => "Update interval must be integer",
             'query_period.required' => "Must specify query period",
             'query_period.integer' => "Query Period must be integer",
-        ]);
-      
-        
-        $trend_group = TrendGroup::create($request->all());
+        ]);     
+        dd($request->all());        
         $trend_group = TrendGroup::create([
             'controller_id' => $request->controller_id,
             'trend_group_name' => $request->trend_group_name,
