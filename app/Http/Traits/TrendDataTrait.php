@@ -12,7 +12,13 @@ trait TrendDataTrait
     {
         $now = date('Y_m_d_H_i_', time());
         $date = date('Y_m_d', time());
-        $filename = sprintf("storage/%s/%s%s%s.csv", $date, $now, $trend_group->trend_group_name, $trend_group->controller_id);
+        $local_filename = str_replace(" ", "_", sprintf("%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id));
+
+        $local_folderpath =sprintf("storage/%s/", $date);
+
+        if (!file_exists($local_folderpath)) {
+            mkdir($local_folderpath, 0777, true);
+        }
 
         $to_time = time();
         $from_time = $to_time - $trend_group->query_period * 60;
@@ -21,25 +27,15 @@ trait TrendDataTrait
         $from_time *=1000;
         $to_time *= 1000;
 
-        $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $filename ;
-        $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
 
-        if ( file_exists($filename ) ) {
-            unlink($filename);
-        }
-        $folder_path = sprintf("storage/%s", $date);
-        if (!file_exists($folder_path)) {
-            mkdir($folder_path, 0777, true);
-        }
-        
+
+        $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $local_folderpath . $local_filename ;
+        $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);        
         shell_exec($command);
 
         $sftp = Storage::disk('sftp');
-        $local_storage_path = sprintf("%s/%s%s%s.csv", $date, $now, $trend_group->trend_group_name, $trend_group->controller_id);
+        $local_storage_path = str_replace(" ", "_", sprintf("%s/%s%s%s.csv", $date, $now, $trend_group->trend_group_name, $trend_group->controller_id));
         $remote_storage_path = sprintf("%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id);
-        // if ( !$sftp->exists(sprintf('%s', $date)) ) {                
-        //     $sftp->makeDirectory(sprintf('%s', $date));
-        // }
 
         $sftp->put($remote_storage_path, file_get_contents(storage_path($local_storage_path) ));
 
