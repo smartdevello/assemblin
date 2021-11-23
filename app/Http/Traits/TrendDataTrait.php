@@ -35,10 +35,10 @@ trait TrendDataTrait
         shell_exec($command);
 
         $sftp = Storage::disk('sftp');
-        $storage_path = sprintf("%s/%s%s%s.csv", $date, $now, $trend_group->trend_group_name, $trend_group->controller_id);
-        if ( !$sftp->exists(sprintf('%s', $date)) ) {                
-            $sftp->makeDirectory(sprintf('%s', $date));
-        }
+        $storage_path = sprintf("%s%s%s.csv", $date, $now, $trend_group->trend_group_name, $trend_group->controller_id);
+        // if ( !$sftp->exists(sprintf('%s', $date)) ) {                
+        //     $sftp->makeDirectory(sprintf('%s', $date));
+        // }
 
         $sftp->put($storage_path, file_get_contents(storage_path($storage_path) ));
 
