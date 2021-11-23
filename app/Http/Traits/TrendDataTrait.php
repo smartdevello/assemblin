@@ -35,12 +35,13 @@ trait TrendDataTrait
         shell_exec($command);
 
         $sftp = Storage::disk('sftp');
-        $storage_path = sprintf("%s%s%s.csv", $date, $now, $trend_group->trend_group_name, $trend_group->controller_id);
+        $local_storage_path = sprintf("%s/%s%s%s.csv", $date, $now, $trend_group->trend_group_name, $trend_group->controller_id);
+        $remote_storage_path = sprintf("%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id);
         // if ( !$sftp->exists(sprintf('%s', $date)) ) {                
         //     $sftp->makeDirectory(sprintf('%s', $date));
         // }
 
-        $sftp->put($storage_path, file_get_contents(storage_path($storage_path) ));
+        $sftp->put($remote_storage_path, file_get_contents(storage_path($local_storage_path) ));
 
     }
     public function receive_csv_save_db($trend_group)
