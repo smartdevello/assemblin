@@ -66,16 +66,16 @@ return [
         ],
         'sftp' => [
             'driver' => 'sftp',
-            'host' => '35.186.171.128',
-            'username' => 'kiindecom',
-            'password' => 'ZMMq7srj0Z2OBb0',
+            'host' => 'sftp.granlund.fi',
+            'username' => 'LahdenMalski_Deos_Metrix',
+            'password' => 'D!7kbaBA4U-sKhU7',
         
             // Settings for SSH key based authentication...
             // 'privateKey' => '/path/to/privateKey',
             // 'password' => 'encryption-password',
         
             // Optional SFTP Settings...
-            'port' => 22234,
+            'port' => 22,
             // 'root' => '',
             // 'timeout' => 30,
         ],
