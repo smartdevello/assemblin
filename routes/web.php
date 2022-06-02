@@ -9,6 +9,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LorawanController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TrendGroupController;
+use App\Http\Controllers\SmallDataGardenController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
