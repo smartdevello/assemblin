@@ -61,7 +61,8 @@ class SmallDataGardenController extends Controller
         foreach($devices as $device)
         {
             $deviceData = $this->getDeviceData($device->DeviceID);
-
+            var_dump($deviceData);
+            
             $dbdata = array(
                 'deviceId' => $device->DeviceID,
                 'type' => 'battvolt',
