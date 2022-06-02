@@ -137,7 +137,7 @@ class HKA_Everymin_Job extends Command
                     $this->automatic_update();
                 } else if ($job->job_name == 'smalldatagarden') {
                     $job->update([
-                        'next_run' => date('Y-m-d H:i:s', time() + 10 * 60)
+                        'next_run' => date('Y-m-d H:i:s', time() + 30 * 60)
                     ]);
                     $this->SmallDataGarden_updateSensors();
                 }
