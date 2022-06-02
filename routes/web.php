@@ -34,6 +34,8 @@ Route::get('', [DashboardController::class, 'index'])->middleware(['auth'])->nam
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 Route::get('/lora', [LorawanController::class, 'index'])->middleware(['auth'])->name('lorawan');
 
+Route::get('/SmallDataGarden', [SmallDataGardenController::class, 'updateSensor'])->name('SmallDataGarden');
+
 // Route::get('/setting', '\App\Http\Controllers\DashboardController@setting_index')->middleware(['auth']);
 Route::group(['prefix' => '/setting', 'middleware' => 'auth'], function ($router) {
     Route::get('', [SettingController::class, 'setting_index'])->name('setting_index');
