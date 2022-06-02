@@ -53,7 +53,7 @@ class SmallDataGardenController extends Controller
 
         $response = curl_exec($curl);
         curl_close($curl);
-        return jso_decode($response);
+        return json_decode($response);
     }
     public function updateSensor()
     {
