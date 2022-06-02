@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use App\Http\Traits\TrendDataTrait;
 use App\Http\Traits\WeatherForcastTrait;
 use App\Http\Traits\AssemblinInit;
+use App\Http\Traits\SmallDataGarden;
 
 use App\Models\DEOS_controller;
 use App\Models\DEOS_point;
@@ -22,6 +23,7 @@ class HKA_Everymin_Job extends Command
     use TrendDataTrait;
     use AssemblinInit;
     use WeatherForcastTrait;
+    use SmallDataGarden;
 
     protected $signature = 'hka_job:everymin';
 
@@ -133,6 +135,11 @@ class HKA_Everymin_Job extends Command
                         'next_run' => date('Y-m-d H:i:s', time() + 5 * 60)
                     ]);
                     $this->automatic_update();
+                } else if ($job->job_name == 'smalldatagarden') {
+                    $job->update([
+                        'next_run' => date('Y-m-d H:i:s', time() + 10 * 60)
+                    ]);
+                    $this->SmallDataGarden_updateSensors();
                 }
                 
             }

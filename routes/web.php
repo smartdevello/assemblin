@@ -10,6 +10,7 @@ use App\Http\Controllers\LorawanController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TrendGroupController;
 use App\Http\Controllers\SmallDataGardenController;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -35,7 +36,8 @@ Route::get('', [DashboardController::class, 'index'])->middleware(['auth'])->nam
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 Route::get('/lora', [LorawanController::class, 'index'])->middleware(['auth'])->name('lorawan');
 
-Route::get('/SmallDataGarden', [SmallDataGardenController::class, 'updateSensor'])->name('SmallDataGarden');
+Route::get('smalldatagarden/automatic_update', '\App\Http\Controllers\SmallDataGardenController@SmallDataGarden_updateSensors');
+
 
 // Route::get('/setting', '\App\Http\Controllers\DashboardController@setting_index')->middleware(['auth']);
 Route::group(['prefix' => '/setting', 'middleware' => 'auth'], function ($router) {
