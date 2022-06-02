@@ -3,77 +3,76 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Traits\SmallDataGarden;
 
 class SmallDataGardenController extends Controller
 {
     //
-    public $api_baseurl = 'https://smalldata.fi/v2/';
-    public $api_token = 'ZN1hMXTYB6kKE2Dsa7djYPFqM451e7OV';
-    public function getAlldevices()
+    use SmallDataGarden;
+    public function index()
     {
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => $this->api_baseurl  . 'devices',
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'X-Sdg-Token: ' . $this->api_token
-        ),
-        ));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-        return json_decode($response);
+        //
+    }
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
     }
 
-    public function getDeviceData($deviceId)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
     {
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => $this->api_baseurl . '/devices/' . $deviceId . '/data',
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_HTTPHEADER => array(
-            'X-Sdg-Token: ' . $this->api_token
-        ),
-        ));
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-        return json_decode($response);
+        //
     }
-    public function updateSensor()
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
-        $devices = $this->getAlldevices();
-        foreach($devices as $device)
-        {
-            $deviceData = $this->getDeviceData($device->DeviceID);
-            var_dump($deviceData);
-            
-            $dbdata = array(
-                'deviceId' => $device->DeviceID,
-                'type' => 'battvolt',
-                'observationId' => null,
-                'tag' => $device->GroupName ?? '',
-                'name' => $device->FriendlyName ?? '',
-                'unit' => '',
-                'value' => $deviceData[0]->battvolt,
-                'message_time' => $device->Time,
-            );
-            var_dump($dbdata);
-        }
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+
+     
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
     }
 }
