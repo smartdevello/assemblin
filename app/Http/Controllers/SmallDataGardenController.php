@@ -38,7 +38,7 @@ class SmallDataGardenController extends Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-        CURLOPT_URL => $this->api_baseurl . `/devices/${deviceId}/data`,
+        CURLOPT_URL => $this->api_baseurl . '/devices/' . $deviceId . '/data',
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
