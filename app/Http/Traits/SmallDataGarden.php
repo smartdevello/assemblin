@@ -57,23 +57,46 @@ trait SmallDataGarden{
     public function SmallDataGarden_updateSensors()
     {
         $devices = $this->SmallDataGarden_getAlldevices();
+        $ignore_list = [
+            "date",
+            "id",
+            "Ack",
+            "Alert",
+            "Average mode",
+            "Data duplication",
+            "Transmit interval",
+            "rawData",
+            "Tx interval",
+            "ack",
+        ];
+
         foreach($devices as $device)
         {
             $deviceData = $this->SmallDataGarden_getDeviceData($device->DeviceID);
             
             $dbdata = array(
                 'deviceId' => $device->DeviceID,
-                'type' => 'battvolt',
+                //'type' => 'battvolt',
                 'observationId' => null,
                 'tag' => $device->GroupName ?? '',
                 'name' => $device->FriendlyName ?? '',
                 'unit' => '',
-                'value' => $deviceData[0]->battvolt,
+                //'value' => $deviceData[0]->battvolt,
                 'message_time' => $device->Time,
             );
-            Sensor::updateOrCreate(
-                ['deviceId' => $device->DeviceID, 'type' => 'battvolt'] , $dbdata
-            );  
+            foreach($deviceData[0] as $key => $value)
+            {
+                if (in_array( $key, $ignore_list)) continue;
+                if (!is_numeric($value)) continue;
+                $dbdata['type'] = $key;
+                $dbdata['value'] = $value;
+
+                Sensor::updateOrCreate(
+                    ['deviceId' => $device->DeviceID, 'type' => $key] , $dbdata
+                );  
+
+            }
+
         }
 
         return response()->json( $devices, 200);
