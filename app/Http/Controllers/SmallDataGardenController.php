@@ -60,7 +60,7 @@ class SmallDataGardenController extends Controller
         $devices = $this->getAlldevices();
         foreach($devices as $device)
         {
-            $deviceData = getDeviceData($device->DeviceID);
+            $deviceData = $this->getDeviceData($device->DeviceID);
 
             $dbdata = array(
                 'deviceId' => $device->DeviceID,
