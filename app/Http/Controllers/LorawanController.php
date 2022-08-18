@@ -58,7 +58,7 @@ class ELSYSdecoder {
             $bytes[]=hexdec(substr($hex, $c, 2));
         return $bytes;
     }
-    
+
     public function DecodeElsysPayload($data) {
         $obj = [];
         for ($i = 0; $i < count($data); $i++) {
@@ -189,7 +189,7 @@ class ELSYSdecoder {
 
                   if(isset($obj['externalTemperature2'] ) &&  is_numeric($obj['externalTemperature2'] ) ) {
                       $obj['externalTemperature2'] = [$obj['externalTemperature2']];
-                  } 
+                  }
                   if(isset($obj['externalTemperature2'] ) &&  is_array($obj['externalTemperature2']) ) {
                       array_push($obj['externalTemperature2'], $temp/10);
 
@@ -252,9 +252,9 @@ class Solidusdecoder extends ELSYSdecoder{
 
         $temp = $data[2] * 256 + $data[3];
         if ($temp >= 32768) {
-            $temp = $temp - 65535;            
+            $temp = $temp - 65535;
         }
-        $obj['Pressure'] = round($temp / 240, 3);    
+        $obj['Pressure'] = round($temp / 240, 3);
         return $obj;
     }
 
@@ -280,12 +280,12 @@ class LorawanController extends Controller
     public function index()
     {
         //
-        
+
         $request = json_decode(file_get_contents("lora.json"));
 
         $ELSYSdecoder = new ELSYSdecoder();
         $hexvalue  = $ELSYSdecoder->hexToBytes($request->DevEUI_uplink->payload_hex);
-        
+
         $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);
 
             foreach ( $data as $key => $val ) {
@@ -305,10 +305,10 @@ class LorawanController extends Controller
                             'value' => strval($sensorValue),
                             'message_time' => $request->DevEUI_uplink->Time,
                         );
-        
+
                         Sensor::updateOrCreate(
                             ['deviceId' => $request->DevEUI_uplink->DevEUI, 'type' => $sensorKey] , $dbdata
-                        );                       
+                        );
 
                     }
                 } else {
@@ -328,7 +328,7 @@ class LorawanController extends Controller
 
                     Sensor::updateOrCreate(
                         ['deviceId' => $request->DevEUI_uplink->DevEUI, 'type' => $sensorKey] , $dbdata
-                    );   
+                    );
 
                 }
             }
@@ -403,7 +403,7 @@ class LorawanController extends Controller
     }
     public function receive_csvfile()
     {
-        if (!isset($_GET['controller_id']) || !isset($_GET['trend_group_name']) || !isset($_GET['query_period'])) 
+        if (!isset($_GET['controller_id']) || !isset($_GET['trend_group_name']) || !isset($_GET['query_period']))
             return response()->json([
                 'error' => 'Parameters are missing'
             ], 401);
@@ -431,7 +431,7 @@ class LorawanController extends Controller
         {
             $index++;
             $row = fgetcsv($file, 0, ';');
-            if (is_array($row)) 
+            if (is_array($row))
                 $output[] = $row;
         }
         fclose($file);
@@ -451,14 +451,15 @@ class LorawanController extends Controller
             if ( $request_data['DevEUI'] == "A81758FFFE04EF1F" ) {
                 $ELSYSdecoder = new ELSYSdecoder();
                 $hexvalue  = $ELSYSdecoder->hexToBytes($request_data['payload_hex']);
-                
-                $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);  
+
+                $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);
             } else if ( $request_data['DevEUI'] == "47EABD48004A0044" ) {
                 $Solidusdecoder = new Solidusdecoder();
                 $hexvalue = $Solidusdecoder->hexToBytes($request_data['payload_hex']);
 
                 $data = $Solidusdecoder->DecodeSolidusPayload($hexvalue);
-            } else if ( $request_data['DevEUI'] == "70B3D55680000A6D" ) {
+            } else if ( strpos($request_data['DevEUI'], "70B3D") === 0 ) {
+                // $request_data['DevEUI'] == "70B3D55680000A6D" || $request_data['DevEUI'] == "70B3D55680002E8C"
                 $IOTSUdecoder = new IOTSUdecoder();
                 $hexvalue = $IOTSUdecoder->hexToBytes($request_data['payload_hex']);
 
@@ -483,10 +484,10 @@ class LorawanController extends Controller
                             'fport' => $request_data['FPort'],
                             'message_time' => $request_data['Time'],
                         );
-        
+
                         Sensor::updateOrCreate(
                             ['deviceId' => $request_data['DevEUI'], 'type' => $sensorKey] , $dbdata
-                        );                       
+                        );
 
                     }
                 } else {
@@ -504,14 +505,14 @@ class LorawanController extends Controller
                         'fport' => $request_data['FPort'],
                         'message_time' => $request_data['Time'],
                     );
-    
+
                     Sensor::updateOrCreate(
                         ['deviceId' => $request_data['DevEUI'], 'type' => $sensorKey] , $dbdata
-                    );  
+                    );
 
                 }
             }
-            
+
         }catch(Exception $e){
             return response()->json([
                 'error' => $e->getMessage()
