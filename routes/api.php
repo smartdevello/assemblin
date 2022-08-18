@@ -23,11 +23,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix' => 'lorawan'], function ($router) {
-    Route::post('receive_data', [LorawanController::class, 'receive_data'])->name('receive_data');
-    Route::get('receive_csvfile', [LorawanController::class, 'receive_csvfile'])->name('receive_csvfile');
-});
-
 Route::middleware(['cors', 'auth:sanctum'])->group(function(){
 
     Route::group(['prefix' => 'dashboard'], function ($router) {
@@ -35,7 +30,10 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function(){
         Route::get('restartAsmServices', [DashboardController::class, 'restartAsmServices'])->name('restartAsmServices');
     });
 
-
+    Route::group(['prefix' => 'lorawan'], function ($router) {
+        Route::post('receive_data', [LorawanController::class, 'receive_data'])->name('receive_data');
+        Route::get('receive_csvfile', [LorawanController::class, 'receive_csvfile'])->name('receive_csvfile');
+    });
 
     Route::group(['prefix' => 'point'], function ($router) {
         Route::get('getPoints', [PointController::class, 'getPoints'])->name('getPoints');
