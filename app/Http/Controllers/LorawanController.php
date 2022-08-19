@@ -264,15 +264,37 @@ class IOTSUdecoder extends ELSYSdecoder{
         $obj = [];
         if ( strpos($model, 'l2aq05') !== false) {
 
+            $obj['humidity #1'] = $data[2];
+            $obj['humidity #2'] = $data[6];
+            $obj['humidity #3'] = $data[10];
+            $obj['humidity #4'] = $data[14];
+
+
+            $obj['temperature #1'] = $data[3] / 10;
+            $obj['temperature #2'] = $data[7] / 10;
+            $obj['temperature #3'] = $data[11] / 10;
+            $obj['temperature #4'] = $data[15] / 10;
+
+
+
+
+            $obj['co2 #1'] = $data[4] * 10 + 400;
+            $obj['co2 #2'] = $data[8] * 10 + 400;
+            $obj['co2 #3'] = $data[12] * 10 + 400;
+            $obj['co2 #4'] = $data[16] * 10 + 400;
+
+            $obj['tvoc #1'] = ($data[5] - 30) * 5 + 60;
+            $obj['tvoc #2'] = ($data[9] - 30) * 5 + 60;
+            $obj['tvoc #3'] = ($data[13] - 30) * 5 + 60;
+            $obj['tvoc #4'] = ($data[17] - 30) * 5 + 60;
+
         } else {
             $obj['vdd'] = $data[0] * 20;
             $obj['humidity #1'] = $data[2] >> 1;
             $obj['temperature #1'] = $data[3] / 10;
             $obj['co2 #1'] = $data[4] * 10 + 400;
-            return $obj;
         }
-
-
+        return $obj;
     }
 }
 
