@@ -264,15 +264,15 @@ class IOTSUdecoder extends ELSYSdecoder{
         $obj = [];
         if ( strpos($model, 'l2aq05') !== false || strpos($model, 'l3aq05') !== false) {
 
-            $obj['humidity #1'] = $data[2];
-            $obj['humidity #2'] = $data[5];
-            $obj['humidity #3'] = $data[8];
-            $obj['humidity #4'] = $data[11];
+            $obj['humidity #1'] = $data[2] >> 1;
+            $obj['humidity #2'] = $data[5] >> 1;
+            $obj['humidity #3'] = $data[8] >> 1;
+            $obj['humidity #4'] = $data[11] >> 1;
 
-            $obj['temperature #1'] = $data[3] / 10;
-            $obj['temperature #2'] = $data[6] / 10;
-            $obj['temperature #3'] = $data[9] / 10;
-            $obj['temperature #4'] = $data[12] / 10;
+            $obj['temperature #1'] = (($data[2] % 2) >> 8 + $data[3]) / 10;
+            $obj['temperature #2'] = (($data[5] % 2) >> 8 + $data[6]) / 10;
+            $obj['temperature #3'] = (($data[8] % 2) >> 8 + $data[9]) / 10;
+            $obj['temperature #4'] = (($data[11] % 2) >> 8 + $data[12]) / 10;
 
             $obj['co2 #1'] = $data[4] * 10 + 400;
             $obj['co2 #2'] = $data[7] * 10 + 400;
@@ -280,16 +280,16 @@ class IOTSUdecoder extends ELSYSdecoder{
             $obj['co2 #4'] = $data[13] * 10 + 400;
 
         } else if (strpos($model, 'l2aq01') !== false  || strpos($model, 'l3aq01') !== false ) {
-            $obj['humidity #1'] = $data[2];
-            $obj['humidity #2'] = $data[6];
-            $obj['humidity #3'] = $data[10];
-            $obj['humidity #4'] = $data[14];
+            $obj['humidity #1'] = $data[2] >> 1;
+            $obj['humidity #2'] = $data[6] >> 1;
+            $obj['humidity #3'] = $data[10] >> 1;
+            $obj['humidity #4'] = $data[14] >> 1;
 
 
-            $obj['temperature #1'] = $data[3] / 10;
-            $obj['temperature #2'] = $data[7] / 10;
-            $obj['temperature #3'] = $data[11] / 10;
-            $obj['temperature #4'] = $data[15] / 10;
+            $obj['temperature #1'] = (($data[2] % 2) >> 8 + $data[3]) / 10;
+            $obj['temperature #2'] = (($data[6] % 2) >> 8 + $data[7]) / 10;
+            $obj['temperature #3'] = (($data[10] % 2) >> 8 + $data[11]) / 10;
+            $obj['temperature #4'] = (($data[14] % 2) >> 8 + $data[15]) / 10;
 
 
 
