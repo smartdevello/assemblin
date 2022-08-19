@@ -261,14 +261,18 @@ class Solidusdecoder extends ELSYSdecoder{
 }
 class IOTSUdecoder extends ELSYSdecoder{
     public function DecodeIOTSUPayload($data, $model = '') {
-
-
         $obj = [];
-        $obj['vdd'] = $data[0] * 20;
-        $obj['humidity #1'] = $data[2] >> 1;
-        $obj['temperature #1'] = $data[3] / 10;
-        $obj['co2 #1'] = $data[4] * 10 + 400;
-        return $obj;
+        if ( strpos($model, 'l2aq05') !== false) {
+
+        } else {
+            $obj['vdd'] = $data[0] * 20;
+            $obj['humidity #1'] = $data[2] >> 1;
+            $obj['temperature #1'] = $data[3] / 10;
+            $obj['co2 #1'] = $data[4] * 10 + 400;
+            return $obj;
+        }
+
+
     }
 }
 
@@ -447,7 +451,7 @@ class LorawanController extends Controller
     {
 
         try{
-            file_put_contents("lora.json", json_encode($request->all()));
+            file_put_contents("lora.json", json_encode($request->all()) , FILE_APPEND );
             $request_data = $request->DevEUI_uplink;
 
             if ( $request_data['DevEUI'] == "A81758FFFE04EF1F" ) {
@@ -465,9 +469,7 @@ class LorawanController extends Controller
                 $IOTSUdecoder = new IOTSUdecoder();
                 $hexvalue = $IOTSUdecoder->hexToBytes($request_data['payload_hex']);
                 $model = $request_data['CustomerData']['alr']['pro'];
-                return response()->json([
-                    'model' => $model
-                ], 200);
+
                 $data = $IOTSUdecoder->DecodeIOTSUPayload($hexvalue, $model);
             }
 
