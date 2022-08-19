@@ -279,7 +279,7 @@ class IOTSUdecoder extends ELSYSdecoder{
             $obj['co2 #3'] = $data[10] * 10 + 400;
             $obj['co2 #4'] = $data[13] * 10 + 400;
 
-        } else if ( strpos($model, 'l3aq01') !== false ) {
+        } else if (strpos($model, 'l2aq01') !== false  || strpos($model, 'l3aq01') !== false ) {
             $obj['humidity #1'] = $data[2];
             $obj['humidity #2'] = $data[6];
             $obj['humidity #3'] = $data[10];
@@ -489,7 +489,7 @@ class LorawanController extends Controller
     {
 
         try{
-            file_put_contents("lora.json", json_encode($request->all()) , FILE_APPEND );
+            file_put_contents("lora.json", json_encode($request->all())  );
             $request_data = $request->DevEUI_uplink;
 
             if ( $request_data['DevEUI'] == "A81758FFFE04EF1F" ) {
