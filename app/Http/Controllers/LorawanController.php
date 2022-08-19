@@ -269,10 +269,10 @@ class IOTSUdecoder extends ELSYSdecoder{
             $obj['humidity #3'] = $data[8] >> 1;
             $obj['humidity #4'] = $data[11] >> 1;
 
-            $obj['temperature #1'] = (($data[2] % 2) >> 8 + $data[3]) / 10;
-            $obj['temperature #2'] = (($data[5] % 2) >> 8 + $data[6]) / 10;
-            $obj['temperature #3'] = (($data[8] % 2) >> 8 + $data[9]) / 10;
-            $obj['temperature #4'] = (($data[11] % 2) >> 8 + $data[12]) / 10;
+            $obj['temperature #1'] = (($data[2] % 2) << 8 + $data[3]) / 10;
+            $obj['temperature #2'] = (($data[5] % 2) << 8 + $data[6]) / 10;
+            $obj['temperature #3'] = (($data[8] % 2) << 8 + $data[9]) / 10;
+            $obj['temperature #4'] = (($data[11] % 2) << 8 + $data[12]) / 10;
 
             $obj['co2 #1'] = $data[4] * 10 + 400;
             $obj['co2 #2'] = $data[7] * 10 + 400;
@@ -286,10 +286,10 @@ class IOTSUdecoder extends ELSYSdecoder{
             $obj['humidity #4'] = $data[14] >> 1;
 
 
-            $obj['temperature #1'] = (($data[2] % 2) >> 8 + $data[3]) / 10;
-            $obj['temperature #2'] = (($data[6] % 2) >> 8 + $data[7]) / 10;
-            $obj['temperature #3'] = (($data[10] % 2) >> 8 + $data[11]) / 10;
-            $obj['temperature #4'] = (($data[14] % 2) >> 8 + $data[15]) / 10;
+            $obj['temperature #1'] = (($data[2] % 2) << 8 + $data[3]) / 10;
+            $obj['temperature #2'] = (($data[6] % 2) << 8 + $data[7]) / 10;
+            $obj['temperature #3'] = (($data[10] % 2) << 8 + $data[11]) / 10;
+            $obj['temperature #4'] = (($data[14] % 2) << 8 + $data[15]) / 10;
 
 
 
