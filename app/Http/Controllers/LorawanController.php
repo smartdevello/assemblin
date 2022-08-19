@@ -464,7 +464,7 @@ class LorawanController extends Controller
                 // $request_data['DevEUI'] == "70B3D55680000A6D" (L2 AQ05)
                 $IOTSUdecoder = new IOTSUdecoder();
                 $hexvalue = $IOTSUdecoder->hexToBytes($request_data['payload_hex']);
-                $model = $request_data-['CustomerData']['alr']['pro'];
+                $model = $request_data['CustomerData']['alr']['pro'];
                 return response()->json([
                     'model' => $model
                 ], 200);
