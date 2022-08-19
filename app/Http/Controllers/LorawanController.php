@@ -262,8 +262,24 @@ class Solidusdecoder extends ELSYSdecoder{
 class IOTSUdecoder extends ELSYSdecoder{
     public function DecodeIOTSUPayload($data, $model = '') {
         $obj = [];
-        if ( strpos($model, 'l2aq05') !== false) {
+        if ( strpos($model, 'l2aq05') !== false || strpos($model, 'l3aq05') !== false) {
 
+            $obj['humidity #1'] = $data[2];
+            $obj['humidity #2'] = $data[5];
+            $obj['humidity #3'] = $data[8];
+            $obj['humidity #4'] = $data[11];
+
+            $obj['temperature #1'] = $data[3] / 10;
+            $obj['temperature #2'] = $data[6] / 10;
+            $obj['temperature #3'] = $data[9] / 10;
+            $obj['temperature #4'] = $data[12] / 10;
+
+            $obj['co2 #1'] = $data[4] * 10 + 400;
+            $obj['co2 #2'] = $data[7] * 10 + 400;
+            $obj['co2 #3'] = $data[10] * 10 + 400;
+            $obj['co2 #4'] = $data[13] * 10 + 400;
+
+        } else if ( strpos($model, 'l3aq01') !== false ) {
             $obj['humidity #1'] = $data[2];
             $obj['humidity #2'] = $data[6];
             $obj['humidity #3'] = $data[10];
