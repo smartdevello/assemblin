@@ -260,6 +260,18 @@ class Solidusdecoder extends ELSYSdecoder{
 
 }
 class IOTSUdecoder extends ELSYSdecoder{
+    public function calctVOC($val) {
+        if ($val <=30) {
+            return 2 * $val;
+        } else if ($val <=118) {
+            return (30 -0 ) * 2 + ($data-30) * 5;
+        } else if ($val <=193) {
+            return (30 -0 ) * 2 + (118-30) * 5 + ($data - 118) * 20;
+        } else {
+            return (30 -0 ) * 2 + (118-30) * 5 + (193 - 118) * 20 + ($data - 193) * 100;
+        }
+        return 0;
+    }
     public function DecodeIOTSUPayload($data, $model = '') {
         $obj = [];
         if ( strpos($model, 'l2aq05') !== false || strpos($model, 'l3aq05') !== false) {
@@ -301,10 +313,10 @@ class IOTSUdecoder extends ELSYSdecoder{
             $obj['co2 #3'] = $data[12] * 10 + 400;
             $obj['co2 #4'] = $data[16] * 10 + 400;
 
-            $obj['tvoc #1'] = ($data[5] - 30) * 5 + 60;
-            $obj['tvoc #2'] = ($data[9] - 30) * 5 + 60;
-            $obj['tvoc #3'] = ($data[13] - 30) * 5 + 60;
-            $obj['tvoc #4'] = ($data[17] - 30) * 5 + 60;
+            $obj['tvoc #1'] = $this->calctVOC($data[5]);
+            $obj['tvoc #2'] = $this->calctVOC($data[9]);
+            $obj['tvoc #3'] = $this->calctVOC($data[13]);
+            $obj['tvoc #4'] = $this->calctVOC($data[17]);
 
         } else {
             $obj['vdd'] = $data[0] * 20;
