@@ -108,12 +108,12 @@
     <script>
         var token = '{!! csrf_token() !!}';
         var sensors_raw = <?php echo json_encode($sensors); ?>;
-        console.log(sensors_raw);
+
         for (let sensor of sensors_raw) {
             if (sensor.visibility == 1) sensor.visibility = true;
             else sensor.visibility = false;
         }
-        console.log(sensors_raw);
+
         const main_vm = new Vue({
             el: '#app',
             vuetify: new Vuetify(),

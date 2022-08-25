@@ -127,6 +127,7 @@ class DashboardController extends Controller
                     "value" => $item["value"],
                     "name" => $item["name"],
                     "point_id" => $item["point_id"] ?? null,
+                    "visibility" => $item["visibility"]
                 ]);
 
                 if ($item['point_id']) {
