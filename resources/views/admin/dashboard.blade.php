@@ -262,6 +262,7 @@
                             point = this.points.find(point => point.id == sensor.point_id);
                             point_name = point.name;
                         }
+                        debugger;
                         if (sensors_raw[i].name != sensor.name || sensors_raw[i].value != sensor.value || sensors_raw[i].point_id != sensor.point_id || sensors_raw[i].visibility != sensor.visibility) {
                             submitdata.push({
                                 "id" : sensor.id,
