@@ -247,6 +247,7 @@
 
                         submitdata.push({
                             "id" : sensor.id,
+                            "name" : sensor.name,
                             "value" : String(sensor.value),
                             "point_id" : sensor.point_id,
                             "point_name" : point_name ?? null,

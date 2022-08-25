@@ -36,7 +36,7 @@ class DashboardController extends Controller
                     $sensor->area_id = $area->id;
                 }
             }
-            
+
         }
         $this->getSERVERConfig();
         $controllers = DEOS_controller::all();
@@ -125,9 +125,10 @@ class DashboardController extends Controller
                 $sensor = Sensor::where('id', $item['id'])->first();
                 $sensor->update([
                     "value" => $item["value"],
-                    "point_id" => $item["point_id"] ?? null,                
+                    "name" => $item["name"],
+                    "point_id" => $item["point_id"] ?? null,
                 ]);
-    
+
                 if ($item['point_id']) {
                     $points_updated = true;
                     $point = DEOS_point::where('id', $item['point_id'])->first();
@@ -145,7 +146,7 @@ class DashboardController extends Controller
                 $res = $this->sendDatatoASM($asm_points_data);
                 $this->stopAsmServices();
                 $this->updateConfigfiles();
-                $this->startAsmServices();   
+                $this->startAsmServices();
             }
         }catch(Exception $e){
             return response()->json([
@@ -181,7 +182,7 @@ class DashboardController extends Controller
             return curl_error($ch);
         }
         curl_close($ch);
-        $result = json_encode($result);        
+        $result = json_encode($result);
         return json_encode($result);
     }
     /**
