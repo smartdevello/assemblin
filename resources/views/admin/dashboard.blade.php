@@ -255,7 +255,7 @@
                 update_All: function(){
                     this.is_relation_updating = true;
                     let submitdata = [];
-                    for (let [i, sensor] of this.sensors)
+                    for (let [i, sensor] of this.sensors.entries())
                     {
                         point_name = null;
                         if ( sensor.point_id ) {
