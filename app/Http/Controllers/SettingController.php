@@ -141,6 +141,7 @@ class SettingController extends Controller
             '6' => '010102',
             '12' => '010103',
             '24' => '010104',
+            '48' => '010105',
             '72' => '010106'
         ];
 
@@ -172,7 +173,7 @@ class SettingController extends Controller
             // If device is Solidus
             $payload = $Solidus_payloads;
             $FPort = 1;
-        } else if ($request->deviceId == '70B3D55680000A6D'){
+        } else if ( strpos($request->deviceId, '70B3D') !== false){
             // If device is IOTSUS
             $payload = $IOTSU_payloads;
             $FPort = 1;
