@@ -262,7 +262,8 @@
                             "point_id" : sensor.point_id,
                             "point_name" : point_name ?? null,
                             "controller_id" : sensor.controller_id,
-                            "area_id" : sensor.area_id
+                            "area_id" : sensor.area_id,
+                            "visibility" : sensor.visibility
                         });
                     }
                     console.log(submitdata);
