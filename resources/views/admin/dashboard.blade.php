@@ -120,7 +120,7 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
-                sensors: sensors_raw,
+                sensors: [ ...sensors_raw ],
                 page: sensors_raw.current_page,
                 points: ( <?php echo json_encode($points); ?> ),
                 controllers: ( <?php echo json_encode($controllers); ?> ),
@@ -250,7 +250,7 @@
 
                 },
                 update_rawData: function(){
-                    sensors_raw = this.sensors;
+                    sensors_raw = [ ...this.sensors ];
                 },
                 update_All: function(){
                     this.is_relation_updating = true;
@@ -262,7 +262,7 @@
                             point = this.points.find(point => point.id == sensor.point_id);
                             point_name = point.name;
                         }
-                        debugger;
+
                         if (sensors_raw[i].name != sensor.name || sensors_raw[i].value != sensor.value || sensors_raw[i].point_id != sensor.point_id || sensors_raw[i].visibility != sensor.visibility) {
                             submitdata.push({
                                 "id" : sensor.id,
@@ -312,7 +312,7 @@
                             };
                             toastr.success('Updated Successfully');
                             console.log(response);
-                            update_raw();
+                            console.log(this);
                         }).fail(function(jqXHR, textStatus, errorThrown) {
                             main_vm.is_relation_updating = false;
                             toastr.error('Something went wrong');
