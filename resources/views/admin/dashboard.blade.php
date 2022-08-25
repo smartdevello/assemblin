@@ -60,6 +60,13 @@
 
                    </template>
 
+                   <template v-slot:item.visibility="{ item }">
+                    <v-simple-checkbox
+                      v-model="item.visibility"
+                      disabled
+                    ></v-simple-checkbox>
+                  </template>
+
                     <template v-slot:item.value="{ item }">
 
                         <v-text-field v-model="item.value" solo></v-text-field>
@@ -127,6 +134,7 @@
                     { text: 'DEOS Point', value: 'point_id' },
                     { text: 'DEOS Controller', value: 'controller_id' },
                     { text: 'Area', value: 'area_id' },
+                    { text: 'Visible', value: 'visibility' },
                 ],
                 search: '',
 
