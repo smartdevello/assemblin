@@ -54,6 +54,12 @@
                       }"
                   >
 
+                   <template v-slot:item.name="{ item }">
+
+                     <v-text-field v-model="item.name" solo></v-text-field>
+
+                   </template>
+
                     <template v-slot:item.value="{ item }">
 
                         <v-text-field v-model="item.value" solo></v-text-field>
@@ -70,7 +76,7 @@
                         </v-select>
                     </template>
                     <template v-slot:item.area_id="{ item }">
-                        <v-select :items="areas" v-model="item.area_id" item-text="name" item-value="id" solo>                                            
+                        <v-select :items="areas" v-model="item.area_id" item-text="name" item-value="id" solo>
                         </v-select>
                     </template>
 
@@ -121,7 +127,7 @@
                     { text: 'DEOS Point', value: 'point_id' },
                     { text: 'DEOS Controller', value: 'controller_id' },
                     { text: 'Area', value: 'area_id' },
-                ],              
+                ],
                 search: '',
 
             },
@@ -225,7 +231,7 @@
                             console.log(textStatus);
                             console.log(errorThrown);
                     });
-                    
+
                 },
 
                 update_All: function(){
@@ -238,12 +244,12 @@
                             point = this.points.find(point => point.id == sensor.point_id);
                             point_name = point.name;
                         }
-                        
+
                         submitdata.push({
                             "id" : sensor.id,
                             "value" : String(sensor.value),
                             "point_id" : sensor.point_id,
-                            "point_name" : point_name ?? null, 
+                            "point_name" : point_name ?? null,
                             "controller_id" : sensor.controller_id,
                             "area_id" : sensor.area_id
                         });
@@ -259,7 +265,7 @@
                             },
                             "data": JSON.stringify(submitdata),
                     };
-                    
+
                     $.ajax(settings).done(function(response) {
                             // setTimeout(main_vm.sendDatatoAssemblin, 500);
                             // main_vm.sendDatatoAssemblin();
