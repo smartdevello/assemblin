@@ -60,12 +60,7 @@
 
                    </template>
 
-                   <template v-slot:item.visibility="{ item }">
-                    <v-simple-checkbox
-                      v-model="item.visibility"
-                      disabled
-                    ></v-simple-checkbox>
-                  </template>
+
 
                     <template v-slot:item.value="{ item }">
 
@@ -85,6 +80,13 @@
                     <template v-slot:item.area_id="{ item }">
                         <v-select :items="areas" v-model="item.area_id" item-text="name" item-value="id" solo>
                         </v-select>
+                    </template>
+
+
+                    <template v-slot:item.visibility="{ item }">
+                        <v-simple-checkbox
+                          v-model="item.visibility"
+                        ></v-simple-checkbox>
                     </template>
 
                 </v-data-table>
