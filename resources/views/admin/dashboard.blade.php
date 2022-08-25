@@ -249,28 +249,32 @@
                     });
 
                 },
-
+                update_rawData: function(){
+                    sensors_raw = this.sensors;
+                },
                 update_All: function(){
                     this.is_relation_updating = true;
                     let submitdata = [];
-                    for (let sensor of this.sensors)
+                    for (let [i, sensor] of this.sensors)
                     {
                         point_name = null;
                         if ( sensor.point_id ) {
                             point = this.points.find(point => point.id == sensor.point_id);
                             point_name = point.name;
                         }
+                        if (sensors_raw[i].name != sensor.name || sensors_raw[i].value != sensor.value || sensors_raw[i].point_id != sensor.point_id || sensors_raw[i].visibility != sensor.visibility) {
+                            submitdata.push({
+                                "id" : sensor.id,
+                                "name" : sensor.name,
+                                "value" : String(sensor.value),
+                                "point_id" : sensor.point_id,
+                                "point_name" : point_name ?? null,
+                                "controller_id" : sensor.controller_id,
+                                "area_id" : sensor.area_id,
+                                "visibility" : sensor.visibility
+                            });
+                        }
 
-                        submitdata.push({
-                            "id" : sensor.id,
-                            "name" : sensor.name,
-                            "value" : String(sensor.value),
-                            "point_id" : sensor.point_id,
-                            "point_name" : point_name ?? null,
-                            "controller_id" : sensor.controller_id,
-                            "area_id" : sensor.area_id,
-                            "visibility" : sensor.visibility
-                        });
                     }
                     console.log(submitdata);
                     var settings = {
@@ -283,7 +287,7 @@
                             },
                             "data": JSON.stringify(submitdata),
                     };
-
+                    var update_raw = this.update_raw;
                     $.ajax(settings).done(function(response) {
                             // setTimeout(main_vm.sendDatatoAssemblin, 500);
                             // main_vm.sendDatatoAssemblin();
@@ -307,6 +311,7 @@
                             };
                             toastr.success('Updated Successfully');
                             console.log(response);
+                            update_raw();
                         }).fail(function(jqXHR, textStatus, errorThrown) {
                             main_vm.is_relation_updating = false;
                             toastr.error('Something went wrong');
