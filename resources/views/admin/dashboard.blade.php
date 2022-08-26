@@ -149,7 +149,7 @@
                 }
                 return [...sensors_raw];
                 this.sensors = [...sensors_raw];
-            }
+            },
             mounted: function() {
                 //Remove All weather_forcast points from dashboard.
                 index = this.points.length - 1;
