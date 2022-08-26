@@ -143,12 +143,7 @@
 
             },
             ready: function() {
-                for (let sensor of sensors_raw) {
-                    if (sensor.visibility == 1) sensor.visibility = true;
-                    else sensor.visibility = false;
-                }
-                return [...sensors_raw];
-                this.sensors = [...sensors_raw];
+
             },
             mounted: function() {
                 //Remove All weather_forcast points from dashboard.
@@ -160,6 +155,12 @@
                     index -= 1;
                 }
 
+                for (let sensor of sensors_raw) {
+                    if (sensor.visibility == 1) sensor.visibility = true;
+                    else sensor.visibility = false;
+                }
+                return [...sensors_raw];
+                this.sensors = [...sensors_raw];
             },
             watch: {
             },
