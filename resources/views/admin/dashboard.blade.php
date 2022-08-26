@@ -39,6 +39,22 @@
                           hide-details
                         ></v-text-field>
                     </v-card-title>
+                    <template v-slot:extension>
+                        <v-tabs
+                          v-model="tab"
+                          fixed-tabs
+                          dark
+                        >
+                          <v-tabs-slider color="black"></v-tabs-slider>
+
+                          <v-tab href="#active">Active</v-tab>
+                          <v-tab href="#hidden">Hidden</v-tab>
+                        </v-tabs>
+                      </template>
+                  <v-tab-items v-model="tab">
+                    <v-tab-item :value="'active'">Active</v-tab-item>
+                    <v-tab-item :value="'hidden'">Hidden</v-tab-item>
+                  </v-tabs-items>
                   <v-data-table
                     :headers="headers"
                     :items="sensors"
