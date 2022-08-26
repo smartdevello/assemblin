@@ -39,22 +39,22 @@
                           hide-details
                         ></v-text-field>
                     </v-card-title>
-                    <template v-slot:extension>
-                        <v-tabs
-                          v-model="tab"
-                          fixed-tabs
-                          dark
-                        >
-                          <v-tabs-slider color="black"></v-tabs-slider>
-
-                          <v-tab href="#active">Active</v-tab>
-                          <v-tab href="#hidden">Hidden</v-tab>
-                        </v-tabs>
-                        <v-tab-items v-model="tab">
-                            <v-tab-item :value="'active'">Active</v-tab-item>
-                            <v-tab-item :value="'hidden'">Hidden</v-tab-item>
-                          </v-tabs-items>
-                      </template>
+                    <v-tabs v-model="tab">
+                        <v-tab>
+                            Coupon
+                        </v-tab>
+                        <v-tab>
+                            Template
+                        </v-tab>
+                    </v-tabs>
+                    <v-tabs-items v-model="tab" class="pt-4">
+                        <v-tab-item>
+                            Active
+                        </v-tab-item>
+                        <v-tab-item>
+                            Hidden
+                        </v-tab-item>
+                    </v-tabs-items>
 
                   <v-data-table
                     :headers="headers"
