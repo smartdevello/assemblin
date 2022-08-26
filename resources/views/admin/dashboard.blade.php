@@ -107,15 +107,19 @@
 @section('script')
     <script>
         var token = '{!! csrf_token() !!}';
-
+        var sensors_raw = ( <?php echo json_encode($sensors); ?> );
+        for (let sensor of sensors_raw) {
+                    if (sensor.visibility == 1) sensor.visibility = true;
+                    else sensor.visibility = false;
+        }
         const main_vm = new Vue({
             el: '#app',
             vuetify: new Vuetify(),
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
-                sensors: ( <?php echo json_encode($sensors); ?> ),
-                old_sensors:( <?php echo json_encode($sensors); ?> ),
+                sensors: [...sensors_raw ],
+                old_sensors: [],
                 page: null,
                 points: ( <?php echo json_encode($points); ?> ),
                 controllers: ( <?php echo json_encode($controllers); ?> ),
@@ -155,10 +159,7 @@
                     index -= 1;
                 }
 
-                for (let sensor of this.sensors) {
-                    if (sensor.visibility == 1) sensor.visibility = true;
-                    else sensor.visibility = false;
-                }
+
                 this.update_oldData();
             },
             watch: {
