@@ -109,19 +109,19 @@
         var token = '{!! csrf_token() !!}';
         var sensors_raw = <?php echo json_encode($sensors); ?>;
 
-        for (let sensor of sensors_raw) {
-            if (sensor.visibility == 1) sensor.visibility = true;
-            else sensor.visibility = false;
-        }
-        const temp_sensors = [...sensors_raw];
-
         const main_vm = new Vue({
             el: '#app',
             vuetify: new Vuetify(),
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
-                sensors:temp_sensors,
+                sensors: function(){
+                    for (let sensor of sensors_raw) {
+                        if (sensor.visibility == 1) sensor.visibility = true;
+                        else sensor.visibility = false;
+                    }
+                    return [...sensors_raw];
+                },
                 page: sensors_raw.current_page,
                 points: ( <?php echo json_encode($points); ?> ),
                 controllers: ( <?php echo json_encode($controllers); ?> ),
@@ -150,9 +150,6 @@
             },
 
             mounted: function() {
-                // console.log(sensors_raw);
-                this.page = this.sensors.current_page;
-
                 //Remove All weather_forcast points from dashboard.
                 index = this.points.length - 1;
                 while (index >= 0) {
@@ -161,7 +158,6 @@
                     }
                     index -= 1;
                 }
-
 
             },
             watch: {
