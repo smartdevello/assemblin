@@ -282,7 +282,7 @@
                             point_name = point.name;
                         }
 
-                        if (old_sensors[i].name != sensor.name || old_sensors[i].value != sensor.value || old_sensors[i].point_id != sensor.point_id || old_sensors[i].visibility != sensor.visibility) {
+                        if (this.old_sensors[i].name != sensor.name || this.old_sensors[i].value != sensor.value || this.old_sensors[i].point_id != sensor.point_id || this.old_sensors[i].visibility != sensor.visibility) {
                             submitdata.push({
                                 "id" : sensor.id,
                                 "name" : sensor.name,
