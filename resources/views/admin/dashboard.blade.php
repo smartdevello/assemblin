@@ -120,7 +120,9 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
-                sensors: [ ...sensors_raw ],
+                sensors: function(){
+                    return [...sensors_raw];
+                },
                 page: sensors_raw.current_page,
                 points: ( <?php echo json_encode($points); ?> ),
                 controllers: ( <?php echo json_encode($controllers); ?> ),
