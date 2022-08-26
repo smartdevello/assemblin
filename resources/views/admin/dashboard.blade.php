@@ -138,6 +138,7 @@
                 mainMenu: mainMenu,
                 sensors: [...sensors_raw ],
                 old_sensors: [],
+                tab: null,
                 page: null,
                 points: ( <?php echo json_encode($points); ?> ),
                 controllers: ( <?php echo json_encode($controllers); ?> ),
