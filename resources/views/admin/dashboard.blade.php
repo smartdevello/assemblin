@@ -116,6 +116,7 @@
                 drawer: true,
                 mainMenu: mainMenu,
                 sensors: [],
+                old_sensors:[],
                 page: sensors_raw.current_page,
                 points: ( <?php echo json_encode($points); ?> ),
                 controllers: ( <?php echo json_encode($controllers); ?> ),
@@ -160,6 +161,7 @@
                     else sensor.visibility = false;
                 }
                 this.sensors = sensors_raw.slice();
+                this.old_sensors = sensors_raw.slice();
             },
             watch: {
             },
