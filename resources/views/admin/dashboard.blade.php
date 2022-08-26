@@ -159,7 +159,7 @@
                     if (sensor.visibility == 1) sensor.visibility = true;
                     else sensor.visibility = false;
                 }
-                this.old_sensors = [...this.sensors];
+                this.old_sensors = this.sensors;
             },
             watch: {
             },
