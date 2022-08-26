@@ -159,7 +159,7 @@
                     if (sensor.visibility == 1) sensor.visibility = true;
                     else sensor.visibility = false;
                 }
-                this.old_sensors = this.sensors;
+                this.update_oldData();
             },
             watch: {
             },
@@ -247,8 +247,26 @@
                     });
 
                 },
-                update_rawData: function(){
-                    this.old_sensors = [ ...this.sensors ];
+                update_oldData: function(){
+                    old_sensors = [ ];
+                    for (const sensor of sensors) {
+                        point_name = null;
+                        if ( sensor.point_id ) {
+                            point = this.points.find(point => point.id == sensor.point_id);
+                            point_name = point.name;
+                        }
+                        old_sensors.push({
+                                "id" : sensor.id,
+                                "name" : sensor.name,
+                                "value" : String(sensor.value),
+                                "point_id" : sensor.point_id,
+                                "point_name" : point_name ?? null,
+                                "controller_id" : sensor.controller_id,
+                                "area_id" : sensor.area_id,
+                                "visibility" : sensor.visibility
+                        });
+                    }
+
                 },
                 update_All: function(){
                     this.is_relation_updating = true;
@@ -276,6 +294,10 @@
 
                     }
                     console.log(submitdata);
+                    if (submitdata.length == 0) {
+                        toastr.error('Nothing to update');
+                        return;
+                    }
                     var settings = {
                             "url": this.update_dashboard_url,
                             "method": "POST",
@@ -310,7 +332,7 @@
                             };
                             toastr.success('Updated Successfully');
                             console.log(response);
-                            console.log(this);
+                            main_vm.update_oldData();
                         }).fail(function(jqXHR, textStatus, errorThrown) {
                             main_vm.is_relation_updating = false;
                             toastr.error('Something went wrong');
