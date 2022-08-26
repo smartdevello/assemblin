@@ -348,8 +348,8 @@
                     this.is_relation_updating = true;
                     let submitdata = [];
                     this.sensors = [...this.active_sensors , ...this.hidden_sensors];
-                    this.sensors.sort((a, b) => { a.id < b.id});
-                    this.old_sensors.sort((a, b) => {a.id < b.id } );
+                    this.sensors.sort((a, b) => { a.id - b.id});
+                    this.old_sensors.sort((a, b) => {a.id - b.id } );
 
                     for (let [i, sensor] of this.sensors.entries())
                     {
