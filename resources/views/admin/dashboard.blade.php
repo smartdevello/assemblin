@@ -113,6 +113,7 @@
             if (sensor.visibility == 1) sensor.visibility = true;
             else sensor.visibility = false;
         }
+        const temp_sensors = [...sensors_raw];
 
         const main_vm = new Vue({
             el: '#app',
@@ -120,7 +121,7 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
-                sensors:[...sensors_raw],
+                sensors:temp_sensors,
                 page: sensors_raw.current_page,
                 points: ( <?php echo json_encode($points); ?> ),
                 controllers: ( <?php echo json_encode($controllers); ?> ),
