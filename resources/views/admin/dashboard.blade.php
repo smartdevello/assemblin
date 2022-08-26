@@ -258,7 +258,7 @@
                             point = this.points.find(point => point.id == sensor.point_id);
                             point_name = point.name;
                         }
-                        old_sensors.push({
+                        this.old_sensors.push({
                                 "id" : sensor.id,
                                 "name" : sensor.name,
                                 "value" : String(sensor.value),
