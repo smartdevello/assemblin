@@ -107,7 +107,6 @@
 @section('script')
     <script>
         var token = '{!! csrf_token() !!}';
-        var sensors_raw = <?php echo json_encode($sensors); ?>;
 
         const main_vm = new Vue({
             el: '#app',
@@ -115,9 +114,9 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
-                sensors: [],
-                old_sensors:[],
-                page: sensors_raw.current_page,
+                sensors: ( <?php echo json_encode($sensors); ?> ),
+                old_sensors:( <?php echo json_encode($sensors); ?> ),
+                page: null,
                 points: ( <?php echo json_encode($points); ?> ),
                 controllers: ( <?php echo json_encode($controllers); ?> ),
                 areas: ( <?php echo json_encode($areas); ?> ),
@@ -156,12 +155,11 @@
                     index -= 1;
                 }
 
-                for (let sensor of sensors_raw) {
+                for (let sensor of this.sensors) {
                     if (sensor.visibility == 1) sensor.visibility = true;
                     else sensor.visibility = false;
                 }
-                this.sensors = sensors_raw.slice();
-                this.old_sensors = sensors_raw.slice();
+                this.old_sensors = [...this.sensors];
             },
             watch: {
             },
@@ -250,7 +248,7 @@
 
                 },
                 update_rawData: function(){
-                    sensors_raw = [ ...this.sensors ];
+                    this.old_sensors = [ ...this.sensors ];
                 },
                 update_All: function(){
                     this.is_relation_updating = true;
@@ -263,7 +261,7 @@
                             point_name = point.name;
                         }
 
-                        if (sensors_raw[i].name != sensor.name || sensors_raw[i].value != sensor.value || sensors_raw[i].point_id != sensor.point_id || sensors_raw[i].visibility != sensor.visibility) {
+                        if (old_sensors[i].name != sensor.name || old_sensors[i].value != sensor.value || old_sensors[i].point_id != sensor.point_id || old_sensors[i].visibility != sensor.visibility) {
                             submitdata.push({
                                 "id" : sensor.id,
                                 "name" : sensor.name,
