@@ -108,10 +108,12 @@
     <script>
         var token = '{!! csrf_token() !!}';
         var sensors_raw = ( <?php echo json_encode($sensors); ?> );
+
         for (let sensor of sensors_raw) {
-                    if (sensor.visibility == 1) sensor.visibility = true;
-                    else sensor.visibility = false;
+            if (sensor.visibility == 1) sensor.visibility = true;
+            else sensor.visibility = false;
         }
+
         const main_vm = new Vue({
             el: '#app',
             vuetify: new Vuetify(),
@@ -249,8 +251,8 @@
 
                 },
                 update_oldData: function(){
-                    old_sensors = [ ];
-                    for (const sensor of sensors) {
+                    this.old_sensors = [];
+                    for (const sensor of this.sensors) {
                         point_name = null;
                         if ( sensor.point_id ) {
                             point = this.points.find(point => point.id == sensor.point_id);
