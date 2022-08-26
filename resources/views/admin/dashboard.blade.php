@@ -50,11 +50,12 @@
                           <v-tab href="#active">Active</v-tab>
                           <v-tab href="#hidden">Hidden</v-tab>
                         </v-tabs>
+                        <v-tab-items v-model="tab">
+                            <v-tab-item :value="'active'">Active</v-tab-item>
+                            <v-tab-item :value="'hidden'">Hidden</v-tab-item>
+                          </v-tabs-items>
                       </template>
-                  <v-tab-items v-model="tab">
-                    <v-tab-item :value="'active'">Active</v-tab-item>
-                    <v-tab-item :value="'hidden'">Hidden</v-tab-item>
-                  </v-tabs-items>
+
                   <v-data-table
                     :headers="headers"
                     :items="sensors"
