@@ -115,13 +115,7 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
-                sensors: function(){
-                    for (let sensor of sensors_raw) {
-                        if (sensor.visibility == 1) sensor.visibility = true;
-                        else sensor.visibility = false;
-                    }
-                    return [...sensors_raw];
-                },
+                sensors: [],
                 page: sensors_raw.current_page,
                 points: ( <?php echo json_encode($points); ?> ),
                 controllers: ( <?php echo json_encode($controllers); ?> ),
@@ -148,7 +142,14 @@
                 search: '',
 
             },
-
+            ready: function() {
+                for (let sensor of sensors_raw) {
+                    if (sensor.visibility == 1) sensor.visibility = true;
+                    else sensor.visibility = false;
+                }
+                return [...sensors_raw];
+                this.sensors = [...sensors_raw];
+            }
             mounted: function() {
                 //Remove All weather_forcast points from dashboard.
                 index = this.points.length - 1;
