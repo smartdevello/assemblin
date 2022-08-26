@@ -282,7 +282,7 @@
                             point_name = point.name;
                         }
 
-                        if (this.old_sensors[i].name != sensor.name || this.old_sensors[i].value != sensor.value || this.old_sensors[i].point_id != sensor.point_id || this.old_sensors[i].visibility != sensor.visibility) {
+                        if (this.old_sensors[i].name != sensor.name  ||  this.old_sensors[i].value != sensor.value || this.old_sensors[i].point_id != sensor.point_id || this.old_sensors[i].visibility != sensor.visibility) {
                             submitdata.push({
                                 "id" : sensor.id,
                                 "name" : sensor.name,
@@ -299,6 +299,7 @@
                     console.log(submitdata);
                     if (submitdata.length == 0) {
                         toastr.error('Nothing to update');
+                        this.is_relation_updating = false;
                         return;
                     }
                     var settings = {
