@@ -41,72 +41,122 @@
                     </v-card-title>
                     <v-tabs v-model="tab">
                         <v-tab>
-                            Coupon
+                            Active
                         </v-tab>
                         <v-tab>
-                            Template
+                            Hidden
                         </v-tab>
                     </v-tabs>
                     <v-tabs-items v-model="tab" class="pt-4">
                         <v-tab-item>
-                            Active
+                            <v-data-table
+                                :headers="headers"
+                                :items="active_sensors"
+                                :search="search"
+                                :items-per-page="10"
+                                multi-sort
+                                :footer-props="{
+                                    showFirstLastPage: true,
+                                    firstIcon: 'mdi-arrow-collapse-left',
+                                    lastIcon: 'mdi-arrow-collapse-right',
+                                    prevIcon: 'mdi-minus',
+                                    nextIcon: 'mdi-plus'
+                                }"
+                            >
+
+                            <template v-slot:item.name="{ item }">
+
+                                <v-text-field v-model="item.name" solo></v-text-field>
+
+                            </template>
+
+
+
+                                <template v-slot:item.value="{ item }">
+
+                                    <v-text-field v-model="item.value" solo></v-text-field>
+
+                                </template>
+
+
+                                <template v-slot:item.point_id="{ item }">
+                                    <v-select class="pa-0 ma-0" :items="points" v-model="item.point_id" item-text="name" item-value="id" solo @change="changePoint($event, item.id)">
+                                    </v-select>
+                                </template>
+                                <template v-slot:item.controller_id="{ item }">
+                                    <v-select :items="controllers" v-model="item.controller_id" item-text="name" item-value="id" solo @change="changeContoller($event, item.id)">
+                                    </v-select>
+                                </template>
+                                <template v-slot:item.area_id="{ item }">
+                                    <v-select :items="areas" v-model="item.area_id" item-text="name" item-value="id" solo>
+                                    </v-select>
+                                </template>
+
+
+                                <template v-slot:item.visibility="{ item }">
+                                    <v-simple-checkbox
+                                    v-model="item.visibility"
+                                    ></v-simple-checkbox>
+                                </template>
+
+                            </v-data-table>
                         </v-tab-item>
                         <v-tab-item>
-                            Hidden
+                            <v-data-table
+                                :headers="headers"
+                                :items="hidden_sensors"
+                                :search="search"
+                                :items-per-page="10"
+                                multi-sort
+                                :footer-props="{
+                                    showFirstLastPage: true,
+                                    firstIcon: 'mdi-arrow-collapse-left',
+                                    lastIcon: 'mdi-arrow-collapse-right',
+                                    prevIcon: 'mdi-minus',
+                                    nextIcon: 'mdi-plus'
+                                }"
+                            >
+
+                            <template v-slot:item.name="{ item }">
+
+                                <v-text-field v-model="item.name" solo></v-text-field>
+
+                            </template>
+
+
+
+                                <template v-slot:item.value="{ item }">
+
+                                    <v-text-field v-model="item.value" solo></v-text-field>
+
+                                </template>
+
+
+                                <template v-slot:item.point_id="{ item }">
+                                    <v-select class="pa-0 ma-0" :items="points" v-model="item.point_id" item-text="name" item-value="id" solo @change="changePoint($event, item.id)">
+                                    </v-select>
+                                </template>
+                                <template v-slot:item.controller_id="{ item }">
+                                    <v-select :items="controllers" v-model="item.controller_id" item-text="name" item-value="id" solo @change="changeContoller($event, item.id)">
+                                    </v-select>
+                                </template>
+                                <template v-slot:item.area_id="{ item }">
+                                    <v-select :items="areas" v-model="item.area_id" item-text="name" item-value="id" solo>
+                                    </v-select>
+                                </template>
+
+
+                                <template v-slot:item.visibility="{ item }">
+                                    <v-simple-checkbox
+                                    v-model="item.visibility"
+                                    ></v-simple-checkbox>
+                                </template>
+
+                            </v-data-table>
                         </v-tab-item>
                     </v-tabs-items>
 
-                  <v-data-table
-                    :headers="headers"
-                    :items="sensors"
-                    :search="search"
-                    :items-per-page="10"
-                    multi-sort
-                    :footer-props="{
-                        showFirstLastPage: true,
-                        firstIcon: 'mdi-arrow-collapse-left',
-                        lastIcon: 'mdi-arrow-collapse-right',
-                        prevIcon: 'mdi-minus',
-                        nextIcon: 'mdi-plus'
-                      }"
-                  >
 
-                   <template v-slot:item.name="{ item }">
-
-                     <v-text-field v-model="item.name" solo></v-text-field>
-
-                   </template>
-
-
-
-                    <template v-slot:item.value="{ item }">
-
-                        <v-text-field v-model="item.value" solo></v-text-field>
-
-                    </template>
-
-
-                    <template v-slot:item.point_id="{ item }">
-                        <v-select class="pa-0 ma-0" :items="points" v-model="item.point_id" item-text="name" item-value="id" solo @change="changePoint($event, item.id)">
-                        </v-select>
-                    </template>
-                    <template v-slot:item.controller_id="{ item }">
-                        <v-select :items="controllers" v-model="item.controller_id" item-text="name" item-value="id" solo @change="changeContoller($event, item.id)">
-                        </v-select>
-                    </template>
-                    <template v-slot:item.area_id="{ item }">
-                        <v-select :items="areas" v-model="item.area_id" item-text="name" item-value="id" solo>
-                        </v-select>
-                    </template>
-
-
-                    <template v-slot:item.visibility="{ item }">
-                        <v-simple-checkbox
-                          v-model="item.visibility"
-                        ></v-simple-checkbox>
-                    </template>
-
-                </v-data-table>
                 </v-card>
               </template>
             <v-row >
@@ -138,6 +188,8 @@
                 drawer: true,
                 mainMenu: mainMenu,
                 sensors: [...sensors_raw ],
+                active_sensors: [],
+                hidden_sensors: [],
                 old_sensors: [],
                 tab: null,
                 page: null,
@@ -178,7 +230,8 @@
                     }
                     index -= 1;
                 }
-
+                this.active_sensors = this.sensors.filter( item => item.visibility === true);
+                this.hidden_sensors = this.sensors.filter( item => item.visibility === false);
 
                 this.update_oldData();
             },
@@ -287,11 +340,14 @@
                                 "visibility" : sensor.visibility
                         });
                     }
+                    this.active_sensors = this.sensors.filter( item => item.visibility === true);
+                    this.hidden_sensors = this.sensors.filter( item => item.visibility === false);
 
                 },
                 update_All: function(){
                     this.is_relation_updating = true;
                     let submitdata = [];
+                    this.sensors = [...this.active_sensors , ...this.hidden_sensors];
                     for (let [i, sensor] of this.sensors.entries())
                     {
                         point_name = null;
@@ -362,8 +418,6 @@
                             console.log(textStatus);
                             console.log(errorThrown);
                         });
-
-
 
                 },
                 update_relations: function() {
