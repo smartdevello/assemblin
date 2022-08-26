@@ -159,7 +159,7 @@
                     if (sensor.visibility == 1) sensor.visibility = true;
                     else sensor.visibility = false;
                 }
-                this.sensors = [...sensors_raw];
+                this.sensors = sensors_raw.slice();
             },
             watch: {
             },
