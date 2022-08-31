@@ -21,12 +21,12 @@ trait AssemblinInit {
             $ssh = new SSH2('172.21.8.245', 22);
 
             $ssh->login('Hkaapiuser', 'ApiUserHKA34!');
-    
-            // Stop services:         
+
+            // Stop services:
             $response = $response .  $ssh->exec("taskkill /IM asmserver.exe /f");
             $response = $response .   $ssh->exec("taskkill /IM asmrest.exe /f");
-            $response = $response .   $ssh->exec("schtasks /end /tn \"AsmRestService starter\"");  
- 
+            $response = $response .   $ssh->exec("schtasks /end /tn \"AsmRestService starter\"");
+
             return response()->json([
                 'success' => $response
             ]);
@@ -43,9 +43,9 @@ trait AssemblinInit {
         try{
             $ssh = new SSH2('172.21.8.245', 22);
 
-            $ssh->login('Hkaapiuser', 'ApiUserHKA34!');   
-   
-    
+            $ssh->login('Hkaapiuser', 'ApiUserHKA34!');
+
+
             //Start Services:
             $response = $response .  $ssh->exec("schtasks /run /tn \"AsmRestService starter\"");
             return response()->json([
@@ -66,13 +66,13 @@ trait AssemblinInit {
             $ssh = new SSH2('172.21.8.245', 22);
 
             $ssh->login('Hkaapiuser', 'ApiUserHKA34!');
-    
-            // Stop services:         
+
+            // Stop services:
             $response = $response .  $ssh->exec("taskkill /IM asmserver.exe /f");
             $response = $response .   $ssh->exec("taskkill /IM asmrest.exe /f");
             $response = $response .   $ssh->exec("schtasks /end /tn \"AsmRestService starter\"");
-    
-    
+
+
             //Start Services:
             $response = $response .  $ssh->exec("schtasks /run /tn \"AsmRestService starter\"");
             return response()->json([
@@ -114,7 +114,7 @@ trait AssemblinInit {
 
         foreach ($res['data'] as &$device) {
             foreach ($device['latestObservations'] as &$sensor) {
-               
+
                 $data = array(
                     'deviceId' => $device['deviceId'],
                     'type' => $sensor['variable'],
@@ -123,12 +123,12 @@ trait AssemblinInit {
                     'name' => $device['displayName'],
                     'unit' => $sensor['unit'] ?? '',
                     'value' => $sensor['value'],
-                    'message_time' => $sensor['message-time'],                    
+                    'message_time' => $sensor['message-time'],
                 );
 
                 Sensor::updateOrCreate(
-                    ['deviceId' => $device['deviceId'], 'type' => $sensor['variable']] , $data                    
-                );               
+                    ['deviceId' => $device['deviceId'], 'type' => $sensor['variable']] , $data
+                );
 
             }
         }
@@ -173,7 +173,7 @@ trait AssemblinInit {
                     ['deviceId' => $item['deviceId'], 'type' => $item['variable']],
                     array(
                         'point_id' => $point->id,
-                        'point_name' => $item['point_name']                        
+                        'point_name' => $item['point_name']
                     )
                 );
                 array_push($res, $row);
@@ -355,7 +355,7 @@ trait AssemblinInit {
             return curl_error($ch);
         }
         curl_close($ch);
-        $result = json_encode($result);        
+        $result = json_encode($result);
         return json_encode($result);
     }
 
@@ -364,8 +364,8 @@ trait AssemblinInit {
     {
         try{
             $filepath = config()->get('constants.BASE_CONFIG_PATH') . 'asmserver/config.json';
-            $content = file_get_contents($filepath);            
-            $content = json_decode($content); 
+            $content = file_get_contents($filepath);
+            $content = json_decode($content);
 
             foreach($content->Slaves as &$controller){
                 $row = DEOS_controller::where('name', $controller->Name)->where('port_number', $controller->Port)->first();
@@ -381,9 +381,9 @@ trait AssemblinInit {
                     $row->update($data);
                 }
                 $controller->controller_id = $row->id;
-                
+
             }
-            
+
             return response()->json($content);
         } catch (\Exception $e){
             return response()->json([
@@ -398,15 +398,15 @@ trait AssemblinInit {
         if (!empty($controller->name) ) {
             try{
                 $filepath = config()->get('constants.BASE_CONFIG_PATH') . 'asmrest/' . $controller->name . ".json";
-                $content = file_get_contents($filepath);            
-                $content = json_decode($content); 
+                $content = file_get_contents($filepath);
+                $content = json_decode($content);
 
                 $controller->update([
                     'ip_address' => $content->OpenEMS->IP
                 ]);
 
                 foreach($content->LP->Writeable as $point) {
-                    
+
                     $row = DEOS_point::where('name', $point->Description)->first();
                     $data = [
                         'name' => $point->Description,
@@ -418,7 +418,7 @@ trait AssemblinInit {
                         'meta_type' => $point->Meta->type ?? '',
                         'controller_id' => $controller->id
                     ];
-                    
+
                     if ($row === null)  {
                         $row = DEOS_point::create($data);
                     } else {
@@ -448,7 +448,7 @@ trait AssemblinInit {
         {
             array_push($data, array("id" => $point->name, "value" => strval($point->value)));
         }
-        
+
         $ch = curl_init();
         curl_setopt_array($ch, array(
             CURLOPT_URL => 'https://172.21.8.245:8000/assemblin/points/writebyid',
@@ -477,7 +477,7 @@ trait AssemblinInit {
         return response()->json([
             'success' => $result,
             'data' => $data
-        ], 200);     
+        ], 200);
     }
     public function automatic_update()
     {
@@ -528,6 +528,6 @@ trait AssemblinInit {
         return response()->json([
             'success' => $result,
             'data' => $data
-        ], 200);        
+        ], 200);
     }
 }
