@@ -27,3 +27,4 @@ npm-debug.log
 yarn-error.log
 composer.lock
 package-lock.json
+lora.json
