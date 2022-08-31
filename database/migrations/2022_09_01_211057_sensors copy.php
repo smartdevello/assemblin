@@ -43,6 +43,6 @@ class Sensors_Copy extends Migration
     public function down()
     {
         //
-        Schema::dropIfExists('sensors');
+        Schema::dropIfExists('sensors_copy');
     }
 }
