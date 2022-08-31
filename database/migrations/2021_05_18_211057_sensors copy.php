@@ -14,7 +14,7 @@ class Sensors extends Migration
     public function up()
     {
         //
-        Schema::create('sensors', function (Blueprint $table) {
+        Schema::create('sensors_copy', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('observationId')->nullable();
