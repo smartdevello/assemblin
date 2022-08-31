@@ -11,7 +11,7 @@ class Sensor extends Model
     use HasFactory, Notifiable;
     protected $table = 'sensors';
     protected $fillable = [
-        'deviceId', 'observationId', 'tag', 'name', 'type', 'unit', 'value', 'fport', 'message_time', 'point_id', 'point_name', 'visibility'
+        'deviceId', 'observationId', 'tag', 'name', 'type', 'unit', 'value', 'fport', 'message_time', 'point_id', 'point_name', 'visibility', 'logs'
     ];
 
     public function point()
