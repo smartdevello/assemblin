@@ -105,7 +105,7 @@
                                 <template v-slot:expanded-item="{ headers, item }">
                                     <table>
                                         <tbody>
-                                            <tr v-for="(info, i) in JSON.parse(item.logs.logs)" :key="i">
+                                            <tr v-for="(info, i) in item.logs" :key="i">
                                                 <th scope="row">{{ info  }}</th> 
                                                 <td scope="row">{{  i }}</td> 
                                             </tr>
@@ -195,6 +195,7 @@
         for (let sensor of sensors_raw) {
             if (sensor.visibility == 1) sensor.visibility = true;
             else sensor.visibility = false;
+            sensor.logs = Json.parse(sensor.logs.logs);
         }
 
         const main_vm = new Vue({
