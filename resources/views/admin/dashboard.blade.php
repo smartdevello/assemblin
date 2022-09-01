@@ -105,7 +105,7 @@
                                 <template v-slot:expanded-item="{ headers, item }">
                                     <table>
                                         <tbody>
-                                            <tr v-for="(info, i) in item.logs" :key="i">
+                                            <tr v-for="(info, i) in JSON.parse(item.logs.logs)" :key="i">
                                                 <th scope="row">{{ info  }}</th> 
                                                 <td scope="row">{{  i }}</td> 
                                             </tr>
