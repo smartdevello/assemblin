@@ -665,6 +665,7 @@ class LorawanController extends Controller
             }
 
         }catch(Exception $e){
+            file_put_contents("error.json", $e->getMessage() );
             return response()->json([
                 'error' => $e->getMessage()
             ], 403);
