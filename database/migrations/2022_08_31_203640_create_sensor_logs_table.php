@@ -15,6 +15,9 @@ class CreateSensorLogsTable extends Migration
     {
         Schema::create('sensor_logs', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('sensor_id');
+            $table->foreign('sensor_id')->references('id')->on('sensors')->onDelete('cascade');
+            $table->longText('logs')->nullable();
             $table->timestamps();
         });
     }

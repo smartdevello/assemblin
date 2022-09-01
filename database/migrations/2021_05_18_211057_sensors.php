@@ -30,7 +30,6 @@ class Sensors extends Migration
             $table->foreign('point_id')->references('id')->on('deos_points')->onDelete('cascade');
             $table->string('point_name')->nullable();
             $table->boolean('visibility')->default(true);
-            $table->string('logs')->nullable();
             $table->timestamps();
         });
     }
