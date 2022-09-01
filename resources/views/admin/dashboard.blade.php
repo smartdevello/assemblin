@@ -103,11 +103,15 @@
                                 </template>
 
                                 <template v-slot:expanded-item="{ headers, item }">
-                                    <td :colspan="headers.length">
-                                        {{ typeof (item) }}
-                                        {{ typeof (item.logs) }}
-                                        {{ item.logs['logs'] }}
-                                    </td>
+                                    <table>
+                                        <tbody>
+                                            <tr v-for="(info, i) in item.logs" :key="i">
+                                                <th scope="row">{{ info  }}</th> 
+                                                <td scope="row">{{  i }}</td> 
+                                            </tr>
+                                        </tbody>
+                                    <table>
+
                                   </template>
 
                             </v-data-table>
