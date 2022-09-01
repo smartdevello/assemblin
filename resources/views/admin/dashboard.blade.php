@@ -106,6 +106,7 @@
                                     <td :colspan="headers.length">
                                         {{ typeof (item) }}
                                         {{ typeof (item.logs) }}
+                                        {{ item.logs['logs'] }}
                                     </td>
                                   </template>
 
