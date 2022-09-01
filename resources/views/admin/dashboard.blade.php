@@ -103,7 +103,7 @@
 
                                 <template v-slot:expanded-item="{ headers, item }">
                                     <td :colspan="headers.length">
-                                      More info about {{ item.logs }}
+                                      More info about { item.logs }
                                     </td>
                                   </template>
 
