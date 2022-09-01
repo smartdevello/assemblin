@@ -98,7 +98,11 @@ trait SmallDataGarden{
                 $log_data = array(
                     'sensor_id' => $sensor->id,
                 );
-                if (!empty( $log )) {
+                if (empty( $log ) || is_null($log)) {
+                    $log_data['logs'] = json_encode([
+                        date('Y-m-d H:i:s') => $sensor->value
+                    ]);
+                } else {
                     $log_data['logs'] = json_decode($log->logs);
                     $len = count($log_data['logs']);
                     if ( $len > 9 ){
@@ -107,10 +111,6 @@ trait SmallDataGarden{
                     $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
 
                     $log_data['logs'] = json_encode($log_data['logs']);
-                } else {
-                    $log_data['logs'] = json_encode([
-                        date('Y-m-d H:i:s') => $sensor->value
-                    ]);
                 }
                 $log = SensorLog::updateOrCreate(
                     ['sensor_id' => $sensor->id, ] , $log_data
