@@ -195,7 +195,6 @@
         for (let sensor of sensors_raw) {
             if (sensor.visibility == 1) sensor.visibility = true;
             else sensor.visibility = false;
-            sensor.logs = JSON.parse(sensor.logs.logs);
         }
 
         const main_vm = new Vue({
