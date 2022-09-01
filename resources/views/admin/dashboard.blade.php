@@ -23,6 +23,7 @@
     </style>
 @endsection
 @section('content')
+@verbatim
     <v-main>
         <v-container>
 
@@ -103,7 +104,7 @@
 
                                 <template v-slot:expanded-item="{ headers, item }">
                                     <td :colspan="headers.length">
-                                        <div v-pre>"{{ item.logs }}"</div>
+                                        <div v-pre>{{ item.logs }}</div>
                                     </td>
                                   </template>
 
@@ -177,6 +178,7 @@
             </v-row>
         </v-container>
     </v-main>
+    @endverbatim
 @endsection
 
 @section('script')
