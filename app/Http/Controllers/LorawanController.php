@@ -407,10 +407,31 @@ class LorawanController extends Controller
                         'message_time' => $request->DevEUI_uplink->Time,
                     );
 
-                    Sensor::updateOrCreate(
+                    $sensor= Sensor::updateOrCreate(
                         ['deviceId' => $request->DevEUI_uplink->DevEUI, 'type' => $sensorKey] , $dbdata
                     );
 
+                        $log = SensorLog::where('sensor_id', $sensor->id)->first();
+                        $log_data = array(
+                            'sensor_id' => $sensor->id,
+                        );
+                        if (!empty( $log )) {
+                            $log_data['logs'] = json_decode($log->logs);
+                            $len = count($log_data['logs']);
+                            if ( $len > 9 ){
+                                $log_data['logs'] = array_slice( $log_data['logs'] ,  $len - 9);
+                            }
+                            $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
+
+                            $log_data['logs'] = json_encode($log_data['logs']);
+                        } else {
+                            $log_data['logs'] = json_encode([
+                                date('Y-m-d H:i:s') => $sensor->value
+                            ]);
+                        }
+                        $log = SensorLog::updateOrCreate(
+                            ['sensor_id' => $sensor->id, ] , $log_data
+                        );
                 }
             }
             return $data;
@@ -567,8 +588,33 @@ class LorawanController extends Controller
                             'message_time' => $request_data['Time'],
                         );
 
-                        Sensor::updateOrCreate(
+                        $sensor = Sensor::updateOrCreate(
                             ['deviceId' => $request_data['DevEUI'], 'type' => $sensorKey] , $dbdata
+                        );
+                        file_put_contents("sensor.json", json_encode($sensor) );
+
+                        $log = SensorLog::where('sensor_id', $sensor->id)->first();
+                        file_put_contents("log.json", json_encode($log) );
+
+                        $log_data = array(
+                            'sensor_id' => $sensor->id,
+                        );
+                        if (!empty( $log )) {
+                            $log_data['logs'] = json_decode($log->logs);
+                            $len = count($log_data['logs']);
+                            if ( $len > 9 ){
+                                $log_data['logs'] = array_slice( $log_data['logs'] ,  $len - 9);
+                            }
+                            $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
+
+                            $log_data['logs'] = json_encode($log_data['logs']);
+                        } else {
+                            $log_data['logs'] = json_encode([
+                                date('Y-m-d H:i:s') => $sensor->value
+                            ]);
+                        }
+                        $log = SensorLog::updateOrCreate(
+                            ['sensor_id' => $sensor->id, ] , $log_data
                         );
 
                     }
@@ -588,10 +634,33 @@ class LorawanController extends Controller
                         'message_time' => $request_data['Time'],
                     );
 
-                    Sensor::updateOrCreate(
+                    $sensor = Sensor::updateOrCreate(
                         ['deviceId' => $request_data['DevEUI'], 'type' => $sensorKey] , $dbdata
                     );
+                    file_put_contents("sensor.json", json_encode($sensor) );
+                    $log = SensorLog::where('sensor_id', $sensor->id)->first();
+                    file_put_contents("log.json", json_encode($log) );
 
+                    $log_data = array(
+                        'sensor_id' => $sensor->id,
+                    );
+                    if (!empty( $log )) {
+                        $log_data['logs'] = json_decode($log->logs);
+                        $len = count($log_data['logs']);
+                        if ( $len > 9 ){
+                            $log_data['logs'] = array_slice( $log_data['logs'] ,  $len - 9);
+                        }
+                        $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
+
+                        $log_data['logs'] = json_encode($log_data['logs']);
+                    } else {
+                        $log_data['logs'] = json_encode([
+                            date('Y-m-d H:i:s') => $sensor->value
+                        ]);
+                    }
+                    $log = SensorLog::updateOrCreate(
+                        ['sensor_id' => $sensor->id, ] , $log_data
+                    );
                 }
             }
 
