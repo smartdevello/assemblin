@@ -7,6 +7,7 @@ use App\Models\DEOS_controller;
 use App\Models\DEOS_point;
 use Illuminate\Http\Request;
 use App\Models\Sensor;
+use App\Models\SensorLog;
 use App\Http\Traits\AssemblinInit;
 use Exception;
 
@@ -36,6 +37,7 @@ class DashboardController extends Controller
                     $sensor->area_id = $area->id;
                 }
             }
+            $sensor->logs;
 
         }
         $this->getSERVERConfig();
@@ -50,7 +52,6 @@ class DashboardController extends Controller
             $point->controller;
             $point->area;
         }
-
         $areas = Area::all();
         return view('admin.dashboard', [
             'sensors' => $sensors,

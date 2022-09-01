@@ -18,4 +18,9 @@ class Sensor extends Model
     {
         return $this->belongsTo(DEOS_point::class, 'point_id', 'id');
     }
+
+    public function logs()
+    {
+        return $this->hasMany(SensorLog::class, 'sensor_id', 'id');
+    }
 }
