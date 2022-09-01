@@ -54,7 +54,10 @@
                                 :items="active_sensors"
                                 :search="search"
                                 :items-per-page="10"
+                                :single-expand="singleExpand"
+                                item-key="id"
                                 multi-sort
+                                show-expand
                                 :footer-props="{
                                     showFirstLastPage: true,
                                     firstIcon: 'mdi-arrow-collapse-left',
@@ -69,7 +72,6 @@
                                 <v-text-field v-model="item.name" solo></v-text-field>
 
                             </template>
-
 
 
                                 <template v-slot:item.value="{ item }">
@@ -98,6 +100,12 @@
                                     v-model="item.visibility"
                                     ></v-simple-checkbox>
                                 </template>
+
+                                <template v-slot:expanded-item="{ headers, item }">
+                                    <td :colspan="headers.length">
+                                      More info about {{ item.logs }}
+                                    </td>
+                                  </template>
 
                             </v-data-table>
                         </v-tab-item>
@@ -188,6 +196,7 @@
                 drawer: true,
                 mainMenu: mainMenu,
                 sensors: [...sensors_raw ],
+                singleExpand: true,
                 active_sensors: [],
                 hidden_sensors: [],
                 old_sensors: [],
@@ -201,6 +210,7 @@
                 send_data_url : `${base_url}/point/writePointsbyid`,
 
                 headers: [
+                    { text: '', value: 'data-table-expand' },
                     {
                         text: 'Device ID',
                         align: 'start',
