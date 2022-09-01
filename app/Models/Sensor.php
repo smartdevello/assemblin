@@ -21,6 +21,6 @@ class Sensor extends Model
 
     public function logs()
     {
-        return $this->belongsTo(SensorLog::class, 'sensor_id', 'id');
+        return $this->belongsTo(SensorLog::class, 'id', 'sensor_id');
     }
 }
