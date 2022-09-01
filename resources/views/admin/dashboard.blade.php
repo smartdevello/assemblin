@@ -104,7 +104,7 @@
 
                                 <template v-slot:expanded-item="{ headers, item }">
                                     <td :colspan="headers.length">
-                                        <div v-pre>{ item.name }</div>
+                                        {{ item.name }}
                                     </td>
                                   </template>
 
