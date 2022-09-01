@@ -104,7 +104,7 @@
 
                                 <template v-slot:expanded-item="{ headers, item }">
                                     <td :colspan="headers.length">
-                                        {{ item.logs }}
+                                        {{ item.logs.id }}
                                     </td>
                                   </template>
 
