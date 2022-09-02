@@ -3,6 +3,7 @@
 namespace App\Http\Traits;
 
 use App\Models\Sensor;
+use App\Models\SensorLog;
 use stdClass;
 
 trait SmallDataGarden{

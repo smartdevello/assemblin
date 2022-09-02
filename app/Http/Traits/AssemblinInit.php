@@ -7,6 +7,7 @@ use App\Models\Area;
 use Illuminate\Http\Request;
 use App\Models\DEOS_controller;
 use App\Models\DEOS_point;
+use App\Models\SensorLog;
 use stdClass;
 use phpseclib3\Net\SSH2;
 
