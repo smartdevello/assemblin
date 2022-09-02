@@ -21,6 +21,6 @@ class Sensor extends Model
 
     public function getlogs()
     {         
-        return $this->hasOne(SensorLog::class, 'sensor_id', 'id')->logs ?? null;
+        return $this->hasOne(SensorLog::class, 'sensor_id', 'id');
     }
 }

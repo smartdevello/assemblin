@@ -37,7 +37,11 @@ class DashboardController extends Controller
                     $sensor->area_id = $area->id;
                 }
             }
-            $sensor->logs = $sensor->getlogs();
+            $logdata = $sensor->getlogs();
+            if (!is_null($logdata) || !empty($logdata)){
+                $sensor->logs = json_encode($logdata->logs);
+            } else $sensor->logs = null;
+
 
         }
         $this->getSERVERConfig();
