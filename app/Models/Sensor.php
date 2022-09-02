@@ -19,7 +19,7 @@ class Sensor extends Model
         return $this->belongsTo(DEOS_point::class, 'point_id', 'id');
     }
 
-    public function getlogs()
+    public function logs()
     {         
         return $this->hasOne(SensorLog::class, 'sensor_id', 'id');
     }
