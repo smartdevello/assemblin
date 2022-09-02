@@ -248,6 +248,11 @@
                     }
                     index -= 1;
                 }
+                for (sensor of this.sensors){
+                    if (sensor.logs) {
+                        sensor.logs = JSON.parse(sensor.logs.logs);
+                    }
+                }
                 this.active_sensors = this.sensors.filter( item => item.visibility === true);
                 this.hidden_sensors = this.sensors.filter( item => item.visibility === false);
 
