@@ -20,6 +20,12 @@
         .v-select__selections {
             max-width: 100px !important;
         }
+        .v-data-table__expanded table.log_table{
+            padding: 10px;
+        }
+        .v-data-table__expanded table.log_table td.table_header{
+            min-width: 120px;
+        }
     </style>
 @endsection
 @section('content')
@@ -122,24 +128,6 @@
                                           </tbody>
                                         </template>
                                       </v-simple-table>
-                                    {{-- <table>
-                                        <tbody>
-                                            <tr>
-                                                <td>DateTime<td>
-                                                <td v-for="(i, val) in item.logs" :key="i">
-                                                    {{val}}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Value<td>
-                                                <td v-for="(i, val) in item.logs" :key="i">
-                                                    {{i}}
-                                                </td>
-                                            </tr>
-
-                                        </tbody>
-                                    <table> --}}
-
                                   </template>
 
                             </v-data-table>
@@ -194,7 +182,28 @@
                                     v-model="item.visibility"
                                     ></v-simple-checkbox>
                                 </template>
+                                
+                                <template v-slot:expanded-item="{ headers, item }">
+                                    <v-simple-table>
+                                        <template v-slot:default>
+                                          <tbody class="log_table">
+                                            <tr>
+                                                <td class="table_header">DateTime<td>
+                                                <td v-for="(i, val) in item.logs" :key="i" class="table_value">
+                                                    {{val}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_header">Value<td>
+                                                <td v-for="(i, val) in item.logs" :key="i" class="table_value">
+                                                    {{i}}
+                                                </td>
+                                            </tr>
 
+                                          </tbody>
+                                        </template>
+                                      </v-simple-table>
+                                  </template>
                             </v-data-table>
                         </v-tab-item>
                     </v-tabs-items>
