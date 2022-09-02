@@ -38,7 +38,7 @@ class DashboardController extends Controller
                 }
             }
             $logdata = $sensor->getlogs();
-            if (!is_null($logdata) || !empty($logdata)){
+            if (isset($logdata->logs)){
                 $sensor->logs = json_encode($logdata->logs);
             } else $sensor->logs = null;
 
