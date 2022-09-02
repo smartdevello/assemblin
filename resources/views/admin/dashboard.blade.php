@@ -105,10 +105,19 @@
                                 <template v-slot:expanded-item="{ headers, item }">
                                     <table>
                                         <tbody>
-                                            <tr v-for="(info, i) in item.logs" :key="i">
-                                                <th scope="row">{{ info  }}</th> 
-                                                <td scope="row">{{  i }}</td> 
+                                            <tr>
+                                                <td>DateTime<td>
+                                                <td v-for="(i, val) in item.logs" :key="i">
+                                                    {{val}}
+                                                </td>
                                             </tr>
+                                            <tr>
+                                                <td>Value<td>
+                                                <td v-for="(i, val) in item.logs" :key="i">
+                                                    {{i}}
+                                                </td>
+                                            </tr>
+
                                         </tbody>
                                     <table>
 
