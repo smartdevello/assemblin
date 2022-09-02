@@ -20,12 +20,15 @@
         .v-select__selections {
             max-width: 100px !important;
         }
-        .v-data-table__expanded table.log_table{
-            padding: 10px;
+        tr.v-data-table__expanded__content>div{
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-left: 30px;
         }
-        .v-data-table__expanded table.log_table td.table_header{
-            min-width: 120px;
+        tr.v-data-table__expanded__content>div td.table_value{
+            min-width: 110px;
         }
+        
     </style>
 @endsection
 @section('content')
@@ -182,7 +185,7 @@
                                     v-model="item.visibility"
                                     ></v-simple-checkbox>
                                 </template>
-                                
+
                                 <template v-slot:expanded-item="{ headers, item }">
                                     <v-simple-table>
                                         <template v-slot:default>
