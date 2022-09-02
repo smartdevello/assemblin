@@ -98,7 +98,7 @@ trait SmallDataGarden{
                 $log_data = array(
                     'sensor_id' => $sensor->id,
                 );
-                if (empty( $log ) || is_null($log)) {
+                if ( !isset($log) ) {
                     $log_data['logs'] = json_encode([
                         date('Y-m-d H:i:s') => $sensor->value
                     ]);
