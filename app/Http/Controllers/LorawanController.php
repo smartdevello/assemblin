@@ -647,6 +647,10 @@ class LorawanController extends Controller
                         ]);
                     } else {
                         $log_data['logs'] = json_decode($log->logs);
+                        return response()->json([
+                            'log object' => $log
+                        ], 403);
+                        
                         $len = count($log_data['logs']);
                         if ( $len > 9 ){
                             $log_data['logs'] = array_slice( $log_data['logs'] ,  $len - 9);
