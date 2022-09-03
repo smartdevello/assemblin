@@ -378,7 +378,7 @@ class LorawanController extends Controller
                                 date('Y-m-d H:i:s') => $sensor->value
                             ]);
                         } else {
-                            $log_data['logs'] = json_decode($log->logs);
+                            $log_data['logs'] = (array)json_decode($log->logs);
                             $len = count($log_data['logs']);
                             if ( $len > 9 ){
                                 $log_data['logs'] = array_slice( $log_data['logs'] ,  $len - 9);
@@ -420,7 +420,7 @@ class LorawanController extends Controller
                                 date('Y-m-d H:i:s') => $sensor->value
                             ]);
                         } else {
-                            $log_data['logs'] = json_decode($log->logs);
+                            $log_data['logs'] = (array)json_decode($log->logs);
                             $len = count($log_data['logs']);
                             if ( $len > 9 ){
                                 $log_data['logs'] = array_slice( $log_data['logs'] ,  $len - 9);
@@ -602,7 +602,7 @@ class LorawanController extends Controller
                                 date('Y-m-d H:i:s') => $sensor->value
                             ]);
                         } else {
-                            $log_data['logs'] = json_decode($log->logs);
+                            $log_data['logs'] = (array)json_decode($log->logs);
                             $len = count($log_data['logs']);
                             if ( $len > 9 ){
                                 $log_data['logs'] = array_slice( $log_data['logs'] ,  $len - 9);
@@ -646,11 +646,7 @@ class LorawanController extends Controller
                             date('Y-m-d H:i:s') => $sensor->value
                         ]);
                     } else {
-                        $log_data['logs'] = json_decode($log->logs);
-                        return response()->json([
-                            'log object' => $log
-                        ], 403);
-                        
+                        $log_data['logs'] = (array)json_decode($log->logs);
                         $len = count($log_data['logs']);
                         if ( $len > 9 ){
                             $log_data['logs'] = array_slice( $log_data['logs'] ,  $len - 9);
