@@ -281,30 +281,30 @@ class IOTSUdecoder extends ELSYSdecoder{
             // $obj['humidity #1'] = $data[2] >> 1;
             // $obj['humidity #2'] = $data[5] >> 1;
             // $obj['humidity #3'] = $data[8] >> 1;
-            $obj['humidity #4'] = $data[11] >> 1;
+            $obj['humidity'] = $data[11] >> 1;
 
             // $obj['temperature #1'] = ((($data[2] % 2) << 8) + $data[3])  / 10;
             // $obj['temperature #2'] = ((($data[5] % 2) << 8 )+ $data[6]) / 10;
             // $obj['temperature #3'] = ((($data[8] % 2) << 8 )+ $data[9]) / 10;
-            $obj['temperature #4'] = ((($data[11] % 2) << 8) + $data[12]) / 10;
+            $obj['temperature'] = ((($data[11] % 2) << 8) + $data[12]) / 10;
 
             // $obj['co2 #1'] = $data[4] * 10 + 400;
             // $obj['co2 #2'] = $data[7] * 10 + 400;
             // $obj['co2 #3'] = $data[10] * 10 + 400;
-            $obj['co2 #4'] = $data[13] * 10 + 400;
+            $obj['co2'] = $data[13] * 10 + 400;
 
         } else if (strpos($model, 'l2aq01') !== false  || strpos($model, 'l3aq01') !== false ) {
             $obj['battery voltage'] = $data[0] * 20;
             // $obj['humidity #1'] = $data[2] >> 1;
             // $obj['humidity #2'] = $data[6] >> 1;
             // $obj['humidity #3'] = $data[10] >> 1;
-            $obj['humidity #4'] = $data[14] >> 1;
+            $obj['humidity'] = $data[14] >> 1;
 
 
             // $obj['temperature #1'] = ((($data[2] % 2) << 8) + $data[3]) / 10;
             // $obj['temperature #2'] = ((($data[6] % 2) << 8)+ $data[7]) / 10;
             // $obj['temperature #3'] = ((($data[10] % 2) << 8) + $data[11]) / 10;
-            $obj['temperature #4'] = ((($data[14] % 2) << 8) + $data[15]) / 10;
+            $obj['temperature'] = ((($data[14] % 2) << 8) + $data[15]) / 10;
 
 
 
@@ -312,18 +312,18 @@ class IOTSUdecoder extends ELSYSdecoder{
             // $obj['co2 #1'] = $data[4] * 10 + 400;
             // $obj['co2 #2'] = $data[8] * 10 + 400;
             // $obj['co2 #3'] = $data[12] * 10 + 400;
-            $obj['co2 #4'] = $data[16] * 10 + 400;
+            $obj['co2'] = $data[16] * 10 + 400;
 
             // $obj['tvoc #1'] = $this->calctVOC($data[5]);
             // $obj['tvoc #2'] = $this->calctVOC($data[9]);
             // $obj['tvoc #3'] = $this->calctVOC($data[13]);
-            $obj['tvoc #4'] = $this->calctVOC($data[17]);
+            $obj['tvoc'] = $this->calctVOC($data[17]);
 
         } else {
             $obj['vdd'] = $data[0] * 20;
-            $obj['humidity #1'] = $data[2] >> 1;
-            $obj['temperature #1'] = $data[3] / 10;
-            $obj['co2 #1'] = $data[4] * 10 + 400;
+            $obj['humidity'] = $data[2] >> 1;
+            $obj['temperature'] = $data[3] / 10;
+            $obj['co2'] = $data[4] * 10 + 400;
         }
         return $obj;
     }
