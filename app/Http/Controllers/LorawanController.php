@@ -314,9 +314,9 @@ class IOTSUdecoder extends ELSYSdecoder{
             $obj['co2 #3'] = $data[12] * 10 + 400;
             $obj['co2 #4'] = $data[16] * 10 + 400;
 
-            $obj['tvoc #1'] = $this->calctVOC($data[5]);
-            $obj['tvoc #2'] = $this->calctVOC($data[9]);
-            $obj['tvoc #3'] = $this->calctVOC($data[13]);
+            // $obj['tvoc #1'] = $this->calctVOC($data[5]);
+            // $obj['tvoc #2'] = $this->calctVOC($data[9]);
+            // $obj['tvoc #3'] = $this->calctVOC($data[13]);
             $obj['tvoc #4'] = $this->calctVOC($data[17]);
 
         } else {
