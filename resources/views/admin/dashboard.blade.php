@@ -122,13 +122,13 @@
                                           <tbody class="log_table">
                                             <tr>
                                                 <td class="table_header">DateTime<td>
-                                                <td v-for="(i, val) in item.logs" :key="i" class="table_value">
+                                                <td v-for="(i, val) in item.logs" :key="val" class="table_value">
                                                     {{val}}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="table_header">Value<td>
-                                                <td v-for="(i, val) in item.logs" :key="i" class="table_value">
+                                                <td v-for="(i, val) in item.logs" :key="val" class="table_value">
                                                     {{i}}
                                                 </td>
                                             </tr>
@@ -200,13 +200,13 @@
                                           <tbody class="log_table">
                                             <tr>
                                                 <td class="table_header">DateTime<td>
-                                                <td v-for="(i, val) in item.logs" :key="i" class="table_value">
+                                                <td v-for="(i, val) in item.logs" :key="val" class="table_value">
                                                     {{val}}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="table_header">Value<td>
-                                                <td v-for="(i, val) in item.logs" :key="i" class="table_value">
+                                                <td v-for="(i, val) in item.logs" :key="val" class="table_value">
                                                     {{i}}
                                                 </td>
                                             </tr>
