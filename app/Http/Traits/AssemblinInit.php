@@ -188,7 +188,7 @@ trait AssemblinInit {
                 } else {
                     $log_data['logs'] = (array)json_decode($log->logs);
                     $len = count($log_data['logs']);
-                    if ( $len > 9 ){
+                    if ( $len > 9 ) {
                         $log_data['logs'] = array_slice( $log_data['logs'] ,  $len - 9);
                     }
                     $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
