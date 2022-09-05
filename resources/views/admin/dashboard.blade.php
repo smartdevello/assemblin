@@ -297,11 +297,15 @@
                     index -= 1;
                 }
                 for (sensor of this.sensors){
-                    if (sensor.logs) {                        
+                    if (sensor.logs) {     
+                        // console.log(sensor.deviceId)
                         sensor.logs = JSON.parse(sensor.logs.logs);
                         // console.log(sensor.logs);
-                        for (log in sensor.logs){
-                            console.log(log);
+                        for (log_key in sensor.logs){
+                            // console.log(log_key);
+                            new_log_key = new Date(log_key + " UTC").toLocaleString();
+                            sensor.logs[new_log_key] = sensor.logs[log_key];
+                            delete sensor.logs[log_key];
                         }
                     }
                 }
