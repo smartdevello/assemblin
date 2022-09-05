@@ -300,7 +300,7 @@
                     if (sensor.logs) {                        
                         sensor.logs = JSON.parse(sensor.logs.logs);
                         console.log(sensor.logs);
-                        for (log of sensor.logs){
+                        for (log in sensor.logs){
 
                         }
                     }
