@@ -299,9 +299,9 @@
                 for (sensor of this.sensors){
                     if (sensor.logs) {                        
                         sensor.logs = JSON.parse(sensor.logs.logs);
-                        console.log(sensor.logs);
+                        // console.log(sensor.logs);
                         for (log in sensor.logs){
-
+                            console.log(log);
                         }
                     }
                 }
