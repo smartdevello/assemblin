@@ -6,12 +6,11 @@ use SimpleXMLElement;
 trait WeatherForcastTrait {
     public function getWeatherData($longitude = 61.0162, $latitude = 25.7647)
     {
-        // $url = sprintf('https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::harmonie::surface::point::timevaluepair&latlon=%f,%f&parameters=temperature,windspeedms,PrecipitationAmount', $longitude, $latitude);
-        $url = "https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::harmonie::surface::point::timevaluepair&latlon=" . $longitude . "," . $latitude . "&parameters=temperature,windspeedms,PrecipitationAmount";
-        // $url = 'https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::harmonie::surface::point::timevaluepair&latlon=61.0162,25.7647&parameters=temperature,windspeedms,PrecipitationAmount';
-        $curl = curl_init();
+
+          $curl = curl_init();
+
         curl_setopt_array($curl, array(
-            CURLOPT_URL => $url,
+            CURLOPT_URL => 'https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::harmonie::surface::point::timevaluepair&latlon=' . $longitude . ',' . $latitude . '&parameters=temperature,windspeedms,PrecipitationAmount',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -19,10 +18,12 @@ trait WeatherForcastTrait {
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'GET',
-          ));
-          
-          $response = curl_exec($curl);
-          curl_close($curl);
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
           dd($response);
           $xml = new SimpleXMLElement($response);
           $ns = $xml->getDocNamespaces();
