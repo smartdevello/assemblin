@@ -31,7 +31,7 @@ trait WeatherForcastTrait {
 
         curl_close($curl);
 
-          dd($response);
+        //   dd($response);
           $xml = new SimpleXMLElement($response);
           $ns = $xml->getDocNamespaces();
           
