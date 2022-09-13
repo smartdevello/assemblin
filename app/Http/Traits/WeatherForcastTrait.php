@@ -4,7 +4,7 @@ namespace App\Http\Traits;
 use SimpleXMLElement;
 
 trait WeatherForcastTrait {
-    public function getWeatherData($longitude = 61.0162, $latitude = 25.7647)
+    public function getWeatherData($longitude = 25.7121, $latitude = 61.0162)
     {
 
           $curl = curl_init();
@@ -15,7 +15,7 @@ trait WeatherForcastTrait {
                 'version'=>'2.0.0',
                 'request'=>'getFeature',
                 'storedquery_id'=>'fmi::forecast::harmonie::surface::point::timevaluepair',
-                'latlon'=> $longitude . ',' . $latitude,
+                'latlon'=> $latitude . ',' . $longitude,
                 'parameters'=>'temperature,windspeedms,PrecipitationAmount',
             ]),
             CURLOPT_RETURNTRANSFER => true,
