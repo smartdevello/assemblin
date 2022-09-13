@@ -22,7 +22,7 @@ trait WeatherForcastTrait {
           
           $response = curl_exec($curl);
           curl_close($curl);
-
+          dd($response);
           $xml = new SimpleXMLElement($response);
           $ns = $xml->getDocNamespaces();
           
