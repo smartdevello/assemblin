@@ -7,6 +7,7 @@ use App\Http\Controllers\LorawanController;
 use App\Http\Controllers\TrendGroupController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DEOS_controllerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,10 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function(){
     Route::group(['prefix' => 'dashboard'], function ($router) {
         Route::post('update', [DashboardController::class, 'update'])->name('update_dashboard');
         Route::get('restartAsmServices', [DashboardController::class, 'restartAsmServices'])->name('restartAsmServices');
+    });    
+
+    Route::group(['prefix' => 'WeatherForcast'], function ($router) {        
+        Route::get('getWeatherData', [DEOS_controllerController::class, 'getWeatherData'])->name('getWeatherData');
     });
 
     Route::group(['prefix' => 'lorawan'], function ($router) {
