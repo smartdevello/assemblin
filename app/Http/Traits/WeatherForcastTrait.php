@@ -8,9 +8,16 @@ trait WeatherForcastTrait {
     {
 
           $curl = curl_init();
-
+        // service=WFS&version=2.0.0&request=getFeature&storedquery_id=&=''&parameters=temperature,windspeedms,PrecipitationAmount'
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::harmonie::surface::point::timevaluepair&latlon=' . $longitude . ',' . $latitude . '&parameters=temperature,windspeedms,PrecipitationAmount',
+            CURLOPT_URL => 'https://opendata.fmi.fi/wfs?'.http_build_query([
+                'service'=>'WFS',
+                'version'=>'2.0.0',
+                'request'=>'getFeature',
+                'storedquery_id'=>'fmi::forecast::harmonie::surface::point::timevaluepair',
+                'latlon'=> $longitude . ',' . $latitude,
+                'parameters'=>'temperature,windspeedms,PrecipitationAmount',
+            ]),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
