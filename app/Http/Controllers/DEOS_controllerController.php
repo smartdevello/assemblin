@@ -171,7 +171,7 @@ class DEOS_controllerController extends Controller
                 'job_id' =>$controller->id
             ]);
 
-            $forecast_data = $this->getWeatherData($controller->longitude, $controller->latitude);
+            $forecast_data = $this->getWeatherData($request->longitude, $request->latitude);
             //Create or Update Weather Points (Actually DEOS Points)
             $dataset_index = 0;
             foreach ($forecast_data as $key => $data)
