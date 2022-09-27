@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 @section('content')
-    <v-main v-if="!!locations">
+    <v-main v-if="!!elecpricedata">
         <v-container>
             @if( \Session::has('success') ) 
                 <h3>{{ \Session::get('success') }}</h3>
@@ -13,9 +13,29 @@
                     @endforeach
                 @endif
             @endif
-            <v-row>
+            <template>
+                <v-card>
+                    <v-card-title>
+                        Electricity Price
+                        <v-spacer></v-spacer>
+                    </v-card-title>
+                    <v-data-table
+                        :headers="headers"
+                        :items="elecpricedata"
+                        :items-per-page="20"
+                        item-key="time"
+                        :footer-props="{
+                            showFirstLastPage: true,
+                            firstIcon: 'mdi-arrow-collapse-left',
+                            lastIcon: 'mdi-arrow-collapse-right',
+                            prevIcon: 'mdi-minus',
+                            nextIcon: 'mdi-plus'
+                        }"
+                    >
 
-            </v-row>
+                    </v-data-table>
+                </v-card>
+            </template>
         </v-container>
     </v-main>
 @endsection
@@ -28,10 +48,18 @@
             data: {
                 drawer: true,
                 mainMenu: mainMenu,
-                elepricedata: ( <?php echo json_encode($forecast_data); ?> ),
+                elecpricedata: ( <?php echo json_encode($forecast_data); ?> ),
+                headers: [
+                    {
+                        text: 'MTU',
+                        align: 'start',
+                        value: 'time',
+                    },
+                    { text: 'Day-ahead Price (EUR/MWh)', value: 'value' },
+                ],
             },
             mounted: function() {
-                console.log(this.elepricedata);
+                console.log(this.elecpricedata);
             },            
             methods: {
 
