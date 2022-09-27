@@ -73,7 +73,11 @@
             icon: 'mdi-group',
             link: prefix_link  + '/trendgroup'
         },
-
+        {
+            title: 'Electricity Price',
+            icon: 'mdi-lightning-bolt',
+            link: prefix_link  + '/electricity_price'
+        },
     ];
 </script>
 @yield('script')

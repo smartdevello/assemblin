@@ -6,6 +6,7 @@ use App\Http\Controllers\DEOS_controllerController;
 use App\Http\Controllers\DEOS_pointController;
 use App\Http\Controllers\PointController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\ElectricityPriceController;
 use App\Http\Controllers\LorawanController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TrendGroupController;
@@ -39,15 +40,10 @@ Route::get('/lora', [LorawanController::class, 'index'])->middleware(['auth'])->
 Route::get('smalldatagarden/automatic_update', '\App\Http\Controllers\SmallDataGardenController@SmallDataGarden_updateSensors');
 
 
-// Route::get('/setting', '\App\Http\Controllers\DashboardController@setting_index')->middleware(['auth']);
 Route::group(['prefix' => '/setting', 'middleware' => 'auth'], function ($router) {
     Route::get('', [SettingController::class, 'setting_index'])->name('setting_index');
-    Route::post('update_device_interval', [SettingController::class, 'update_device_interval'])->name('update_device_interval');
-    
-    // Route::get('/{id}', [LocationController::class, 'show'])->name('location-detail');    
-    // Route::post('update/{id}', [LocationController::class, 'update'])->name('location-update');
-    // Route::post('delete/{id}', [LocationController::class, 'destroy'])->name('location-delete');
-    // Route::post('delete_buildings/{id}', [LocationController::class, 'delete_buildings'])->name('location-delete_buildings');
+    Route::post('update_device_interval', [SettingController::class, 'update_device_interval'])->name('update_device_interval');    
+
 });
 
 Route::group(['prefix' => 'location', 'middleware' => 'auth'], function ($router) {
@@ -58,6 +54,11 @@ Route::group(['prefix' => 'location', 'middleware' => 'auth'], function ($router
     Route::post('delete/{id}', [LocationController::class, 'destroy'])->name('location-delete');
     Route::post('delete_buildings/{id}', [LocationController::class, 'delete_buildings'])->name('location-delete_buildings');
 });
+
+Route::group(['prefix' => 'electricity_price', 'middleware' => 'auth'], function ($router) {
+    Route::get('', [ElectricityPriceController::class, 'index'])->name('electricity_price_table');
+});
+
 
 Route::group(['prefix' => 'building', 'middleware' => 'auth'], function ($router) {
     Route::get('', [BuildingController::class, 'index'])->name('buildings');

@@ -7,6 +7,8 @@ use App\Models\TrendGroup;
 use Illuminate\Console\Command;
 use App\Http\Traits\TrendDataTrait;
 use App\Http\Traits\WeatherForcastTrait;
+use App\Http\Traits\ElectricyPriceForcastTrait;
+
 use App\Http\Traits\AssemblinInit;
 use App\Http\Traits\SmallDataGarden;
 
@@ -23,6 +25,7 @@ class HKA_Everymin_Job extends Command
     use TrendDataTrait;
     use AssemblinInit;
     use WeatherForcastTrait;
+    use ElectricyPriceForcastTrait;
     use SmallDataGarden;
 
     protected $signature = 'hka_job:everymin';
@@ -126,6 +129,17 @@ class HKA_Everymin_Job extends Command
                             $dataset_index++;
                         }
                         $this->sendWeatherForcasttoDEOS();
+                    } else {
+                        $job->delete();
+                    }
+                } else if ($job->job_name  == "electricity_forcast") {
+                    $controller = DEOS_controller::where('id', $job->job_id)->first();
+                    if ( $controller ) {
+                        $forecast_data = $this->getElectricityPriceData();
+                        $dateset_index = 0;
+                        foreach($forecast_data as $item) {
+
+                        }
                     } else {
                         $job->delete();
                     }
