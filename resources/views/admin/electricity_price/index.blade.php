@@ -58,8 +58,10 @@
                     { text: 'Day-ahead Price (EUR/MWh)', value: 'value' },
                 ],
             },
-            mounted: function() {
-                console.log(this.elecpricedata);
+            mounted: function() {                
+                for (item of this.elecpricedata) {
+                    item.time = new Date(item.time * 1000).toLocaleString();
+                }
             },            
             methods: {
 
