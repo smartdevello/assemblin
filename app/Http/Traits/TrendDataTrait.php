@@ -98,7 +98,7 @@ trait TrendDataTrait
                 for ($i = 0; $i < count($values); $i++) {
                     if ( preg_match("/^[\d,]+$/", $values[$i]) ) {
                         $payload->measurementPoint[] = (object) array(
-                            'controller'=>'controller',
+                            'controller'=>$trend_group->trend_group_name,
                             'pointName'=> $this->convertFinnishtoEnglish ( $columns[$i] ),
                             'out'=> (int)str_replace(",", "", $values[$i])
                         );
@@ -116,7 +116,7 @@ trait TrendDataTrait
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => json_encode($payload),
+                CURLOPT_POSTFIELDS => json_encode( $payload ),
                 CURLOPT_HTTPHEADER => array(
                     'authorization: SharedAccessSignature sr=freesi-sensor-data-hub.azure-devices.net%2Fdevices%2Fhka_vipusenkatu5a&sig=BIW3fIdoAL70h6tw0Bj0dyXFrd%2BIg7eN3ctYZZnNltc%3D&se=2024431159',
                     'Content-Type: application/json'
