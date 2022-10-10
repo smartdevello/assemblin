@@ -119,7 +119,7 @@ trait AssemblinInit {
                 $data = array(
                     'deviceId' => $device['deviceId'],
                     'type' => $sensor['variable'],
-                    'observationId' => $sensor['id'] ?? '',
+                    'observationId' => $sensor['id'] ?? null,
                     'tag' => implode(" ", $device['tags']),
                     'name' => $device['displayName'],
                     'unit' => $sensor['unit'] ?? '',
