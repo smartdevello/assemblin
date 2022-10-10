@@ -92,7 +92,7 @@ trait TrendDataTrait
                 $columns = $csv_data[0];
                 $values = $csv_data[count($csv_data) - 1];
                 $payload = new stdClass();
-                $payload ->{"message#"} = time() - 1665171000;
+                $payload ->{"message#"} = time() - 1665428000;
                 $payload -> currentTime = date_format(new DateTime(), 'c');
                 $payload->measurementPoint = array();
                 for ($i = 0; $i < count($values); $i++) {
@@ -102,9 +102,29 @@ trait TrendDataTrait
                             'pointName'=> $this->convertFinnishtoEnglish ( $columns[$i] ),
                             'out'=> (int)str_replace(",", "", $values[$i])
                         );
-                    }
-                    
+                    }                    
                 }
+
+                $curl = curl_init();
+
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://freesi-sensor-data-hub.azure-devices.net/devices/hka_vipusenkatu5a/messages/events?api-version=2018-06-30',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => json_encode($payload),
+                CURLOPT_HTTPHEADER => array(
+                    'authorization: SharedAccessSignature sr=freesi-sensor-data-hub.azure-devices.net%2Fdevices%2Fhka_vipusenkatu5a&sig=BIW3fIdoAL70h6tw0Bj0dyXFrd%2BIg7eN3ctYZZnNltc%3D&se=2024431159',
+                    'Content-Type: application/json'
+                ),
+                ));
+
+                $response = curl_exec($curl);
+                curl_close($curl);
             }
                 
         }
