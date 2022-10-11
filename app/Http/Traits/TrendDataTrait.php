@@ -100,7 +100,8 @@ trait TrendDataTrait
                         $payload->measurementPoint[] = (object) array(
                             'controller'=>$trend_group->trend_group_name,
                             'pointName'=> $this->convertFinnishtoEnglish ( $columns[$i] ),
-                            'out'=> (float)str_replace(",", ".", $values[$i])
+                            'out'=> (float)str_replace(",", ".", $values[$i]),
+                            'facet' => '',
                         );
                     }                    
                 }
