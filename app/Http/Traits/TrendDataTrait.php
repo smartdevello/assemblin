@@ -93,14 +93,14 @@ trait TrendDataTrait
                 $values = $csv_data[count($csv_data) - 1];
                 $payload = new stdClass();
                 $payload ->{"message#"} = time() - 1665428000;
-                $payload -> currentTime = date_format(new DateTime(), 'c');
+                $payload -> currentTime = date_format(new DateTime(), 'Y-m-d H:i:s.vO');
                 $payload->measurementPoint = array();
                 for ($i = 0; $i < count($values); $i++) {
                     if ( preg_match("/^[\d,]+$/", $values[$i]) ) {
                         $payload->measurementPoint[] = (object) array(
                             'controller'=>$trend_group->trend_group_name,
                             'pointName'=> $this->convertFinnishtoEnglish ( $columns[$i] ),
-                            'out'=> (int)str_replace(",", "", $values[$i])
+                            'out'=> (float)str_replace(",", ".", $values[$i])
                         );
                     }                    
                 }
