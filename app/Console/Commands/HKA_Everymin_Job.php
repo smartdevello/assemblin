@@ -60,19 +60,24 @@ class HKA_Everymin_Job extends Command
             $next_run = strtotime( $job->next_run);
             if ( time() > $next_run) {
                 if ($job->job_name == 'trend_group') {
-                    $trend_group = TrendGroup::where('id', $job->job_id)->first();
-                    if ($trend_group ) {
-                        $job->update([
-                            'next_run' => date('Y-m-d H:i:s', time() + $trend_group->update_interval * 60)
-                        ]);
-                        if ($trend_group->send_to_ftp == false)
-                            $this->receive_csv_save_db($trend_group);
-                        else {
-                            $this->receive_csv_and_savefile_sendto_external_ftp($trend_group);
+                    try{
+                        $trend_group = TrendGroup::where('id', $job->job_id)->first();
+                        if ($trend_group ) {
+                            $job->update([
+                                'next_run' => date('Y-m-d H:i:s', time() + $trend_group->update_interval * 60)
+                            ]);
+                            if ($trend_group->send_to_ftp == false)
+                                $this->receive_csv_save_db($trend_group);
+                            else {
+                                $this->receive_csv_and_savefile_sendto_external_ftp($trend_group);
+                            }
+                        } else {
+                            $job->delete();
                         }
-                    } else {
-                        $job->delete();
+                    } catch (\Exception $e) {
+
                     }
+
                 } else if ( $job->job_name == 'weather_forecast') {
                     //Check if the controller exists for weather_forcast
                     $controller = DEOS_controller::where('id', $job->job_id)->first();
