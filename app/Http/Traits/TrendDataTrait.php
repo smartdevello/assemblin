@@ -185,14 +185,14 @@ trait TrendDataTrait
             file_put_contents('logs.txt', $msg, FILE_APPEND | LOCK_EX);        
         }
 
-        // $msg = sprintf("%s               %d\n", $filename, $httpcode );
-        // // Write the contents to the file, 
-        // // using the FILE_APPEND flag to append the content to the end of the file
-        // // and the LOCK_EX flag to prevent anyone else writing to the file at the same time
-        // file_put_contents('logs.txt', json_encode( $payload ) . " " . $httpcode . " " . $time_taken . "\n", FILE_APPEND | LOCK_EX);        
-        // if ($httpcode == 0) {
-        //     file_put_contents('logs.txt', json_encode( $csv_data ) .  "\n", FILE_APPEND | LOCK_EX); 
-        // }
+        $msg = sprintf("%s               %d\n", $filename, $httpcode );
+        // Write the contents to the file, 
+        // using the FILE_APPEND flag to append the content to the end of the file
+        // and the LOCK_EX flag to prevent anyone else writing to the file at the same time
+        file_put_contents('logs.txt', json_encode( $payload ) . " " . $httpcode . " " . $time_taken . "\n", FILE_APPEND | LOCK_EX);        
+        if ($httpcode == 0) {
+            file_put_contents('logs.txt', json_encode( $csv_data ) .  "\n", FILE_APPEND | LOCK_EX); 
+        }
         return $csv_data;
     }
 }
