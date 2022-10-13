@@ -68,12 +68,12 @@ trait TrendDataTrait
         $to_time = time();
         $from_time = $to_time - $trend_group->query_period * 60;
         $filename = sprintf("%s_%s.csv", $trend_group->trend_group_name, date_format(new DateTime(), 'His') );
-
+        $csv_data = [];
 
         //Convet it to milisecond;
         $from_time *=1000;
         $to_time *= 1000;
-
+        $httpcode = 0;
         $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $filename ;
         $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
 
@@ -85,7 +85,7 @@ trait TrendDataTrait
             shell_exec($command);
     
             $file = fopen($filename,"r");
-            $csv_data = [];
+
             $index = 0;
             while(! feof($file))
             {
@@ -132,8 +132,6 @@ trait TrendDataTrait
     
                     $response = curl_exec($curl);
                     $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-                    $msg = sprintf("%s               %d\n", $filename, $httpcode );
-                    $my_log = file_put_contents('logs.txt', $msg.PHP_EOL, FILE_APPEND | LOCK_EX );
                     curl_close($curl);
                 }
                     
@@ -169,14 +167,15 @@ trait TrendDataTrait
             //             }
             //         }
             //     }
-            // }
-    
-            return $csv_data;
+            // }    
+            
         }catch(\Exception $e) {    
             
             $msg = sprintf("%s               %s\n", $filename, $e->getMessage() );
             $my_log = file_put_contents('logs.txt', $msg.PHP_EOL, FILE_APPEND | LOCK_EX );
         }
-        return null;
+        $msg = sprintf("%s               %d\n", $filename, $httpcode );
+        $my_log = file_put_contents('logs.txt', $msg.PHP_EOL, FILE_APPEND | LOCK_EX );
+        return $csv_data;
     }
 }
