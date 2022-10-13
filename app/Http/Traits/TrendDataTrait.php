@@ -172,10 +172,18 @@ trait TrendDataTrait
         }catch(\Exception $e) {    
             
             $msg = sprintf("%s               %s\n", $filename, $e->getMessage() );
-            $my_log = file_put_contents('logs.txt', $msg.PHP_EOL, FILE_APPEND | LOCK_EX );
+            // Write the contents to the file, 
+            // using the FILE_APPEND flag to append the content to the end of the file
+            // and the LOCK_EX flag to prevent anyone else writing to the file at the same time
+            file_put_contents('logs.txt', $msg, FILE_APPEND | LOCK_EX);        
         }
+
         $msg = sprintf("%s               %d\n", $filename, $httpcode );
-        $my_log = file_put_contents('logs.txt', $msg.PHP_EOL, FILE_APPEND | LOCK_EX );
+        // Write the contents to the file, 
+        // using the FILE_APPEND flag to append the content to the end of the file
+        // and the LOCK_EX flag to prevent anyone else writing to the file at the same time
+        file_put_contents('logs.txt', $msg, FILE_APPEND | LOCK_EX);        
+
         return $csv_data;
     }
 }
