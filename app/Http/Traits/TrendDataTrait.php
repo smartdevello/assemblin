@@ -67,7 +67,7 @@ trait TrendDataTrait
 
         $to_time = time();
         $from_time = $to_time - $trend_group->query_period * 60;
-        $filename = sprintf("%s_%s.csv", $trend_group->trend_group_name, $payload->currentTime );
+        $filename = sprintf("%s_%s.csv", $trend_group->trend_group_name, date_format(new DateTime(), 'His') );
 
 
         //Convet it to milisecond;
