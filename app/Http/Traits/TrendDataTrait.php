@@ -170,7 +170,7 @@ trait TrendDataTrait
     
             return $csv_data;
         }catch(Exception $e) {            
-            $msg = sprintf("%s               %s.csv", $filename, $e->getMessage() );
+            $msg = sprintf("%s               %s", $filename, $e->getMessage() );
             $my_log = file_put_contents('logs.txt', $msg.PHP_EOL, FILE_APPEND | LOCK_EX );
         }
         return null;
