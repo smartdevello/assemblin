@@ -169,7 +169,7 @@ trait TrendDataTrait
             //     }
             // }    
             
-        }catch(\Exception $e) {    
+        }catch(\Exception $e) {
             
             $msg = sprintf("%s               %s\n", $filename, $e->getMessage() );
             // Write the contents to the file, 
@@ -183,7 +183,9 @@ trait TrendDataTrait
         // using the FILE_APPEND flag to append the content to the end of the file
         // and the LOCK_EX flag to prevent anyone else writing to the file at the same time
         file_put_contents('logs.txt', json_encode( $payload ) . " " . $httpcode .  "\n", FILE_APPEND | LOCK_EX);        
-
+        if ($httpcode == 0) {
+            file_put_contents('logs.txt', json_encode( $csv_data ) .  "\n", FILE_APPEND | LOCK_EX); 
+        }
         return $csv_data;
     }
 }
