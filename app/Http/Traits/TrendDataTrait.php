@@ -132,7 +132,7 @@ trait TrendDataTrait
     
                     $response = curl_exec($curl);
                     $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-                    $msg = sprintf("%s               %d", $filename, $httpcode );
+                    $msg = sprintf("%s               %d\n", $filename, $httpcode );
                     $my_log = file_put_contents('logs.txt', $msg.PHP_EOL, FILE_APPEND | LOCK_EX );
                     curl_close($curl);
                 }
@@ -174,7 +174,7 @@ trait TrendDataTrait
             return $csv_data;
         }catch(\Exception $e) {    
             
-            $msg = sprintf("%s               %s", $filename, $e->getMessage() );
+            $msg = sprintf("%s               %s\n", $filename, $e->getMessage() );
             $my_log = file_put_contents('logs.txt', $msg.PHP_EOL, FILE_APPEND | LOCK_EX );
         }
         return null;
