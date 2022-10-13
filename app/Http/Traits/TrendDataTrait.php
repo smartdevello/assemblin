@@ -74,6 +74,12 @@ trait TrendDataTrait
         $from_time *=1000;
         $to_time *= 1000;
         $httpcode = 0;
+
+        $starttime = microtime(true);
+        $time_taken = 0;
+
+
+
         $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $filename ;
         $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
 
@@ -83,7 +89,8 @@ trait TrendDataTrait
                 unlink($filename);
             }
             shell_exec($command);
-    
+            $time_taken = microtime(true) - $starttime;
+
             $file = fopen($filename,"r");
 
             $index = 0;
@@ -182,7 +189,7 @@ trait TrendDataTrait
         // Write the contents to the file, 
         // using the FILE_APPEND flag to append the content to the end of the file
         // and the LOCK_EX flag to prevent anyone else writing to the file at the same time
-        file_put_contents('logs.txt', json_encode( $payload ) . " " . $httpcode .  "\n", FILE_APPEND | LOCK_EX);        
+        file_put_contents('logs.txt', json_encode( $payload ) . " " . $httpcode . " " . $time_taken . "\n", FILE_APPEND | LOCK_EX);        
         if ($httpcode == 0) {
             file_put_contents('logs.txt', json_encode( $csv_data ) .  "\n", FILE_APPEND | LOCK_EX); 
         }
