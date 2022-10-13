@@ -97,7 +97,7 @@ trait TrendDataTrait
             fclose($file);
     
             if ( strpos( $trend_group->trend_group_name, "Freesi") !== false)  {
-                if ( count($csv_data) >= 3) {
+                if ( count($csv_data) >= 2) {
                     $columns = $csv_data[0];
                     $values = $csv_data[count($csv_data) - 1];
     
