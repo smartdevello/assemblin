@@ -35,7 +35,7 @@ trait TrendDataTrait
 
 
         $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $local_folderpath . $local_filename ;
-        $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);        
+        $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
         shell_exec($command);
 
         $sftp = Storage::disk('sftp');
@@ -52,7 +52,7 @@ trait TrendDataTrait
             'Ä' => 'A',
             'Ö'=> 'O',
             ' ' => '_'
-        ];    
+        ];
         foreach ($patterns as $find => $replace) {
             $finnish = str_replace($find, $replace, $finnish);
         }
@@ -84,7 +84,7 @@ trait TrendDataTrait
         $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
 
         try{
-    
+
             if ( file_exists($filename ) ) {
                 unlink($filename);
             }
@@ -98,16 +98,16 @@ trait TrendDataTrait
             {
                 $index++;
                 $row = fgetcsv($file, 0, ';');
-                if (is_array($row)) 
-                    $csv_data[] = $row;         
+                if (is_array($row))
+                    $csv_data[] = $row;
             }
             fclose($file);
-    
+
             if ( strpos( $trend_group->trend_group_name, "Freesi") !== false)  {
                 if ( count($csv_data) >= 2) {
                     $columns = $csv_data[0];
                     $values = $csv_data[count($csv_data) - 1];
-    
+
                     for ($i = 0; $i < count($values); $i++) {
                         if ( preg_match("/^[\d,]+$/", $values[$i]) ) {
                             $payload->measurementPoint[] = (object) array(
@@ -116,11 +116,11 @@ trait TrendDataTrait
                                 'out'=> (float)str_replace(",", ".", $values[$i]),
                                 'facet' => '',
                             );
-                        }                    
+                        }
                     }
-    
+
                     $curl = curl_init();
-    
+
                     curl_setopt_array($curl, array(
                     CURLOPT_URL => 'https://freesi-sensor-data-hub.azure-devices.net/devices/hka_vipusenkatu5a/messages/events?api-version=2018-06-30',
                     CURLOPT_RETURNTRANSFER => true,
@@ -136,28 +136,28 @@ trait TrendDataTrait
                         'Content-Type: application/json'
                     ),
                     ));
-    
+
                     $response = curl_exec($curl);
                     $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
                     curl_close($curl);
                 }
-                    
+
             }
-    
+
             $output = [];
             // foreach($csv_data as $index => $arr)
             // {
             //     if ($index !=0) {
             //         $timestamp = 0;
-    
+
             //         if ( count($arr) < 3 ) continue;
             //         foreach($arr as $key => $value) {
-    
+
             //             if ($key == 1){
             //                 $timestamp = strtotime( trim($arr[0]). " " . trim($arr[1]));
             //             } else if ($key !=0 && $key !=1) {
             //                 if ( empty( $csv_data[0][$key] ) || empty( $value ) ) continue;
-     
+
             //                 $data = [
             //                     'trend_group_id' => $trend_group->id,
             //                     'timestamp' => date('Y-m-d H:i:s', $timestamp),
@@ -167,31 +167,31 @@ trait TrendDataTrait
             //                 $csv_trend_data = Csv_Trend_Data::updateOrCreate(
             //                     ['trend_group_id'=> $trend_group->id, 'sensor_name' => $csv_data[0][$key]], $data
             //                 );
-    
+
             //                 if ($csv_trend_data)
             //                     $output[] = $csv_trend_data;
-    
+
             //             }
             //         }
             //     }
-            // }    
-            
+            // }
+
         }catch(\Exception $e) {
-            
+
             $msg = sprintf("%s               %s\n", $filename, $e->getMessage() );
-            // Write the contents to the file, 
+            // Write the contents to the file,
             // using the FILE_APPEND flag to append the content to the end of the file
             // and the LOCK_EX flag to prevent anyone else writing to the file at the same time
-            file_put_contents('logs.txt', $msg, FILE_APPEND | LOCK_EX);        
+            // file_put_contents('logs.txt', $msg, FILE_APPEND | LOCK_EX);
         }
 
         $msg = sprintf("%s               %d\n", $filename, $httpcode );
-        // Write the contents to the file, 
+        // Write the contents to the file,
         // using the FILE_APPEND flag to append the content to the end of the file
         // and the LOCK_EX flag to prevent anyone else writing to the file at the same time
-        file_put_contents('logs.txt', json_encode( $payload ) . " " . $httpcode . " " . $time_taken . "\n", FILE_APPEND | LOCK_EX);        
+        // file_put_contents('logs.txt', json_encode( $payload ) . " " . $httpcode . " " . $time_taken . "\n", FILE_APPEND | LOCK_EX);
         if ($httpcode == 0) {
-            file_put_contents('logs.txt', json_encode( $csv_data ) .  "\n", FILE_APPEND | LOCK_EX); 
+            // file_put_contents('logs.txt', json_encode( $csv_data ) .  "\n", FILE_APPEND | LOCK_EX);
         }
         return $csv_data;
     }
