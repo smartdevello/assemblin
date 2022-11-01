@@ -38,6 +38,8 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function () {
 
     Route::group(['prefix' => 'ElectricityPrice'], function ($router) {
         Route::get('getElectricityPriceData', [ElectricityPriceController::class, 'getElectricityPriceData'])->name('getElectricityPriceData');
+        Route::get('getTimeZone', [ElectricityPriceController::class, 'getTimeZone'])->name('getTimeZone');
+
     });
 
     Route::group(['prefix' => 'lorawan'], function ($router) {
