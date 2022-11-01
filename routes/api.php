@@ -1,13 +1,13 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DEOS_controllerController;
 use App\Http\Controllers\FoxeriotController;
-use App\Http\Controllers\PointController;
 use App\Http\Controllers\LorawanController;
+use App\Http\Controllers\PointController;
 use App\Http\Controllers\TrendGroupController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DEOS_controllerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,21 +18,25 @@ use App\Http\Controllers\DEOS_controllerController;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware(['cors', 'auth:sanctum'])->group(function(){
+Route::middleware(['cors', 'auth:sanctum'])->group(function () {
 
     Route::group(['prefix' => 'dashboard'], function ($router) {
         Route::post('update', [DashboardController::class, 'update'])->name('update_dashboard');
         Route::get('restartAsmServices', [DashboardController::class, 'restartAsmServices'])->name('restartAsmServices');
-    });    
+    });
 
-    Route::group(['prefix' => 'WeatherForcast'], function ($router) {        
+    Route::group(['prefix' => 'WeatherForcast'], function ($router) {
         Route::get('getWeatherData', [DEOS_controllerController::class, 'getWeatherData'])->name('getWeatherData');
+    });
+
+    Route::group(['prefix' => 'ElectricityPrice'], function ($router) {
+        Route::get('getElectricityPriceData', [DEOS_controllerController::class, 'getElectricityPriceData'])->name('getElectricityPriceData');
     });
 
     Route::group(['prefix' => 'lorawan'], function ($router) {
@@ -70,12 +74,10 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function(){
 
     Route::get('foxeriot/automatic_update', '\App\Http\Controllers\FoxeriotController@automatic_update');
 
-
     Route::group(['prefix' => 'asm_server/config'], function ($router) {
         Route::get('getSERVERConfig', [AsmServerController::class, 'getSERVERConfig'])->name('getSERVERConfig');
         Route::get('getRESTconfig', [AsmServerController::class, 'getRESTconfig'])->name('getRESTconfig');
     });
-
 
     Route::group(['prefix' => 'trendgroup'], function ($router) {
         Route::post('', [TrendGroupController::class, 'receive_csv'])->name('receive_csv');
