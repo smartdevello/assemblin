@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DEOS_controllerController;
+use App\Http\Controllers\ElectricityPriceController;
 use App\Http\Controllers\FoxeriotController;
 use App\Http\Controllers\LorawanController;
 use App\Http\Controllers\PointController;
@@ -36,7 +37,7 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function () {
     });
 
     Route::group(['prefix' => 'ElectricityPrice'], function ($router) {
-        Route::get('getElectricityPriceData', [DEOS_controllerController::class, 'getElectricityPriceData'])->name('getElectricityPriceData');
+        Route::get('getElectricityPriceData', [ElectricityPriceController::class, 'getElectricityPriceData'])->name('getElectricityPriceData');
     });
 
     Route::group(['prefix' => 'lorawan'], function ($router) {
