@@ -5,38 +5,47 @@ namespace App\Http\Traits;
 use DateTime;
 use Illuminate\Support\Facades\Storage;
 use stdClass;
+use TheSeer\Tokenizer\Exception;
 
 trait TrendDataTrait
 {
 
     public function receive_csv_and_savefile_sendto_external_ftp($trend_group)
     {
-        $now = date('Y_m_d_H_i_', time());
-        $date = date('Y_m_d', time());
-        $local_filename = str_replace(" ", "_", sprintf("%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id));
+        try {
+            $now = date('Y_m_d_H_i_', time());
+            $date = date('Y_m_d', time());
+            $local_filename = str_replace(" ", "_", sprintf("%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id));
 
-        $local_folderpath = sprintf("storage/%s/", $date);
+            $local_folderpath = sprintf("storage/%s/", $date);
 
-        if (!file_exists($local_folderpath)) {
-            mkdir($local_folderpath, 0777, true);
+            if (!file_exists($local_folderpath)) {
+                mkdir($local_folderpath, 0777, true);
+            }
+
+            $to_time = time();
+            $from_time = $to_time - $trend_group->query_period * 60;
+
+            //Convet it to milisecond;
+            $from_time *= 1000;
+            $to_time *= 1000;
+
+            $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $local_folderpath . $local_filename;
+            $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
+            shell_exec($command);
+
+            $sftp = Storage::disk('sftp');
+            $local_storage_path = str_replace(" ", "_", sprintf("%s/%s%s%s.csv", $date, $now, $trend_group->trend_group_name, $trend_group->controller_id));
+            $remote_storage_path = sprintf("%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id);
+
+            $sftp->put($remote_storage_path, file_get_contents(storage_path($local_storage_path)));
+
+            file_put_contents("error.log", $local_storage_path . " sent successfully", FILE_APPEND);
+        } catch (Exception $ex) {
+
+            file_put_contents("error.log", $ex->getMessage(), FILE_APPEND);
+
         }
-
-        $to_time = time();
-        $from_time = $to_time - $trend_group->query_period * 60;
-
-        //Convet it to milisecond;
-        $from_time *= 1000;
-        $to_time *= 1000;
-
-        $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $local_folderpath . $local_filename;
-        $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
-        shell_exec($command);
-
-        $sftp = Storage::disk('sftp');
-        $local_storage_path = str_replace(" ", "_", sprintf("%s/%s%s%s.csv", $date, $now, $trend_group->trend_group_name, $trend_group->controller_id));
-        $remote_storage_path = sprintf("%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id);
-
-        $sftp->put($remote_storage_path, file_get_contents(storage_path($local_storage_path)));
 
     }
     public function convertFinnishtoEnglish($finnish)

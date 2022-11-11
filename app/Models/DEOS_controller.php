@@ -13,7 +13,7 @@ class DEOS_controller extends Model
     protected $table = 'deos_controllers';
 
     protected $fillable = [
-        'name', 'ip_address', 'port_number', 'building_id', 'longitude', 'latitude', 'enable_weather_forcast'
+        'name', 'ip_address', 'port_number', 'building_id', 'longitude', 'latitude', 'enable_weather_forcast', 'enable_electricityprice_forcast',
     ];
 
     public function building()
@@ -23,7 +23,7 @@ class DEOS_controller extends Model
 
     public function points()
     {
-        
+
         return $this->hasMany(DEOS_point::class, 'controller_id', 'id');
     }
 }

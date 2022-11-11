@@ -2,12 +2,12 @@
 @section('content')
     <v-main>
         <v-container>
-            @if( \Session::has('success') ) 
+            @if( \Session::has('success') )
                 <h3>{{ \Session::get('success') }}</h3>
             @elseif ( \Session::has('error'))
                 <h3 style="color: red">{{ \Session::get('error') }}</h3>
             @else
-                @if( count($errors) > 0)  
+                @if( count($errors) > 0)
                     @foreach($errors->all() as $error)
                         <h3 style="color: red">{{ $error }}</h3>
                     @endforeach
@@ -26,12 +26,18 @@
                                     <v-text-field v-model="controller.ip_address" label="IP Address" name="ip_address" required></v-text-field>
                                     <v-text-field v-model="controller.port_number" label="Port Number" name="port_number" required readonly></v-text-field>
                                     <v-select :items="buildings" label="Select a Building" name="building_id" v-model="currentBuilding" item-text="name" item-value="id" solo required></v-select>
-                                    <v-checkbox 
+                                    <v-checkbox
+                                        v-model="controller.enable_electricityprice_forcast" label="Enable Electricity Price Forcast" name="enable_electricityprice_forcast"
+                                        :value="controller.enable_electricityprice_forcast"
+                                        >
+                                    </v-checkbox>
+
+                                    <v-checkbox
                                         v-model="controller.enable_weather_forcast" label="Enable Weather Forcast" name="enable_weather_forcast"
                                         :value="controller.enable_weather_forcast"
                                         >
                                     </v-checkbox>
-                                    
+
                                     <v-text-field v-show="controller.enable_weather_forcast"  v-model="controller.longitude" label="Longitude (Optional)" name="longitude"></v-text-field>
                                     <v-text-field v-show="controller.enable_weather_forcast"  v-model="controller.latitude" label ="Latitude (Optional)" name="latitude"></v-text-field>
                                 </v-card-text>
@@ -102,7 +108,7 @@
                             <v-card-title class="headline grey lighten-2">
                                 Add New Point
                             </v-card-title>
-                            
+
                             <v-text-field  name="label" label="DEOS page and sensor" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
                             <v-text-field  name="name"  label="Point Name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
                             <v-select :items="controllers" label="Select A Controller" name="controller_id" item-text="name" item-value="id" solo required >
@@ -154,7 +160,7 @@
                 for (let building of this.buildings) {
                     building.name = building.name + " ( " + building.location.name + " ) ";
                 }
-                
+
                 index = this.controller.points.length - 1;
                     while (index >= 0) {
                         if (this.controller.points[index].meta_type == 'weather_forcast') {
