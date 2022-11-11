@@ -17,6 +17,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "league/flysystem-aws-s3-v3": "~1.0",
+        "league/flysystem-sftp": "~1.0",
         "maatwebsite/excel": "^3.1",
         "phpseclib/phpseclib": "0.3.10"
     },
