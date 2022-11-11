@@ -10,8 +10,11 @@
 
 /node_modules
 /public/hot
+/public/storage
 /public/assemblin_config
 /config/constants.php
+/storage/*.key
+/storage
 /vendor
 /public/images
 .env
