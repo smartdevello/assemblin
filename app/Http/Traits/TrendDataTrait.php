@@ -3,7 +3,7 @@
 namespace App\Http\Traits;
 
 use DateTime;
-use Illuminate\Support\Facades\Storage;
+use phpseclib3\Net\SFTP;
 use stdClass;
 use TheSeer\Tokenizer\Exception;
 
@@ -34,10 +34,13 @@ trait TrendDataTrait
             $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
             shell_exec($command);
 
-            $sftp = Storage::disk('sftp');
+            // $sftp = Storage::disk('sftp');
             $local_storage_path = str_replace(" ", "_", sprintf("%s/%s%s%s.csv", $date, $now, $trend_group->trend_group_name, $trend_group->controller_id));
             $remote_storage_path = sprintf("%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id);
 
+            // $sftp->put($remote_storage_path, file_get_contents(storage_path($local_storage_path)));
+            $sftp = new SFTP('sftp.granlund.fi');
+            $sftp->login('LahdenMalski_Deos_Metrix', 'D!7kbaBA4U-sKhU7');
             $sftp->put($remote_storage_path, file_get_contents(storage_path($local_storage_path)));
 
             file_put_contents("error.log", $local_storage_path . " sent successfully", FILE_APPEND);
