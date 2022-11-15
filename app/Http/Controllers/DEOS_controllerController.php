@@ -149,12 +149,12 @@ class DEOS_controllerController extends Controller
         // so only 1 controller to have electricityprice_forcast functionality
 
         $controllers = DEOS_controller::all();
-        foreach ($controllers as $item) {
-            $item->update([
-                'enable_weather_forcast' => false,
-                'enable_electricityprice_forcast' => false,
-            ]);
-        }
+        // foreach ($controllers as $item) {
+        //     $item->update([
+        //         'enable_weather_forcast' => false,
+        //         'enable_electricityprice_forcast' => false,
+        //     ]);
+        // }
 
         $controller->update([
             'name' => $request->name,
