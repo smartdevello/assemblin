@@ -169,11 +169,14 @@ class DEOS_controllerController extends Controller
 
         // Update scheduled job controller, so it can reference the current controller's coordinate
         if (isset($request->enable_weather_forcast)) {
-            $job = HKA_Scheduled_JOb::where('job_name', 'weather_forecast')->first();
-            $job->update([
-                'next_run' => date('Y-m-d H:i:s', time() + 60 * 60),
-                'job_id' => $controller->id,
-            ]);
+
+            $job = HKA_Scheduled_JOb::updateOrCreate(
+                ['job_name' => 'weather_forecast', 'job_id' => $controller->id], [
+                    'job_name' => 'weather_forecast',
+                    'job_id' => $controller->id,
+                    'next_run' => date('Y-m-d H:i:s', time() + 60 * 60),
+                ]
+            );
 
             $forecast_data = $this->getWeatherData($request->longitude, $request->latitude);
             //Create or Update Weather Points (Actually DEOS Points)
