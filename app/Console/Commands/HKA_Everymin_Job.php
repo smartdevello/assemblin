@@ -108,6 +108,8 @@ class HKA_Everymin_Job extends Command
                                 $point = DEOS_point::where([
                                     ['name', '=', $key . $index],
                                     ['label', '=', $label],
+                                    ['controller_id', '=', $controller->id],
+                                    ['meta_type', '=', 'weather_forcast'],
                                 ])->first();
 
                                 if ($point != null) {
