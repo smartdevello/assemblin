@@ -458,9 +458,13 @@ trait AssemblinInit
         }
     }
 
-    public function sendForcasttoDEOS($meta_type)
+    public function sendForcasttoDEOS($meta_type, $controller_id)
     {
-        $points = DEOS_point::where('meta_type', '=', $meta_type)->get();
+        $points = DEOS_point::where([
+            ['meta_type', '=', $meta_type],
+            ['controller_id', '=', $controller_id],
+        ])->get();
+        // $points = DEOS_point::where('meta_type', '=', $meta_type)->get();
         $data = [];
         foreach ($points as $point) {
             array_push($data, array("id" => $point->name, "value" => strval($point->value)));

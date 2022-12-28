@@ -226,7 +226,7 @@ class DEOS_controllerController extends Controller
                 }
                 $dataset_index++;
             }
-            $this->sendForcasttoDEOS('weather_forcast');
+            $this->sendForcasttoDEOS('weather_forcast', $controller->id);
 
         }
 
