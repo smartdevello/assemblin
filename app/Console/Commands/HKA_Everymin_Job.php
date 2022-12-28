@@ -84,7 +84,7 @@ class HKA_Everymin_Job extends Command
                     if ($controller && isset($controller->longitude) && isset($controller->latitude)) {
                         // Update Job next schedule time
                         $job->update([
-                            'next_run' => date('Y-m-d H:i:s', time() + 3600),
+                            'next_run' => date('Y-m-d H:i:s', time() + 300),
                         ]);
 
                         //perform relevant actions
