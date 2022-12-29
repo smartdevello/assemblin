@@ -464,10 +464,12 @@ trait AssemblinInit
             ['meta_type', '=', $meta_type],
             ['controller_id', '=', $controller_id],
         ])->get();
+        $controller = DEOS_controller::where('id', $controller_id)->first();
+
         // $points = DEOS_point::where('meta_type', '=', $meta_type)->get();
         $data = [];
         foreach ($points as $point) {
-            array_push($data, array("id" => $point->name, "value" => strval($point->value)));
+            array_push($data, array("id" => $controller->name . '_' . $point->name, "value" => strval($point->value)));
             // array_push($data, array("id" => $point->name, "value" => strval(0)));
         }
 
