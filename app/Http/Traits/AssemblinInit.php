@@ -467,8 +467,8 @@ trait AssemblinInit
         // $points = DEOS_point::where('meta_type', '=', $meta_type)->get();
         $data = [];
         foreach ($points as $point) {
-            // array_push($data, array("id" => $point->name, "value" => strval($point->value)));
-            array_push($data, array("id" => $point->name, "value" => strval(0)));
+            array_push($data, array("id" => $point->name, "value" => strval($point->value)));
+            // array_push($data, array("id" => $point->name, "value" => strval(0)));
         }
 
         $ch = curl_init();
