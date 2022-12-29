@@ -299,7 +299,7 @@ trait AssemblinInit
             foreach ($points as $point) {
                 $item = new stdClass();
                 $item->Label = $point->label ?? '';
-                $item->Description = $point->name ?? '';
+                $item->Description = $controller->name . '_' . $point->name ?? '';
                 $item->Meta = new stdClass();
                 $item->Meta->property = $point->meta_property ?? '';
                 $item->Meta->room = $point->meta_room ?? '';
@@ -470,7 +470,6 @@ trait AssemblinInit
         $data = [];
         foreach ($points as $point) {
             array_push($data, array("id" => $controller->name . '_' . $point->name, "value" => strval($point->value)));
-            // array_push($data, array("id" => $point->name, "value" => strval(0)));
         }
 
         $ch = curl_init();
@@ -520,7 +519,7 @@ trait AssemblinInit
                     $area = Area::where('id', $point->area_id)->first();
                     $sensor->area_id = $area->id;
                 }
-                array_push($data, array("id" => $point->name, "value" => strval($sensor->value)));
+                array_push($data, array("id" => $controller->name . '_' . $point->name, "value" => strval($sensor->value)));
             }
         }
 

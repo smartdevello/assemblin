@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Area;
 use App\Models\Building;
-use Illuminate\Http\Request;
-use App\Models\DEOS_point;
 use App\Models\DEOS_controller;
+use App\Models\DEOS_point;
 use App\Models\Location;
-use stdClass;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 use phpseclib3\Net\SSH2;
+use stdClass;
 
 class DEOS_pointController extends Controller
 {
@@ -20,21 +19,24 @@ class DEOS_pointController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-
     public function index()
     {
         //
         $points = DEOS_point::where('meta_type', '!=', 'weather_forcast')->get();
-        foreach($points as $point) {
+        foreach ($points as $point) {
             $point->controller;
             $point->area;
         }
 
         $controllers = DEOS_controller::all();
-        foreach($controllers as $controller) $controller->building;
+        foreach ($controllers as $controller) {
+            $controller->building;
+        }
 
         $areas = Area::all();
-        foreach($areas as $area) $area->building;
+        foreach ($areas as $area) {
+            $area->building;
+        }
 
         return view('admin.point.index', compact('points', 'controllers', 'areas'));
     }
@@ -51,16 +53,16 @@ class DEOS_pointController extends Controller
         $this->validate($request, [
             'label' => 'required',
             'controller_id' => 'required',
-            'area_id' => 'required'
+            'area_id' => 'required',
         ], [
             'label.required' => "Description field can't be empty",
             'controller_id.required' => "Must specify a Controller",
-            'area_id.required' => "Must specify a Area"
+            'area_id.required' => "Must specify a Area",
         ]);
 
         try {
             $controller = DEOS_controller::where('id', $request->controller_id)->first();
-            $building = Building::where('id', $controller->building_id)->first();            
+            $building = Building::where('id', $controller->building_id)->first();
             $location = Location::where('id', $building->location_id)->first();
             $request->name = $location->name . "_" . $building->name . "_" . $request->name;
 
@@ -71,11 +73,10 @@ class DEOS_pointController extends Controller
                 'name.unique' => sprintf("The Point \"%s\" already exists", $request->name),
             ]);
 
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return back()->with('error', 'Building or Location is not allocated for this point');
         }
 
-        
         // if (! $this->checkValidPoint_forController ($request )) {
         //     $controller = DEOS_controller::where('id', $request->controller_id)->first();
         //     return back()->with('error', sprintf("The Controller \"%s\" already has the point named \"%s\"", $controller->name , $request->name));
@@ -86,64 +87,67 @@ class DEOS_pointController extends Controller
         //     return back()->with('error', sprintf("The Area \"%s\" already has the point named \"%s\"", $area->name , $request->name));
         // }
 
-        
         DEOS_point::create([
             'name' => $request->name,
             'label' => $request->label,
             'type' => 'FL',
             'controller_id' => $request->controller_id,
             'area_id' => $request->area_id,
-            
+
         ]);
         $this->stopAsmServices();
         $this->updateConfigfiles();
         $this->startAsmServices();
         return back()->with('success', 'Created successfully');
     }
-    public function checkValidPoint_forController( Request $request) 
+    public function checkValidPoint_forController(Request $request)
     {
         $samecontrollerPoints = DEOS_point::where('controller_id', $request->controller_id)->get();
-        foreach ($samecontrollerPoints as $point ) {
-            if ( $point->name == $request->name) return false;
+        foreach ($samecontrollerPoints as $point) {
+            if ($point->name == $request->name) {
+                return false;
+            }
+
         }
         return true;
     }
-    public function checkValidPoint_forArea( Request $request) 
+    public function checkValidPoint_forArea(Request $request)
     {
         $samecontrollerPoints = DEOS_point::where('area_id', $request->area_id)->get();
-        foreach ($samecontrollerPoints as $point ) {
-            if ( $point->name == $request->name) return false;
+        foreach ($samecontrollerPoints as $point) {
+            if ($point->name == $request->name) {
+                return false;
+            }
+
         }
         return true;
     }
 
     public function update(Request $request, $id)
     {
-        
+
         //
         $point = DEOS_point::where('id', $id)->first();
-
 
         if (!$point) {
             return back()->with('error', 'Not found');
         }
         $point->controller;
-        $point->area;     
-
+        $point->area;
 
         $this->validate($request, [
             'label' => 'required',
             'controller_id' => 'required',
-            'area_id' => 'required'
+            'area_id' => 'required',
         ], [
             'label.required' => "Description field can't be empty",
             'controller_id.required' => "Must specify a Controller",
-            'area_id.required' => "Must specify a Area"
+            'area_id.required' => "Must specify a Area",
         ]);
 
         try {
             $controller = DEOS_controller::where('id', $point->controller_id)->first();
-            $building = Building::where('id', $controller->building_id)->first();            
+            $building = Building::where('id', $controller->building_id)->first();
             $location = Location::where('id', $building->location_id)->first();
             $request->name = $location->name . "_" . $building->name . "_" . $request->name;
 
@@ -154,12 +158,9 @@ class DEOS_pointController extends Controller
                 'name.unique' => sprintf("The Point \"%s\" already exists", $request->name),
             ]);
 
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return back()->with('error', 'Building or Location is not allocated for this point');
         }
-
-
-       
 
         $point->update($request->all());
 
@@ -182,20 +183,24 @@ class DEOS_pointController extends Controller
     public function show(Request $request, $id)
     {
         //
-        $point = DEOS_point::where('id', $id)->first();        
+        $point = DEOS_point::where('id', $id)->first();
         $controllers = DEOS_controller::all();
-        foreach ($controllers as $controller) $controller->building;
+        foreach ($controllers as $controller) {
+            $controller->building;
+        }
+
         $areas = Area::all();
-        foreach ( $areas as $area) $area->building;
+        foreach ($areas as $area) {
+            $area->building;
+        }
+
         return view('admin.point.details', compact('point', 'controllers', 'areas'));
     }
-
 
     public function edit($id)
     {
         //
     }
-
 
     public function restartAsmServices()
     {
@@ -208,51 +213,50 @@ class DEOS_pointController extends Controller
         echo $ssh->exec("taskkill /IM asmrest.exe /f");
         echo $ssh->exec("schtasks /end /tn \"AsmRestService starter\"");
 
-
         //Start Services:
         echo $ssh->exec("schtasks /run /tn \"AsmRestService starter\"");
-        
+
     }
-    public function stopAsmServices() {
+    public function stopAsmServices()
+    {
         $response = "";
-        try{
+        try {
             $ssh = new SSH2('172.21.8.245', 22);
 
             $ssh->login('Hkaapiuser', 'ApiUserHKA34!');
-    
-            // Stop services:         
-            $response = $response .  $ssh->exec("taskkill /IM asmserver.exe /f");
-            $response = $response .   $ssh->exec("taskkill /IM asmrest.exe /f");
-            $response = $response .   $ssh->exec("schtasks /end /tn \"AsmRestService starter\"");  
- 
+
+            // Stop services:
+            $response = $response . $ssh->exec("taskkill /IM asmserver.exe /f");
+            $response = $response . $ssh->exec("taskkill /IM asmrest.exe /f");
+            $response = $response . $ssh->exec("schtasks /end /tn \"AsmRestService starter\"");
+
             return response()->json([
-                'success' => $response
+                'success' => $response,
             ]);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
-                'response' => $response
+                'response' => $response,
             ], 403);
         }
     }
     public function startAsmServices()
     {
         $response = "";
-        try{
+        try {
             $ssh = new SSH2('172.21.8.245', 22);
 
-            $ssh->login('Hkaapiuser', 'ApiUserHKA34!');   
-   
-    
+            $ssh->login('Hkaapiuser', 'ApiUserHKA34!');
+
             //Start Services:
-            $response = $response .  $ssh->exec("schtasks /run /tn \"AsmRestService starter\"");
+            $response = $response . $ssh->exec("schtasks /run /tn \"AsmRestService starter\"");
             return response()->json([
-                'success' => $response
+                'success' => $response,
             ]);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
-                'response' => $response
+                'response' => $response,
             ], 403);
         }
 
@@ -262,7 +266,7 @@ class DEOS_pointController extends Controller
 
         $controllers = DEOS_controller::all();
 
-        foreach($controllers as $controller) {
+        foreach ($controllers as $controller) {
             $filepath = config()->get('constants.BASE_CONFIG_PATH') . 'asmrest/' . $controller->name . ".json";
             $restconfig = new stdClass();
             $restconfig->Address = '127.0.0.1';
@@ -277,10 +281,10 @@ class DEOS_pointController extends Controller
             $restconfig->LP->Writeable = [];
 
             $points = $controller->points;
-            foreach ($points as $point ) {
+            foreach ($points as $point) {
                 $item = new stdClass();
                 $item->Label = $point->label ?? '';
-                $item->Description = $point->name ?? '';
+                $item->Description = $controller->name . '_' . $point->name ?? '';
                 $item->Meta = new stdClass();
                 $item->Meta->property = $point->meta_property ?? '';
                 $item->Meta->room = $point->meta_room ?? '';
@@ -293,7 +297,7 @@ class DEOS_pointController extends Controller
             file_put_contents($filepath, json_encode($restconfig));
         }
 
-    }    
+    }
     /**
      * Remove the specified resource from storage.
      *
