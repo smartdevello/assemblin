@@ -284,7 +284,7 @@ class DEOS_pointController extends Controller
             foreach ($points as $point) {
                 $item = new stdClass();
                 $item->Label = $point->label ?? '';
-                $item->Description = $controller->name . '_' . $point->name ?? '';
+                $item->Description = $point->name ?? '';
                 $item->Meta = new stdClass();
                 $item->Meta->property = $point->meta_property ?? '';
                 $item->Meta->room = $point->meta_room ?? '';
