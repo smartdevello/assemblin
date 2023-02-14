@@ -37,6 +37,9 @@
         .v-data-table__expanded__content .log_table{
             position: absolute;
         }
+        div.v-data-table table thead tr th:nth-child(4), div.v-data-table table thead tr th:nth-child(6){
+            min-width: 200px;
+        }
     </style>
 @endsection
 @section('content')
@@ -300,7 +303,7 @@
                     index -= 1;
                 }
                 for (sensor of this.sensors){
-                    if (sensor.logs) {     
+                    if (sensor.logs) {
                         // console.log(sensor.deviceId)
                         sensor.logs = JSON.parse(sensor.logs.logs);
                         // console.log(sensor.logs);
