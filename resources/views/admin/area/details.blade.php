@@ -32,13 +32,12 @@
                                 </v-card-actions>
                             </v-card>
                         </v-form>
+                        <div class="text-h2">DEOS Points</div>
+                        <v-card v-for="point in area.points" :key="point.id" @click="openPointPage(point.id)" width="300" elevation="10" class="ma-2">
 
-                        <v-card class="mx-auto my-12" v-if="area.points.length > 0">
-                            <v-card-title>DEOS Points</v-card-title>
-                            <v-card-subtitle  v-for="item in area.points" :key="item.id">
-                                    <div class="text-h4">@{{ item.name }}</div>
-                                <v-card-text>@{{ item.label }}</v-card-text>
-                            </v-card-subtitle>
+                                <v-card-title>@{{ point . name }}</v-card-title>
+                                <v-card-subtitle>@{{ point.label }}</v-card-subtitle>
+
                         </v-card>
 
                     </div>
@@ -84,7 +83,12 @@
 
                 this.updateUrl = `${prefix_link}/area/update/${this.area.id}`;
                 this.deleteUrl = `${prefix_link}/area/delete/${this.area.id}`;
-            }
+            },
+            methods: {
+                openPointPage: function(id) {
+                    window.location.href = `${prefix_link}/point/${id}`;
+                }
+            },
         })
 
     </script>
