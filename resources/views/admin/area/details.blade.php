@@ -33,12 +33,14 @@
                             </v-card>
                         </v-form>
                         <div class="text-h2">DEOS Points</div>
-                        <v-card v-for="point in area.points" :key="point.id" @click="openPointPage(point.id)" width="300" elevation="10" class="ma-2">
+                        <v-row>
+                            <v-card v-for="point in area.points" :key="point.id" @click="openPointPage(point.id)" width="300" elevation="10" class="ma-2">
 
-                                <v-card-title>@{{ point . name }}</v-card-title>
-                                <v-card-subtitle>@{{ point.label }}</v-card-subtitle>
+                                    <v-card-title>@{{ point . name }}</v-card-title>
+                                    <v-card-subtitle>@{{ point.label }}</v-card-subtitle>
 
-                        </v-card>
+                            </v-card>
+                        </v-row>
 
                     </div>
                 </template>
