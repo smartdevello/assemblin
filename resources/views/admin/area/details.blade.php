@@ -36,11 +36,9 @@
                             <v-card class="mx-auto my-12" v-if="area.points.length > 0">
                                 <v-card-title>DEOS Points</v-card-title>
                                 <v-card-text fluid v-for="item in area.points" :key="item.id">
-                                    <template v-slot:label>
-                                        <div class="mx-3">@{{ item . label }}</div>
-                                        <div class="mx-3">@{{ item . name }}</div>
-                                        <div class="mx-3">@{{ item . value }}</div>
-                                    </template>
+                                        <div class="mx-3">@{{ item.label }}</div>
+                                        <div class="mx-3">@{{ item.name }}</div>
+                                        <div class="mx-3">@{{ item.value }}</div>
                                 </v-card-text>
                             </v-card>
                         </v-form>
