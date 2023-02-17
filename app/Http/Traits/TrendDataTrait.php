@@ -19,7 +19,7 @@ trait TrendDataTrait
 
             $local_folderpath = sprintf("storage/%s/", $date);
 
-            if (!file_exists($local_folderpath)) {
+            if (! file_exists($local_folderpath)) {
                 mkdir($local_folderpath, 0777, true);
             }
 
@@ -99,7 +99,7 @@ trait TrendDataTrait
             $file = fopen($filename, "r");
 
             $index = 0;
-            while (!feof($file)) {
+            while (! feof($file)) {
                 $index++;
                 $row = fgetcsv($file, 0, ';');
                 if (is_array($row)) {
@@ -119,7 +119,7 @@ trait TrendDataTrait
                     $values = $csv_data[count($csv_data) - 1];
 
                     for ($i = 0; $i < count($values); $i++) {
-                        if (preg_match("/^[\d,]+$/", $values[$i])) {
+                        if (preg_match("/^[\d,-]+$/", $values[$i])) {
                             $payload->measurementPoint[] = (object) array(
                                 'controller' => $trend_group->trend_group_name,
                                 'pointName' => $this->convertFinnishtoEnglish($columns[$i]),
