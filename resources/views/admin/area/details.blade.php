@@ -32,7 +32,7 @@
                                 </v-card-actions>
                             </v-card>
                         </v-form>
-                        <div class="text-h2">DEOS Points</div>
+                        <div class="text-h4">DEOS Points</div>
                         <v-row>
                             <v-card v-for="point in area.points" :key="point.id" @click="openPointPage(point.id)" width="300" elevation="10" class="ma-2">
 
