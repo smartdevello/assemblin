@@ -32,15 +32,15 @@
                                 </v-card-actions>
                             </v-card>
                         </v-form>
-                        <v-form>
-                            <v-card class="mx-auto my-12" v-if="area.points.length > 0">
-                                <v-card-title>DEOS Points</v-card-title>
-                                <v-card-text fluid v-for="item in area.points" :key="item.id">
-                                    <v-card-title>@{{ item.name }}</v-card-title>
-                                    <v-card-subtitle>@{{ item.label }}</v-card-subtitle>
-                                </v-card-text>
-                            </v-card>
-                        </v-form>
+
+                        <v-card class="mx-auto my-12" v-if="area.points.length > 0">
+                            <v-card-title>DEOS Points</v-card-title>
+                            <v-card-subtitle fluid v-for="item in area.points" :key="item.id">
+                                <v-card-text>@{{ item.name }}</v-card-text>
+                                <v-card-text>@{{ item.label }}</v-card-text>
+                            </v-card-subtitle>
+                        </v-card>
+
                     </div>
                 </template>
                 <v-dialog v-model="openDelete" width="500" v-if="!!deleteUrl">
