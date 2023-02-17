@@ -2,12 +2,12 @@
 @section('content')
     <v-main >
         <v-container>
-            @if( \Session::has('success') ) 
+            @if( \Session::has('success') )
                 <h3>{{ \Session::get('success') }}</h3>
             @elseif ( \Session::has('error'))
                 <h3 style="color: red">{{ \Session::get('error') }}</h3>
             @else
-                @if( count($errors) > 0)  
+                @if( count($errors) > 0)
                     @foreach($errors->all() as $error)
                         <h3 style="color: red">{{ $error }}</h3>
                     @endforeach
@@ -19,14 +19,14 @@
                         <v-col cols = "6"> <v-card-title>@{{ controller . name }}</v-card-title> </v-col>
                         <v-col cols = "6"> <v-card-title>@{{ controller . building . name }}</v-card-title> </v-col>
                     </v-row>
-                    
-                    <v-row>
+
+                    {{-- <v-row>
                         <v-col cols="6">
                             <v-card-subtitle v-for="point in controller.points" :key="point.id">
                                 @{{ point . name }}
                             </v-card-subtitle>
                         </v-col>
-                    </v-row>
+                    </v-row> --}}
 
                 </v-card>
             </v-row>
@@ -48,7 +48,7 @@
                                     <v-text-field placeholder="Name" name="name" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
                                     <v-text-field placeholder="IP Address" name="ip_address" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]"></v-text-field>
                                     <v-text-field placeholder="Port Number" name="port_number" required class="pa-2" :rules="[ v => !!v || 'Field is required', ]" readonly :value="nextId + 8000"></v-text-field>
-                                    <v-select :items="buildings" label="Select A Building" name="building_id" item-text="name" item-value="id" solo required>                                        
+                                    <v-select :items="buildings" label="Select A Building" name="building_id" item-text="name" item-value="id" solo required>
                                     </v-select>
 
                                     <v-card-actions>

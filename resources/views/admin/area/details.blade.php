@@ -2,12 +2,12 @@
 @section('content')
     <v-main v-if="mainMenu && deleteUrl">
         <v-container>
-            @if( \Session::has('success') ) 
+            @if( \Session::has('success') )
                 <h3>{{ \Session::get('success') }}</h3>
             @elseif ( \Session::has('error'))
                 <h3 style="color: red">{{ \Session::get('error') }}</h3>
             @else
-                @if( count($errors) > 0)  
+                @if( count($errors) > 0)
                     @foreach($errors->all() as $error)
                         <h3 style="color: red">{{ $error }}</h3>
                     @endforeach
@@ -30,6 +30,20 @@
                                     <v-btn color="primary" text type="submit" form="update-form">Update</v-btn>
                                     <v-btn color="red" @click="openDelete = true">Remove</v-btn>
                                 </v-card-actions>
+                            </v-card>
+                        </v-form>
+                        <v-form>
+                            <v-card class="mx-auto my-12" v-if="area.points.length > 0">
+                                <v-card-title>DEOS Points</v-card-title>
+                                <v-card-text fluid v-for="item in area.points" :key="item.id">
+                                    <v-checkbox v-model="pointSelected[item.id]">
+                                        <template v-slot:label>
+                                            <div class="mx-3">@{{ item . label }}</div>
+                                            <div class="mx-3">@{{ item . name }}</div>
+                                            <div class="mx-3">@{{ item . value }}</div>
+                                        </template>
+                                    </v-checkbox>
+                                </v-card-text>
                             </v-card>
                         </v-form>
                     </div>
