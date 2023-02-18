@@ -12,6 +12,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TrendGroupController;
 use App\Http\Controllers\SmallDataGardenController;
 
+use App\Http\Controllers\WeatherForecastController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -42,7 +43,7 @@ Route::get('smalldatagarden/automatic_update', '\App\Http\Controllers\SmallDataG
 
 Route::group(['prefix' => '/setting', 'middleware' => 'auth'], function ($router) {
     Route::get('', [SettingController::class, 'setting_index'])->name('setting_index');
-    Route::post('update_device_interval', [SettingController::class, 'update_device_interval'])->name('update_device_interval');    
+    Route::post('update_device_interval', [SettingController::class, 'update_device_interval'])->name('update_device_interval');
 
 });
 
@@ -97,6 +98,9 @@ Route::group(['prefix' => 'point', 'middleware' => 'auth'], function ($router) {
     Route::post('update/{id}', [DEOS_pointController::class, 'update'])->name('point-update');
     Route::post('delete/{id}', [DEOS_pointController::class, 'destroy'])->name('point-delete');
 });
+Route::group(['prefix' => 'weather_forecast', 'middleware' => 'auth'], function ($router) {
+    Route::get('', [WeatherForecastController::class, 'index'])->name('weather_forecast_dashboard');
+});
 
 Route::group(['prefix' => 'trendgroup', 'middleware' => 'auth'], function ($router) {
     Route::get('', [TrendGroupController::class, 'index'])->name('groups');
@@ -107,7 +111,7 @@ Route::group(['prefix' => 'trendgroup', 'middleware' => 'auth'], function ($rout
 });
 
 Route::post('/tokens/create', function (Request $request) {
-    $user = $request->user();    
+    $user = $request->user();
     $access_token = $user->createToken($request->token_name);
     $plainToken = $access_token->plainTextToken;
 
@@ -118,74 +122,83 @@ Route::post('/tokens/create', function (Request $request) {
     return redirect()->route('setting_index');
 });
 Route::post('/tokens/remove', function (Request $request) {
-    
+
     $items = [];
     foreach (json_decode($request->selected_tokens) as $key => $val) {
-        if ($val != true) continue;
+        if ($val != true)
+            continue;
         $items[] = $key;
     }
     PersonalAccessToken::whereIn('id', $items)->delete();
     return redirect()->route('setting_index');
 });
 
-Route::middleware('auth:sanctum')->get('/test', function() {
+Route::middleware('auth:sanctum')->get('/test', function () {
     return 'Hello World';
 });
 
 
-Route::middleware(['cors', 'auth:sanctum'])->group(function(){
+Route::middleware(['cors', 'auth:sanctum'])->group(function () {
 
     Route::group(['prefix' => 'dashboard'], function ($router) {
         Route::post('update', [DashboardController::class, 'update'])->name('update_dashboard');
-        Route::get('restartAsmServices', [DashboardController::class, 'restartAsmServices'])->name('restartAsmServices');        
-    });
-    
+        Route::get('restartAsmServices', [DashboardController::class, 'restartAsmServices'])->name('restartAsmServices');
+    }
+    );
+
     Route::group(['prefix' => 'lorawan'], function ($router) {
         Route::post('receive_data', [LorawanController::class, 'receive_data'])->name('receive_data');
         Route::get('receive_csvfile', [LorawanController::class, 'receive_csvfile'])->name('receive_csvfile');
-    });
+    }
+    );
 
     Route::group(['prefix' => 'point'], function ($router) {
         Route::get('getPoints', [PointController::class, 'getPoints'])->name('getPoints');
         Route::get('checkPoints', [PointController::class, 'checkPoints'])->name('checkPoints');
-        
+
         Route::post('writePointstoLocalDB', [PointController::class, 'writePointstoLocalDB'])->name('writePointstoLocalDB');
         Route::post('writePointsbyid', [PointController::class, 'writePointsbyid'])->name('writePointsbyid');
 
         Route::get('readable', [PointController::class, 'getReadablePoints'])->name('getReadablePoints');
         Route::get('writable', [PointController::class, 'getWritablePoints'])->name('getWritablePoints');
-        
-    });    
+
+    }
+    );
 
     Route::group(['prefix' => 'trend'], function ($router) {
         Route::get('getTrends', [PointController::class, 'getTrends'])->name('getTrends');
         // Route::post('values',  [PointController::class, 'getTrendValues'])->name('getTrendValues');
-    });
+    }
+    );
 
     Route::group(['prefix' => 'sensor'], function ($router) {
         Route::get('getSensors', [FoxeriotController::class, 'getSensors'])->name('getSensors');
         Route::post('updatePoints', [FoxeriotController::class, 'updateSensorsPoint'])->name('updateSensorsPoint');
 
-    });
+    }
+    );
 
     Route::group(['prefix' => 'observation'], function ($router) {
-        Route::get('getObservations', [FoxeriotController::class, 'getObservations'])->name('getObservations');      
+        Route::get('getObservations', [FoxeriotController::class, 'getObservations'])->name('getObservations');
 
-    });
+    }
+    );
 
     Route::get('foxeriot/automatic_update', '\App\Http\Controllers\FoxeriotController@automatic_update');
 
-    
+
     Route::group(['prefix' => 'asm_server/config'], function ($router) {
         Route::get('getSERVERConfig', [AsmServerController::class, 'getSERVERConfig'])->name('getSERVERConfig');
         Route::get('getRESTconfig', [AsmServerController::class, 'getRESTconfig'])->name('getRESTconfig');
-    });
+    }
+    );
 
-    
-    Route::group(['prefix' => 'trendgroup'], function ($router) {  
+
+    Route::group(['prefix' => 'trendgroup'], function ($router) {
         Route::post('/receive_csv', [TrendGroupController::class, 'receive_csv'])->name('receive_csv');
-    });
+    }
+    );
 });
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

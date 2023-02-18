@@ -14,7 +14,7 @@
 <body class="antialiased" style="visibility: hidden">
 
     <div id="app">
-        <div class="v-cloak">    
+        <div class="v-cloak">
             <v-app >
                 @include('admin.layout.header')
                 @include('admin.layout.navigation')
@@ -78,6 +78,11 @@
             icon: 'mdi-lightning-bolt',
             link: prefix_link  + '/electricity_price'
         },
+        {
+            title: 'Weather Forecast',
+            icon: 'mdi-weather-lightning-rainy',
+            link: prefix_link + '/weather_forecast'
+        }
     ];
 </script>
 @yield('script')
