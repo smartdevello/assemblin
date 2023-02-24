@@ -180,7 +180,7 @@ trait AssemblinInit
                 $log_data = array(
                     'sensor_id' => $sensor->id,
                 );
-                if (!isset($log)) {
+                if (! isset($log)) {
                     $log_data['logs'] = json_encode([
                         date('Y-m-d H:i:s') => $sensor->value,
                     ]);
@@ -412,7 +412,7 @@ trait AssemblinInit
 
     public function getRESTconfig(DEOS_controller $controller)
     {
-        if (!empty($controller->name)) {
+        if (! empty($controller->name)) {
             try {
                 $filepath = config()->get('constants.BASE_CONFIG_PATH') . 'asmrest/' . $controller->name . ".json";
                 $content = file_get_contents($filepath);

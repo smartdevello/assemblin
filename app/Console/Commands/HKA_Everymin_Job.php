@@ -144,22 +144,29 @@ class HKA_Everymin_Job extends Command
                         $job->delete();
                     }
                 } else if ($job->job_name == "electricityprice_forecast") {
+                    $job->update([
+                        'next_run' => date('Y-m-d H:i:s', time() + 5 * 60),
+                    ]);
                     $controller = DEOS_controller::where('id', $job->job_id)->first();
                     if ($controller) {
-                        $forecast_data = $this->getElectricityPriceData();
-                        $date = new DateTime();
-                        $date->modify('+1 hours');
-                        $date->setTimezone(new DateTimeZone('Europe/Helsinki'));
-                        $date->setTime($date->format("H"), 0, 0);
-                        $date->getTimestamp();
+                        $point_data = $this->getElectricityPricePointData();
+                        foreach ($point_data as $data) {
+                            $label = $data['id'];
+                            $value = $data['value'];
 
-                        for ($index = 1; $index <= 25; $index++) {
-
-                            $label = sprintf('fmi.f:I%02d', $index);
-
+                            DEOS_point::updateOrCreate(
+                                ['label' => $label, 'controller_id' => $controller->id],
+                                [
+                                    'name' => $controller->name . ' ' . $label,
+                                    'label' => $label,
+                                    'type' => 'FL',
+                                    'meta_type' => 'electricityprice_forecast',
+                                    'value' => strval($value),
+                                    'controller_id' => $controller->id
+                                ]
+                            );
                         }
-                    } else {
-                        $job->delete();
+                        $this->sendForcasttoDEOS('electricityprice_forecast', $controller->id);
                     }
                 } else if ($job->job_name == "automatic_update") {
 

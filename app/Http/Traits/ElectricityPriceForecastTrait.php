@@ -71,15 +71,13 @@ trait ElectricityPriceForecastTrait
     }
     public function getElectricityPricePointData()
     {
-
-        $controller_id = 35;
         $forecast_data = $this->getElectricityPriceData();
         $today = new DateTime("today", new DateTimeZone('Europe/Helsinki'));
         $points_data = [];
 
         for ($i = 1; $i <= 26; $i++) {
 
-            $label = sprintf('sahko.f01:I0%d', $i);
+            $label = sprintf('sahko.f01:I%02d', $i);
             $timestamp = "";
             if ($i == 26) {
 
@@ -110,7 +108,6 @@ trait ElectricityPriceForecastTrait
                 "id" => $label,
                 "value" => $point_value
             ];
-
         }
 
         return $points_data;

@@ -236,47 +236,26 @@ class DEOS_controllerController extends Controller
             $job = HKA_Scheduled_JOb::updateOrCreate(
                 ['job_name' => 'electricityprice_forecast'], array(
                     'job_name' => 'electricityprice_forecast',
-                    'next_run' => date('Y-m-d H:i:s', time() + 60),
+                    'next_run' => date('Y-m-d H:i:s', time() + 5 * 60),
                     'job_id' => $controller->id,
                 )
             );
-            $forecast_data = $this->getElectricityPriceData();
-            $today = new DateTime("today", new DateTimeZone('Europe/Helsinki'));
-            for ($i = 1; $i <= 26; $i++) {
-                $label = sprintf('I%02d', $i);
-                $timestamp = "";
-                if ($i == 26) {
-                    $date = new DateTime("now", new DateTimeZone('Europe/Helsinki'));
-                    $date->modify('+1 hours');
-                    $date->setTime($date->format("H"), 0, 0);
-                    $timestamp = $date->getTimestamp();
+            $point_data = $this->getElectricityPricePointData();
+            foreach ($point_data as $data) {
+                $label = $data['id'];
+                $value = $data['value'];
 
-                } else if ($i == 25) {
-                    $date = new DateTime("now", new DateTimeZone('Europe/Helsinki'));
-                    $date->setTime($date->format("H"), 0, 0);
-                    $timestamp = $date->getTimestamp();
-                } else {
-                    $timestamp = $today->getTimestamp() + ($i - 1) * 3600;
-                }
-                $point_value = array_filter($forecast_data, function ($item) {
-                    global $timestamp;
-                    if ($item->time == $timestamp) {
-                        return $item->value;
-                    }
-
-                });
-                // $point = DEOS_point::updateOrCreate(
-                //     [], []
-                // );
-                // $point->update([
-                //     'name' => $key . $index,
-                //     'label' => $label,
-                //     'type' => 'FL',
-                //     'value' => $item['value'],
-                //     'controller_id' => $controller->id,
-                //     'meta_type' => 'weather_forcast',
-                // ]);
-
+                DEOS_point::updateOrCreate(
+                    ['label' => $label, 'controller_id' => $controller->id],
+                    [
+                        'name' => $controller->name . ' ' . $label,
+                        'label' => $label,
+                        'type' => 'FL',
+                        'meta_type' => 'electricityprice_forecast',
+                        'value' => strval($value),
+                        'controller_id' => $controller->id
+                    ]
+                );
             }
 
         }
