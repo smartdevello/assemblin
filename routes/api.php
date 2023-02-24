@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
- */
+*/
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
@@ -30,22 +30,26 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function () {
     Route::group(['prefix' => 'dashboard'], function ($router) {
         Route::post('update', [DashboardController::class, 'update'])->name('update_dashboard');
         Route::get('restartAsmServices', [DashboardController::class, 'restartAsmServices'])->name('restartAsmServices');
-    });
+    }
+    );
 
     Route::group(['prefix' => 'WeatherForcast'], function ($router) {
         Route::get('getWeatherData', [DEOS_controllerController::class, 'getWeatherData'])->name('getWeatherData');
-    });
+    }
+    );
 
     Route::group(['prefix' => 'ElectricityPrice'], function ($router) {
         Route::get('getElectricityPriceData', [ElectricityPriceController::class, 'getElectricityPriceData'])->name('getElectricityPriceData');
+        Route::get('getElectricityPricePointData', [ElectricityPriceController::class, 'getElectricityPricePointData'])->name('getElectricityPricePointData');
         Route::get('getTimeZone', [ElectricityPriceController::class, 'getTimeZone'])->name('getTimeZone');
-
-    });
+    }
+    );
 
     Route::group(['prefix' => 'lorawan'], function ($router) {
         Route::post('receive_data', [LorawanController::class, 'receive_data'])->name('receive_data');
         Route::get('receive_csvfile', [LorawanController::class, 'receive_csvfile'])->name('receive_csvfile');
-    });
+    }
+    );
 
     Route::group(['prefix' => 'point'], function ($router) {
         Route::get('getPoints', [PointController::class, 'getPoints'])->name('getPoints');
@@ -57,32 +61,38 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function () {
         Route::get('readable', [PointController::class, 'getReadablePoints'])->name('getReadablePoints');
         Route::get('writable', [PointController::class, 'getWritablePoints'])->name('getWritablePoints');
 
-    });
+    }
+    );
 
     Route::group(['prefix' => 'trend'], function ($router) {
         Route::get('getTrends', [PointController::class, 'getTrends'])->name('getTrends');
         // Route::post('values',  [PointController::class, 'getTrendValues'])->name('getTrendValues');
-    });
+    }
+    );
 
     Route::group(['prefix' => 'sensor'], function ($router) {
         Route::get('getSensors', [FoxeriotController::class, 'getSensors'])->name('getSensors');
         Route::post('updatePoints', [FoxeriotController::class, 'updateSensorsPoint'])->name('updateSensorsPoint');
 
-    });
+    }
+    );
 
     Route::group(['prefix' => 'observation'], function ($router) {
         Route::get('getObservations', [FoxeriotController::class, 'getObservations'])->name('getObservations');
 
-    });
+    }
+    );
 
     Route::get('foxeriot/automatic_update', '\App\Http\Controllers\FoxeriotController@automatic_update');
 
     Route::group(['prefix' => 'asm_server/config'], function ($router) {
         Route::get('getSERVERConfig', [AsmServerController::class, 'getSERVERConfig'])->name('getSERVERConfig');
         Route::get('getRESTconfig', [AsmServerController::class, 'getRESTconfig'])->name('getRESTconfig');
-    });
+    }
+    );
 
     Route::group(['prefix' => 'trendgroup'], function ($router) {
         Route::post('', [TrendGroupController::class, 'receive_csv'])->name('receive_csv');
-    });
+    }
+    );
 });

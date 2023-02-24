@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Http\Traits\AssemblinInit;
-use App\Http\Traits\ElectricyPriceForcastTrait;
+use App\Http\Traits\ElectricityPriceForecastTrait;
 use App\Http\Traits\SmallDataGarden;
 use App\Http\Traits\TrendDataTrait;
 use App\Http\Traits\WeatherForcastTrait;
@@ -25,7 +25,7 @@ class HKA_Everymin_Job extends Command
     use TrendDataTrait;
     use AssemblinInit;
     use WeatherForcastTrait;
-    use ElectricyPriceForcastTrait;
+    use ElectricityPriceForecastTrait;
     use SmallDataGarden;
 
     protected $signature = 'hka_job:everymin';

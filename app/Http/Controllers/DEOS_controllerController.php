@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\AssemblinInit;
-use App\Http\Traits\ElectricyPriceForcastTrait;
+use App\Http\Traits\ElectricityPriceForecastTrait;
 use App\Http\Traits\WeatherForcastTrait;
 use App\Imports\PointsImport;
 use App\Models\Area;
@@ -23,7 +23,7 @@ class DEOS_controllerController extends Controller
 {
     use AssemblinInit;
     use WeatherForcastTrait;
-    use ElectricyPriceForcastTrait;
+    use ElectricityPriceForecastTrait;
     public function index()
     {
         $buildings = Building::all();
@@ -65,13 +65,13 @@ class DEOS_controllerController extends Controller
             'building_id.required' => 'Controller must be belonged to a Building',
         ];
 
-        if (!empty($request->longitude)) {
+        if (! empty($request->longitude)) {
             $validate_rules['longitude'] = 'numeric|between:-180.00,180.00';
             $validate_errors['longitude.numeric'] = "Longitude should be numeric value";
             $validate_errors['longitude.between'] = "Longitude should be numeric value between -180 ~ 180";
 
         }
-        if (!empty($request->latitude)) {
+        if (! empty($request->latitude)) {
             $validate_rules['latitude'] = 'numeric|between:-90.00,90.00';
             $validate_errors['latitude.numeric'] = "Latitude should be numeric value";
             $validate_errors['latitude.between'] = "Latitude should be numeric value between -90 ~ 90";
@@ -115,7 +115,7 @@ class DEOS_controllerController extends Controller
 
         $controller = DEOS_controller::where('id', $id)->first();
         $controller->building;
-        if (!$controller) {
+        if (! $controller) {
             return back()->with('error', 'Not found');
         }
 
@@ -129,13 +129,13 @@ class DEOS_controllerController extends Controller
             'ip_address.required' => "IP Address can't be empty",
             'building_id.required' => 'Controller must be belonged to a Building',
         ];
-        if (!empty($request->longitude)) {
+        if (! empty($request->longitude)) {
             $validate_rules['longitude'] = 'numeric|between:-180.00,180.00';
             $validate_errors['longitude.numeric'] = "Longitude should be numeric value";
             $validate_errors['longitude.between'] = "Longitude should be numeric value between -180 ~ 180";
 
         }
-        if (!empty($request->latitude)) {
+        if (! empty($request->latitude)) {
             $validate_rules['latitude'] = 'numeric|between:-90.00,90.00';
             $validate_errors['latitude.numeric'] = "Latitude should be numeric value";
             $validate_errors['latitude.between'] = "Latitude should be numeric value between -90 ~ 90";
@@ -236,23 +236,27 @@ class DEOS_controllerController extends Controller
             $job = HKA_Scheduled_JOb::updateOrCreate(
                 ['job_name' => 'electricityprice_forecast'], array(
                     'job_name' => 'electricityprice_forecast',
-                    'next_run' => date('Y-m-d H:i:s', time() + 15 * 60),
+                    'next_run' => date('Y-m-d H:i:s', time() + 60),
                     'job_id' => $controller->id,
                 )
             );
             $forecast_data = $this->getElectricityPriceData();
             $today = new DateTime("today", new DateTimeZone('Europe/Helsinki'));
-            for ($i = 1; $i <= 25; $i++) {
+            for ($i = 1; $i <= 26; $i++) {
                 $label = sprintf('I%02d', $i);
                 $timestamp = "";
-                if ($i == 1) {
+                if ($i == 26) {
                     $date = new DateTime("now", new DateTimeZone('Europe/Helsinki'));
                     $date->modify('+1 hours');
                     $date->setTime($date->format("H"), 0, 0);
                     $timestamp = $date->getTimestamp();
 
+                } else if ($i == 25) {
+                    $date = new DateTime("now", new DateTimeZone('Europe/Helsinki'));
+                    $date->setTime($date->format("H"), 0, 0);
+                    $timestamp = $date->getTimestamp();
                 } else {
-                    $timestamp = $today->getTimestamp() + ($i - 2) * 3600;
+                    $timestamp = $today->getTimestamp() + ($i - 1) * 3600;
                 }
                 $point_value = array_filter($forecast_data, function ($item) {
                     global $timestamp;
@@ -285,7 +289,7 @@ class DEOS_controllerController extends Controller
     public function destroy($id)
     {
         $controller = DEOS_controller::where('id', $id)->first();
-        if (!$controller) {
+        if (! $controller) {
             return back()->with('error', 'Not found');
         }
 
@@ -338,18 +342,18 @@ class DEOS_controllerController extends Controller
 
         try {
 
-            if (!$request->file('file')) {
+            if (! $request->file('file')) {
                 return back()->with('error', 'Empty file');
             }
 
             $controller = DEOS_controller::where('id', $id)->first();
             $building = Building::where('id', $controller->building_id)->first();
-            if (!$building) {
+            if (! $building) {
                 return back()->with('error', 'This Controller does not belong to any Building');
             }
 
             $location = Location::where('id', $building->location_id)->first();
-            if (!$location) {
+            if (! $location) {
                 return back()->with('error', 'This Controller does not belong to any Location');
             }
 

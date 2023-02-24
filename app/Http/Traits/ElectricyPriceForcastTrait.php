@@ -4,7 +4,7 @@ namespace App\Http\Traits;
 
 use SimpleXMLElement;
 
-trait ElectricyPriceForcastTrait
+trait ElectricityPriceForecastTrait
 {
     public function getTimeZone()
     {
