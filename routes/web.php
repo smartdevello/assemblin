@@ -58,6 +58,7 @@ Route::group(['prefix' => 'location', 'middleware' => 'auth'], function ($router
 
 Route::group(['prefix' => 'electricity_price', 'middleware' => 'auth'], function ($router) {
     Route::get('', [ElectricityPriceController::class, 'index'])->name('electricity_price_table');
+    Route::get('pointData', [ElectricityPriceController::class, 'getElectricityPricePointData'])->name('getElectricityPricePointDataWeb');
 });
 
 
