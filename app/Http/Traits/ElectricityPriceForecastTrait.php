@@ -64,46 +64,42 @@ trait ElectricityPriceForecastTrait
     }
     public function getElectricityPricePointData()
     {
-        try {
-            $controller_id = 35;
-            $forecast_data = $this->getElectricityPriceData();
-            $today = new DateTime("today", new DateTimeZone('Europe/Helsinki'));
-            $points_data = [];
 
-            for ($i = 1; $i <= 26; $i++) {
+        $controller_id = 35;
+        $forecast_data = $this->getElectricityPriceData();
+        $today = new DateTime("today", new DateTimeZone('Europe/Helsinki'));
+        $points_data = [];
 
-                $label = sprintf('sahko.f01:I0%d', $i);
-                $timestamp = "";
-                if ($i == 26) {
-                    $date = new DateTime("now", new DateTimeZone('Europe/Helsinki'));
-                    $date->modify('+1 hours');
-                    $date->setTime($date->format("H"), 0, 0);
-                    $timestamp = $date->getTimestamp();
+        for ($i = 1; $i <= 26; $i++) {
 
-                } else if ($i == 25) {
-                    $date = new DateTime("now", new DateTimeZone('Europe/Helsinki'));
-                    $date->setTime($date->format("H"), 0, 0);
-                    $timestamp = $date->getTimestamp();
-                } else {
-                    $timestamp = $today->getTimestamp() + ($i - 1) * 3600;
-                }
-                $point_value = array_filter($forecast_data, function ($item) {
-                    global $timestamp;
-                    if ($item->time == $timestamp) {
-                        return $item->value;
-                    }
+            $label = sprintf('sahko.f01:I0%d', $i);
+            $timestamp = "";
+            if ($i == 26) {
+                $date = new DateTime("now", new DateTimeZone('Europe/Helsinki'));
+                $date->modify('+1 hours');
+                $date->setTime($date->format("H"), 0, 0);
+                $timestamp = $date->getTimestamp();
 
-                });
-                $points_data[] = [
-                    "id" => $label,
-                    "value" => $point_value
-                ];
-
+            } else if ($i == 25) {
+                $date = new DateTime("now", new DateTimeZone('Europe/Helsinki'));
+                $date->setTime($date->format("H"), 0, 0);
+                $timestamp = $date->getTimestamp();
+            } else {
+                $timestamp = $today->getTimestamp() + ($i - 1) * 3600;
             }
 
-            return $points_data;
-        } catch (\Exception $e) {
-            return $e->getMessage();
+            $item = array_filter($forecast_data, function ($item) {
+                global $timestamp;
+                if ($item->time == $timestamp)
+                    return true;
+            });
+            $points_data[] = [
+                "id" => $label,
+                "value" => $item[0]->value
+            ];
+
         }
+
+        return $points_data;
     }
 }
