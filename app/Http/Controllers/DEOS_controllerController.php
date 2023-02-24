@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\AssemblinInit;
-use App\Http\Traits\ElectricityPriceForecastTrait;
 use App\Http\Traits\WeatherForcastTrait;
 use App\Imports\PointsImport;
 use App\Models\Area;
@@ -18,6 +17,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Traits\ElectricityPriceForecastTrait;
 
 class DEOS_controllerController extends Controller
 {
