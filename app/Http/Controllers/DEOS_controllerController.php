@@ -278,6 +278,7 @@ class DEOS_controllerController extends Controller
                 // ]);
 
             }
+
         }
 
         $this->stopAsmServices();
