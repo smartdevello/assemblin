@@ -17,11 +17,15 @@ trait ElectricityPriceForecastTrait
     {
 
         $curl = curl_init();
-        $now = time() - 12 * 3600;
-        $tomorrow = $now + 24 * 3600;
 
-        $periodStart = date('YmdH00', $now);
-        $periodEnd = date('YmdH00', $tomorrow);
+        date_default_timezone_set('Europe/Helsinki');
+        $today = new Datetime('today', new DateTimeZone('Europe/Helsinki'));
+        $tomorrow = clone $today;
+        $tomorrow->modify('+1 day');
+
+
+        $periodStart = date('YmdH00', $today->getTimestamp());
+        $periodEnd = date('YmdH00', $tomorrow->getTimestamp());
 
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://web-api.tp.entsoe.eu/api?documentType=A44&in_Domain=10YFI-1--------U&out_Domain=10YFI-1--------U&periodStart=' . $periodStart . '&periodEnd=' . $periodEnd . '&securityToken=35db50f7-f48c-4d38-be46-1d79fa63fc9b',
@@ -75,27 +79,33 @@ trait ElectricityPriceForecastTrait
             $label = sprintf('sahko.f01:I0%d', $i);
             $timestamp = "";
             if ($i == 26) {
-                $date = new DateTime("now", new DateTimeZone('Europe/Helsinki'));
-                $date->modify('+1 hours');
-                $date->setTime($date->format("H"), 0, 0);
-                $timestamp = $date->getTimestamp();
+
+                //Next Hour
+                $now = new DateTime("now", new DateTimeZone('Europe/Helsinki'));
+                $now->modify('+1 hours');
+                $now->setTime($now->format("H"), 0, 0);
+                $timestamp = $now->getTimestamp();
 
             } else if ($i == 25) {
-                $date = new DateTime("now", new DateTimeZone('Europe/Helsinki'));
-                $date->setTime($date->format("H"), 0, 0);
-                $timestamp = $date->getTimestamp();
+
+                //current Hour
+                $now = new DateTime("now", new DateTimeZone('Europe/Helsinki'));
+                $now->setTime($now->format("H"), 0, 0);
+                $timestamp = $now->getTimestamp();
             } else {
                 $timestamp = $today->getTimestamp() + ($i - 1) * 3600;
             }
+            $point_value = null;
 
-            $item = array_filter($forecast_data, function ($item) {
-                global $timestamp;
-                if ($item->time == $timestamp)
-                    return true;
-            });
+            foreach ($forecast_data as $item) {
+                if ($item->time == $timestamp) {
+                    $point_value = $item->value;
+                }
+            }
+
             $points_data[] = [
                 "id" => $label,
-                "value" => $item[0]->value
+                "value" => $point_value
             ];
 
         }
