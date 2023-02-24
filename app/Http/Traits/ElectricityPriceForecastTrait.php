@@ -98,8 +98,8 @@ trait ElectricityPriceForecastTrait
             $point_value = -1;
 
             foreach ($forecast_data as $item) {
-                if ($item->time == $timestamp) {
-                    $point_value = $item->value;
+                if ($item['time'] == $timestamp) {
+                    $point_value = $item['value'];
                 }
             }
 
