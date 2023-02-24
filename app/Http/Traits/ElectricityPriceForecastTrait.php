@@ -95,7 +95,7 @@ trait ElectricityPriceForecastTrait
             } else {
                 $timestamp = $today->getTimestamp() + ($i - 1) * 3600;
             }
-            $point_value = null;
+            $point_value = -1;
 
             foreach ($forecast_data as $item) {
                 if ($item->time == $timestamp) {
