@@ -23,8 +23,11 @@ trait ElectricityPriceForecastTrait
         $tomorrow = clone $today;
         $tomorrow->modify('+1 day');
 
+        $yesterday = clone $today;
+        $yesterday->modify('-1 day');
 
-        $periodStart = date('YmdH00', $today->getTimestamp());
+
+        $periodStart = date('YmdH00', $yesterday->getTimestamp());
         $periodEnd = date('YmdH00', $tomorrow->getTimestamp());
 
         curl_setopt_array($curl, array(
