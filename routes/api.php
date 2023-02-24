@@ -40,7 +40,7 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function () {
 
     Route::group(['prefix' => 'ElectricityPrice'], function ($router) {
         Route::get('getElectricityPriceData', [ElectricityPriceController::class, 'getElectricityPriceData'])->name('getElectricityPriceData');
-        // Route::get('getElectricityPricePointData', [ElectricityPriceController::class, 'getElectricityPriceData'])->name('getElectricityPricePointData');
+        Route::get('getElectricityPricePointData', [ElectricityPriceController::class, 'getElectricityPriceData'])->name('getElectricityPricePointData');
         Route::get('getTimeZone', [ElectricityPriceController::class, 'getTimeZone'])->name('getTimeZone');
     }
     );
