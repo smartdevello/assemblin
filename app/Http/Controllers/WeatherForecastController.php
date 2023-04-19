@@ -14,6 +14,8 @@ class WeatherForecastController extends Controller
     public function index()
     {
         //
+        $forecast_data = [];
+        return view('admin.weather_forecast.index', compact('forecast_data'));
     }
 
     /**
