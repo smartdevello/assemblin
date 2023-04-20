@@ -92,7 +92,7 @@
                     }
                     index = controller.points.length - 1;
                     while (index >= 0) {
-                        if (controller.points[index].meta_type == 'weather_forcast') {
+                        if (controller.points[index].meta_type == 'weather_forecast') {
                             controller.points.splice(index, 1);
                         }
                         index -= 1;

@@ -114,7 +114,8 @@ class DEOS_controllerController extends Controller
     {
 
         $controller = DEOS_controller::where('id', $id)->first();
-        $controller->building;
+        $building = $controller->building;
+        $location = $building?->location;
         if (! $controller) {
             return back()->with('error', 'Not found');
         }
@@ -143,7 +144,7 @@ class DEOS_controllerController extends Controller
 
         $this->validate($request, $validate_rules, $validate_errors);
 
-        // Disable all controllers to have weather_forcast functionalities
+        // Disable all controllers to have weather_forecast functionalities
         // so only 1 controller to have weather functionality
         // Disable all controllers to have electricityprice_forcast functionalities
         // so only 1 controller to have electricityprice_forcast functionality
@@ -151,8 +152,8 @@ class DEOS_controllerController extends Controller
         // $controllers = DEOS_controller::all();
         // foreach ($controllers as $item) {
         //     $item->update([
-        //         'enable_weather_forcast' => false,
-        //         'enable_electricityprice_forcast' => false,
+        //         'enable_weather_forecast' => false,
+        //         'enable_electricityprice_forecast' => false,
         //     ]);
         // }
 
@@ -163,12 +164,12 @@ class DEOS_controllerController extends Controller
             'building_id' => $request->building_id,
             'longitude' => $request->longitude,
             'latitude' => $request->latitude,
-            'enable_weather_forcast' => isset($request->enable_weather_forcast) ? true : false,
-            'enable_electricityprice_forcast' => isset($request->enable_electricityprice_forcast) ? true : false,
+            'enable_weather_forecast' => isset($request->enable_weather_forecast) ? true : false,
+            'enable_electricityprice_forecast' => isset($request->enable_electricityprice_forecast) ? true : false,
         ]);
 
         // Update scheduled job controller, so it can reference the current controller's coordinate
-        if (isset($request->enable_weather_forcast)) {
+        if (isset($request->enable_weather_forecast)) {
 
             $job = HKA_Scheduled_JOb::updateOrCreate(
                 ['job_name' => 'weather_forecast', 'job_id' => $controller->id], [
@@ -180,58 +181,54 @@ class DEOS_controllerController extends Controller
 
             $forecast_data = $this->getWeatherData($request->longitude, $request->latitude);
             //Create or Update Weather Points (Actually DEOS Points)
-            // $dataset_index = 0;
-            // foreach ($forecast_data as $key => $data) {
-            //     foreach ($data as $index => $item) {
-            //         //Skip first or last data among 50 , so we need only middle 48 data
-            //         if ($index == 0 || $index == 49) {
-            //             continue;
-            //         }
+            $dataset_index = 0;
+            $pointIndex = 0;
+            $location_name = $location?->name ?? "";
+            foreach ($forecast_data as $key => $data) {
+                foreach ($data as $index => $item) {
 
-            //         if ($dataset_index == 0) {
-            //             $label = sprintf('fmi.f:I%02d', $index);
-            //         } else {
-            //             $label = sprintf('fmi.f:I%03d', $index + $dataset_index * 100);
-            //         }
+                    if (strpos($key, 'temperature') !== false || strpos($key, 'PrecipitationAmount') !== false && strpos($key, 'windspeedms') !== false) {
+                        //break if $index == 36, because we need only first 36
+                        if ($index == 36)
+                            break;
+                        // saalahti . f01 . I01->saalahti . f101 . I108 .
+                        $name = sprintf($location_name . '.f01.I%02d', $index + 1 + $dataset_index * 36);
+                        $label = $key . $index;
 
-            //         $point = DEOS_point::where([
-            //             ['name', '=', $key . $index],
-            //             ['label', '=', $label],
-            //         ])->first();
+                        DEOS_point::updateOrCreate(
+                            ['label' => $label, 'name' => $name],
+                            [
+                                'name' => $name,
+                                'label' => $label,
+                                'type' => '',
+                                'value' => $item['value'],
+                                'controller_id' => $controller->id,
+                                'meta_type' => 'weather_forecast',
+                            ]);
+                    }
+                }
 
-            //         if ($point != null) {
+                $name = sprintf($location_name . '.f01.I%02d', $dataset_index + 109);
+                $label = $key . '0';
 
-            //             $point->update([
-            //                 'name' => $key . $index,
-            //                 'label' => $label,
-            //                 'type' => 'FL',
-            //                 'value' => $item['value'],
-            //                 'controller_id' => $controller->id,
-            //                 'meta_type' => 'weather_forcast',
-            //             ]);
-
-            //         } else {
-
-            //             DEOS_point::create([
-            //                 'name' => $key . $index,
-            //                 'label' => $label,
-            //                 'type' => 'FL',
-            //                 'value' => $item['value'],
-            //                 'controller_id' => $controller->id,
-            //                 'meta_type' => 'weather_forcast',
-            //             ]);
-
-            //         }
-
-            //     }
-            //     $dataset_index++;
-            // }
-            // $this->sendForcasttoDEOS('weather_forcast', $controller->id);
+                DEOS_point::updateOrCreate(
+                    ['label' => $label, 'name' => $name],
+                    [
+                        'name' => $name,
+                        'label' => $label,
+                        'type' => '',
+                        'value' => $forecast_data[$key][0],
+                        'controller_id' => $controller->id,
+                        'meta_type' => 'weather_forecast',
+                    ]);
+                $dataset_index++;
+            }
+            // $this->sendForcasttoDEOS('weather_forecast', $controller->id);
 
         }
 
         // Update scheduled job controller for electricity price forcast
-        if (isset($request->enable_electricityprice_forcast)) {
+        if (isset($request->enable_electricityprice_forecast)) {
 
             $job = HKA_Scheduled_JOb::updateOrCreate(
                 ['job_name' => 'electricityprice_forecast'], array(

@@ -22,7 +22,7 @@ class DEOS_pointController extends Controller
     public function index()
     {
         //
-        $points = DEOS_point::where('meta_type', '!=', 'weather_forcast')->get();
+        $points = DEOS_point::where('meta_type', '!=', 'weather_forecast')->get();
         foreach ($points as $point) {
             $point->controller;
             $point->area;
@@ -55,10 +55,10 @@ class DEOS_pointController extends Controller
             'controller_id' => 'required',
             'area_id' => 'required',
         ], [
-            'label.required' => "Description field can't be empty",
-            'controller_id.required' => "Must specify a Controller",
-            'area_id.required' => "Must specify a Area",
-        ]);
+                'label.required' => "Description field can't be empty",
+                'controller_id.required' => "Must specify a Controller",
+                'area_id.required' => "Must specify a Area",
+            ]);
 
         try {
             $controller = DEOS_controller::where('id', $request->controller_id)->first();
@@ -69,9 +69,9 @@ class DEOS_pointController extends Controller
             $this->validate($request, [
                 'name' => 'required|unique:deos_points,name',
             ], [
-                'name.required' => "Name field can't be empty",
-                'name.unique' => sprintf("The Point \"%s\" already exists", $request->name),
-            ]);
+                    'name.required' => "Name field can't be empty",
+                    'name.unique' => sprintf("The Point \"%s\" already exists", $request->name),
+                ]);
 
         } catch (\Exception $e) {
             return back()->with('error', 'Building or Location is not allocated for this point');
@@ -129,7 +129,7 @@ class DEOS_pointController extends Controller
         //
         $point = DEOS_point::where('id', $id)->first();
 
-        if (!$point) {
+        if (! $point) {
             return back()->with('error', 'Not found');
         }
         $point->controller;
@@ -140,10 +140,10 @@ class DEOS_pointController extends Controller
             'controller_id' => 'required',
             'area_id' => 'required',
         ], [
-            'label.required' => "Description field can't be empty",
-            'controller_id.required' => "Must specify a Controller",
-            'area_id.required' => "Must specify a Area",
-        ]);
+                'label.required' => "Description field can't be empty",
+                'controller_id.required' => "Must specify a Controller",
+                'area_id.required' => "Must specify a Area",
+            ]);
 
         try {
             $controller = DEOS_controller::where('id', $point->controller_id)->first();
@@ -154,9 +154,9 @@ class DEOS_pointController extends Controller
             $this->validate($request, [
                 'name' => 'required|unique:deos_points,name',
             ], [
-                'name.required' => "Name field can't be empty",
-                'name.unique' => sprintf("The Point \"%s\" already exists", $request->name),
-            ]);
+                    'name.required' => "Name field can't be empty",
+                    'name.unique' => sprintf("The Point \"%s\" already exists", $request->name),
+                ]);
 
         } catch (\Exception $e) {
             return back()->with('error', 'Building or Location is not allocated for this point');
@@ -308,7 +308,7 @@ class DEOS_pointController extends Controller
     {
         //
         $row = DEOS_point::where('id', $id)->first();
-        if (!$row) {
+        if (! $row) {
             return back()->with('error', 'Not found');
         }
         $row->delete();

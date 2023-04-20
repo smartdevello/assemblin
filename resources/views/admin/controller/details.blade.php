@@ -27,19 +27,19 @@
                                     <v-text-field v-model="controller.port_number" label="Port Number" name="port_number" required readonly></v-text-field>
                                     <v-select :items="buildings" label="Select a Building" name="building_id" v-model="currentBuilding" item-text="name" item-value="id" solo required></v-select>
                                     <v-checkbox
-                                        v-model="controller.enable_electricityprice_forcast" label="Enable Electricity Price Forcast" name="enable_electricityprice_forcast"
-                                        :value="controller.enable_electricityprice_forcast"
+                                        v-model="controller.enable_electricityprice_forecast" label="Enable Electricity Price Forcast" name="enable_electricityprice_forecast"
+                                        :value="controller.enable_electricityprice_forecast"
                                         >
                                     </v-checkbox>
 
                                     <v-checkbox
-                                        v-model="controller.enable_weather_forcast" label="Enable Weather Forcast" name="enable_weather_forcast"
-                                        :value="controller.enable_weather_forcast"
+                                        v-model="controller.enable_weather_forecast" label="Enable Weather Forcast" name="enable_weather_forecast"
+                                        :value="controller.enable_weather_forecast"
                                         >
                                     </v-checkbox>
 
-                                    <v-text-field v-show="controller.enable_weather_forcast"  v-model="controller.longitude" label="Longitude (Optional)" name="longitude"></v-text-field>
-                                    <v-text-field v-show="controller.enable_weather_forcast"  v-model="controller.latitude" label ="Latitude (Optional)" name="latitude"></v-text-field>
+                                    <v-text-field v-show="controller.enable_weather_forecast"  v-model="controller.longitude" label="Longitude (Optional)" name="longitude"></v-text-field>
+                                    <v-text-field v-show="controller.enable_weather_forecast"  v-model="controller.latitude" label ="Latitude (Optional)" name="latitude"></v-text-field>
                                 </v-card-text>
 
                                 <v-card-actions>
@@ -163,7 +163,7 @@
 
                 index = this.controller.points.length - 1;
                     while (index >= 0) {
-                        if (this.controller.points[index].meta_type == 'weather_forcast') {
+                        if (this.controller.points[index].meta_type == 'weather_forecast') {
                             this.controller.points.splice(index, 1);
                         }
                         index -= 1;

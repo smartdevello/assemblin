@@ -79,7 +79,7 @@ class HKA_Everymin_Job extends Command
                     }
 
                 } else if ($job->job_name == 'weather_forecast') {
-                    //Check if the controller exists for weather_forcast
+                    //Check if the controller exists for weather_forecast
                     $controller = DEOS_controller::where('id', $job->job_id)->first();
                     if ($controller && isset($controller->longitude) && isset($controller->latitude)) {
                         // Update Job next schedule time
@@ -109,7 +109,7 @@ class HKA_Everymin_Job extends Command
                         //             ['name', '=', $key . $index],
                         //             ['label', '=', $label],
                         //             ['controller_id', '=', $controller->id],
-                        //             ['meta_type', '=', 'weather_forcast'],
+                        //             ['meta_type', '=', 'weather_forecast'],
                         //         ])->first();
 
                         //         if ($point != null) {
@@ -120,7 +120,7 @@ class HKA_Everymin_Job extends Command
                         //                 'type' => 'FL',
                         //                 'value' => $item['value'],
                         //                 'controller_id' => $controller->id,
-                        //                 'meta_type' => 'weather_forcast',
+                        //                 'meta_type' => 'weather_forecast',
                         //             ]);
 
                         //         } else {
@@ -131,7 +131,7 @@ class HKA_Everymin_Job extends Command
                         //                 'type' => 'FL',
                         //                 'value' => $item['value'],
                         //                 'controller_id' => $controller->id,
-                        //                 'meta_type' => 'weather_forcast',
+                        //                 'meta_type' => 'weather_forecast',
                         //             ]);
 
                         //         }
@@ -139,7 +139,7 @@ class HKA_Everymin_Job extends Command
                         //     }
                         //     $dataset_index++;
                         // }
-                        // $this->sendForcasttoDEOS('weather_forcast', $controller->id);
+                        // $this->sendForcasttoDEOS('weather_forecast', $controller->id);
                     } else {
                         $job->delete();
                     }

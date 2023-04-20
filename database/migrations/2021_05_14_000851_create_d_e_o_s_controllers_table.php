@@ -21,8 +21,8 @@ class CreateDEOSControllersTable extends Migration
             $table->string('port_number')->nullable();
             $table->double('longitude', 10, 4)->nullable();
             $table->double('latitude', 10, 4)->nullable();
-            $table->boolean('enable_weather_forcast')->nullable();
-            $table->boolean('enable_electricityprice_forcast')->nullable();
+            $table->boolean('enable_weather_forecast')->nullable();
+            $table->boolean('enable_electricityprice_forecast')->nullable();
 
             $table->unsignedBigInteger('building_id')->nullable();
             $table->foreign('building_id')->references('id')->on('buildings')->onDelete('cascade');
