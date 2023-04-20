@@ -29,9 +29,9 @@ trait ElectricityPriceForecastTrait
 
         $periodStart = date('YmdH00', $yesterday->getTimestamp());
         $periodEnd = date('YmdH00', $tomorrow->getTimestamp());
-
+        $url = 'https://web-api.tp.entsoe.eu/api?documentType=A44&in_Domain=10YFI-1--------U&out_Domain=10YFI-1--------U&periodStart=' . $periodStart . '&periodEnd=' . $periodEnd . '&securityToken=35db50f7-f48c-4d38-be46-1d79fa63fc9b';
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://web-api.tp.entsoe.eu/api?documentType=A44&in_Domain=10YFI-1--------U&out_Domain=10YFI-1--------U&periodStart=' . $periodStart . '&periodEnd=' . $periodEnd . '&securityToken=35db50f7-f48c-4d38-be46-1d79fa63fc9b',
+            CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
