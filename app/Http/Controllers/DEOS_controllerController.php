@@ -180,53 +180,53 @@ class DEOS_controllerController extends Controller
 
             $forecast_data = $this->getWeatherData($request->longitude, $request->latitude);
             //Create or Update Weather Points (Actually DEOS Points)
-            $dataset_index = 0;
-            foreach ($forecast_data as $key => $data) {
-                foreach ($data as $index => $item) {
-                    //Skip first or last data among 50 , so we need only middle 48 data
-                    if ($index == 0 || $index == 49) {
-                        continue;
-                    }
+            // $dataset_index = 0;
+            // foreach ($forecast_data as $key => $data) {
+            //     foreach ($data as $index => $item) {
+            //         //Skip first or last data among 50 , so we need only middle 48 data
+            //         if ($index == 0 || $index == 49) {
+            //             continue;
+            //         }
 
-                    if ($dataset_index == 0) {
-                        $label = sprintf('fmi.f:I%02d', $index);
-                    } else {
-                        $label = sprintf('fmi.f:I%03d', $index + $dataset_index * 100);
-                    }
+            //         if ($dataset_index == 0) {
+            //             $label = sprintf('fmi.f:I%02d', $index);
+            //         } else {
+            //             $label = sprintf('fmi.f:I%03d', $index + $dataset_index * 100);
+            //         }
 
-                    $point = DEOS_point::where([
-                        ['name', '=', $key . $index],
-                        ['label', '=', $label],
-                    ])->first();
+            //         $point = DEOS_point::where([
+            //             ['name', '=', $key . $index],
+            //             ['label', '=', $label],
+            //         ])->first();
 
-                    if ($point != null) {
+            //         if ($point != null) {
 
-                        $point->update([
-                            'name' => $key . $index,
-                            'label' => $label,
-                            'type' => 'FL',
-                            'value' => $item['value'],
-                            'controller_id' => $controller->id,
-                            'meta_type' => 'weather_forcast',
-                        ]);
+            //             $point->update([
+            //                 'name' => $key . $index,
+            //                 'label' => $label,
+            //                 'type' => 'FL',
+            //                 'value' => $item['value'],
+            //                 'controller_id' => $controller->id,
+            //                 'meta_type' => 'weather_forcast',
+            //             ]);
 
-                    } else {
+            //         } else {
 
-                        DEOS_point::create([
-                            'name' => $key . $index,
-                            'label' => $label,
-                            'type' => 'FL',
-                            'value' => $item['value'],
-                            'controller_id' => $controller->id,
-                            'meta_type' => 'weather_forcast',
-                        ]);
+            //             DEOS_point::create([
+            //                 'name' => $key . $index,
+            //                 'label' => $label,
+            //                 'type' => 'FL',
+            //                 'value' => $item['value'],
+            //                 'controller_id' => $controller->id,
+            //                 'meta_type' => 'weather_forcast',
+            //             ]);
 
-                    }
+            //         }
 
-                }
-                $dataset_index++;
-            }
-            $this->sendForcasttoDEOS('weather_forcast', $controller->id);
+            //     }
+            //     $dataset_index++;
+            // }
+            // $this->sendForcasttoDEOS('weather_forcast', $controller->id);
 
         }
 
