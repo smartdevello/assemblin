@@ -109,11 +109,11 @@ class HKA_Everymin_Job extends Command
                                     $label = $key . $index;
 
                                     DEOS_point::updateOrCreate(
-                                        ['label' => $label, 'name' => $name],
+                                        ['label' => $name, 'name' => $name],
                                         [
                                             'name' => $name,
-                                            'label' => $label,
-                                            'type' => '',
+                                            'label' => $name,
+                                            'type' => 'FL',
                                             'value' => $item['value'],
                                             'controller_id' => $controller->id,
                                             'meta_type' => 'weather_forecast',
@@ -125,11 +125,11 @@ class HKA_Everymin_Job extends Command
                             $label = $key . '0';
 
                             DEOS_point::updateOrCreate(
-                                ['label' => $label, 'name' => $name],
+                                ['label' => $name, 'name' => $name],
                                 [
                                     'name' => $name,
-                                    'label' => $label,
-                                    'type' => '',
+                                    'label' => $name,
+                                    'type' => 'FL',
                                     'value' => $data[0]['value'],
                                     'controller_id' => $controller->id,
                                     'meta_type' => 'weather_forecast',
@@ -158,10 +158,10 @@ class HKA_Everymin_Job extends Command
                             $value = $data['value'];
 
                             DEOS_point::updateOrCreate(
-                                ['label' => $label, 'name' => $name, 'controller_id' => $controller->id],
+                                ['label' => $name, 'name' => $name, 'controller_id' => $controller->id],
                                 [
                                     'name' => $name,
-                                    'label' => $label,
+                                    'label' => $name,
                                     'type' => 'FL',
                                     'meta_type' => 'electricityprice_forecast',
                                     'value' => strval($value),
