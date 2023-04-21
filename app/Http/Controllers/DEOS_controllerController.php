@@ -217,7 +217,7 @@ class DEOS_controllerController extends Controller
                         'name' => $name,
                         'label' => $label,
                         'type' => '',
-                        'value' => $data[0],
+                        'value' => $data[0]['value'],
                         'controller_id' => $controller->id,
                         'meta_type' => 'weather_forecast',
                     ]);
