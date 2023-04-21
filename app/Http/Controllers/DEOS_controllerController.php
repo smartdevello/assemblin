@@ -116,6 +116,7 @@ class DEOS_controllerController extends Controller
         $controller = DEOS_controller::where('id', $id)->first();
         $building = $controller->building;
         $location = $building?->location;
+        $location_name = $location?->name ?? "";
         if (! $controller) {
             return back()->with('error', 'Not found');
         }
@@ -183,7 +184,7 @@ class DEOS_controllerController extends Controller
             //Create or Update Weather Points (Actually DEOS Points)
             $dataset_index = 0;
             $pointIndex = 0;
-            $location_name = $location?->name ?? "";
+
             foreach ($forecast_data as $key => $data) {
                 foreach ($data as $index => $item) {
 
@@ -240,12 +241,13 @@ class DEOS_controllerController extends Controller
             $point_data = $this->getElectricityPricePointData();
             foreach ($point_data as $data) {
                 $label = $data['id'];
+                $name = $location_name . '.' . $label;
                 $value = $data['value'];
 
                 DEOS_point::updateOrCreate(
-                    ['label' => $label, 'controller_id' => $controller->id],
+                    ['label' => $label, 'name' => $name, 'controller_id' => $controller->id],
                     [
-                        'name' => $controller->name . ' ' . $label,
+                        'name' => $name,
                         'label' => $label,
                         'type' => 'FL',
                         'meta_type' => 'electricityprice_forecast',

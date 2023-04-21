@@ -90,56 +90,54 @@ class HKA_Everymin_Job extends Command
                         //perform relevant actions
 
                         $forecast_data = $this->getWeatherData($controller->longitude, $controller->latitude);
+                        $building = $controller->building;
+                        $location = $building?->location;
+
                         //Create or Update Weather Points (Actually DEOS Points)
-                        // $dataset_index = 0;
-                        // foreach ($forecast_data as $key => $data) {
-                        //     foreach ($data as $index => $item) {
-                        //         //Skip first or last data among 50 , so we need only middle 48 data
-                        //         if ($index == 0 || $index == 49) {
-                        //             continue;
-                        //         }
+                        $dataset_index = 0;
+                        $pointIndex = 0;
+                        $location_name = $location?->name ?? "";
+                        foreach ($forecast_data as $key => $data) {
+                            foreach ($data as $index => $item) {
 
-                        //         if ($dataset_index == 0) {
-                        //             $label = sprintf('saalahti.f:I%02d', $index);
-                        //         } else {
-                        //             $label = sprintf('saalahti.f:I%03d', $index + $dataset_index * 100);
-                        //         }
+                                if (strpos($key, 'temperature') !== false || strpos($key, 'PrecipitationAmount') !== false || strpos($key, 'windspeedms') !== false) {
+                                    //break if $index == 36, because we need only first 36
+                                    if ($index == 36)
+                                        break;
+                                    // saalahti . f01 . I01->saalahti . f101 . I108 .
+                                    $name = sprintf($location_name . '.f01.I%02d', $index + 1 + $dataset_index * 36);
+                                    $label = $key . $index;
 
-                        //         $point = DEOS_point::where([
-                        //             ['name', '=', $key . $index],
-                        //             ['label', '=', $label],
-                        //             ['controller_id', '=', $controller->id],
-                        //             ['meta_type', '=', 'weather_forecast'],
-                        //         ])->first();
+                                    DEOS_point::updateOrCreate(
+                                        ['label' => $label, 'name' => $name],
+                                        [
+                                            'name' => $name,
+                                            'label' => $label,
+                                            'type' => '',
+                                            'value' => $item['value'],
+                                            'controller_id' => $controller->id,
+                                            'meta_type' => 'weather_forecast',
+                                        ]);
+                                }
+                            }
 
-                        //         if ($point != null) {
+                            $name = sprintf($location_name . '.f01.I%02d', $dataset_index + 109);
+                            $label = $key . '0';
 
-                        //             $point->update([
-                        //                 'name' => $key . $index,
-                        //                 'label' => $label,
-                        //                 'type' => 'FL',
-                        //                 'value' => $item['value'],
-                        //                 'controller_id' => $controller->id,
-                        //                 'meta_type' => 'weather_forecast',
-                        //             ]);
+                            DEOS_point::updateOrCreate(
+                                ['label' => $label, 'name' => $name],
+                                [
+                                    'name' => $name,
+                                    'label' => $label,
+                                    'type' => '',
+                                    'value' => $data[0]['value'],
+                                    'controller_id' => $controller->id,
+                                    'meta_type' => 'weather_forecast',
+                                ]);
+                            $dataset_index++;
+                        }
+                        $this->sendForcasttoDEOS('weather_forecast', $controller->id);
 
-                        //         } else {
-
-                        //             DEOS_point::create([
-                        //                 'name' => $key . $index,
-                        //                 'label' => $label,
-                        //                 'type' => 'FL',
-                        //                 'value' => $item['value'],
-                        //                 'controller_id' => $controller->id,
-                        //                 'meta_type' => 'weather_forecast',
-                        //             ]);
-
-                        //         }
-
-                        //     }
-                        //     $dataset_index++;
-                        // }
-                        // $this->sendForcasttoDEOS('weather_forecast', $controller->id);
                     } else {
                         $job->delete();
                     }
@@ -148,16 +146,21 @@ class HKA_Everymin_Job extends Command
                         'next_run' => date('Y-m-d H:i:s', time() + 5 * 60),
                     ]);
                     $controller = DEOS_controller::where('id', $job->job_id)->first();
+
                     if ($controller) {
                         $point_data = $this->getElectricityPricePointData();
+                        $building = $controller->building;
+                        $location = $building?->location;
+                        $location_name = $location?->name ?? "";
                         foreach ($point_data as $data) {
                             $label = $data['id'];
+                            $name = $location_name . '.' . $label;
                             $value = $data['value'];
 
                             DEOS_point::updateOrCreate(
-                                ['label' => $label, 'controller_id' => $controller->id],
+                                ['label' => $label, 'name' => $name, 'controller_id' => $controller->id],
                                 [
-                                    'name' => $controller->name . ' ' . $label,
+                                    'name' => $name,
                                     'label' => $label,
                                     'type' => 'FL',
                                     'meta_type' => 'electricityprice_forecast',
