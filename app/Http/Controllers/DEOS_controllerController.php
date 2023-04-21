@@ -187,7 +187,7 @@ class DEOS_controllerController extends Controller
             foreach ($forecast_data as $key => $data) {
                 foreach ($data as $index => $item) {
 
-                    if (strpos($key, 'temperature') !== false || strpos($key, 'PrecipitationAmount') !== false && strpos($key, 'windspeedms') !== false) {
+                    if (strpos($key, 'temperature') !== false || strpos($key, 'PrecipitationAmount') !== false || strpos($key, 'windspeedms') !== false) {
                         //break if $index == 36, because we need only first 36
                         if ($index == 36)
                             break;
@@ -223,7 +223,7 @@ class DEOS_controllerController extends Controller
                     ]);
                 $dataset_index++;
             }
-            // $this->sendForcasttoDEOS('weather_forecast', $controller->id);
+            $this->sendForcasttoDEOS('weather_forecast', $controller->id);
 
         }
 
