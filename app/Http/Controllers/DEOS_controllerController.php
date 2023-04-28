@@ -241,7 +241,7 @@ class DEOS_controllerController extends Controller
             $point_data = $this->getElectricityPricePointData();
             foreach ($point_data as $data) {
                 $label = $data['id'];
-                $name = $location_name . '.' . $label;
+                $name = $label;
                 $value = $data['value'];
 
                 DEOS_point::updateOrCreate(
