@@ -104,8 +104,8 @@ class HKA_Everymin_Job extends Command
                                     //break if $index == 36, because we need only first 36
                                     if ($index == 36)
                                         break;
-                                    // saalahti . f01 . I01->saalahti . f101 . I108 .
-                                    $name = sprintf($location_name . '.f01.I%02d', $index + 1 + $dataset_index * 36);
+                                    // saalahti . f01 . I01->saalahti . f101:I108 .
+                                    $name = sprintf($location_name . '.f01:I%02d', $index + 1 + $dataset_index * 36);
                                     $label = $key . $index;
 
                                     DEOS_point::updateOrCreate(
@@ -121,7 +121,7 @@ class HKA_Everymin_Job extends Command
                                 }
                             }
 
-                            $name = sprintf($location_name . '.f01.I%02d', $dataset_index + 109);
+                            $name = sprintf($location_name . '.f01:I%02d', $dataset_index + 109);
                             $label = $key . '0';
 
                             DEOS_point::updateOrCreate(

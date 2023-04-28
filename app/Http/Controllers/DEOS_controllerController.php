@@ -193,7 +193,7 @@ class DEOS_controllerController extends Controller
                         if ($index == 36)
                             break;
                         // saalahti . f01 . I01->saalahti . f101 . I108 .
-                        $name = sprintf($location_name . '.f01.I%02d', $index + 1 + $dataset_index * 36);
+                        $name = sprintf($location_name . '.f01:I%02d', $index + 1 + $dataset_index * 36);
                         $label = $key . $index;
 
                         DEOS_point::updateOrCreate(
@@ -209,7 +209,7 @@ class DEOS_controllerController extends Controller
                     }
                 }
 
-                $name = sprintf($location_name . '.f01.I%02d', $dataset_index + 109);
+                $name = sprintf($location_name . '.f01:I%02d', $dataset_index + 109);
                 $label = $key . '0';
 
                 DEOS_point::updateOrCreate(
