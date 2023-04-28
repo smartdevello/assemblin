@@ -176,7 +176,7 @@ class DEOS_controllerController extends Controller
                 ['job_name' => 'weather_forecast', 'job_id' => $controller->id], [
                     'job_name' => 'weather_forecast',
                     'job_id' => $controller->id,
-                    'next_run' => date('Y-m-d H:i:s', time() + 60 * 60),
+                    'next_run' => date('Y-m-d H:i:s', time() + 60 * 5),
                 ]
             );
 
