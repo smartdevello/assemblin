@@ -149,12 +149,11 @@ class HKA_Everymin_Job extends Command
 
                     if ($controller) {
                         $point_data = $this->getElectricityPricePointData();
-                        $building = $controller->building;
-                        $location = $building?->location;
-                        $location_name = $location?->name ?? "";
+
+
                         foreach ($point_data as $data) {
                             $label = $data['id'];
-                            $name = $location_name . '.' . $label;
+                            $name = $label;
                             $value = $data['value'];
 
                             DEOS_point::updateOrCreate(
