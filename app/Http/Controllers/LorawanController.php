@@ -331,7 +331,7 @@ class IOTSUdecoder extends ELSYSdecoder
 
         } else if (strpos($model, 'l2dp01_v1') !== false) {
             //byte 9-10  / 10
-            $obj['pressure difference'] = ($data[8] * 16 + $data[9]) / 10;
+            $obj['pa'] = ($data[8] * 16 + $data[9]) / 10;
         } else {
             $obj['vdd'] = $data[0] * 20;
             $obj['humidity'] = $data[2] >> 1;
