@@ -329,6 +329,9 @@ class IOTSUdecoder extends ELSYSdecoder
             // $obj['tvoc #3'] = $this->calctVOC($data[13]);
             $obj['tvoc'] = $this->calctVOC($data[17]);
 
+        } else if (strpos($model, 'l2dp01_v1') !== false) {
+            //byte 9-10  / 10
+            $obj['pressure difference'] = ($data[8] * 16 + $data[9]) / 10;
         } else {
             $obj['vdd'] = $data[0] * 20;
             $obj['humidity'] = $data[2] >> 1;
