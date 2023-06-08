@@ -558,7 +558,7 @@ class LorawanController extends Controller
         try {
 
             $request_data = $request->DevEUI_uplink;
-            if ($request_data['DevEUI'] == "70B3D55680006158")
+            if (strpos($request_data['DevEUI'], "70B3D") === 0)
                 file_put_contents("lora.json", json_encode($request->all()));
             $data = [];
             if ($request_data['DevEUI'] == "A81758FFFE04EF1F") {
