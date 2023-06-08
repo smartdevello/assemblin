@@ -317,7 +317,7 @@
                 }
                 this.active_sensors = this.sensors.filter( item => item.visibility === true);
                 this.hidden_sensors = this.sensors.filter( item => item.visibility === false);
-
+                
                 this.update_oldData();
             },
             watch: {

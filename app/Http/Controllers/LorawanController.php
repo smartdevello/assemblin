@@ -9,7 +9,8 @@ use App\Models\SensorLog;
 
 use Exception;
 
-class ELSYSdecoder {
+class ELSYSdecoder
+{
     const TYPE_TEMP = 0x01; //temp 2 bytes -3276.8°C -->3276.7°C
     const TYPE_RH = 0x02; //Humidity 1 byte  0-100%
     const TYPE_ACC = 0x03; //acceleration 3 bytes X,Y,Z -128 --> 127 +/-63=1G
@@ -41,180 +42,184 @@ class ELSYSdecoder {
     const TYPE_DEBUG = 0x3D; // 4bytes debug
     const AES_KEY = '4ADB475FFCFBC1EE09BDB7CE4A47C555';
 
-    public function bin16dec($bin) {
+    public function bin16dec($bin)
+    {
         $num = $bin & 0xFFFF;
         if (0x8000 & $num)
             $num = -(0x010000 - $num);
         return $num;
     }
-    public function bin8dec($bin) {
+    public function bin8dec($bin)
+    {
         $num = $bin & 0xFF;
         if (0x80 & $num)
-        $num = -(0x0100 - $num);
+            $num = -(0x0100 - $num);
         return $num;
     }
-    public function hexToBytes($hex) {
+    public function hexToBytes($hex)
+    {
         $bytes = [];
         for ($c = 0; $c < strlen($hex); $c += 2)
-            $bytes[]=hexdec(substr($hex, $c, 2));
+            $bytes[] = hexdec(substr($hex, $c, 2));
         return $bytes;
     }
 
-    public function DecodeElsysPayload($data) {
+    public function DecodeElsysPayload($data)
+    {
         $obj = [];
         for ($i = 0; $i < count($data); $i++) {
 
             switch ($data[$i]) {
-              case self::TYPE_TEMP: //Temperature
-                  $temp = ($data[$i + 1] << 8) | ($data[$i + 2]);
-                  $temp = $this->bin16dec($temp);
-                  $obj['temperature'] = $temp / 10;
-                  $i += 2;
-                  break;
-              case self::TYPE_RH: //Humidity
-                  $rh = ($data[$i + 1]);
-                  $obj['humidity'] = $rh;
-                  $i += 1;
-                  break;
-              case self::TYPE_ACC: //Acceleration
-                  $obj['x'] = $this->bin8dec($data[$i + 1]);
-                  $obj['y'] = $this->bin8dec($data[$i + 2]);
-                  $obj['z'] = $this->bin8dec($data[$i + 3]);
-                  $i += 3;
-                  break;
-              case self::TYPE_LIGHT: //Light
-                  $obj['light'] = ($data[$i + 1] << 8) | ($data[$i + 2]);
-                  $i += 2;
-                  break;
-              case self::TYPE_MOTION: //Motion sensor(PIR)
-                  $obj['motion'] = ($data[$i + 1]);
-                  $i += 1;
-                  break;
-              case self::TYPE_CO2: //CO2
-                  $obj['co2'] = ($data[$i + 1] << 8) | ($data[$i + 2]);
-                  $i += 2;
-                  break;
-              case self::TYPE_VDD: //Battery level
-                  $obj['vdd'] = (($data[$i + 1] << 8) | ($data[$i + 2])) / 1000;
-                  $obj['vdd'] = round($obj['vdd'], 1);
-                  $i += 2;
-                  break;
-              case self::TYPE_ANALOG1: //Analog input 1
-                  $obj['analog1'] = ($data[$i + 1] << 8) | ($data[$i + 2]);
-                  $i += 2;
-                  break;
-              case self::TYPE_GPS: //gps
-                  $i++;
-                  $obj['lat'] = ($data[$i + 0] | $data[$i + 1] << 8 | $data[$i + 2] << 16 | ($data[$i + 2] & 0x80 ? 0xFF << 24 : 0)) / 10000;
-                  $obj['long'] = ($data[$i + 3] | $data[$i + 4] << 8 | $data[$i + 5] << 16 | ($data[$i + 5] & 0x80 ? 0xFF << 24 : 0)) / 10000;
-                  $i += 5;
-                  break;
-              case self::TYPE_PULSE1: //Pulse input 1
-                  $obj['pulse1'] = ($data[$i + 1] << 8) | ($data[$i + 2]);
-                  $i += 2;
-                  break;
-              case self::TYPE_PULSE1_ABS: //Pulse input 1 absolute value
-                  $pulseAbs = ($data[$i + 1] << 24) | ($data[$i + 2] << 16) | ($data[$i + 3] << 8) | ($data[$i + 4]);
-                  $obj['pulseAbs'] = $pulseAbs;
-                  $i += 4;
-                  break;
-              case self::TYPE_EXT_TEMP1: //External temp
-                  $temp = ($data[$i + 1] << 8) | ($data[$i + 2]);
-                  $temp = $this->bin16dec($temp);
-                  $obj['externalTemperature'] = $temp / 10;
-                  $i += 2;
-                  break;
-              case self::TYPE_EXT_DIGITAL: //Digital input
-                  $obj['digital'] = ($data[$i + 1]);
-                  $i += 1;
-                  break;
-              case self::TYPE_EXT_DISTANCE: //Distance sensor input
-                  $obj['distance'] = ($data[$i + 1] << 8) | ($data[$i + 2]);
-                  $i += 2;
-                  break;
-              case self::TYPE_ACC_MOTION: //Acc motion
-                  $obj['accMotion'] = ($data[$i + 1]);
-                  $i += 1;
-                  break;
-              case self::TYPE_IR_TEMP: //IR temperature
-                  $iTemp = ($data[$i + 1] << 8) | ($data[$i + 2]);
-                  $iTemp = $this->bin16dec($iTemp);
-                  $eTemp = ($data[$i + 3] << 8) | ($data[$i + 4]);
-                  $eTemp = $this->bin16dec($eTemp);
-                  $obj['irInternalTemperature'] = $iTemp / 10;
-                  $obj['irExternalTemperature'] = $eTemp / 10;
-                  $i += 4;
-                  break;
-              case self::TYPE_OCCUPANCY: //Body occupancy
-                  $obj['occupancy'] = ($data[$i + 1]);
-                  $i += 1;
-                  break;
-              case self::TYPE_WATERLEAK: //Water leak
-                  $obj['waterleak'] = ($data[$i + 1]);
-                  $i += 1;
-                  break;
-              case self::TYPE_GRIDEYE: //Grideye data
-                  $ref = $data[$i+1];
-                  $i++;
-                  $obj['grideye'] = [];
-                  for($j = 0; $j < 64; $j++) {
-                      $obj['grideye'][$j] = $ref + ($data[1+$i+$j] / 10.0);
-                  }
-                  $i += 64;
-                  break;
-              case self::TYPE_PRESSURE: //External Pressure
-                  $temp = ($data[$i + 1] << 24) | ($data[$i + 2] << 16) | ($data[$i + 3] << 8) | ($data[$i + 4]);
-                  $obj['pressure'] = $temp / 1000;
-                  $i += 4;
-                  break;
-              case self::TYPE_SOUND: //Sound
-                  $obj['soundPeak'] = $data[$i + 1];
-                  $obj['soundAvg'] = $data[$i + 2];
-                  $i += 2;
-                  break;
-              case self::TYPE_PULSE2: //Pulse 2
-                  $obj['pulse2'] = ($data[$i + 1] << 8) | ($data[$i + 2]);
-                  $i += 2;
-                  break;
-              case self::TYPE_PULSE2_ABS: //Pulse input 2 absolute value
-                  $obj['pulseAbs2'] = ($data[$i + 1] << 24) | ($data[$i + 2] << 16) | ($data[$i + 3] << 8) | ($data[$i + 4]);
-                  $i += 4;
-                  break;
-              case self::TYPE_ANALOG2: //Analog input 2
-                  $obj['analog2'] = ($data[$i + 1] << 8) | ($data[$i + 2]);
-                  $i += 2;
-                  break;
-              case self::TYPE_EXT_TEMP2: //External temp 2
-                  $temp = ($data[$i + 1] << 8) | ($data[$i + 2]);
-                  $temp = $this->bin16dec($temp);
+                case self::TYPE_TEMP: //Temperature
+                    $temp = ($data[$i + 1] << 8) | ($data[$i + 2]);
+                    $temp = $this->bin16dec($temp);
+                    $obj['temperature'] = $temp / 10;
+                    $i += 2;
+                    break;
+                case self::TYPE_RH: //Humidity
+                    $rh = ($data[$i + 1]);
+                    $obj['humidity'] = $rh;
+                    $i += 1;
+                    break;
+                case self::TYPE_ACC: //Acceleration
+                    $obj['x'] = $this->bin8dec($data[$i + 1]);
+                    $obj['y'] = $this->bin8dec($data[$i + 2]);
+                    $obj['z'] = $this->bin8dec($data[$i + 3]);
+                    $i += 3;
+                    break;
+                case self::TYPE_LIGHT: //Light
+                    $obj['light'] = ($data[$i + 1] << 8) | ($data[$i + 2]);
+                    $i += 2;
+                    break;
+                case self::TYPE_MOTION: //Motion sensor(PIR)
+                    $obj['motion'] = ($data[$i + 1]);
+                    $i += 1;
+                    break;
+                case self::TYPE_CO2: //CO2
+                    $obj['co2'] = ($data[$i + 1] << 8) | ($data[$i + 2]);
+                    $i += 2;
+                    break;
+                case self::TYPE_VDD: //Battery level
+                    $obj['vdd'] = (($data[$i + 1] << 8) | ($data[$i + 2])) / 1000;
+                    $obj['vdd'] = round($obj['vdd'], 1);
+                    $i += 2;
+                    break;
+                case self::TYPE_ANALOG1: //Analog input 1
+                    $obj['analog1'] = ($data[$i + 1] << 8) | ($data[$i + 2]);
+                    $i += 2;
+                    break;
+                case self::TYPE_GPS: //gps
+                    $i++;
+                    $obj['lat'] = ($data[$i + 0] | $data[$i + 1] << 8 | $data[$i + 2] << 16 | ($data[$i + 2] & 0x80 ? 0xFF << 24 : 0)) / 10000;
+                    $obj['long'] = ($data[$i + 3] | $data[$i + 4] << 8 | $data[$i + 5] << 16 | ($data[$i + 5] & 0x80 ? 0xFF << 24 : 0)) / 10000;
+                    $i += 5;
+                    break;
+                case self::TYPE_PULSE1: //Pulse input 1
+                    $obj['pulse1'] = ($data[$i + 1] << 8) | ($data[$i + 2]);
+                    $i += 2;
+                    break;
+                case self::TYPE_PULSE1_ABS: //Pulse input 1 absolute value
+                    $pulseAbs = ($data[$i + 1] << 24) | ($data[$i + 2] << 16) | ($data[$i + 3] << 8) | ($data[$i + 4]);
+                    $obj['pulseAbs'] = $pulseAbs;
+                    $i += 4;
+                    break;
+                case self::TYPE_EXT_TEMP1: //External temp
+                    $temp = ($data[$i + 1] << 8) | ($data[$i + 2]);
+                    $temp = $this->bin16dec($temp);
+                    $obj['externalTemperature'] = $temp / 10;
+                    $i += 2;
+                    break;
+                case self::TYPE_EXT_DIGITAL: //Digital input
+                    $obj['digital'] = ($data[$i + 1]);
+                    $i += 1;
+                    break;
+                case self::TYPE_EXT_DISTANCE: //Distance sensor input
+                    $obj['distance'] = ($data[$i + 1] << 8) | ($data[$i + 2]);
+                    $i += 2;
+                    break;
+                case self::TYPE_ACC_MOTION: //Acc motion
+                    $obj['accMotion'] = ($data[$i + 1]);
+                    $i += 1;
+                    break;
+                case self::TYPE_IR_TEMP: //IR temperature
+                    $iTemp = ($data[$i + 1] << 8) | ($data[$i + 2]);
+                    $iTemp = $this->bin16dec($iTemp);
+                    $eTemp = ($data[$i + 3] << 8) | ($data[$i + 4]);
+                    $eTemp = $this->bin16dec($eTemp);
+                    $obj['irInternalTemperature'] = $iTemp / 10;
+                    $obj['irExternalTemperature'] = $eTemp / 10;
+                    $i += 4;
+                    break;
+                case self::TYPE_OCCUPANCY: //Body occupancy
+                    $obj['occupancy'] = ($data[$i + 1]);
+                    $i += 1;
+                    break;
+                case self::TYPE_WATERLEAK: //Water leak
+                    $obj['waterleak'] = ($data[$i + 1]);
+                    $i += 1;
+                    break;
+                case self::TYPE_GRIDEYE: //Grideye data
+                    $ref = $data[$i + 1];
+                    $i++;
+                    $obj['grideye'] = [];
+                    for ($j = 0; $j < 64; $j++) {
+                        $obj['grideye'][$j] = $ref + ($data[1 + $i + $j] / 10.0);
+                    }
+                    $i += 64;
+                    break;
+                case self::TYPE_PRESSURE: //External Pressure
+                    $temp = ($data[$i + 1] << 24) | ($data[$i + 2] << 16) | ($data[$i + 3] << 8) | ($data[$i + 4]);
+                    $obj['pressure'] = $temp / 1000;
+                    $i += 4;
+                    break;
+                case self::TYPE_SOUND: //Sound
+                    $obj['soundPeak'] = $data[$i + 1];
+                    $obj['soundAvg'] = $data[$i + 2];
+                    $i += 2;
+                    break;
+                case self::TYPE_PULSE2: //Pulse 2
+                    $obj['pulse2'] = ($data[$i + 1] << 8) | ($data[$i + 2]);
+                    $i += 2;
+                    break;
+                case self::TYPE_PULSE2_ABS: //Pulse input 2 absolute value
+                    $obj['pulseAbs2'] = ($data[$i + 1] << 24) | ($data[$i + 2] << 16) | ($data[$i + 3] << 8) | ($data[$i + 4]);
+                    $i += 4;
+                    break;
+                case self::TYPE_ANALOG2: //Analog input 2
+                    $obj['analog2'] = ($data[$i + 1] << 8) | ($data[$i + 2]);
+                    $i += 2;
+                    break;
+                case self::TYPE_EXT_TEMP2: //External temp 2
+                    $temp = ($data[$i + 1] << 8) | ($data[$i + 2]);
+                    $temp = $this->bin16dec($temp);
 
-                  if(isset($obj['externalTemperature2'] ) &&  is_numeric($obj['externalTemperature2'] ) ) {
-                      $obj['externalTemperature2'] = [$obj['externalTemperature2']];
-                  }
-                  if(isset($obj['externalTemperature2'] ) &&  is_array($obj['externalTemperature2']) ) {
-                      array_push($obj['externalTemperature2'], $temp/10);
+                    if (isset($obj['externalTemperature2']) && is_numeric($obj['externalTemperature2'])) {
+                        $obj['externalTemperature2'] = [$obj['externalTemperature2']];
+                    }
+                    if (isset($obj['externalTemperature2']) && is_array($obj['externalTemperature2'])) {
+                        array_push($obj['externalTemperature2'], $temp / 10);
 
-                  } else {
-                      $obj['externalTemperature2'] = $temp / 10;
-                  }
-                  $i += 2;
-                  break;
-              case self::TYPE_EXT_DIGITAL2: //Digital input 2
-                  $obj['digital2'] = ($data[$i + 1]);
-                  $i += 1;
-                  break;
-              case self::TYPE_EXT_ANALOG_UV: //Load cell analog uV
-                  $obj['analogUv'] = ($data[$i + 1] << 24) | ($data[$i + 2] << 16) | ($data[$i + 3] << 8) | ($data[$i + 4]);
-                  $i += 4;
-                  break;
-              case self::TYPE_TVOC:
-                  $obj['tvoc'] = ($data[$i + 1] << 8) | ($data[$i + 2]);
-                  $i += 2;
-                  break;
-              default: //somthing is wrong with data
-                  echo 'default';
-                  $i = count($data);
-                  break;
+                    } else {
+                        $obj['externalTemperature2'] = $temp / 10;
+                    }
+                    $i += 2;
+                    break;
+                case self::TYPE_EXT_DIGITAL2: //Digital input 2
+                    $obj['digital2'] = ($data[$i + 1]);
+                    $i += 1;
+                    break;
+                case self::TYPE_EXT_ANALOG_UV: //Load cell analog uV
+                    $obj['analogUv'] = ($data[$i + 1] << 24) | ($data[$i + 2] << 16) | ($data[$i + 3] << 8) | ($data[$i + 4]);
+                    $i += 4;
+                    break;
+                case self::TYPE_TVOC:
+                    $obj['tvoc'] = ($data[$i + 1] << 8) | ($data[$i + 2]);
+                    $i += 2;
+                    break;
+                default: //somthing is wrong with data
+                    echo 'default';
+                    $i = count($data);
+                    break;
             }
         }
         return $obj;
@@ -242,14 +247,16 @@ class ELSYSdecoder {
 
     }
 }
-class Solidusdecoder extends ELSYSdecoder{
+class Solidusdecoder extends ELSYSdecoder
+{
 
-    public function DecodeSolidusPayload($data) {
+    public function DecodeSolidusPayload($data)
+    {
         $obj = [];
         $obj['vdd'] = $data[0] * 30;
-        $obj['temperature'] = $data[1] -128;
-        $obj['MSB'] = round ( $data[2] / 240, 3);
-        $obj['LSB'] = round( $data[3] / 240, 3);
+        $obj['temperature'] = $data[1] - 128;
+        $obj['MSB'] = round($data[2] / 240, 3);
+        $obj['LSB'] = round($data[3] / 240, 3);
 
         $temp = $data[2] * 256 + $data[3];
         if ($temp >= 32768) {
@@ -260,22 +267,25 @@ class Solidusdecoder extends ELSYSdecoder{
     }
 
 }
-class IOTSUdecoder extends ELSYSdecoder{
-    public function calctVOC($val) {
-        if ($val <=30) {
+class IOTSUdecoder extends ELSYSdecoder
+{
+    public function calctVOC($val)
+    {
+        if ($val <= 30) {
             return 2 * $val;
-        } else if ($val <=118) {
-            return (30 -0 ) * 2 + ($val-30) * 5;
-        } else if ($val <=193) {
-            return (30 -0 ) * 2 + (118-30) * 5 + ($val - 118) * 20;
+        } else if ($val <= 118) {
+            return (30 - 0) * 2 + ($val - 30) * 5;
+        } else if ($val <= 193) {
+            return (30 - 0) * 2 + (118 - 30) * 5 + ($val - 118) * 20;
         } else {
-            return (30 -0 ) * 2 + (118-30) * 5 + (193 - 118) * 20 + ($val - 193) * 100;
+            return (30 - 0) * 2 + (118 - 30) * 5 + (193 - 118) * 20 + ($val - 193) * 100;
         }
         return 0;
     }
-    public function DecodeIOTSUPayload($data, $model = '') {
+    public function DecodeIOTSUPayload($data, $model = '')
+    {
         $obj = [];
-        if ( strpos($model, 'l2aq05') !== false || strpos($model, 'l3aq05') !== false) {
+        if (strpos($model, 'l2aq05') !== false || strpos($model, 'l3aq05') !== false) {
 
             $obj['battery voltage'] = $data[0] * 20;
             // $obj['humidity #1'] = $data[2] >> 1;
@@ -293,7 +303,7 @@ class IOTSUdecoder extends ELSYSdecoder{
             // $obj['co2 #3'] = $data[10] * 10 + 400;
             $obj['co2'] = $data[13] * 10 + 400;
 
-        } else if (strpos($model, 'l2aq01') !== false  || strpos($model, 'l3aq01') !== false ) {
+        } else if (strpos($model, 'l2aq01') !== false || strpos($model, 'l3aq01') !== false) {
             $obj['battery voltage'] = $data[0] * 20;
             // $obj['humidity #1'] = $data[2] >> 1;
             // $obj['humidity #2'] = $data[6] >> 1;
@@ -343,58 +353,16 @@ class LorawanController extends Controller
         $request = json_decode(file_get_contents("lora.json"));
 
         $ELSYSdecoder = new ELSYSdecoder();
-        $hexvalue  = $ELSYSdecoder->hexToBytes($request->DevEUI_uplink->payload_hex);
+        $hexvalue = $ELSYSdecoder->hexToBytes($request->DevEUI_uplink->payload_hex);
 
         $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);
 
-            foreach ( $data as $key => $val ) {
+        foreach ($data as $key => $val) {
 
-                if ( $key == 'externalTemperature2' ){
-                    foreach ($val as $key1 => $val1){
-                        $sensorKey = $key."_".strval($key1);
-                        $sensorValue = $val1;
-
-                        $dbdata = array(
-                            'deviceId' => $request->DevEUI_uplink->DevEUI,
-                            'type' => $sensorKey,
-                            'observationId' => null,
-                            'tag' => '',
-                            'name' => '',
-                            'unit' => '',
-                            'value' => strval($sensorValue),
-                            'message_time' => $request->DevEUI_uplink->Time,
-                        );
-
-                        $sensor = Sensor::updateOrCreate(
-                            ['deviceId' => $request->DevEUI_uplink->DevEUI, 'type' => $sensorKey] , $dbdata
-                        );
-
-                        $log = SensorLog::where('sensor_id', $sensor->id)->first();
-                        $log_data = array(
-                            'sensor_id' => $sensor->id,
-                        );
-                        if ( !isset($log) ) {
-                            $log_data['logs'] = json_encode([
-                                date('Y-m-d H:i:s') => $sensor->value
-                            ]);
-                        } else {
-                            $log_data['logs'] = (array)json_decode($log->logs);
-                            $len = count($log_data['logs']);
-                            if ( $len > 9 ){
-                                $log_data['logs'] = array_slice( $log_data['logs'] ,  $len - 9);
-                            }
-                            $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
-
-                            $log_data['logs'] = json_encode($log_data['logs']);
-                        }
-                        $log = SensorLog::updateOrCreate(
-                            ['sensor_id' => $sensor->id, ] , $log_data
-                        );
-
-                    }
-                } else {
-                    $sensorKey = $key;
-                    $sensorValue = $val;
+            if ($key == 'externalTemperature2') {
+                foreach ($val as $key1 => $val1) {
+                    $sensorKey = $key . "_" . strval($key1);
+                    $sensorValue = $val1;
 
                     $dbdata = array(
                         'deviceId' => $request->DevEUI_uplink->DevEUI,
@@ -407,34 +375,76 @@ class LorawanController extends Controller
                         'message_time' => $request->DevEUI_uplink->Time,
                     );
 
-                    $sensor= Sensor::updateOrCreate(
-                        ['deviceId' => $request->DevEUI_uplink->DevEUI, 'type' => $sensorKey] , $dbdata
+                    $sensor = Sensor::updateOrCreate(
+                        ['deviceId' => $request->DevEUI_uplink->DevEUI, 'type' => $sensorKey], $dbdata
                     );
 
-                        $log = SensorLog::where('sensor_id', $sensor->id)->first();
-                        $log_data = array(
-                            'sensor_id' => $sensor->id,
-                        );
-                        if ( !isset($log) ) {
-                            $log_data['logs'] = json_encode([
-                                date('Y-m-d H:i:s') => $sensor->value
-                            ]);
-                        } else {
-                            $log_data['logs'] = (array)json_decode($log->logs);
-                            $len = count($log_data['logs']);
-                            if ( $len > 9 ){
-                                $log_data['logs'] = array_slice( $log_data['logs'] ,  $len - 9);
-                            }
-                            $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
-
-                            $log_data['logs'] = json_encode($log_data['logs']);
+                    $log = SensorLog::where('sensor_id', $sensor->id)->first();
+                    $log_data = array(
+                        'sensor_id' => $sensor->id,
+                    );
+                    if (! isset($log)) {
+                        $log_data['logs'] = json_encode([
+                            date('Y-m-d H:i:s') => $sensor->value
+                        ]);
+                    } else {
+                        $log_data['logs'] = (array) json_decode($log->logs);
+                        $len = count($log_data['logs']);
+                        if ($len > 9) {
+                            $log_data['logs'] = array_slice($log_data['logs'], $len - 9);
                         }
-                        $log = SensorLog::updateOrCreate(
-                            ['sensor_id' => $sensor->id, ] , $log_data
-                        );
+                        $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
+
+                        $log_data['logs'] = json_encode($log_data['logs']);
+                    }
+                    $log = SensorLog::updateOrCreate(
+                        ['sensor_id' => $sensor->id,], $log_data
+                    );
+
                 }
+            } else {
+                $sensorKey = $key;
+                $sensorValue = $val;
+
+                $dbdata = array(
+                    'deviceId' => $request->DevEUI_uplink->DevEUI,
+                    'type' => $sensorKey,
+                    'observationId' => null,
+                    'tag' => '',
+                    'name' => '',
+                    'unit' => '',
+                    'value' => strval($sensorValue),
+                    'message_time' => $request->DevEUI_uplink->Time,
+                );
+
+                $sensor = Sensor::updateOrCreate(
+                    ['deviceId' => $request->DevEUI_uplink->DevEUI, 'type' => $sensorKey], $dbdata
+                );
+
+                $log = SensorLog::where('sensor_id', $sensor->id)->first();
+                $log_data = array(
+                    'sensor_id' => $sensor->id,
+                );
+                if (! isset($log)) {
+                    $log_data['logs'] = json_encode([
+                        date('Y-m-d H:i:s') => $sensor->value
+                    ]);
+                } else {
+                    $log_data['logs'] = (array) json_decode($log->logs);
+                    $len = count($log_data['logs']);
+                    if ($len > 9) {
+                        $log_data['logs'] = array_slice($log_data['logs'], $len - 9);
+                    }
+                    $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
+
+                    $log_data['logs'] = json_encode($log_data['logs']);
+                }
+                $log = SensorLog::updateOrCreate(
+                    ['sensor_id' => $sensor->id,], $log_data
+                );
             }
-            return $data;
+        }
+        return $data;
 
     }
 
@@ -505,7 +515,7 @@ class LorawanController extends Controller
     }
     public function receive_csvfile()
     {
-        if (!isset($_GET['controller_id']) || !isset($_GET['trend_group_name']) || !isset($_GET['query_period']))
+        if (! isset($_GET['controller_id']) || ! isset($_GET['trend_group_name']) || ! isset($_GET['query_period']))
             return response()->json([
                 'error' => 'Parameters are missing'
             ], 401);
@@ -515,22 +525,21 @@ class LorawanController extends Controller
         $trend_group_name = $_GET['trend_group_name'];
 
         $filename = "myfile.csv";
-        $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $filename ;
+        $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $filename;
         $to_time = time();
         $from_time = $to_time - $query_period * 60;
         $from_time *= 1000;
         $to_time *= 1000;
         $command = sprintf($format, $controller_id, $trend_group_name, $from_time, $to_time);
-        if ( file_exists($filename ) ) {
+        if (file_exists($filename)) {
             unlink($filename);
         }
         shell_exec($command);
 
-        $file = fopen($filename,"r");
+        $file = fopen($filename, "r");
         $output = [];
         $index = 0;
-        while(! feof($file))
-        {
+        while (! feof($file)) {
             $index++;
             $row = fgetcsv($file, 0, ';');
             if (is_array($row))
@@ -546,21 +555,23 @@ class LorawanController extends Controller
     public function receive_data(Request $request)
     {
 
-        try{
-            file_put_contents("lora.json", json_encode($request->all())  );
+        try {
+
             $request_data = $request->DevEUI_uplink;
+            if ($request_data['DevEUI'] == "70B3D55680006158")
+                file_put_contents("lora.json", json_encode($request->all()));
             $data = [];
-            if ( $request_data['DevEUI'] == "A81758FFFE04EF1F" ) {
+            if ($request_data['DevEUI'] == "A81758FFFE04EF1F") {
                 $ELSYSdecoder = new ELSYSdecoder();
-                $hexvalue  = $ELSYSdecoder->hexToBytes($request_data['payload_hex']);
+                $hexvalue = $ELSYSdecoder->hexToBytes($request_data['payload_hex']);
 
                 $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);
-            } else if ( $request_data['DevEUI'] == "47EABD48004A0044" ) {
+            } else if ($request_data['DevEUI'] == "47EABD48004A0044") {
                 $Solidusdecoder = new Solidusdecoder();
                 $hexvalue = $Solidusdecoder->hexToBytes($request_data['payload_hex']);
 
                 $data = $Solidusdecoder->DecodeSolidusPayload($hexvalue);
-            } else if ( strpos($request_data['DevEUI'], "70B3D") === 0 ) {
+            } else if (strpos($request_data['DevEUI'], "70B3D") === 0) {
                 // $request_data['DevEUI'] == "70B3D55680000A6D" (L2 AQ05)
                 $IOTSUdecoder = new IOTSUdecoder();
                 $hexvalue = $IOTSUdecoder->hexToBytes($request_data['payload_hex']);
@@ -569,11 +580,11 @@ class LorawanController extends Controller
                 $data = $IOTSUdecoder->DecodeIOTSUPayload($hexvalue, $model);
             }
 
-            foreach ( $data as $key => $val ) {
+            foreach ($data as $key => $val) {
 
-                if ( $key == 'externalTemperature2' ){
-                    foreach ($val as $key1 => $val1){
-                        $sensorKey = $key."_".strval($key1);
+                if ($key == 'externalTemperature2') {
+                    foreach ($val as $key1 => $val1) {
+                        $sensorKey = $key . "_" . strval($key1);
                         $sensorValue = $val1;
 
                         $dbdata = array(
@@ -589,7 +600,7 @@ class LorawanController extends Controller
                         );
 
                         $sensor = Sensor::updateOrCreate(
-                            ['deviceId' => $request_data['DevEUI'], 'type' => $sensorKey] , $dbdata
+                            ['deviceId' => $request_data['DevEUI'], 'type' => $sensorKey], $dbdata
                         );
 
                         $log = SensorLog::where('sensor_id', $sensor->id)->first();
@@ -597,22 +608,22 @@ class LorawanController extends Controller
                         $log_data = array(
                             'sensor_id' => $sensor->id,
                         );
-                        if (!isset($log) ) {
+                        if (! isset($log)) {
                             $log_data['logs'] = json_encode([
                                 date('Y-m-d H:i:s') => $sensor->value
                             ]);
                         } else {
-                            $log_data['logs'] = (array)json_decode($log->logs);
+                            $log_data['logs'] = (array) json_decode($log->logs);
                             $len = count($log_data['logs']);
-                            if ( $len > 9 ){
-                                $log_data['logs'] = array_slice( $log_data['logs'] ,  $len - 9);
+                            if ($len > 9) {
+                                $log_data['logs'] = array_slice($log_data['logs'], $len - 9);
                             }
                             $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
 
                             $log_data['logs'] = json_encode($log_data['logs']);
                         }
                         $log = SensorLog::updateOrCreate(
-                            ['sensor_id' => $sensor->id, ] , $log_data
+                            ['sensor_id' => $sensor->id,], $log_data
                         );
 
                     }
@@ -633,7 +644,7 @@ class LorawanController extends Controller
                     );
 
                     $sensor = Sensor::updateOrCreate(
-                        ['deviceId' => $request_data['DevEUI'], 'type' => $sensorKey] , $dbdata
+                        ['deviceId' => $request_data['DevEUI'], 'type' => $sensorKey], $dbdata
                     );
 
                     $log = SensorLog::where('sensor_id', $sensor->id)->first();
@@ -641,15 +652,15 @@ class LorawanController extends Controller
                     $log_data = array(
                         'sensor_id' => $sensor->id,
                     );
-                    if ( !isset($log) ) {
+                    if (! isset($log)) {
                         $log_data['logs'] = json_encode([
                             date('Y-m-d H:i:s') => $sensor->value
                         ]);
                     } else {
-                        $log_data['logs'] = (array)json_decode($log->logs);
+                        $log_data['logs'] = (array) json_decode($log->logs);
                         $len = count($log_data['logs']);
-                        if ( $len > 9 ){
-                            $log_data['logs'] = array_slice( $log_data['logs'] ,  $len - 9);
+                        if ($len > 9) {
+                            $log_data['logs'] = array_slice($log_data['logs'], $len - 9);
                         }
                         $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
 
@@ -657,12 +668,12 @@ class LorawanController extends Controller
                     }
 
                     $log = SensorLog::updateOrCreate(
-                        ['sensor_id' => $sensor->id, ] , $log_data
+                        ['sensor_id' => $sensor->id,], $log_data
                     );
                 }
             }
 
-        }catch(Exception $e){
+        } catch (Exception $e) {
 
             return response()->json([
                 'error' => $e->getMessage()

@@ -153,7 +153,7 @@ class HKA_Everymin_Job extends Command
 
                         foreach ($point_data as $data) {
                             $label = $data['id'];
-                            $name = $label;
+                            $name =  $label;
                             $value = $data['value'];
 
                             DEOS_point::updateOrCreate(

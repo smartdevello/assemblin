@@ -6,7 +6,7 @@ use SimpleXMLElement;
 
 trait WeatherForcastTrait
 {
-    public function getWeatherData($longitude = 25.650317, $latitude = 60.983692)
+    public function getWeatherData($longitude = 25.7647, $latitude = 61.0162)
     {
 
         $curl = curl_init();
