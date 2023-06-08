@@ -556,10 +556,11 @@ class LorawanController extends Controller
     {
 
         try {
-
+            file_put_contents("lora.json", json_encode($request->all()));
             $request_data = $request->DevEUI_uplink;
-            if (strpos($request_data['DevEUI'], "70B3D") === 0)
-                file_put_contents("lora.json", json_encode($request->all()));
+            if (file_put_contents(sprintf("%s.json", $request_data['DevEUI']), json_encode($request->all())) === false) {
+                file_put_contents(sprintf("%X.json", $request_data['DevEUI']), json_encode($request->all()));
+            }
             $data = [];
             if ($request_data['DevEUI'] == "A81758FFFE04EF1F") {
                 $ELSYSdecoder = new ELSYSdecoder();
@@ -573,6 +574,9 @@ class LorawanController extends Controller
                 $data = $Solidusdecoder->DecodeSolidusPayload($hexvalue);
             } else if (strpos($request_data['DevEUI'], "70B3D") === 0) {
                 // $request_data['DevEUI'] == "70B3D55680000A6D" (L2 AQ05)
+
+
+
                 $IOTSUdecoder = new IOTSUdecoder();
                 $hexvalue = $IOTSUdecoder->hexToBytes($request_data['payload_hex']);
                 $model = $request_data['CustomerData']['alr']['pro'];
