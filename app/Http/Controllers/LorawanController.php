@@ -49,6 +49,16 @@ class ELSYSdecoder
             $num = -(0x010000 - $num);
         return $num;
     }
+    public function twoBytestoDecimal($byte1, $byte2)
+    {
+        if ($byte1 >= 128) {
+            //if byte1 is greater than 128, then the first bit is 1, so the value should be negative
+            $p = 65536 - ($byte1 * 256 + $byte2);
+            return -$p;
+        } else {
+            return $byte1 * 256 + $byte2;
+        }
+    }
     public function bin8dec($bin)
     {
         $num = $bin & 0xFF;
@@ -330,8 +340,8 @@ class IOTSUdecoder extends ELSYSdecoder
             $obj['tvoc'] = $this->calctVOC($data[17]);
 
         } else if (strpos($model, 'l2dp01_v1') !== false) {
-            //byte 9-10  / 10
-            $obj['pa'] = ($data[8] * 16 + $data[9]) / 10;
+            $obj['pa'] = ($this->twoBytestoDecimal($data[8], $data[9])) / 10;
+
         } else {
             $obj['vdd'] = $data[0] * 20;
             $obj['humidity'] = $data[2] >> 1;
