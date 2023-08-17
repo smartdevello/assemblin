@@ -19,6 +19,10 @@
                         Weather Forcast
                         <v-spacer></v-spacer>
                     </v-card-title>
+                    <div>
+                        <strong>Temperature </strong>
+                        <span>@{{ forecast_data[0]["mts-1-1-temperature"] }}</span>
+                    </div>
                     <v-card-item>
                         <v-card-subtitle>Temperature</v-card-subtitle>
                         <v-card-text>@{{ forecast_data[0]["mts-1-1-temperature"] }}</v-card-text>
