@@ -22,26 +22,26 @@ class WeatherForecastController extends Controller
     {
         //
         date_default_timezone_set('Europe/Helsinki');
-        $return_data = [];
+        $forecast_data = [];
         $all_jobs = HKA_Scheduled_JOb::all();
         foreach ($all_jobs as $job) {
             if ($job->job_name == 'weather_forecast') {
                 $controller = DEOS_controller::where('id', $job->job_id)->first();
                 if ($controller && isset($controller->longitude) && isset($controller->latitude)) {
-                    $forecast_data = $this->getWeatherData($controller->longitude, $controller->latitude);
-                    foreach($forecast_data as $key => $data) {
+                    $json_data = $this->getWeatherData($controller->longitude, $controller->latitude);
+                    foreach($json_data as $key => $data) {
                         foreach($data as $index => $item) {
 
 
                             $time = strtotime($item['time']);
                             $value = $item['value'];
                     
-                            $found_key = array_search($time , array_column($return_data, 'time'));
+                            $found_key = array_search($time , array_column($forecast_data, 'time'));
                             if ($found_key !== false) {
-                                $return_data[$found_key][$key] = $value;
+                                $forecast_data[$found_key][$key] = $value;
                             } else {
                                 
-                                $return_data[] = [                
+                                $forecast_data[] = [                
                                     'time' => $time,
                                     $key => $value
                                 ];
@@ -53,7 +53,7 @@ class WeatherForecastController extends Controller
                 }
             }
         }
-        return view('admin.weather_forecast.index', compact('return_data'));
+        return view('admin.weather_forecast.index', compact('forecast_data'));
     }
 
     /**
