@@ -21,19 +21,19 @@
                     </v-card-title>
                     <div style="padding: 16px;">
                         <strong> Temperature </strong>
-                        <span>@{{ forecast_data[0]["mts-1-1-temperature"] }} °C </span>
+                        <span style="padding-right: 20px;">@{{ forecast_data[0]["mts-1-1-temperature"] }} °C </span>
 
                         <strong> Rainfall </strong>
-                        <span>@{{ forecast_data[0]["mts-1-1-PrecipitationAmount"] }} mm </span>
+                        <span style="padding-right: 20px;">@{{ forecast_data[0]["mts-1-1-PrecipitationAmount"] }} mm </span>
 
                         <strong> Windspeed </strong>
-                        <span>@{{ forecast_data[0]["mts-1-1-windspeedms"] }} m/s </span>
+                        <span style="padding-right: 20px;">@{{ forecast_data[0]["mts-1-1-windspeedms"] }} m/s </span>
 
                         <strong> Pressure </strong>
-                        <span>@{{ forecast_data[0]["mts-1-1-pressure"] }} hPa </span>
+                        <span style="padding-right: 20px;">@{{ forecast_data[0]["mts-1-1-pressure"] }} hPa </span>
 
                         <strong> Humidity </strong>
-                        <span>@{{ forecast_data[0]["mts-1-1-humidity"] }} % </span>
+                        <span style="padding-right: 20px;">@{{ forecast_data[0]["mts-1-1-humidity"] }} % </span>
                     </div>
 
                     <v-data-table
