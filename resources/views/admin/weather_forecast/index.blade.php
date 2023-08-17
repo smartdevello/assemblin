@@ -19,9 +19,9 @@
                         Weather Forcast
                         <v-spacer></v-spacer>
                     </v-card-title>
-                    {{-- <v-data-table
+                    <v-data-table
                         :headers="headers"
-                        :items="elecpricedata"
+                        :items="forecast_data"
                         :items-per-page="20"
                         item-key="time"
                         :footer-props="{
@@ -33,7 +33,7 @@
                         }"
                     >
 
-                    </v-data-table> --}}
+                    </v-data-table>
                 </v-card>
             </template>
         </v-container>
@@ -55,7 +55,12 @@
                         align: 'start',
                         value: 'time',
                     },
-                    { text: 'Day-ahead Price (EUR/MWh)', value: 'value' },
+                    { text: 'Temperature', value: 'mts-1-1-temperature' },
+                    { text: 'PrecipitationAmount', value: 'mts-1-1-PrecipitationAmount' },
+                    { text: 'Windspeed', value: 'mts-1-1-windspeedms' },
+                    { text: 'Pressure', value: 'mts-1-1-pressure' },
+                    { text: 'Humidity', value: 'mts-1-1-humidity' },
+
                 ],
             },
             mounted: function() {
