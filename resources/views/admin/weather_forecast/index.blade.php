@@ -21,23 +21,23 @@
                     </v-card-title>
                     <v-card-item>
                         <v-card-subtitle>Temperature</v-card-subtitle>
-                        <v-card-text>{{ forecast_data[0]["mts-1-1-temperature"] }}</v-card-text>
+                        <v-card-text>@{{ forecast_data[0]["mts-1-1-temperature"] }}</v-card-text>
                     </v-card-item>
                     <v-card-item>
                         <v-card-subtitle>Rainfall</v-card-subtitle>
-                        <v-card-text>{{ forecast_data[0]["mts-1-1-PrecipitationAmount"] }}</v-card-text>
+                        <v-card-text>@{{ forecast_data[0]["mts-1-1-PrecipitationAmount"] }}</v-card-text>
                     </v-card-item>
                     <v-card-item>
                         <v-card-subtitle>Windspeed</v-card-subtitle>
-                        <v-card-text>{{ forecast_data[0]["mts-1-1-windspeedms"] }}</v-card-text>
+                        <v-card-text>@{{ forecast_data[0]["mts-1-1-windspeedms"] }}</v-card-text>
                     </v-card-item>
                     <v-card-item>
                         <v-card-subtitle>Pressure</v-card-subtitle>
-                        <v-card-text>{{ forecast_data[0]["mts-1-1-pressure"] }}</v-card-text>
+                        <v-card-text>@{{ forecast_data[0]["mts-1-1-pressure"] }}</v-card-text>
                     </v-card-item>
                     <v-card-item>
                         <v-card-subtitle>Humidity</v-card-subtitle>
-                        <v-card-text>{{ forecast_data[0]["mts-1-1-humidity"] }}</v-card-text>
+                        <v-card-text>@{{ forecast_data[0]["mts-1-1-humidity"] }}</v-card-text>
                     </v-card-item>
 
                     <v-data-table
