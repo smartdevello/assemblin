@@ -575,12 +575,12 @@ class LorawanController extends Controller
                 file_put_contents(sprintf("%X.json", $request_data['DevEUI']), json_encode($request->all()));
             }
             $data = [];
-            if ($request_data['DevEUI'] == "A81758FFFE04EF1F") {
+            if (strpos($request_data['DevEUI'], "A81758FFFE") === 0) {
                 $ELSYSdecoder = new ELSYSdecoder();
                 $hexvalue = $ELSYSdecoder->hexToBytes($request_data['payload_hex']);
-
-                $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);
-            } else if ($request_data['DevEUI'] == "47EABD48004A0044") {
+                $data = $ELSYSdecoder->DecodeElsysPayload($hexvalue);                
+            }
+            else if ($request_data['DevEUI'] == "47EABD48004A0044") {
                 $Solidusdecoder = new Solidusdecoder();
                 $hexvalue = $Solidusdecoder->hexToBytes($request_data['payload_hex']);
 
