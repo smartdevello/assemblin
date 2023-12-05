@@ -6,7 +6,7 @@ use DateTime;
 use phpseclib3\Net\SFTP;
 use stdClass;
 use TheSeer\Tokenizer\Exception;
-
+use Illuminate\Support\Facades\Storage;
 trait TrendDataTrait
 {
 
@@ -102,7 +102,8 @@ trait TrendDataTrait
                 //Write csv file again 
 
 
-                $handle = fopen(storage_path($local_storage_path), 'a');
+                // $handle = fopen(storage_path($local_storage_path), 'a');
+                $handle = fopen('php://temp', 'r+');
                 fputcsv($handle, ['MeterID', 'ValueDateTime', 'Value'], ';');
                 for ($i= 0; $i<count($csv_data)-1; $i++) {
                     $location_cnt = count($csv_data[0]) -2;
@@ -121,24 +122,32 @@ trait TrendDataTrait
                         fputcsv($handle, $line, ';');
                     }
                 }
+                rewind($handle);
+                // Read the contents of the CSV
+                $contents = "";
+                while (!feof($handle)) {
+                    $contents .= fread($handle, 8192);
+                }
+
                 fclose($handle);
+                Storage::disk('local')->put($local_storage_path, $contents);
+                return $csv_data;
+                // //now we send the file to ftp server
+                // $ftp_server = "194.142.156.67";
+                // $ftp_conn = ftp_connect($ftp_server) or die("Could not connect to $ftp_server");
 
-                //now we send the file to ftp server
-                $ftp_server = "194.142.156.67";
-                $ftp_conn = ftp_connect($ftp_server) or die("Could not connect to $ftp_server");
+                // $login = ftp_login($ftp_conn, "163098", "r8ZL~SRk&r?{SsG");
+                // if (!$login) {
+                //     die("Could not log in");
+                // }
 
-                $login = ftp_login($ftp_conn, "163098", "r8ZL~SRk&r?{SsG");
-                if (!$login) {
-                    die("Could not log in");
-                }
-
-                if (ftp_put($ftp_conn, $remote_storage_path, storage_path($local_storage_path))) {
-                    file_put_contents("error.log", $local_storage_path . " sent successfully" . PHP_EOL  , FILE_APPEND);
-                    return ['message' => $local_storage_path . " sent successfully"];
-                } else {
-                    file_put_contents("error.log", "Error uploading $local_storage_path." . PHP_EOL  , FILE_APPEND);  
-                    return ['message' => "Error uploading $local_storage_path"];
-                }
+                // if (ftp_put($ftp_conn, $remote_storage_path, storage_path($local_storage_path))) {
+                //     file_put_contents("error.log", $local_storage_path . " sent successfully" . PHP_EOL  , FILE_APPEND);
+                //     return ['message' => $local_storage_path . " sent successfully"];
+                // } else {
+                //     file_put_contents("error.log", "Error uploading $local_storage_path." . PHP_EOL  , FILE_APPEND);  
+                //     return ['message' => "Error uploading $local_storage_path"];
+                // }
                 
                 // return $csv_data;
             }
