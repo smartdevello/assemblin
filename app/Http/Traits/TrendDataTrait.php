@@ -56,7 +56,7 @@ trait TrendDataTrait
                 ];
                 file_put_contents("error.log", $local_storage_path . " sent successfully" . PHP_EOL  , FILE_APPEND);
             } else if (strpos($trend_group->trend_group_name, "Vesimittaukset") !== false) {
-                return $command;
+                
                 $file = fopen($local_folderpath . $local_filename, "r");
 
                 $index = 0;
@@ -69,6 +69,7 @@ trait TrendDataTrait
     
                 }
                 fclose($file);
+                return $csv_data;
                 //remove the file because we don't need it anymore                
                 if (file_exists(storage_path($local_storage_path))) {
                     unlink(storage_path($local_storage_path));
