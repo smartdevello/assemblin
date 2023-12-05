@@ -37,7 +37,7 @@ trait TrendDataTrait
             $to_time *= 1000;
 
             $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $local_folderpath . $local_filename;                      
-            $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
+            $cmdresult = $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
             shell_exec($command);
             $local_storage_path = str_replace(" ", "_", sprintf("%s/%s%s%s.csv", $date, $now, $trend_group->trend_group_name, $trend_group->controller_id));
 
@@ -58,7 +58,8 @@ trait TrendDataTrait
             } else if (strpos($trend_group->trend_group_name, "Vesimittaukset") !== false) {
                 return [
                     'filepath' => storage_path($local_storage_path),
-                    'command' => $command
+                    'command' => $command,
+                    'cmdresult' => $cmdresult
                 ];
                 $file = fopen(storage_path($local_storage_path), "r");
 
