@@ -153,32 +153,33 @@ trait TrendDataTrait
                 }
 
             } else if (strpos($trend_group->trend_group_name, "Vesimittaukset") !== false) {
-                // try{
-                //     $currentTime = new DateTime('now');
-                //     $filename = sprintf("%s_", $trend_group->location_name) . $currentTime->format('Y-m-d-H-i-s') . '.csv';
+                try{
+                    $currentTime = new DateTime('now');
+                    $filename = sprintf("%s_", $trend_group->location_name) . $currentTime->format('Y-m-d-H-i-s') . '.csv';
     
-                //     $handle = fopen($filename, 'a');
-                //     fputcsv($handle, ['MeterID', 'ValueDateTime', 'Value'], ';');
-                //     for ($i= 0; $i<count($csv_data)-1; $i++) {
-                //         $location_cnt = count($csv_data) -2;
+                    $handle = fopen($filename, 'a');
+                    fputcsv($handle, ['MeterID', 'ValueDateTime', 'Value'], ';');
+                    for ($i= 0; $i<count($csv_data)-1; $i++) {
+                        $location_cnt = count($csv_data[0]) -2;
                         
-                //         for ($j = 0; $j<$location_cnt; $j++) {
-                //             $line= [];
-                //             //add meterID
-                //             $line[] = $csv_data[0][$j + 2];
-                //             //add ValueDateTime
-                            
-                //             $dateObj = DateTime::createFromFormat($csv_data[$i+1][0] . $csv_data[$i+1][1], 'j.n.YH:i:s');
-                //             $line[] = $dateObj->format('Y-m-d\TH:i:s\Z');
-                //             //add Value
-                //             $line[] = str_replace(",", ".", $csv_data[$i+1][$j + 2]);
-                //             fputcsv($handle, $line, ';');
-                //         }
-                //     }
-                //     fclose($handle);
-                // }catch(Exception $e) {
+                        for ($j = 0; $j<$location_cnt-2; $j++) {
+                            $line= [];
+                            //add meterID
+                            $line[] = $csv_data[0][$j + 2];
+                            //add ValueDateTime
+                            // 2.12.2023 19:10:00
+                            echo $csv_data[$i+1][0] . ' ' .  $csv_data[$i+1][1];
+                            $dateObj = DateTime::createFromFormat('j.n.Y H:i:s', $csv_data[$i+1][0] . ' ' .  $csv_data[$i+1][1]);
+                            $line[] = $dateObj->format('Y-m-d\TH:i:s\Z');
+                            //add Value
+                            $line[] = str_replace(",", ".", $csv_data[$i+1][$j + 2]);
+                            fputcsv($handle, $line, ';');
+                        }
+                    }
+                    fclose($handle);
+                }catch(Exception $e) {
 
-                // }
+                }
 
             }   
 
