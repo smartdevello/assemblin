@@ -36,9 +36,9 @@ trait TrendDataTrait
             $from_time *= 1000;
             $to_time *= 1000;
 
-            $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $local_folderpath . $local_filename . " 2>&1";
+            $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $local_folderpath . $local_filename;
             $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
-            $cmdresult = shell_exec($command);
+            exec($command, $output, $return_var);
             $local_storage_path = str_replace(" ", "_", sprintf("%s/%s%s%s.csv", $date, $now, $trend_group->trend_group_name, $trend_group->controller_id));
 
 
@@ -59,7 +59,8 @@ trait TrendDataTrait
                 return [
                     'filepath' => storage_path($local_storage_path),
                     'command' => $command,
-                    'cmdresult' => $cmdresult
+                    'output' => $output,
+                    'return_var' => $return_var
                 ];
                 $file = fopen(storage_path($local_storage_path), "r");
 
@@ -177,7 +178,7 @@ trait TrendDataTrait
             if (file_exists($filename)) {
                 unlink($filename);
             }
-            shell_exec($command);
+            exec($command, $output, $return_var);
             $time_taken = microtime(true) - $starttime;
 
             $file = fopen($filename, "r");
