@@ -96,9 +96,6 @@ trait TrendDataTrait
                     unlink($filename);
                 }
 
-
-                return $csv_data;
-
                 $local_storage_path = sprintf("%s/%s_%s_%s.csv", $date, $trend_group->location_name, $trend_group->trend_group_name, $currentTime->format('Y-m-d-H-i-s'));
                 $remote_storage_path = sprintf("%s_%s_%s.csv", $trend_group->location_name, $trend_group->trend_group_name, $currentTime->format('Y-m-d-H-i-s'));
 
