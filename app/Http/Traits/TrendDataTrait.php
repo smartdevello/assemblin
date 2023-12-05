@@ -112,13 +112,13 @@ trait TrendDataTrait
 
                 if (ftp_put($ftp_conn, $remote_storage_path, storage_path($local_storage_path))) {
                     file_put_contents("error.log", $local_storage_path . " sent successfully" . PHP_EOL  , FILE_APPEND);
-                    $csv_data[] = ['message' => $local_storage_path . " sent successfully"];
+                    return ['message' => $local_storage_path . " sent successfully"];
                 } else {
                     file_put_contents("error.log", "Error uploading $local_storage_path." . PHP_EOL  , FILE_APPEND);  
-                    $csv_data[] = ['message' => "Error uploading $local_storage_path"];
+                    return ['message' => "Error uploading $local_storage_path"];
                 }
                 
-                return $csv_data;
+                // return $csv_data;
             }
 
         } catch (Exception $ex) {
