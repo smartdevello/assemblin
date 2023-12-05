@@ -153,6 +153,9 @@ trait TrendDataTrait
                 }
 
             } else if (strpos($trend_group->trend_group_name, "Vesimittaukset") !== false) {
+                $currentTime = new DateTime('now');
+                $filename = sprintf("%s_", $trend_group->location_name) . $currentTime->format('Y-m-d-H-i-s') . '.csv';
+
                 $handle = fopen($filename, 'a');
                 fputcsv($handle, ['MeterID', 'ValueDateTime', 'Value'], ';');
                 for ($i= 0; $i<count($csv_data)-1; $i++) {
