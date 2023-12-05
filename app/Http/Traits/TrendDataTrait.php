@@ -7,6 +7,7 @@ use phpseclib3\Net\SFTP;
 use stdClass;
 use TheSeer\Tokenizer\Exception;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 trait TrendDataTrait
 {
 
@@ -54,7 +55,7 @@ trait TrendDataTrait
                 return [
                     'message' => $local_storage_path . " sent successfully"
                 ];
-                file_put_contents("error.log", $local_storage_path . " sent successfully" . PHP_EOL  , FILE_APPEND);
+
             } else if (strpos($trend_group->trend_group_name, "Vesimittaukset") !== false) {
 
                 $to_time = time();
@@ -73,6 +74,9 @@ trait TrendDataTrait
                 $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $filename;
                 $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
 
+                return [
+                    'command' => $command
+                ];
                 if (file_exists($filename)) {
                     unlink($filename);
                 }
@@ -140,20 +144,17 @@ trait TrendDataTrait
                     die("Could not log in");
                 }
 
-                if (ftp_put($ftp_conn, $remote_storage_path, storage_path('app/' . $local_storage_path))) {
-                    file_put_contents("error.log", storage_path('app/' . $local_storage_path). " sent successfully" . PHP_EOL  , FILE_APPEND);
+                if (ftp_put($ftp_conn, $remote_storage_path, storage_path('app/' . $local_storage_path))) {                   
                     return ['message' => storage_path('app/' . $local_storage_path) . " sent successfully"];
                 } else {
-                    file_put_contents("error.log",  sprintf("Error uploading %s", storage_path('app/' . $local_storage_path)) . PHP_EOL  , FILE_APPEND);  
                     return ['message' => sprintf("Error uploading %s", storage_path('app/' . $local_storage_path))];
                 }
                 
                 return $csv_data;
             }
 
-        } catch (Exception $ex) {
-
-            file_put_contents("error.log", $ex->getMessage() . PHP_EOL , FILE_APPEND);
+        } catch (Exception $ex) {            
+            Log::error($ex->getMessage());
             return [
                 'message' => 'Something went wrong ' . $ex->getMessage()
             ];
