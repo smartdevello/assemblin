@@ -43,10 +43,10 @@ trait TrendDataTrait
             $sftp->login('LahdenMalski_Deos_Metrix', 'D!7kbaBA4U-sKhU7');
             $sftp->put($remote_storage_path, file_get_contents(storage_path($local_storage_path)));
 
-            file_put_contents("error.log", $local_storage_path . " sent successfully", FILE_APPEND);
+            file_put_contents("error.log", $local_storage_path . " sent successfully" . PHP_EOL  , FILE_APPEND);
         } catch (Exception $ex) {
 
-            file_put_contents("error.log", $ex->getMessage(), FILE_APPEND);
+            file_put_contents("error.log", $ex->getMessage() . PHP_EOL , FILE_APPEND);
 
         }
 
@@ -152,7 +152,27 @@ trait TrendDataTrait
                     curl_close($curl);
                 }
 
-            }
+            } else if (strpos($trend_group->trend_group_name, "Vesimittaukset") !== false) {
+                $handle = fopen($filename, 'a');
+                fputcsv($handle, ['MeterID', 'ValueDateTime', 'Value'], ';');
+                for ($i= 0; $i<count($csv_data)-1; $i++) {
+                    $location_cnt = count($csv_data) -2;
+                    
+                    for ($j = 0; $j<$location_cnt; $j++) {
+                        $line= [];
+                        //add meterID
+                        $line[] = $csv_data[0][$j + 2];
+                        //add ValueDateTime
+                        
+                        $dateObj = DateTime::createFromFormat($csv_data[$i+1][0] . $csv_data[$i+1][1], 'j.n.YH:i:s');
+                        $line[] = $dateObj->format('Y-m-d\TH:i:s\Z');
+                        //add Value
+                        $line[] = str_replace(",", ".", $csv_data[$i+1][$j + 2]);
+                        fputcsv($handle, $line, ';');
+                    }
+                }
+                fclose($handle);
+            }   
 
             $output = [];
             // foreach($csv_data as $index => $arr)
