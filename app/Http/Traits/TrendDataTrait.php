@@ -114,7 +114,6 @@ trait TrendDataTrait
                         $line[] = $csv_data[0][$j + 2];
                         //add ValueDateTime
                         // 2.12.2023 19:10:00
-                        echo $csv_data[$i+1][0] . ' ' .  $csv_data[$i+1][1];
                         $dateObj = DateTime::createFromFormat('j.n.Y H:i:s', $csv_data[$i+1][0] . ' ' .  $csv_data[$i+1][1]);
                         $line[] = $dateObj->format('Y-m-d\TH:i:s\Z');
                         //add Value
@@ -131,25 +130,25 @@ trait TrendDataTrait
 
                 fclose($handle);
                 Storage::disk('local')->put($local_storage_path, $contents);
-                return $csv_data;
-                // //now we send the file to ftp server
-                // $ftp_server = "194.142.156.67";
-                // $ftp_conn = ftp_connect($ftp_server) or die("Could not connect to $ftp_server");
 
-                // $login = ftp_login($ftp_conn, "163098", "r8ZL~SRk&r?{SsG");
-                // if (!$login) {
-                //     die("Could not log in");
-                // }
+                //now we send the file to ftp server
+                $ftp_server = "194.142.156.67";
+                $ftp_conn = ftp_connect($ftp_server) or die("Could not connect to $ftp_server");
 
-                // if (ftp_put($ftp_conn, $remote_storage_path, storage_path($local_storage_path))) {
-                //     file_put_contents("error.log", $local_storage_path . " sent successfully" . PHP_EOL  , FILE_APPEND);
-                //     return ['message' => $local_storage_path . " sent successfully"];
-                // } else {
-                //     file_put_contents("error.log", "Error uploading $local_storage_path." . PHP_EOL  , FILE_APPEND);  
-                //     return ['message' => "Error uploading $local_storage_path"];
-                // }
+                $login = ftp_login($ftp_conn, "163098", "r8ZL~SRk&r?{SsG");
+                if (!$login) {
+                    die("Could not log in");
+                }
+
+                if (ftp_put($ftp_conn, $remote_storage_path, storage_path('app/' . $local_storage_path))) {
+                    file_put_contents("error.log", storage_path('app/' . $local_storage_path). " sent successfully" . PHP_EOL  , FILE_APPEND);
+                    return ['message' => storage_path('app/' . $local_storage_path) . " sent successfully"];
+                } else {
+                    file_put_contents("error.log",  sprintf("Error uploading %s", storage_path('app/' . $local_storage_path)) . PHP_EOL  , FILE_APPEND);  
+                    return ['message' => sprintf("Error uploading %s", storage_path('app/' . $local_storage_path))];
+                }
                 
-                // return $csv_data;
+                return $csv_data;
             }
 
         } catch (Exception $ex) {
