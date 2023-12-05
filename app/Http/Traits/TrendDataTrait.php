@@ -56,7 +56,10 @@ trait TrendDataTrait
                 ];
                 file_put_contents("error.log", $local_storage_path . " sent successfully" . PHP_EOL  , FILE_APPEND);
             } else if (strpos($trend_group->trend_group_name, "Vesimittaukset") !== false) {
-                
+                return [
+                    'filepath' => storage_path($local_storage_path),
+                    'command' => $command
+                ];
                 $file = fopen(storage_path($local_storage_path), "r");
 
                 $index = 0;
