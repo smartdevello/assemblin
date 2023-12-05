@@ -18,32 +18,32 @@ trait TrendDataTrait
             $currentTime = new DateTime('now');
             $date = $currentTime->format('Y_m_d');
             $now =$currentTime->format('Y_m_d_H_i_');
-            // $date = date('Y_m_d', time());
-            // $now =   date('Y_m_d_H_i_', time());
-
-            $local_filename = str_replace(" ", "_", sprintf("%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id));
-
-            $local_folderpath = sprintf("storage/%s/", $date);
-
-            if (! file_exists($local_folderpath)) {
-                mkdir($local_folderpath, 0777, true);
-            }
-
-            $to_time = time();
-            $from_time = $to_time - $trend_group->query_period * 60;
-
-            //Convet it to milisecond;
-            $from_time *= 1000;
-            $to_time *= 1000;
-
-            $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $local_folderpath . $local_filename;
-            $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
-            exec($command, $output, $return_var);
-            $local_storage_path = str_replace(" ", "_", sprintf("%s/%s%s%s.csv", $date, $now, $trend_group->trend_group_name, $trend_group->controller_id));
 
 
             if (strpos($trend_group->trend_group_name, "G_MALSKI_VAK") !== false) {
-    
+
+                // $date = date('Y_m_d', time());
+                // $now =   date('Y_m_d_H_i_', time());
+
+                $local_filename = str_replace(" ", "_", sprintf("%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id));
+
+                $local_folderpath = sprintf("storage/%s/", $date);
+
+                if (! file_exists($local_folderpath)) {
+                    mkdir($local_folderpath, 0777, true);
+                }
+
+                $to_time = time();
+                $from_time = $to_time - $trend_group->query_period * 60;
+
+                //Convet it to milisecond;
+                $from_time *= 1000;
+                $to_time *= 1000;
+
+                $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $local_folderpath . $local_filename;
+                $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
+                exec($command, $output, $return_var);
+                $local_storage_path = str_replace(" ", "_", sprintf("%s/%s%s%s.csv", $date, $now, $trend_group->trend_group_name, $trend_group->controller_id));
                 // $sftp = Storage::disk('sftp');
 
                 $remote_storage_path = sprintf("%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id);
@@ -56,14 +56,31 @@ trait TrendDataTrait
                 ];
                 file_put_contents("error.log", $local_storage_path . " sent successfully" . PHP_EOL  , FILE_APPEND);
             } else if (strpos($trend_group->trend_group_name, "Vesimittaukset") !== false) {
-                return [
-                    'filepath' => storage_path($local_storage_path),
-                    'command' => $command,
-                    'output' => $output,
-                    'return_var' => $return_var
-                ];
-                $file = fopen(storage_path($local_storage_path), "r");
 
+                $to_time = time();
+                $from_time = $to_time - $trend_group->query_period * 60;
+                $filename = sprintf("%s_%s.csv", $trend_group->trend_group_name, date_format(new DateTime(), 'His'));
+                $csv_data = [];
+        
+                //Convet it to milisecond;
+                $from_time *= 1000;
+                $to_time *= 1000;
+                $httpcode = 0;
+        
+                $starttime = microtime(true);
+                $time_taken = 0;
+        
+                $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $filename;
+                $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
+
+                if (file_exists($filename)) {
+                    unlink($filename);
+                }
+                exec($command, $output, $return_var);
+                $time_taken = microtime(true) - $starttime;
+    
+                $file = fopen($filename, "r");
+    
                 $index = 0;
                 while (! feof($file)) {
                     $index++;
@@ -74,11 +91,13 @@ trait TrendDataTrait
     
                 }
                 fclose($file);
-                return $csv_data;
-                //remove the file because we don't need it anymore                
-                if (file_exists(storage_path($local_storage_path))) {
-                    unlink(storage_path($local_storage_path));
+    
+                if (file_exists($filename)) {
+                    unlink($filename);
                 }
+
+
+                return $csv_data;
 
                 $local_storage_path = sprintf("%s/%s_%s_%s.csv", $date, $trend_group->location_name, $trend_group->trend_group_name, $currentTime->format('Y-m-d-H-i-s'));
                 $remote_storage_path = sprintf("%s_%s_%s.csv", $trend_group->location_name, $trend_group->trend_group_name, $currentTime->format('Y-m-d-H-i-s'));
