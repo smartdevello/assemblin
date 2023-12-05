@@ -13,8 +13,14 @@ trait TrendDataTrait
     public function receive_csv_and_savefile_sendto_external_ftp($trend_group)
     {
         try {
-            $now = date('Y_m_d_H_i_', time());
-            $date = date('Y_m_d', time());
+            
+            
+            $currentTime = new DateTime('now');
+            $date = $currentTime->format('Y_m_d');
+            $now =$currentTime->format('Y_m_d_H_i_');
+            // $date = date('Y_m_d', time());
+            // $now =   date('Y_m_d_H_i_', time());
+
             $local_filename = str_replace(" ", "_", sprintf("%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id));
 
             $local_folderpath = sprintf("storage/%s/", $date);
@@ -33,21 +39,94 @@ trait TrendDataTrait
             $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $local_folderpath . $local_filename;
             $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
             shell_exec($command);
-
-            // $sftp = Storage::disk('sftp');
             $local_storage_path = str_replace(" ", "_", sprintf("%s/%s%s%s.csv", $date, $now, $trend_group->trend_group_name, $trend_group->controller_id));
-            $remote_storage_path = sprintf("%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id);
 
-            // $sftp->put($remote_storage_path, file_get_contents(storage_path($local_storage_path)));
-            $sftp = new SFTP('sftp.granlund.fi');
-            $sftp->login('LahdenMalski_Deos_Metrix', 'D!7kbaBA4U-sKhU7');
-            $sftp->put($remote_storage_path, file_get_contents(storage_path($local_storage_path)));
 
-            file_put_contents("error.log", $local_storage_path . " sent successfully" . PHP_EOL  , FILE_APPEND);
+            if (strpos($trend_group->trend_group_name, "G_MALSKI_VAK") !== false) {
+    
+                // $sftp = Storage::disk('sftp');
+
+                $remote_storage_path = sprintf("%s%s%s.csv", $now, $trend_group->trend_group_name, $trend_group->controller_id);
+                // $sftp->put($remote_storage_path, file_get_contents(storage_path($local_storage_path)));
+                $sftp = new SFTP('sftp.granlund.fi');
+                $sftp->login('LahdenMalski_Deos_Metrix', 'D!7kbaBA4U-sKhU7');
+                $sftp->put($remote_storage_path, file_get_contents(storage_path($local_storage_path)));
+                return [
+                    'message' => $local_storage_path . " sent successfully"
+                ];
+                file_put_contents("error.log", $local_storage_path . " sent successfully" . PHP_EOL  , FILE_APPEND);
+            } else if (strpos($trend_group->trend_group_name, "Vesimittaukset") !== false) {
+                
+                $file = fopen(storage_path($local_storage_path), "r");
+
+                $index = 0;
+                while (! feof($file)) {
+                    $index++;
+                    $row = fgetcsv($file, 0, ';');
+                    if (is_array($row)) {
+                        $csv_data[] = $row;
+                    }
+    
+                }
+                fclose($file);
+                //remove the file because we don't need it anymore                
+                if (file_exists(storage_path($local_storage_path))) {
+                    unlink(storage_path($local_storage_path));
+                }
+
+                $local_storage_path = sprintf("%s/%s_%s_%s.csv", $date, $trend_group->location_name, $trend_group->trend_group_name, $currentTime->format('Y-m-d-H-i-s'));
+                $remote_storage_path = sprintf("%s_%s_%s.csv", $trend_group->location_name, $trend_group->trend_group_name, $currentTime->format('Y-m-d-H-i-s'));
+
+                //Write csv file again 
+
+
+                $handle = fopen(storage_path($local_storage_path), 'a');
+                fputcsv($handle, ['MeterID', 'ValueDateTime', 'Value'], ';');
+                for ($i= 0; $i<count($csv_data)-1; $i++) {
+                    $location_cnt = count($csv_data[0]) -2;
+                    
+                    for ($j = 0; $j<$location_cnt-2; $j++) {
+                        $line= [];
+                        //add meterID
+                        $line[] = $csv_data[0][$j + 2];
+                        //add ValueDateTime
+                        // 2.12.2023 19:10:00
+                        echo $csv_data[$i+1][0] . ' ' .  $csv_data[$i+1][1];
+                        $dateObj = DateTime::createFromFormat('j.n.Y H:i:s', $csv_data[$i+1][0] . ' ' .  $csv_data[$i+1][1]);
+                        $line[] = $dateObj->format('Y-m-d\TH:i:s\Z');
+                        //add Value
+                        $line[] = str_replace(",", ".", $csv_data[$i+1][$j + 2]);
+                        fputcsv($handle, $line, ';');
+                    }
+                }
+                fclose($handle);
+
+                //now we send the file to ftp server
+                $ftp_server = "194.142.156.67";
+                $ftp_conn = ftp_connect($ftp_server) or die("Could not connect to $ftp_server");
+
+                $login = ftp_login($ftp_conn, "163098", "r8ZL~SRk&r?{SsG");
+                if (!$login) {
+                    die("Could not log in");
+                }
+
+                if (ftp_put($ftp_conn, $remote_storage_path, storage_path($local_storage_path))) {
+                    file_put_contents("error.log", $local_storage_path . " sent successfully" . PHP_EOL  , FILE_APPEND);
+                    $csv_data[] = ['message' => $local_storage_path . " sent successfully"];
+                } else {
+                    file_put_contents("error.log", "Error uploading $local_storage_path." . PHP_EOL  , FILE_APPEND);  
+                    $csv_data[] = ['message' => "Error uploading $local_storage_path"];
+                }
+                
+                return $csv_data;
+            }
+
         } catch (Exception $ex) {
 
             file_put_contents("error.log", $ex->getMessage() . PHP_EOL , FILE_APPEND);
-
+            return [
+                'message' => 'Something went wrong ' . $ex->getMessage()
+            ];
         }
 
     }
@@ -152,37 +231,7 @@ trait TrendDataTrait
                     curl_close($curl);
                 }
 
-            } else if (strpos($trend_group->trend_group_name, "Vesimittaukset") !== false) {
-                try{
-                    $currentTime = new DateTime('now');
-                    $filename = sprintf("%s_", $trend_group->location_name) . $currentTime->format('Y-m-d-H-i-s') . '.csv';
-    
-                    $handle = fopen($filename, 'a');
-                    fputcsv($handle, ['MeterID', 'ValueDateTime', 'Value'], ';');
-                    for ($i= 0; $i<count($csv_data)-1; $i++) {
-                        $location_cnt = count($csv_data[0]) -2;
-                        
-                        for ($j = 0; $j<$location_cnt-2; $j++) {
-                            $line= [];
-                            //add meterID
-                            $line[] = $csv_data[0][$j + 2];
-                            //add ValueDateTime
-                            // 2.12.2023 19:10:00
-                            echo $csv_data[$i+1][0] . ' ' .  $csv_data[$i+1][1];
-                            $dateObj = DateTime::createFromFormat('j.n.Y H:i:s', $csv_data[$i+1][0] . ' ' .  $csv_data[$i+1][1]);
-                            $line[] = $dateObj->format('Y-m-d\TH:i:s\Z');
-                            //add Value
-                            $line[] = str_replace(",", ".", $csv_data[$i+1][$j + 2]);
-                            fputcsv($handle, $line, ';');
-                        }
-                    }
-                    fclose($handle);
-                }catch(Exception $e) {
-
-                }
-
-            }   
-
+            }
             $output = [];
             // foreach($csv_data as $index => $arr)
             // {

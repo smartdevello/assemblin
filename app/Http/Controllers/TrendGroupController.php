@@ -214,7 +214,10 @@ class TrendGroupController extends Controller
                 'error' => "The Trend group does not exist on DB."
             ], 404);
         }
-        $output = $this->receive_csv_save_db($trend_group);
+        if ($trend_group->send_to_ftp == false)
+            $output = $this->receive_csv_save_db($trend_group);
+        else 
+            $output = $this->receive_csv_and_savefile_sendto_external_ftp($trend_group);
         return response()->json($output);
     }
 
