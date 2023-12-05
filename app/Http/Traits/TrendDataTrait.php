@@ -65,11 +65,9 @@ trait TrendDataTrait
         
                 //Convet it to milisecond;
                 $from_time *= 1000;
-                $to_time *= 1000;
-                $httpcode = 0;
-        
+                $to_time *= 1000;        
                 $starttime = microtime(true);
-                $time_taken = 0;
+
         
                 $format = "lynx --dump 'http://172.21.8.245/COSMOWEB?TYP=REGLER&MSG=GET_TRENDVIEW_DOWNLOAD_CVS&COMPUTERNR=THIS&REGLERSTRANG=%s&REZEPT=%s&FROMTIME=%d&TOTIME=%d&' > " . $filename;
                 $command = sprintf($format, $trend_group->controller_id, $trend_group->trend_group_name, $from_time, $to_time);
