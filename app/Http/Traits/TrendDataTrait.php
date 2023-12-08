@@ -56,7 +56,7 @@ trait TrendDataTrait
                     'message' => $local_storage_path . " sent successfully"
                 ];
 
-            } else if (strpos($trend_group->trend_group_name, "Vesimittaukset") !== false) {
+            } else if (strpos($trend_group->trend_group_name, "Vesimittaukset") !== false || strpos($trend_group->trend_group_name, "Sahkomittaukset") !== false) {
 
                 $to_time = time();
                 $from_time = $to_time - $trend_group->query_period * 60;

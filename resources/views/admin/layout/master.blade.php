@@ -82,6 +82,11 @@
             title: 'Weather Forecast',
             icon: 'mdi-weather-lightning-rainy',
             link: prefix_link + '/weather_forecast'
+        }, 
+        {
+            title: 'Kiona Endpoints',
+            icon: 'mdi-google-circles-extended',
+            link: prefix_link + '/kiona_endpoints'
         }
     ];
 </script>
