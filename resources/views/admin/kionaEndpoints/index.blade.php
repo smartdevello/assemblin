@@ -78,25 +78,9 @@
                             }"
                         >
 
-                            <template v-slot:item.name="{ item }">
-
-                                <v-text-field v-model="item.name" solo></v-text-field>
-
-                            </template>
-
-
-                            <template v-slot:item.value="{ item }">
-
-                                <v-text-field v-model="item.value" solo></v-text-field>
-
-                            </template>
-
-
-
-
                             <template v-slot:item.sendToKiona="{ item }">
                                 <v-simple-checkbox
-                                v-model="item.sendToKiona"
+                                    v-model="item.sendToKiona"
                                 ></v-simple-checkbox>
                             </template>
 
@@ -142,7 +126,7 @@
     <script>
         var token = '{!! csrf_token() !!}';
         var sensors_raw = ( <?php echo json_encode($sensors); ?> );
-
+        console.log('sensors_raw', sensors_raw);
         for (let sensor of sensors_raw) {
             if (sensor.visibility == 1) sensor.visibility = true;
             else sensor.visibility = false;
@@ -221,85 +205,7 @@
                 changeContoller: function (controller_id, sensor_id) {
 
                 },
-                changePoint: function(point_id, sensor_id) {
 
-                    for (let sensor of this.sensors) {
-                        if (sensor.id != sensor_id && sensor.point_id == point_id) {
-                            sensor.point_id = null;
-                            sensor.controller_id = null;
-                            sensor.area_id = null;
-                        }
-                        if (sensor.id == sensor_id) {
-                            for (let point of this.points) {
-                                if (point.id == sensor.point_id) {
-                                    sensor.controller_id = point.controller_id;
-                                    sensor.area_id = point.area_id;
-                                }
-                            }
-                        }
-                    }
-
-                },
-
-                sendDatatoAssemblin: function(){
-                    let submitdata = [];
-                    for (let sensor of this.sensors)
-                    {
-                        if (sensor.point_id)
-                        {
-                            point = this.points.find(point => point.id == sensor.point_id);
-                            submitdata.push({
-                                "id": point.name,
-                                "value": String(sensor.value)
-                            });
-                        }
-                    }
-
-                    var settings = {
-                        "url": base_url + "/point/writePointsbyid",
-                        "method": "POST",
-                        "timeout": 0,
-                        "headers": {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": token,
-                        },
-                        "data": JSON.stringify(submitdata),
-                    };
-
-                    // console.log(this.send_data_url);
-                    // console.log(submitdata);
-
-                    $.ajax(settings).done(function(response) {
-                        main_vm.is_relation_updating = false;
-                            toastr.options = {
-                                "closeButton": false,
-                                "debug": false,
-                                "newestOnTop": false,
-                                "progressBar": false,
-                                "positionClass": "toast-bottom-center",
-                                "preventDuplicates": false,
-                                "onclick": null,
-                                "showDuration": "300",
-                                "hideDuration": "1000",
-                                "timeOut": "5000",
-                                "extendedTimeOut": "1000",
-                                "showEasing": "swing",
-                                "hideEasing": "linear",
-                                "showMethod": "fadeIn",
-                                "hideMethod": "fadeOut"
-                            };
-                            toastr.success('Updated Successfully');
-                            console.log(response);
-                    }).fail(function(jqXHR, textStatus, errorThrown) {
-                            console.log(jqXHR);
-                            main_vm.is_relation_updating = false;
-                            toastr.error('Something went wrong');
-                            console.log(jqXHR);
-                            console.log(textStatus);
-                            console.log(errorThrown);
-                    });
-
-                },
                 update_oldData: function(){
                     this.old_sensors = [];
                     for (const sensor of this.sensors) {
@@ -319,14 +225,11 @@
                                 "visibility" : sensor.visibility
                         });
                     }
-                    this.active_sensors = this.sensors.filter( item => item.visibility === true);
-                    this.hidden_sensors = this.sensors.filter( item => item.visibility === false);
 
                 },
                 update_All: function(){
                     this.is_relation_updating = true;
                     let submitdata = [];
-                    this.sensors = [...this.active_sensors , ...this.hidden_sensors];
                     this.sensors.sort((a, b) =>  a.id - b.id );
                     this.old_sensors.sort((a, b) => a.id - b.id  );
 
@@ -370,8 +273,7 @@
                     };
                     var update_raw = this.update_raw;
                     $.ajax(settings).done(function(response) {
-                            // setTimeout(main_vm.sendDatatoAssemblin, 500);
-                            // main_vm.sendDatatoAssemblin();
+
                             main_vm.is_relation_updating = false;
                             toastr.options = {
                                 "closeButton": false,
@@ -402,100 +304,7 @@
                         });
 
                 },
-                update_relations: function() {
-                    let data = [];
-                    let point_data = [];
-                    for (device of this.devices.data) {
-                        for (observation of device.latestObservations) {
-                            if (observation.point_name !== null && observation.point_name !== undefined) {
-                                let value = observation.manual_value ? String(observation.manual_value) : String(observation.value);
-                                data.push({
-                                    "id": observation.point_name,
-                                    "value": value
-                                });
-                                point_data.push({
-                                    "deviceId": device['deviceId'],
-                                    "variable": observation['variable'],
-                                    "point_name": observation.point_name
-                                });
-                                this.is_relation_updating = true;
 
-                            }
-                        }
-                    }
-
-                    this.update_DEOS_point_name(point_data);
-
-                    if (data.length > 0) {
-
-                        var settings = {
-                            "url": base_url + "/points/writepointsbyid",
-                            "method": "PUT",
-                            "timeout": 0,
-                            "headers": {
-                                "Content-Type": "application/json",
-                                "X-CSRF-TOKEN": token,
-                            },
-                            "data": JSON.stringify(data),
-                        };
-                        let sensor = {};
-                        for (row of data) {
-                            if (sensor[row['id']] === undefined) sensor[row['id']] = 1;
-                            else sensor[row['id']]++;
-                        }
-                        for (item in sensor) {
-                            if (item == "") continue;
-                            if (sensor[item] > 1) {
-                                main_vm.is_relation_updating = false;
-                                toastr.options = {
-                                    "closeButton": false,
-                                    "debug": false,
-                                    "newestOnTop": false,
-                                    "progressBar": false,
-                                    "positionClass": "toast-bottom-center",
-                                    "preventDuplicates": false,
-                                    "onclick": null,
-                                    "showDuration": "300",
-                                    "hideDuration": "1000",
-                                    "timeOut": "5000",
-                                    "extendedTimeOut": "1000",
-                                    "showEasing": "swing",
-                                    "hideEasing": "linear",
-                                    "showMethod": "fadeIn",
-                                    "hideMethod": "fadeOut"
-                                };
-                                toastr.error(item + ' is linked more than 2 sensors, Please check again.');
-                                return;
-                            }
-                        }
-
-                        $.ajax(settings).done(function(response) {
-                            main_vm.is_relation_updating = false;
-                            toastr.options = {
-                                "closeButton": false,
-                                "debug": false,
-                                "newestOnTop": false,
-                                "progressBar": false,
-                                "positionClass": "toast-bottom-center",
-                                "preventDuplicates": false,
-                                "onclick": null,
-                                "showDuration": "300",
-                                "hideDuration": "1000",
-                                "timeOut": "5000",
-                                "extendedTimeOut": "1000",
-                                "showEasing": "swing",
-                                "hideEasing": "linear",
-                                "showMethod": "fadeIn",
-                                "hideMethod": "fadeOut"
-                            };
-                            toastr.success('Updated Successfully');
-
-                        }).fail(function(jqXHR, textStatus, errorThrown) {
-                            main_vm.is_relation_updating = false;
-                            toastr.error('Something went wrong');
-                        });
-                    }
-                }
             },
             computed: {
 
