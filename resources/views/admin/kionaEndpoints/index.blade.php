@@ -92,9 +92,6 @@
                                     <v-simple-checkbox  v-model="item.sendToKiona"  ></v-simple-checkbox>
                                 </template>
 
-                                <template v-slot:item.visibility="{item}">
-                                    <v-simple-checkbox   v-model="item.visibility" ></v-simple-checkbox>
-                                </template>
 
                                 <template v-slot:expanded-item="{ headers, item }">
                                     <v-simple-table>
@@ -143,9 +140,6 @@
                                 <v-simple-checkbox  v-model="item.sendToKiona"  ></v-simple-checkbox>
                             </template>
 
-                            <template v-slot:item.visibility="{item}">
-                                <v-simple-checkbox   v-model="item.visibility" ></v-simple-checkbox>
-                            </template>
 
                             <template v-slot:expanded-item="{ headers, item }">
                                 <v-simple-table>
@@ -193,13 +187,7 @@
         console.log('sensors_raw', sensors_raw);
         for (let sensor of sensors_raw) {
             if (sensor.sendToKiona == 1) sensor.sendToKiona = true;
-            else sensor.sendToKiona = false;
-
-            if (sensor.visibility == 1) sensor.visibility = true;
-            else sensor.visibility = false;
-
-
-            
+            else sensor.sendToKiona = false;            
         }
 
         const main_vm = new Vue({
@@ -231,7 +219,6 @@
                     { text: 'Type', value: 'type' },
                     { text: 'Latest value', value: 'value' },
                     { text: 'SendtoKiona', value: 'sendToKiona' },
-                    { text: 'Visible', value: 'visibility' },
 
                 ],
                 search: '',
@@ -273,7 +260,6 @@
                         this.old_sensors.push({
                                 "id" : sensor.id,
                                 "name" : sensor.name,
-                                "visibility" : sensor.visibility,
                                 "sendToKiona" : sensor.sendToKiona,
                         });
                     }
@@ -294,7 +280,6 @@
                             submitdata.push({
                                 "id" : sensor.id,
                                 "name" : sensor.name,
-                                "visibility" : sensor.visibility,
                                 "sendToKiona" : sensor.sendToKiona,
                             });
                         }
