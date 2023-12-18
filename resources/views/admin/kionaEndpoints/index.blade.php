@@ -62,10 +62,10 @@
                     </v-card-title>
                     <v-tabs v-model="tab">
                         <v-tab>
-                            Active
+                            Set To Kiona
                         </v-tab>
                         <v-tab>
-                            Hidden
+                            Not
                         </v-tab>
                     </v-tabs>
                     <v-tabs-items v-model="tab" class="pt-4">
@@ -88,14 +88,15 @@
                                 }"
                             >
 
-                            <template v-slot:item.visibility="{ item }">
-                                <v-simple-checkbox
-                                v-model="item.visibility"
-                                ></v-simple-checkbox>
-                            </template>
                             <template v-slot:item.sendToKiona="{ item }">
                                 <v-simple-checkbox
                                 v-model="item.sendToKiona"
+                                ></v-simple-checkbox>
+                            </template>
+
+                            <template v-slot:item.visibility="{ item }">
+                                <v-simple-checkbox
+                                v-model="item.visibility"
                                 ></v-simple-checkbox>
                             </template>
 
@@ -140,18 +141,20 @@
                                     prevIcon: 'mdi-minus',
                                     nextIcon: 'mdi-plus'
                                 }"
-                            >
+                            >                            
+
+                            <template v-slot:item.sendToKiona="{ item }">
+                                <v-simple-checkbox
+                                v-model="item.sendToKiona"
+                                ></v-simple-checkbox>
+                            </template>
 
                             <template v-slot:item.visibility="{ item }">
                                 <v-simple-checkbox
                                 v-model="item.visibility"
                                 ></v-simple-checkbox>
                             </template>
-                            <template v-slot:item.sendToKiona="{ item }">
-                                <v-simple-checkbox
-                                v-model="item.sendToKiona"
-                                ></v-simple-checkbox>
-                            </template>
+
                             <template v-slot:expanded-item="{ headers, item }">
                                 <v-simple-table>
                                     <template v-slot:default>
@@ -197,11 +200,13 @@
         var sensors_raw = ( <?php echo json_encode($sensors); ?> );
         console.log('sensors_raw', sensors_raw);
         for (let sensor of sensors_raw) {
+            if (sensor.sendToKiona == 1) sensor.sendToKiona = true;
+            else sensor.sendToKiona = false;
+
             if (sensor.visibility == 1) sensor.visibility = true;
             else sensor.visibility = false;
 
-            if (sensor.sendToKiona == 1) sensor.sendToKiona = true;
-            else sensor.sendToKiona = false;
+
             
         }
 
@@ -233,8 +238,9 @@
                     { text: 'Name', value: 'name' },
                     { text: 'Type', value: 'type' },
                     { text: 'Latest value', value: 'value' },
-                    { text: 'Visible', value: 'visibility' },
                     { text: 'Send to Kiona', value: 'sendToKiona' },
+                    { text: 'Visible', value: 'visibility' },
+
                 ],
                 search: '',
 
@@ -257,8 +263,8 @@
                         }
                     }
                 }
-                this.active_sensors = this.sensors.filter( item => item.visibility === true);
-                this.hidden_sensors = this.sensors.filter( item => item.visibility === false)
+                this.active_sensors = this.sensors.filter( item => item.sendToKiona === true);
+                this.hidden_sensors = this.sensors.filter( item => item.sendToKiona === false)
                 this.update_oldData();
             },
             watch: {
@@ -279,8 +285,8 @@
                                 "sendToKiona" : sensor.sendToKiona,
                         });
                     }
-                    this.active_sensors = this.sensors.filter( item => item.visibility === true);
-                    this.hidden_sensors = this.sensors.filter( item => item.visibility === false);
+                    this.active_sensors = this.sensors.filter( item => item.sendToKiona === true);
+                    this.hidden_sensors = this.sensors.filter( item => item.sendToKiona === false);
                 },
                 update_All: function(){
                     this.is_relation_updating = true;
