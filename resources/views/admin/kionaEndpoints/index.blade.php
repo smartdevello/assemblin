@@ -88,17 +88,13 @@
                                 }"
                             >
 
-                            <template v-slot:item.kionaCheckbox="{ item }">
-                                <v-simple-checkbox
-                                v-model="item.sendToKiona"
-                                ></v-simple-checkbox>
-                            </template>
+                                <template v-slot:item.sendToKiona="{item}">
+                                    <v-simple-checkbox  v-model="item.sendToKiona"  ></v-simple-checkbox>
+                                </template>
 
-                            <template v-slot:item.visibility="{ item }">
-                                <v-simple-checkbox
-                                v-model="item.visibility"
-                                ></v-simple-checkbox>
-                            </template>
+                                <template v-slot:item.visibility="{item}">
+                                    <v-simple-checkbox   v-model="item.visibility" ></v-simple-checkbox>
+                                </template>
 
                                 <template v-slot:expanded-item="{ headers, item }">
                                     <v-simple-table>
@@ -143,16 +139,12 @@
                                 }"
                             >                            
 
-                            <template v-slot:item.kionaCheckbox="{ item }">
-                                <v-simple-checkbox
-                                v-model="item.sendToKiona"
-                                ></v-simple-checkbox>
+                            <template v-slot:item.sendToKiona="{item}">
+                                <v-simple-checkbox  v-model="item.sendToKiona"  ></v-simple-checkbox>
                             </template>
 
-                            <template v-slot:item.visibility="{ item }">
-                                <v-simple-checkbox
-                                v-model="item.visibility"
-                                ></v-simple-checkbox>
+                            <template v-slot:item.visibility="{item}">
+                                <v-simple-checkbox   v-model="item.visibility" ></v-simple-checkbox>
                             </template>
 
                             <template v-slot:expanded-item="{ headers, item }">
@@ -238,7 +230,7 @@
                     { text: 'Name', value: 'name' },
                     { text: 'Type', value: 'type' },
                     { text: 'Latest value', value: 'value' },
-                    { text: 'SendtoKiona', value: 'kionaCheckbox' },
+                    { text: 'SendtoKiona', value: 'sendToKiona' },
                     { text: 'Visible', value: 'visibility' },
 
                 ],
