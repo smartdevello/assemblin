@@ -83,30 +83,12 @@ class DashboardController extends Controller
             }
             // $logdata = $sensor->getlogs();
             $sensor->logs;
-            // if (isset($logdata->logs)){
-            //     $sensor->logs = json_encode($logdata->logs);
-            // } else $sensor->logs = null;
-
 
         }
         $this->getSERVERConfig();
-        $controllers = DEOS_controller::all();
-        foreach($controllers as $controller)
-        {
-            $this->getRESTconfig($controller);
-        }
 
-        $points = DEOS_point::all();
-        foreach ($points as $point) {
-            $point->controller;
-            $point->area;
-        }
-        $areas = Area::all();
         return view('admin.kionaEndpoints.index', [
-            'sensors' => $sensors,
-            'points' => $points,
-            'controllers' => $controllers,
-            'areas' => $areas
+            'sensors' => $sensors
         ]);
     }
     public function setting_index(){

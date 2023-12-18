@@ -60,30 +60,98 @@
                           hide-details
                         ></v-text-field>
                     </v-card-title>
-                        <v-data-table
-                            :headers="headers"
-                            :items="sensors"
-                            :search="search"
-                            :items-per-page="10"
-                            :single-expand="singleExpand"
-                            item-key="id"
-                            multi-sort
-                            show-expand
-                            :footer-props="{
-                                showFirstLastPage: true,
-                                firstIcon: 'mdi-arrow-collapse-left',
-                                lastIcon: 'mdi-arrow-collapse-right',
-                                prevIcon: 'mdi-minus',
-                                nextIcon: 'mdi-plus'
-                            }"
-                        >
+                    <v-tabs v-model="tab">
+                        <v-tab>
+                            Active
+                        </v-tab>
+                        <v-tab>
+                            Hidden
+                        </v-tab>
+                    </v-tabs>
+                    <v-tabs-items v-model="tab" class="pt-4">
+                        <v-tab-item>
+                            <v-data-table
+                                :headers="headers"
+                                :items="active_sensors"
+                                :search="search"
+                                :items-per-page="10"
+                                :single-expand="singleExpand"
+                                item-key="id"
+                                multi-sort
+                                show-expand
+                                :footer-props="{
+                                    showFirstLastPage: true,
+                                    firstIcon: 'mdi-arrow-collapse-left',
+                                    lastIcon: 'mdi-arrow-collapse-right',
+                                    prevIcon: 'mdi-minus',
+                                    nextIcon: 'mdi-plus'
+                                }"
+                            >
 
+                            <template v-slot:item.visibility="{ item }">
+                                <v-simple-checkbox
+                                v-model="item.visibility"
+                                ></v-simple-checkbox>
+                            </template>
                             <template v-slot:item.sendToKiona="{ item }">
                                 <v-simple-checkbox
-                                    v-model="item.sendToKiona"
+                                v-model="item.sendToKiona"
                                 ></v-simple-checkbox>
                             </template>
 
+                                <template v-slot:expanded-item="{ headers, item }">
+                                    <v-simple-table>
+                                        <template v-slot:default>
+                                          <tbody class="log_table">
+                                            <tr>
+                                                <td class="table_header">DateTime<td>
+                                                <td v-for="(i, val) in item.logs" :key="val" class="table_value">
+                                                    {{val}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="table_header">Value<td>
+                                                <td v-for="(i, val) in item.logs" :key="val" class="table_value">
+                                                    {{i}}
+                                                </td>
+                                            </tr>
+
+                                          </tbody>
+                                        </template>
+                                      </v-simple-table>
+                                  </template>
+
+                            </v-data-table>
+                        </v-tab-item>
+                        <v-tab-item>
+                            <v-data-table
+                                :headers="headers"
+                                :items="hidden_sensors"
+                                :search="search"
+                                :items-per-page="10"
+                                :single-expand="singleExpand"
+                                item-key="id"
+                                multi-sort
+                                show-expand
+                                :footer-props="{
+                                    showFirstLastPage: true,
+                                    firstIcon: 'mdi-arrow-collapse-left',
+                                    lastIcon: 'mdi-arrow-collapse-right',
+                                    prevIcon: 'mdi-minus',
+                                    nextIcon: 'mdi-plus'
+                                }"
+                            >
+
+                            <template v-slot:item.visibility="{ item }">
+                                <v-simple-checkbox
+                                v-model="item.visibility"
+                                ></v-simple-checkbox>
+                            </template>
+                            <template v-slot:item.sendToKiona="{ item }">
+                                <v-simple-checkbox
+                                v-model="item.sendToKiona"
+                                ></v-simple-checkbox>
+                            </template>
                             <template v-slot:expanded-item="{ headers, item }">
                                 <v-simple-table>
                                     <template v-slot:default>
@@ -105,8 +173,9 @@
                                     </template>
                                     </v-simple-table>
                                 </template>
-
-                        </v-data-table>
+                            </v-data-table>
+                        </v-tab-item>
+                    </v-tabs-items>
                 </v-card>
               </template>
             <v-row >
@@ -144,12 +213,11 @@
                 mainMenu: mainMenu,
                 sensors: [...sensors_raw ],
                 singleExpand: true,
+                active_sensors: [],
+                hidden_sensors: [],
                 old_sensors: [],
                 tab: null,
                 page: null,
-                points: ( <?php echo json_encode($points); ?> ),
-                controllers: ( <?php echo json_encode($controllers); ?> ),
-                areas: ( <?php echo json_encode($areas); ?> ),
                 is_relation_updating: false,
                 update_dashboard_url : `${prefix_link}/dashboard/update`,
                 send_data_url : `${base_url}/point/writePointsbyid`,
@@ -165,6 +233,7 @@
                     { text: 'Name', value: 'name' },
                     { text: 'Type', value: 'type' },
                     { text: 'Latest value', value: 'value' },
+                    { text: 'Visible', value: 'visibility' },
                     { text: 'Send to Kiona', value: 'sendToKiona' },
                 ],
                 search: '',
@@ -188,7 +257,8 @@
                         }
                     }
                 }
-                
+                this.active_sensors = this.sensors.filter( item => item.visibility === true);
+                this.hidden_sensors = this.sensors.filter( item => item.visibility === false)
                 this.update_oldData();
             },
             watch: {
@@ -202,48 +272,30 @@
                 update_oldData: function(){
                     this.old_sensors = [];
                     for (const sensor of this.sensors) {
-                        point_name = null;
-                        if ( sensor.point_id ) {
-                            point = this.points.find(point => point.id == sensor.point_id);
-                            point_name = point.name;
-                        }
                         this.old_sensors.push({
                                 "id" : sensor.id,
                                 "name" : sensor.name,
-                                "value" : String(sensor.value),
-                                "point_id" : sensor.point_id,
-                                "point_name" : point_name ?? null,
-                                "controller_id" : sensor.controller_id,
-                                "area_id" : sensor.area_id,
                                 "visibility" : sensor.visibility,
                                 "sendToKiona" : sensor.sendToKiona,
                         });
                     }
-
+                    this.active_sensors = this.sensors.filter( item => item.visibility === true);
+                    this.hidden_sensors = this.sensors.filter( item => item.visibility === false);
                 },
                 update_All: function(){
                     this.is_relation_updating = true;
                     let submitdata = [];
+                    this.sensors = [...this.active_sensors , ...this.hidden_sensors];
                     this.sensors.sort((a, b) =>  a.id - b.id );
                     this.old_sensors.sort((a, b) => a.id - b.id  );
 
                     for (let [i,  sensor] of this.sensors.entries())
                     {
-                        point_name = null;
-                        if ( sensor.point_id ) {
-                            point = this.points.find(point => point.id == sensor.point_id);
-                            point_name = point.name;
-                        }
 
-                        if (this.old_sensors[i].name != sensor.name  ||  this.old_sensors[i].value != sensor.value || this.old_sensors[i].point_id != sensor.point_id || this.old_sensors[i].visibility != sensor.visibility) {
+                        if (this.old_sensors[i].name != sensor.name || this.old_sensors[i].sendToKiona != sensor.sendToKiona) {
                             submitdata.push({
                                 "id" : sensor.id,
                                 "name" : sensor.name,
-                                "value" : String(sensor.value),
-                                "point_id" : sensor.point_id,
-                                "point_name" : point_name ?? null,
-                                "controller_id" : sensor.controller_id,
-                                "area_id" : sensor.area_id,
                                 "visibility" : sensor.visibility,
                                 "sendToKiona" : sensor.sendToKiona,
                             });
@@ -266,7 +318,6 @@
                             },
                             "data": JSON.stringify(submitdata),
                     };
-                    var update_raw = this.update_raw;
                     $.ajax(settings).done(function(response) {
 
                             main_vm.is_relation_updating = false;
