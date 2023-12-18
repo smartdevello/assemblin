@@ -145,6 +145,7 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function () {
 
     Route::group(['prefix' => 'dashboard'], function ($router) {
         Route::post('update', [DashboardController::class, 'update'])->name('update_dashboard');
+        Route::post('to_kiona_update', [DashboardController::class, 'to_kiona_update'])->name('kiona_update_dashboard');
         Route::get('restartAsmServices', [DashboardController::class, 'restartAsmServices'])->name('restartAsmServices');
     }
     );
