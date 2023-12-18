@@ -62,7 +62,7 @@
                     </v-card-title>
                     <v-tabs v-model="tab">
                         <v-tab>
-                            Set To Kiona
+                            Send To Kiona
                         </v-tab>
                         <v-tab>
                             Not
@@ -89,7 +89,7 @@
                             >
 
                                 <template v-slot:item.sendToKiona="{item}">
-                                    <v-simple-checkbox  v-model="item.sendToKiona"  ></v-simple-checkbox>
+                                    <v-simple-checkbox  v-model="item.visibility"  ></v-simple-checkbox>
                                 </template>
 
 
@@ -137,7 +137,7 @@
                             >                            
 
                             <template v-slot:item.sendToKiona="{item}">
-                                <v-simple-checkbox  v-model="item.sendToKiona"  ></v-simple-checkbox>
+                                <v-simple-checkbox  v-model="item.visibility"  ></v-simple-checkbox>
                             </template>
 
 
@@ -187,7 +187,10 @@
         console.log('sensors_raw', sensors_raw);
         for (let sensor of sensors_raw) {
             if (sensor.sendToKiona == 1) sensor.sendToKiona = true;
-            else sensor.sendToKiona = false;            
+            else sensor.sendToKiona = false;         
+            
+            if (sensor.visibility == 1) sensor.visibility = true;
+            else sensor.visibility = false;
         }
 
         const main_vm = new Vue({
