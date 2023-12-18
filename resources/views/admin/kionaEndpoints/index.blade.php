@@ -184,7 +184,7 @@
     <script>
         var token = '{!! csrf_token() !!}';
         var sensors_raw = ( <?php echo json_encode($sensors); ?> );
-        console.log('sensors_raw', sensors_raw);
+
         for (let sensor of sensors_raw) {
             if (sensor.to_kiona == 1) sensor.to_kiona = true;
             else sensor.to_kiona = false;         

@@ -91,6 +91,11 @@ class DashboardController extends Controller
             'sensors' => $sensors
         ]);
     }
+    public function get_kiona_values(){
+        $this->getSensors();
+        return Sensor::where('to_kiona', 1)->get();
+
+    }
     public function setting_index(){
         return view('admin.setting');
     }

@@ -10,7 +10,6 @@ use App\Http\Controllers\TrendGroupController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AsmServerController;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -94,6 +93,8 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function () {
 
     Route::group(['prefix' => 'trendgroup'], function ($router) {
         Route::post('', [TrendGroupController::class, 'receive_csv'])->name('receive_csv');
-    }
-    );
+    });
+    Route::group(['prefix' => 'kiona'], function ($router) {
+        Route::post('', [DashboardController::class, 'get_kiona_values'])->name('get_kiona_values');
+    });
 });
