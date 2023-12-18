@@ -238,7 +238,7 @@
                     { text: 'Name', value: 'name' },
                     { text: 'Type', value: 'type' },
                     { text: 'Latest value', value: 'value' },
-                    { text: 'Send to Kiona', value: 'sendToKiona' },
+                    { text: 'SendtoKiona', value: 'sendToKiona' },
                     { text: 'Visible', value: 'visibility' },
 
                 ],
