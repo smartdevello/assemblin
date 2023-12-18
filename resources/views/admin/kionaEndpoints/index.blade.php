@@ -88,7 +88,7 @@
                                 }"
                             >
 
-                            <template v-slot:item.sendToKiona="{ item }">
+                            <template v-slot:item.kionaCheckbox="{ item }">
                                 <v-simple-checkbox
                                 v-model="item.sendToKiona"
                                 ></v-simple-checkbox>
@@ -143,7 +143,7 @@
                                 }"
                             >                            
 
-                            <template v-slot:item.sendToKiona="{ item }">
+                            <template v-slot:item.kionaCheckbox="{ item }">
                                 <v-simple-checkbox
                                 v-model="item.sendToKiona"
                                 ></v-simple-checkbox>
@@ -238,7 +238,7 @@
                     { text: 'Name', value: 'name' },
                     { text: 'Type', value: 'type' },
                     { text: 'Latest value', value: 'value' },
-                    { text: 'SendtoKiona', value: 'sendToKiona' },
+                    { text: 'SendtoKiona', value: 'kionaCheckbox' },
                     { text: 'Visible', value: 'visibility' },
 
                 ],
