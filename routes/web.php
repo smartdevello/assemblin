@@ -11,6 +11,8 @@ use App\Http\Controllers\LorawanController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TrendGroupController;
 use App\Http\Controllers\SmallDataGardenController;
+use App\Http\Controllers\FoxeriotController;
+use App\Http\Controllers\AsmServerController;
 
 use App\Http\Controllers\WeatherForecastController;
 use Illuminate\Support\Facades\Route;
