@@ -198,7 +198,6 @@ class DashboardController extends Controller
             {
                 $sensor = Sensor::where('id', $item['id'])->first();
                 $sensor->update([
-                    "value" => $item["value"],
                     "name" => $item["name"],
                     "to_kiona" => $item["to_kiona"]
                 ]);
