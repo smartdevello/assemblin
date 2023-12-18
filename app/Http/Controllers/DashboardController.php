@@ -93,7 +93,21 @@ class DashboardController extends Controller
     }
     public function get_kiona_values(){
         $this->getSensors();
-        return Sensor::where('to_kiona', 1)->get();
+        $sensors = Sensor::where('to_kiona', 1)->get();
+        $return = [];
+        foreach($sensors as $sensor) {
+            $return[] = [
+                'id' => $sensor->id,
+                'deviceId' => $sensor->deviceId,
+                'tag' => $sensor->tag,
+                'name' => $sensor->name,
+                'type' => $sensor->type,
+                'unit' => $sensor->unit,
+                'value' => $sensor->value,
+                'created_at' => $sensor->created_at,
+                'updated_at' => $sensor->updated_at,
+            ]; 
+        }
 
     }
     public function setting_index(){
