@@ -88,8 +88,8 @@
                                 }"
                             >
 
-                                <template v-slot:item.sendToKiona="{item}">
-                                    <v-simple-checkbox  v-model="item.visibility"  ></v-simple-checkbox>
+                                <template v-slot:item.to_kiona="{item}">
+                                    <v-simple-checkbox  v-model="item.to_kiona"  ></v-simple-checkbox>
                                 </template>
 
 
@@ -136,8 +136,8 @@
                                 }"
                             >                            
 
-                            <template v-slot:item.sendToKiona="{item}">
-                                <v-simple-checkbox  v-model="item.visibility"  ></v-simple-checkbox>
+                            <template v-slot:item.to_kiona="{item}">
+                                <v-simple-checkbox  v-model="item.to_kiona"  ></v-simple-checkbox>
                             </template>
 
 
@@ -186,8 +186,8 @@
         var sensors_raw = ( <?php echo json_encode($sensors); ?> );
         console.log('sensors_raw', sensors_raw);
         for (let sensor of sensors_raw) {
-            if (sensor.sendToKiona == 1) sensor.sendToKiona = true;
-            else sensor.sendToKiona = false;         
+            if (sensor.to_kiona == 1) sensor.to_kiona = true;
+            else sensor.to_kiona = false;         
             
             if (sensor.visibility == 1) sensor.visibility = true;
             else sensor.visibility = false;
@@ -221,7 +221,7 @@
                     { text: 'Name', value: 'name' },
                     { text: 'Type', value: 'type' },
                     { text: 'Latest value', value: 'value' },
-                    { text: 'Send To Kiona', value: 'sendToKiona' },
+                    { text: 'Send To Kiona', value: 'to_kiona' },
 
                 ],
                 search: '',
@@ -245,8 +245,8 @@
                         }
                     }
                 }
-                this.active_sensors = this.sensors.filter( item => item.sendToKiona === true);
-                this.hidden_sensors = this.sensors.filter( item => item.sendToKiona === false)
+                this.active_sensors = this.sensors.filter( item => item.to_kiona === true);
+                this.hidden_sensors = this.sensors.filter( item => item.to_kiona === false)
                 this.update_oldData();
             },
             watch: {
@@ -263,11 +263,11 @@
                         this.old_sensors.push({
                                 "id" : sensor.id,
                                 "name" : sensor.name,
-                                "sendToKiona" : sensor.sendToKiona,
+                                "to_kiona" : sensor.to_kiona,
                         });
                     }
-                    this.active_sensors = this.sensors.filter( item => item.sendToKiona === true);
-                    this.hidden_sensors = this.sensors.filter( item => item.sendToKiona === false);
+                    this.active_sensors = this.sensors.filter( item => item.to_kiona === true);
+                    this.hidden_sensors = this.sensors.filter( item => item.to_kiona === false);
                 },
                 update_All: function(){
                     this.is_relation_updating = true;
@@ -279,11 +279,11 @@
                     for (let [i,  sensor] of this.sensors.entries())
                     {
 
-                        if (this.old_sensors[i].name != sensor.name || this.old_sensors[i].sendToKiona != sensor.sendToKiona) {
+                        if (this.old_sensors[i].name != sensor.name || this.old_sensors[i].to_kiona != sensor.to_kiona) {
                             submitdata.push({
                                 "id" : sensor.id,
                                 "name" : sensor.name,
-                                "sendToKiona" : sensor.sendToKiona,
+                                "to_kiona" : sensor.to_kiona,
                             });
                         }
 
