@@ -36,6 +36,8 @@ use Laravel\Sanctum\PersonalAccessToken;
 
 Route::get('', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
+Route::get('/kiona_endpoints', [DashboardController::class, 'kiona_endpoints_index'])->middleware(['auth'])->name('kiona_endpoints_dashboard');
+
 Route::get('/lora', [LorawanController::class, 'index'])->middleware(['auth'])->name('lorawan');
 
 Route::get('smalldatagarden/automatic_update', '\App\Http\Controllers\SmallDataGardenController@SmallDataGarden_updateSensors');

@@ -9,6 +9,7 @@ use App\Http\Controllers\PointController;
 use App\Http\Controllers\TrendGroupController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AsmServerController;
 
 /*
 |--------------------------------------------------------------------------
