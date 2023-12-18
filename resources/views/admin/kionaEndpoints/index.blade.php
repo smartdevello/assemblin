@@ -174,14 +174,7 @@
 
             },
             mounted: function() {
-                //Remove All weather_forecast points from dashboard.
-                // index = this.points.length - 1;
-                // while (index >= 0) {
-                //     if (this.points[index].meta_type == 'weather_forecast') {
-                //         this.points.splice(index, 1);
-                //     }
-                //     index -= 1;
-                // }
+
                 for (sensor of this.sensors){
                     if (sensor.logs) {
                         // console.log(sensor.deviceId)
@@ -222,7 +215,8 @@
                                 "point_name" : point_name ?? null,
                                 "controller_id" : sensor.controller_id,
                                 "area_id" : sensor.area_id,
-                                "visibility" : sensor.visibility
+                                "visibility" : sensor.visibility,
+                                "sendToKiona" : sensor.sendToKiona,
                         });
                     }
 
@@ -250,7 +244,8 @@
                                 "point_name" : point_name ?? null,
                                 "controller_id" : sensor.controller_id,
                                 "area_id" : sensor.area_id,
-                                "visibility" : sensor.visibility
+                                "visibility" : sensor.visibility,
+                                "sendToKiona" : sensor.sendToKiona,
                             });
                         }
 
