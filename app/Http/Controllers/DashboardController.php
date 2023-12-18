@@ -191,6 +191,29 @@ class DashboardController extends Controller
 
     }
 
+    public function to_kiona_update(Request $request) {
+        $res = "";
+        try{
+            foreach($request->all() as $item)
+            {
+                $sensor = Sensor::where('id', $item['id'])->first();
+                $sensor->update([
+                    "value" => $item["value"],
+                    "name" => $item["name"],
+                    "to_kiona" => $item["to_kiona"]
+                ]);
+
+            }
+
+        }catch(Exception $e){
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 403);
+        }
+        return response()->json([
+            'success' => $res
+        ], 200);
+    }
     public function sendDatatoASM($data){
         $ch = curl_init();
         //        return $request;

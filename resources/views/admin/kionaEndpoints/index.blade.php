@@ -207,8 +207,7 @@
                 tab: null,
                 page: null,
                 is_relation_updating: false,
-                update_dashboard_url : `${prefix_link}/dashboard/update`,
-                send_data_url : `${base_url}/point/writePointsbyid`,
+                update_dashboard_url : `${prefix_link}/dashboard/to_kiona_update`,
 
                 headers: [
                     { text: '', value: 'data-table-expand' },
