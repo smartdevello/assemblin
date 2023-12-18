@@ -108,6 +108,7 @@ class DashboardController extends Controller
                 'updated_at' => $sensor->updated_at,
             ]; 
         }
+        return $return;
 
     }
     public function setting_index(){
