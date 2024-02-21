@@ -111,6 +111,10 @@ class DashboardController extends Controller
         return $return;
 
     }
+    public function get_kiona_valuesByLocationName($locationName) {
+        return $locationName;
+
+    }
     public function setting_index(){
         return view('admin.setting');
     }

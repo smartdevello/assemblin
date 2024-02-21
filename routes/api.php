@@ -96,5 +96,7 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function () {
     });
     Route::group(['prefix' => 'kiona'], function ($router) {
         Route::get('', [DashboardController::class, 'get_kiona_values'])->name('get_kiona_values');
+        Route::get('/{locationName}', [DashboardController::class, 'get_kiona_valuesByLocationName'])->name('get_kiona_valuesByLocationName');
     });
+
 });
