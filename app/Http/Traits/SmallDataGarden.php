@@ -30,10 +30,10 @@ trait SmallDataGarden{
 
         $response = curl_exec($curl);
         if(curl_errno($curl)) {
-            echo 'Curl error: ' . curl_error($curl);
             Log::error('Curl error: ' . curl_error($curl));
         }
         curl_close($curl);
+        Log::error('All devices ' . $response);
         return json_decode($response);
     }
 
@@ -57,10 +57,10 @@ trait SmallDataGarden{
 
         $response = curl_exec($curl);
         if(curl_errno($curl)) {
-            echo 'Curl error: ' . curl_error($curl);
             Log::error('Curl error: ' . curl_error($curl));
         }
         curl_close($curl);
+        Log::error('Device Id ' . $deviceId . " Device data " . $response);
         return json_decode($response);
     }
     public function SmallDataGarden_updateSensors()
