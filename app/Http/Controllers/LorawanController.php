@@ -569,10 +569,10 @@ class LorawanController extends Controller
     {
 
         try {
-            file_put_contents("lora.json", json_encode($request->all()));
+            file_put_contents("logs/lora.json", json_encode($request->all()));
             $request_data = $request->DevEUI_uplink;
-            if (file_put_contents(sprintf("%s.json", $request_data['DevEUI']), json_encode($request->all())) === false) {
-                file_put_contents(sprintf("%X.json", $request_data['DevEUI']), json_encode($request->all()));
+            if (file_put_contents(sprintf("logs/%s.json", $request_data['DevEUI']), json_encode($request->all())) === false) {
+                file_put_contents(sprintf("logs/%X.json", $request_data['DevEUI']), json_encode($request->all()));
             }
             $data = [];
             if (strpos($request_data['DevEUI'], "A81758FFFE") === 0) {
