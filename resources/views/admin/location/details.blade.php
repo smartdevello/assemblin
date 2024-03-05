@@ -45,13 +45,13 @@
                                 <v-text-field v-model="location.name" name="name" solo required></v-text-field>
 
                                 <v-checkbox
-                                        v-model="location.enable_kiona_endpoint" label="Enable Kiona Endpoint" name="enable_kiona_endpoint"
+                                        v-model="location.enable_kiona_endpoint" label="Enable Kiona Endpoint (/api/kiona/@{{ location.name }})" name="enable_kiona_endpoint"
                                         :value="location.enable_kiona_endpoint"
                                         >
                                 </v-checkbox>
                                 <v-row justify="left">
                                     <v-card-text>
-                                        /api/kiona/@{{ location.name }}
+                                        
                                     </v-card-text>
                                 </v-row>
                                 <v-card-actions>
