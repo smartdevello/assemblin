@@ -11,7 +11,7 @@ class Location extends Model
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name', 'img_url'
+        'name', 'img_url', 'enable_kiona_endpoint'
     ];
 
     public function buildings()
