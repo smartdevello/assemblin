@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Area;
 use App\Models\DEOS_controller;
 use App\Models\DEOS_point;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use App\Models\Sensor;
 use App\Models\SensorLog;
@@ -112,7 +113,39 @@ class DashboardController extends Controller
 
     }
     public function get_kiona_valuesByLocationName($locationName) {
-        return $locationName;
+        $location = Location::where('name', $locationName)->first();
+        if (!$location) {
+            return [];
+        } else {
+            $return = [];
+            $buildings = $location->buildings;
+            foreach($buildings as $building) {
+                $controllers = $building->controllers;
+                foreach($controllers as $controller) {
+                    $points = $controller->points;
+                    foreach($points as $point) {
+                        $sensors = $point->sensors;
+                        foreach($sensors as $sensor) {
+                            $return[] = [
+                                'id' => $sensor->id,
+                                'deviceId' => $sensor->deviceId,
+                                'tag' => $sensor->tag,
+                                'name' => $sensor->name,
+                                'type' => $sensor->type,
+                                'unit' => $sensor->unit,
+                                'value' => $sensor->value,
+                                'created_at' => $sensor->created_at,
+                                'updated_at' => $sensor->updated_at,
+                            ]; 
+                        }
+                    }
+                
+                }
+            }
+            return $return;
+        }
+
+        
 
     }
     public function setting_index(){

@@ -43,6 +43,13 @@
 
 
                                 <v-text-field v-model="location.name" name="name" solo required></v-text-field>
+
+                                <v-checkbox
+                                        v-model="location.enable_kiona_endpoint" label="Enable Kiona Endpoint" name="enable_kiona_endpoint"
+                                        :value="location.enable_kiona_endpoint"
+                                        >
+                                </v-checkbox>
+
                                 <v-card-actions>
                                     <v-btn color="primary" text type="submit" form="update-form">Update</v-btn>
                                     <v-btn color="red" @click="openDelete = true">Remove</v-btn>

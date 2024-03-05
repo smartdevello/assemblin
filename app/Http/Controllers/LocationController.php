@@ -96,6 +96,7 @@ class LocationController extends Controller
         $location->update([
             'name' => $request->name,
             'img_url' => $request->image ? $imageName: null,
+            'enable_kiona_endpoint' => isset($request->enable_kiona_endpoint) ? true : false
         ]);
 
         return back()->with('success', 'Updated successfully');
