@@ -6,6 +6,7 @@ use App\Models\Area;
 use App\Models\DEOS_controller;
 use App\Models\DEOS_point;
 use App\Models\Location;
+
 use Illuminate\Http\Request;
 use App\Models\Sensor;
 use App\Models\SensorLog;
@@ -128,13 +129,9 @@ class DashboardController extends Controller
                 if (!$controllers) break;
                 foreach($controllers as $controller) {
                     $points = $controller->points;
-
-                    $return[] = $points;
-                    continue;
-
                     if (!$points) break;
                     foreach($points as $point) {
-                        $sensors = $point->sensors;
+                        $sensors = Sensor::where('point_id', $point->id)->get();
                         if (!$sensors) break;
                         foreach($sensors as $sensor) {
                             $return[] = [
@@ -149,6 +146,7 @@ class DashboardController extends Controller
                                 'updated_at' => $sensor->updated_at,
                             ]; 
                         }
+
                     }
                 
                 }
