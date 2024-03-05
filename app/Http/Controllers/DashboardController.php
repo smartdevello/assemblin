@@ -135,7 +135,7 @@ class DashboardController extends Controller
                         $sensors = Sensor::where('point_id', $point->id)->get();
                         if (!$sensors) break;
                         foreach($sensors as $sensor) {
-                            if ($sensor->to_kiona == 1) {
+                            // if ($sensor->to_kiona == 1) {
                                 $return[] = [
                                     'id' => $sensor->id,
                                     'deviceId' => $sensor->deviceId,
@@ -147,7 +147,7 @@ class DashboardController extends Controller
                                     'created_at' => $sensor->created_at,
                                     'updated_at' => $sensor->updated_at,
                                 ]; 
-                            }
+                            // }
                         }
 
                     }
