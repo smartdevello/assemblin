@@ -118,6 +118,7 @@ class DashboardController extends Controller
         if (!$location) {
             return [];
         } else {
+            if (!$location->enable_kiona_endpoint) return [];
             $return = [];
             $buildings = $location->buildings;
 
@@ -134,17 +135,19 @@ class DashboardController extends Controller
                         $sensors = Sensor::where('point_id', $point->id)->get();
                         if (!$sensors) break;
                         foreach($sensors as $sensor) {
-                            $return[] = [
-                                'id' => $sensor->id,
-                                'deviceId' => $sensor->deviceId,
-                                'tag' => $sensor->tag,
-                                'name' => $sensor->name,
-                                'type' => $sensor->type,
-                                'unit' => $sensor->unit,
-                                'value' => $sensor->value,
-                                'created_at' => $sensor->created_at,
-                                'updated_at' => $sensor->updated_at,
-                            ]; 
+                            if ($sensor->to_kiona == 1) {
+                                $return[] = [
+                                    'id' => $sensor->id,
+                                    'deviceId' => $sensor->deviceId,
+                                    'tag' => $sensor->tag,
+                                    'name' => $sensor->name,
+                                    'type' => $sensor->type,
+                                    'unit' => $sensor->unit,
+                                    'value' => $sensor->value,
+                                    'created_at' => $sensor->created_at,
+                                    'updated_at' => $sensor->updated_at,
+                                ]; 
+                            }
                         }
 
                     }
