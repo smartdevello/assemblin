@@ -119,12 +119,16 @@ class DashboardController extends Controller
         } else {
             $return = [];
             $buildings = $location->buildings;
-            return $buildings;
+
             if (!$buildings) {
                 return [];
             }
             foreach($buildings as $building) {
                 $controllers = $building->controllers;
+
+                $return[] = $controllers;
+                continue;
+                
                 if (!$controllers) break;
                 foreach($controllers as $controller) {
                     $points = $controller->points;
