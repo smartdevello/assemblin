@@ -49,7 +49,9 @@
                                         :value="location.enable_kiona_endpoint"
                                         >
                                 </v-checkbox>
-
+                                <v-card-text>
+                                    /api/kiona/@{{ location.name }}
+                                </v-card-text>
                                 <v-card-actions>
                                     <v-btn color="primary" text type="submit" form="update-form">Update</v-btn>
                                     <v-btn color="red" @click="openDelete = true">Remove</v-btn>
