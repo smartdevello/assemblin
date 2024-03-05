@@ -125,13 +125,13 @@ class DashboardController extends Controller
             }
             foreach($buildings as $building) {
                 $controllers = $building->controllers;
-
-                $return[] = $controllers;
-                continue;
-                
                 if (!$controllers) break;
                 foreach($controllers as $controller) {
                     $points = $controller->points;
+
+                    $return[] = $points;
+                    continue;
+
                     if (!$points) break;
                     foreach($points as $point) {
                         $sensors = $point->sensors;
