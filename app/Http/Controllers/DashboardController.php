@@ -114,7 +114,6 @@ class DashboardController extends Controller
     }
     public function get_kiona_valuesByLocationName($locationName) {
         $location = Location::where('name', $locationName)->first();
-        return $location;
         if (!$location) {
             return [];
         } else {
