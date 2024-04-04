@@ -234,7 +234,6 @@ trait TrendDataTrait
                     }
 
                     $curl = curl_init();
-
                     curl_setopt_array($curl, array(
                         CURLOPT_URL => 'https://freesi-sensor-data-hub.azure-devices.net/devices/hka_vipusenkatu5a/messages/events?api-version=2018-06-30',
                         CURLOPT_RETURNTRANSFER => true,
@@ -247,6 +246,27 @@ trait TrendDataTrait
                         CURLOPT_POSTFIELDS => json_encode($payload),
                         CURLOPT_HTTPHEADER => array(
                             'authorization: SharedAccessSignature sr=freesi-sensor-data-hub.azure-devices.net%2Fdevices%2Fhka_vipusenkatu5a&sig=BIW3fIdoAL70h6tw0Bj0dyXFrd%2BIg7eN3ctYZZnNltc%3D&se=2024431159',
+                            'Content-Type: application/json',
+                        ),
+                    ));
+
+                    $response = curl_exec($curl);
+                    $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+                    curl_close($curl);
+
+                    $curl = curl_init();
+                    curl_setopt_array($curl, array(
+                        CURLOPT_URL => 'https://freesi-sensor-data-hub.azure-devices.net/devices/bravida_manuko/messages/events?api-version=2018-06-30',
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_ENCODING => '',
+                        CURLOPT_MAXREDIRS => 10,
+                        CURLOPT_TIMEOUT => 0,
+                        CURLOPT_FOLLOWLOCATION => true,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                        CURLOPT_CUSTOMREQUEST => 'POST',
+                        CURLOPT_POSTFIELDS => json_encode($payload),
+                        CURLOPT_HTTPHEADER => array(
+                            'authorization: SharedAccessSignature sr=freesi-sensor-data-hub.azure-devices.net%2Fdevices%2Fbravida_manuko&sig=f4InBNZMXdEYAbwb9Oi1NIQetfa9mtX2hZMjWPHDThs%3D&se=2683621602',
                             'Content-Type: application/json',
                         ),
                     ));
