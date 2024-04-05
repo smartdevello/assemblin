@@ -216,22 +216,22 @@ trait TrendDataTrait
             if (file_exists($filename)) {
                 unlink($filename);
             }
+            if (count($csv_data) >= 2) {
+                $columns = $csv_data[0];
+                $values = $csv_data[count($csv_data) - 1];
 
-            if (strpos($trend_group->trend_group_name, "Freesi") !== false) {
-                if (count($csv_data) >= 2) {
-                    $columns = $csv_data[0];
-                    $values = $csv_data[count($csv_data) - 1];
-
-                    for ($i = 0; $i < count($values); $i++) {
-                        if (preg_match("/^[\d,-]+$/", $values[$i])) {
-                            $payload->measurementPoint[] = (object) array(
-                                'controller' => $trend_group->trend_group_name,
-                                'pointName' => $this->convertFinnishtoEnglish($columns[$i]),
-                                'out' => (float) str_replace(",", ".", $values[$i]),
-                                'facet' => '',
-                            );
-                        }
+                for ($i = 0; $i < count($values); $i++) {
+                    if (preg_match("/^[\d,-]+$/", $values[$i])) {
+                        $payload->measurementPoint[] = (object) array(
+                            'controller' => $trend_group->trend_group_name,
+                            'pointName' => $this->convertFinnishtoEnglish($columns[$i]),
+                            'out' => (float) str_replace(",", ".", $values[$i]),
+                            'facet' => '',
+                        );
                     }
+                }
+
+                if (strpos($trend_group->trend_group_name, "Freesi_VAK") !== false) {
 
                     $curl = curl_init();
                     curl_setopt_array($curl, array(
@@ -254,6 +254,8 @@ trait TrendDataTrait
                     $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
                     curl_close($curl);
 
+
+                } else if (strpos($trend_group->trend_group_name, "FreesiMaNuko") !== false) {
                     $curl = curl_init();
                     curl_setopt_array($curl, array(
                         CURLOPT_URL => 'https://freesi-sensor-data-hub.azure-devices.net/devices/bravida_manuko/messages/events?api-version=2018-06-30',
