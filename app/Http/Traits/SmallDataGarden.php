@@ -60,7 +60,6 @@ trait SmallDataGarden{
             Log::error('Curl error: ' . curl_error($curl));
         }
         curl_close($curl);
-        Log::error('Device Id ' . $deviceId . " Device data " . $response);
         return json_decode($response);
     }
     public function SmallDataGarden_updateSensors()
