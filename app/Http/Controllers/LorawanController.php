@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Sensor;
 use Illuminate\Support\Facades\Log;
 use App\Models\SensorLog;
-
+use DateTime;
 use Exception;
 
 class ELSYSdecoder
@@ -255,6 +255,200 @@ class ELSYSdecoder
 
         return $decrypted;
 
+    }
+}
+class ZENNERDecoder
+{
+    private $alarms = [
+        "0200" => 'BatteryEndOfLife',
+        "0800" => 'SmokeChamberPollutionPrewarning',
+        "1000" => 'SmokeChamberPollutionWarning',
+        "2000" => 'TestButtonFailure',
+        "4000" => 'AcousticAlarmFailure',
+        "8000" => 'RemovalDetection',
+        "0001" => 'TestAlarm',
+        "0002" => 'SmokeAlarm',
+        "0004" => 'ObstructionDetection',
+        "0008" => 'SurroundingAreaMonitoring',
+        "0010" => 'LEDFailure'
+    ];
+    private $errorCodes = [
+        "02" => "Removal",
+        "0C" => "Battery end of life",
+        "16" => "Horn drive level failure",
+        "1A" => "Obstruction detection",
+        "19" => "Smoke alarm released (only in some CommunicationScenarios)",
+        "1C" => "Object in the surrounding area"
+    ];
+
+    private $statusBits = [
+        0 => "Removal detected",
+        2 => "Battery end of life",
+        3 => "Acoustic alarm failure",
+        4 => "Obstruction detection",
+        5 => "Surrounding area monitoring"
+    ];
+
+    public function decodeUplink($input)
+    {
+        $d = [
+            'value1' => [],
+            'value2' => []
+        ];
+        $warnings = [];
+        $errors = [];
+
+        $d['transceived_at'] = $input['transceived_at'] ?? date('c');
+        // $b = array_map(function ($byte) {
+        //     return strtoupper(str_pad(chr($byte), 2, '0', STR_PAD_LEFT));
+        // }, $input['bytes']);
+        $b = str_split(strtoupper( $input['bytes'] ), 2);
+        print_r($b);
+        if ($b[0] === "11") {
+            $this->decodePacketSP1_1($b, $d, $warnings);
+        }
+
+        if ($b[0] === "91") {
+            $this->decodePacketSP9_1($b, $d, $warnings);
+        }
+
+        if ($b[0] === "92") {
+            $this->decodePacketSP9_2($b, $d);
+        }
+
+        if ($b[0] === "A0") {
+            $this->decodePacketAP1_0($b, $d, $warnings, $errors);
+        }
+
+        return ['data' => $d, 'warnings' => $warnings, 'errors' => $errors];
+    }
+    private function decodePacketSP1_1($b, &$d, &$warnings)
+    {
+        $d['packetType'] = "SP1.1";
+        $d['packetName'] = "day value";
+        $d['message_art'] = "Status report";
+        $alarmResult = $this->getAlarmFromHex(implode('', array_slice($b, 1, 2)));
+        if ($alarmResult === "OKAY") {
+            $d['status'] = 1;
+        } else {
+            $d['status'] = 2;
+            $d['warning_current'] = $alarmResult;
+            $warnings['message'] = $alarmResult;
+        }
+    }
+    private function decodePacketSP9_1($b, &$d, &$warnings)
+    {
+        $d['packetType'] = "SP9.1";
+        $d['packetName'] = "current date and time & status summary";
+        $d['message_art'] = "Status report";
+        $d['timestamp'] = $this->datetime(implode('', array_reverse(array_slice($b, 1, 4))));
+        $statussummary = implode(' ', array_slice($b, 5, 2));
+        if ($statussummary === "00 00") {
+            $d['status'] = 1;
+        } else {
+            $d['status'] = 2;
+            $warningResult = $this->decodeRadioStatus($statussummary);
+            $d['warning_current'] = $warningResult;
+            $warnings['message'] = $warningResult;
+        }
+    }
+    private function decodePacketSP9_2($b, &$d)
+    {
+        $d['packetType'] = "SP9.2";
+        $d['packetName'] = "static device information";
+        $d['message_art'] = "Status report";
+
+        $firmwareVersion = array_map(function($n) {
+          return intval($n);
+        }, array_reverse(array_slice($b, 1, 4)));
+
+        $d['firmwareVersion'] = implode('.', $firmwareVersion);
+
+      // Convert and format the LoRaWAN version
+      $loraWanVersion = array_map(function($n) {
+        return intval($n);
+      }, array_reverse(array_slice($b, 5, 3)));
+      $d['loraWanVersion'] = implode('.', $loraWanVersion);
+
+      // Convert and format the LoRa command version
+      $loraCommandVersion = array_map(function($n) {
+        return intval($n);
+      }, array_reverse(array_slice($b, 8, 2)));
+      $d['loraCommandVersion'] = implode('.', $loraCommandVersion);
+
+      // Convert and format the Minol device type
+      $minolDeviceType = array_map(function($n) {
+        return intval($n);
+      }, str_split($b[10], 2));
+      $d['minolDeviceType'] = implode('.', $minolDeviceType);
+
+      // Parse device meter ID
+      $meterIdBytes = array_slice($b, 11, 4);
+      $d['meterId'] = intval(implode('', array_reverse($meterIdBytes)), 16);
+
+        // Versionsnummern und Geräte-IDs müssen noch implementiert werden
+    }
+    private function decodePacketAP1_0($b, &$d, &$warnings, &$errors)
+    {
+        $d['packetType'] = "AP1.0";
+        $d['packetName'] = "status code, status data";
+        $d['message_art'] = "malfunction report";
+        $d['timestamp'] = $this->datetime(implode('', array_reverse(array_slice($b, 3, 2))));
+        $d['status'] = 2;
+        $apCodeResult = $this->APCode($b[1]);
+        $d['warning_current'] = $apCodeResult;
+        $warnings['message'] = $apCodeResult;
+        $errors['message'] = $apCodeResult;
+    }
+    private function getAlarmFromHex($hexValue)
+    {
+        $lsbHexValue = substr($hexValue, -2) . substr($hexValue, 0, -2);
+        $decimalValue = hexdec($lsbHexValue);
+        $alarms = array_filter($this->alarms, function ($key) use ($decimalValue) {
+            return ($decimalValue & hexdec($key));
+        }, ARRAY_FILTER_USE_KEY);
+
+        return implode(", ", $alarms) ?: "OKAY";
+    }
+    private function decodeRadioStatus($payload)
+    {
+        $decimalPayload = hexdec($payload);
+        $statuses = array_filter($this->statusBits, function ($bit) use ($decimalPayload) {
+            return ($decimalPayload & (1 << $bit));
+        }, ARRAY_FILTER_USE_KEY);
+
+        return implode(", ", $statuses);
+    }
+    private function APCode($payload)
+    {
+        $results = array_filter($this->errorCodes, function ($code) use ($payload) {
+            return strpos($payload, $code) !== false;
+        }, ARRAY_FILTER_USE_KEY);
+
+        return implode(", ", $results);
+    }
+    private function datetime($hex)
+    {
+        var_dump($hex);
+        $hex = hexdec($hex);
+        var_dump($hex);
+        $dt0 = $hex & 0xff;
+        $dt1 = ($hex >> 8) & 0xff;
+        $dt2 = ($hex >> 16) & 0xff;
+        $dt3 = ($hex >> 24) & 0xff;
+        
+        $year = (($dt2 & 0xE0) >> 5) | (($dt3 & 0xF0) >> 1) + 2000;
+        $month = ($dt3 & 0x0F) - 1;
+        $day = $dt2 & 0x1F;
+        $hour = $dt1 & 0x1F;
+        $minute = $dt0 & 0x3F;
+        
+        // Create DateTime object
+        $date = new DateTime();
+        $date->setDate($year, $month + 1, $day); // PHP months are 1-based, JavaScript months are 0-based
+        $date->setTime($hour, $minute);
+
+        return $date->format('c');
     }
 }
 class Solidusdecoder extends ELSYSdecoder
@@ -573,6 +767,7 @@ class LorawanController extends Controller
             Log::debug(json_encode($request->all()));
             file_put_contents("logs/lora.json", json_encode($request->all()));
             $request_data = $request->DevEUI_uplink;
+
             if (file_put_contents(sprintf("logs/%s.json", $request_data['DevEUI']), json_encode($request->all())) === false) {
                 file_put_contents(sprintf("logs/%X.json", $request_data['DevEUI']), json_encode($request->all()));
             }
@@ -589,16 +784,73 @@ class LorawanController extends Controller
                 $data = $Solidusdecoder->DecodeSolidusPayload($hexvalue);
             } else if (strpos($request_data['DevEUI'], "70B3D") === 0) {
                 // $request_data['DevEUI'] == "70B3D55680000A6D" (L2 AQ05)
-
-
-
                 $IOTSUdecoder = new IOTSUdecoder();
                 $hexvalue = $IOTSUdecoder->hexToBytes($request_data['payload_hex']);
                 $model = $request_data['CustomerData']['alr']['pro'];
 
                 $data = $IOTSUdecoder->DecodeIOTSUPayload($hexvalue, $model);
-            }
+            } else if (strpos($request_data['DevEUI'], "04B6480C01") === 0) {
+                //Zenner device
+                $zennerDecoder = new ZENNERDecoder();
+                $input = [];
+                $input['bytes'] = $request_data['payload_hex'];
+                $output= $zennerDecoder->decodeUplink($input);
 
+                $dbdata = [];
+                if ($output['data']['packetType'] == "SP9.2" || $output['data']['packetType'] == "SP9.1") {
+                    $dbdata = array(
+                        'deviceId' => $request_data['DevEUI'],
+                        'type' => $output['data']['message_art'],
+                        'observationId' => null,
+                        'tag' => '',
+                        'name' => '',
+                        'unit' => '',
+                        'value' => $request_data['Time'],
+                        'fport' => $request_data['FPort'],
+                        'message_time' => $request_data['Time'],
+                    );
+
+                } else if ($output['data']['packetType'] == "SP1.1" || $output['data']['packetType'] == "AP1.0") {                   
+
+                    $dbdata = array(
+                        'deviceId' => $request_data['DevEUI'],
+                        'type' => $output['data']['warning_current'] ?? $output['data']['message_art'],
+                        'observationId' => null,
+                        'tag' => '',
+                        'name' => '',
+                        'unit' => '',
+                        'value' => $request_data['Time'],
+                        'fport' => $request_data['FPort'],
+                        'message_time' => $request_data['Time'],
+                    );
+                }
+
+                $sensor = Sensor::updateOrCreate(
+                    ['deviceId' => $request_data['DevEUI'], 'type' => $output['data']['packetType']], $dbdata
+                );
+                $log = SensorLog::where('sensor_id', $sensor->id)->first();
+
+                $log_data = array(
+                    'sensor_id' => $sensor->id,
+                );
+                if (! isset($log)) {
+                    $log_data['logs'] = json_encode([
+                        date('Y-m-d H:i:s') => $sensor->value
+                    ]);
+                } else {
+                    $log_data['logs'] = (array) json_decode($log->logs);
+                    $len = count($log_data['logs']);
+                    if ($len > 9) {
+                        $log_data['logs'] = array_slice($log_data['logs'], $len - 9);
+                    }
+                    $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
+
+                    $log_data['logs'] = json_encode($log_data['logs']);
+                }
+                $log = SensorLog::updateOrCreate(
+                    ['sensor_id' => $sensor->id,], $log_data
+                );
+            }
             foreach ($data as $key => $val) {
 
                 if ($key == 'externalTemperature2') {
