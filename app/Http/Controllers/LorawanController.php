@@ -763,9 +763,6 @@ class LorawanController extends Controller
     {
 
         try {
-            Log::debug("Lora data received");
-            Log::debug(json_encode($request->all()));
-            file_put_contents("logs/lora.json", json_encode($request->all()));
             $request_data = $request->DevEUI_uplink;
 
             if (file_put_contents(sprintf("logs/%s.json", $request_data['DevEUI']), json_encode($request->all())) === false) {
