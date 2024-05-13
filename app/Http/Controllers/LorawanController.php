@@ -801,8 +801,7 @@ class LorawanController extends Controller
                         'observationId' => null,
                         'tag' => '',
                         'name' => '',
-                        'unit' => '',
-                        'value' => $request_data['Time'],
+                        'unit' => '',                        
                         'fport' => $request_data['FPort'],
                         'message_time' => $request_data['Time'],
                     );
@@ -815,8 +814,7 @@ class LorawanController extends Controller
                         'observationId' => null,
                         'tag' => '',
                         'name' => '',
-                        'unit' => '',
-                        'value' => $request_data['Time'],
+                        'unit' => '',                        
                         'fport' => $request_data['FPort'],
                         'message_time' => $request_data['Time'],
                     );
