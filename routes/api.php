@@ -84,7 +84,8 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function () {
     );
 
     Route::get('foxeriot/automatic_update', '\App\Http\Controllers\FoxeriotController@automatic_update');
-
+    Route::get('smalldatagarden/automatic_update', '\App\Http\Controllers\SmallDataGardenController@SmallDataGarden_updateSensors');
+    
     Route::group(['prefix' => 'asm_server/config'], function ($router) {
         Route::get('getSERVERConfig', [AsmServerController::class, 'getSERVERConfig'])->name('getSERVERConfig');
         Route::get('getRESTconfig', [AsmServerController::class, 'getRESTconfig'])->name('getRESTconfig');

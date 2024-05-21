@@ -42,7 +42,7 @@ Route::get('/kiona_endpoints', [DashboardController::class, 'kiona_endpoints_ind
 
 Route::get('/lora', [LorawanController::class, 'index'])->middleware(['auth'])->name('lorawan');
 
-Route::get('smalldatagarden/automatic_update', '\App\Http\Controllers\SmallDataGardenController@SmallDataGarden_updateSensors');
+
 
 
 Route::group(['prefix' => '/setting', 'middleware' => 'auth'], function ($router) {
