@@ -78,10 +78,11 @@ trait SmallDataGarden{
             "ack",
         ];
 
+        $res = [];
         foreach($devices as $device)
         {
-            // $deviceData = $this->SmallDataGarden_getDeviceData($device->DeviceID);
-
+            $deviceData = $this->SmallDataGarden_getDeviceData($device->DeviceID);
+            $res[] = $deviceData;
             $dbdata = array(
                 'deviceId' => $device->DeviceID,
                 //'type' => 'battvolt',
@@ -131,6 +132,6 @@ trait SmallDataGarden{
 
         }
 
-        return response()->json( $devices, 200);
+        return response()->json( $res, 200);
     }
 }
