@@ -80,7 +80,7 @@ trait SmallDataGarden{
 
         foreach($devices as $device)
         {
-            $deviceData = $this->SmallDataGarden_getDeviceData($device->DeviceID);
+            // $deviceData = $this->SmallDataGarden_getDeviceData($device->DeviceID);
 
             $dbdata = array(
                 'deviceId' => $device->DeviceID,
