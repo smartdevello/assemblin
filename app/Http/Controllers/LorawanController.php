@@ -830,7 +830,7 @@ class LorawanController extends Controller
                 );
                 if (! isset($log)) {
                     $log_data['logs'] = json_encode([
-                        date('Y-m-d H:i:s') => $sensor->value
+                        date('Y-m-d H:i:s') => $request_data['payload_hex']
                     ]);
                 } else {
                     $log_data['logs'] = (array) json_decode($log->logs);
@@ -838,7 +838,7 @@ class LorawanController extends Controller
                     if ($len > 9) {
                         $log_data['logs'] = array_slice($log_data['logs'], $len - 9);
                     }
-                    $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
+                    $log_data['logs'][date('Y-m-d H:i:s')] = $request_data['payload_hex'];
 
                     $log_data['logs'] = json_encode($log_data['logs']);
                 }
