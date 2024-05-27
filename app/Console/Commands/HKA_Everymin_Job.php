@@ -14,7 +14,7 @@ use App\Models\TrendGroup;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Console\Command;
-
+use App\Jobs\LongRunningJob;
 class HKA_Everymin_Job extends Command
 {
     /**
@@ -180,7 +180,7 @@ class HKA_Everymin_Job extends Command
                     $job->update([
                         'next_run' => date('Y-m-d H:i:s', time() + 30 * 60),
                     ]);
-                    $this->SmallDataGarden_updateSensors();
+                    LongRunningJob::dispatch('smalldatagarden');                    
                 }
 
             }
