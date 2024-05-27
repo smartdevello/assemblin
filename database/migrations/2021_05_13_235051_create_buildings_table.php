@@ -13,14 +13,26 @@ class CreateBuildingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('buildings', function (Blueprint $table) {
-            $table->id();
-            $table->text('name');
-            $table->string('img_url')->nullable();
-            $table->unsignedBigInteger('location_id')->nullable();
-            $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('buildings')) {
+            Schema::create('buildings', function (Blueprint $table) {
+                $table->id();
+                $table->text('name');
+                $table->string('img_url')->nullable();
+                $table->unsignedBigInteger('location_id')->nullable();
+                $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
+                $table->timestamps();
+            });
+        } else
+            Schema::table('buildings', function (Blueprint $table) {
+                if (!Schema::hasColumn('buildings', 'id')) {
+                    $table->id();
+                    $table->text('name');
+                    $table->string('img_url')->nullable();
+                    $table->unsignedBigInteger('location_id')->nullable();
+                    $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
+                    $table->timestamps();
+                }
+            });
     }
 
     /**

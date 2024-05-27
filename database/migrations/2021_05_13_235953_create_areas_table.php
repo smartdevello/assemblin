@@ -13,14 +13,23 @@ class CreateAreasTable extends Migration
      */
     public function up()
     {
-        Schema::create('areas', function (Blueprint $table) {
-            $table->id();
-
-            $table->text('name');
-            $table->unsignedBigInteger('building_id')->nullable();
-            $table->foreign('building_id')->references('id')->on('buildings')->onDelete('cascade');
-
-            $table->timestamps();
+        if (!Schema::hasTable('areas')) {
+            Schema::create('areas', function (Blueprint $table) {
+                $table->id();
+                $table->text('name');
+                $table->unsignedBigInteger('building_id')->nullable();
+                $table->foreign('building_id')->references('id')->on('buildings')->onDelete('cascade');
+                $table->timestamps();
+            });
+        } else
+        Schema::table('areas', function (Blueprint $table) {
+            if (!Schema::hasColumn('areas', 'id')) {
+                $table->id();
+                $table->text('name');
+                $table->unsignedBigInteger('building_id')->nullable();
+                $table->foreign('building_id')->references('id')->on('buildings')->onDelete('cascade');
+                $table->timestamps();
+            }
         });
     }
 

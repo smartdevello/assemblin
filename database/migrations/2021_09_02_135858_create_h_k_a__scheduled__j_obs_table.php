@@ -13,12 +13,23 @@ class CreateHKAScheduledJObsTable extends Migration
      */
     public function up()
     {
-        Schema::create('hka_scheduled_jobs', function (Blueprint $table) {
-            $table->id();
-            $table->string('job_name');
-            $table->unsignedBigInteger('job_id');
-            $table->timestamp('next_run');
-            $table->timestamps();
+        if (!Schema::hasTable('hka_scheduled_jobs')) {
+            Schema::create('hka_scheduled_jobs', function (Blueprint $table) {
+                $table->id();
+                $table->string('job_name');
+                $table->unsignedBigInteger('job_id');
+                $table->timestamp('next_run');
+                $table->timestamps();
+            });
+        } else
+        Schema::table('hka_scheduled_jobs', function (Blueprint $table) {
+            if (!Schema::hasColumn('hka_scheduled_jobs', 'id')) {
+                $table->id();
+                $table->string('job_name');
+                $table->unsignedBigInteger('job_id');
+                $table->timestamp('next_run');
+                $table->timestamps();
+            }
         });
     }
 

@@ -13,12 +13,23 @@ class CreateSensorLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('sensor_logs', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('sensor_id');
-            $table->foreign('sensor_id')->references('id')->on('sensors')->onDelete('cascade');
-            $table->longText('logs')->nullable();
-            $table->timestamps();
+        if (!Schema::hasTable('sensor_logs')) {
+            Schema::create('sensor_logs', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('sensor_id');
+                $table->foreign('sensor_id')->references('id')->on('sensors')->onDelete('cascade');
+                $table->longText('logs')->nullable();
+                $table->timestamps();
+            });
+        } else
+        Schema::table('sensor_logs', function (Blueprint $table) {
+            if (!Schema::hasColumn('sensor_logs', 'id')) {
+                $table->id();
+                $table->unsignedBigInteger('sensor_id');
+                $table->foreign('sensor_id')->references('id')->on('sensors')->onDelete('cascade');
+                $table->longText('logs')->nullable();
+                $table->timestamps();
+            }
         });
     }
 

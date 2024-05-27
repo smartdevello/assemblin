@@ -13,11 +13,21 @@ class CreateLocationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('locations', function (Blueprint $table) {
-            $table->id();
-            $table->text('name');
-            $table->string('img_url')->nullable();
-            $table->timestamps();
+        if (!Schema::hasTable('locations')) {
+            Schema::create('locations', function (Blueprint $table) {
+                $table->id();
+                $table->text('name');
+                $table->string('img_url')->nullable();
+                $table->timestamps();
+            });
+        } else
+        Schema::table('locations', function (Blueprint $table) {
+            if (!Schema::hasColumn('locations', 'id')) {
+                $table->id();
+                $table->text('name');
+                $table->string('img_url')->nullable();
+                $table->timestamps();
+            }
         });
     }
 

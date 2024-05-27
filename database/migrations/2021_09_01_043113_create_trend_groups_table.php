@@ -13,16 +13,29 @@ class CreateTrendGroupsTable extends Migration
      */
     public function up()
     {
-
-        Schema::create('trend_groups', function (Blueprint $table) {
-            $table->id();
-            $table->string('controller_id')->nullable();
-            $table->string('trend_group_name')->nullable();
-            $table->string('location_name')->nullable();
-            $table->bigInteger('update_interval')->nullable();
-            $table->bigInteger('query_period')->nullable();
-            $table->boolean('send_to_ftp')->nullable();
-            $table->timestamps();
+        if (!Schema::hasTable('trend_groups')) {
+            Schema::create('trend_groups', function (Blueprint $table) {
+                $table->id();
+                $table->string('controller_id')->nullable();
+                $table->string('trend_group_name')->nullable();
+                $table->string('location_name')->nullable();
+                $table->bigInteger('update_interval')->nullable();
+                $table->bigInteger('query_period')->nullable();
+                $table->boolean('send_to_ftp')->nullable();
+                $table->timestamps();
+            });
+        } else
+        Schema::table('trend_groups', function (Blueprint $table) {
+            if (!Schema::hasColumn('trend_groups', 'id')) {
+                $table->id();
+                $table->string('controller_id')->nullable();
+                $table->string('trend_group_name')->nullable();
+                $table->string('location_name')->nullable();
+                $table->bigInteger('update_interval')->nullable();
+                $table->bigInteger('query_period')->nullable();
+                $table->boolean('send_to_ftp')->nullable();
+                $table->timestamps();
+            }
         });
     }
 
