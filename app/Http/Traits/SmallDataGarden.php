@@ -32,8 +32,7 @@ trait SmallDataGarden{
         if(curl_errno($curl)) {
             Log::error('Curl error: ' . curl_error($curl));
         }
-        curl_close($curl);
-        Log::error('All devices ' . $response);
+        curl_close($curl);        
         return json_decode($response);
     }
 
