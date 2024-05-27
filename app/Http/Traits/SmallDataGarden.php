@@ -132,6 +132,7 @@ trait SmallDataGarden{
                     }
                 }
             } catch (\Exception $e) {
+                Log::error('SmallDataGarden_updateSensors error: ' . $device->DeviceID . ' ' . $e->getMessage());
                 continue;
             }
 
