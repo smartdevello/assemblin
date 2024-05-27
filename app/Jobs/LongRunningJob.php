@@ -15,6 +15,7 @@ class LongRunningJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, SmallDataGarden;
 
     //Define properties for the params
+    public $tries = 1;
     protected $job_name;
     /**
      * Create a new job instance.
@@ -34,6 +35,7 @@ class LongRunningJob implements ShouldQueue
      */
     public function handle()
     {
+        set_time_limit(0); // Remove the time limit for this job
         // do something here for long running job
         if ($this->job_name == 'smalldatagarden') {
             $this->SmallDataGarden_updateSensors();
