@@ -184,9 +184,9 @@ class HKA_Everymin_Job extends Command
                     } else if ($job->job_name == 'smalldatagarden') {
                         $job->update([
                             'next_run' => date('Y-m-d H:i:s', time() + 5 * 60),
-                        ]);
-                        file_put_contents(storage_path('smalldatagarden.log'), "SmallDataGarden Job is running\n", FILE_APPEND | LOCK_EX);
-                        // LongRunningJob::dispatch('smalldatagarden');                    
+                        ]);                        
+                        LongRunningJob::dispatch('smalldatagarden');                    
+                        file_put_contents(storage_path('logs/smalldatagarden.log'), "SmallDataGarden Job is running\n", FILE_APPEND | LOCK_EX);
                     }
 
                 }
