@@ -93,41 +93,41 @@ trait SmallDataGarden{
                 //'value' => $deviceData[0]->battvolt,
                 'message_time' => $device->Time,
             );
-            // if ($deviceData) {
-            //     foreach($deviceData[0] as $key => $value)
-            //     {
-            //         if (in_array( $key, $ignore_list)) continue;
-            //         if (!is_numeric($value)) continue;
-            //         $dbdata['type'] = $key;
-            //         $dbdata['value'] = $value;
+            if ($deviceData) {
+                foreach($deviceData[0] as $key => $value)
+                {
+                    if (in_array( $key, $ignore_list)) continue;
+                    if (!is_numeric($value)) continue;
+                    $dbdata['type'] = $key;
+                    $dbdata['value'] = $value;
     
-            //         $sensor = Sensor::updateOrCreate(
-            //             ['deviceId' => $device->DeviceID, 'type' => $key] , $dbdata
-            //         );
-            //         $log = SensorLog::where('sensor_id', $sensor->id)->first();
-            //         $log_data = array(
-            //             'sensor_id' => $sensor->id,
-            //         );
-            //         if ( !isset($log) ) {
-            //             $log_data['logs'] = json_encode([
-            //                 date('Y-m-d H:i:s') => $sensor->value
-            //             ]);
-            //         } else {
-            //             $log_data['logs'] = (array)json_decode($log->logs);
-            //             $len = count($log_data['logs']);
-            //             if ( $len > 9 ){
-            //                 $log_data['logs'] = array_slice( $log_data['logs'] ,  $len - 9);
-            //             }
-            //             $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
+                    $sensor = Sensor::updateOrCreate(
+                        ['deviceId' => $device->DeviceID, 'type' => $key] , $dbdata
+                    );
+                    $log = SensorLog::where('sensor_id', $sensor->id)->first();
+                    $log_data = array(
+                        'sensor_id' => $sensor->id,
+                    );
+                    if ( !isset($log) ) {
+                        $log_data['logs'] = json_encode([
+                            date('Y-m-d H:i:s') => $sensor->value
+                        ]);
+                    } else {
+                        $log_data['logs'] = (array)json_decode($log->logs);
+                        $len = count($log_data['logs']);
+                        if ( $len > 9 ){
+                            $log_data['logs'] = array_slice( $log_data['logs'] ,  $len - 9);
+                        }
+                        $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
     
-            //             $log_data['logs'] = json_encode($log_data['logs']);
-            //         }
-            //         $log = SensorLog::updateOrCreate(
-            //             ['sensor_id' => $sensor->id, ] , $log_data
-            //         );
+                        $log_data['logs'] = json_encode($log_data['logs']);
+                    }
+                    $log = SensorLog::updateOrCreate(
+                        ['sensor_id' => $sensor->id, ] , $log_data
+                    );
     
-            //     }
-            // }
+                }
+            }
 
 
         }
