@@ -412,11 +412,16 @@ class ZENNERDecoder
     }
     private function decodeRadioStatus($payload)
     {
-        $decimalPayload = hexdec($payload);
+
+        $tmp = explode(" ", $payload)[0];
+        $decimalPayload = hexdec($tmp);
+
+
         $statuses = array_filter($this->statusBits, function ($bit) use ($decimalPayload) {
             return ($decimalPayload & (1 << $bit));
         }, ARRAY_FILTER_USE_KEY);
 
+        
         return implode(", ", $statuses);
     }
     private function APCode($payload)
@@ -429,9 +434,7 @@ class ZENNERDecoder
     }
     private function datetime($hex)
     {
-        var_dump($hex);
         $hex = hexdec($hex);
-        var_dump($hex);
         $dt0 = $hex & 0xff;
         $dt1 = ($hex >> 8) & 0xff;
         $dt2 = ($hex >> 16) & 0xff;
@@ -451,6 +454,7 @@ class ZENNERDecoder
         return $date->format('c');
     }
 }
+
 class Solidusdecoder extends ELSYSdecoder
 {
 
@@ -793,35 +797,21 @@ class LorawanController extends Controller
                 $input['bytes'] = $request_data['payload_hex'];
                 $output= $zennerDecoder->decodeUplink($input);
 
-                $dbdata = [];
-                if ($output['data']['packetType'] == "SP9.2" || $output['data']['packetType'] == "SP9.1") {
-                    $dbdata = array(
-                        'deviceId' => $request_data['DevEUI'],
-                        'type' => $output['data']['message_art'],
-                        'observationId' => null,
-                        'tag' => '',
-                        'name' => '',
-                        'unit' => '',                        
-                        'fport' => $request_data['FPort'],
-                        'message_time' => $request_data['Time'],
-                    );
 
-                } else if ($output['data']['packetType'] == "SP1.1" || $output['data']['packetType'] == "AP1.0") {                   
+                $dbdata = array(
+                    'deviceId' => $request_data['DevEUI'],
+                    'type' => $output['data']['message_art'],
+                    'tag' => '',
+                    'name' => '',
+                    'unit' => '',
+                    'value' => $output['data']['warning_current'] ?? '',
+                    'fport' => $request_data['FPort'],
+                    'message_time' => $request_data['Time'],
+                );
 
-                    $dbdata = array(
-                        'deviceId' => $request_data['DevEUI'],
-                        'type' => $output['data']['warning_current'] ?? $output['data']['message_art'],
-                        'observationId' => null,
-                        'tag' => '',
-                        'name' => '',
-                        'unit' => '',                        
-                        'fport' => $request_data['FPort'],
-                        'message_time' => $request_data['Time'],
-                    );
-                }
 
                 $sensor = Sensor::updateOrCreate(
-                    ['deviceId' => $request_data['DevEUI'], 'type' => $output['data']['packetType']], $dbdata
+                    ['deviceId' => $request_data['DevEUI'] ], $dbdata
                 );
                 $log = SensorLog::where('sensor_id', $sensor->id)->first();
 
@@ -830,7 +820,7 @@ class LorawanController extends Controller
                 );
                 if (! isset($log)) {
                     $log_data['logs'] = json_encode([
-                        date('Y-m-d H:i:s') => $request_data['payload_hex']
+                        date('Y-m-d H:i:s') => $sensor->value,
                     ]);
                 } else {
                     $log_data['logs'] = (array) json_decode($log->logs);
@@ -838,7 +828,7 @@ class LorawanController extends Controller
                     if ($len > 9) {
                         $log_data['logs'] = array_slice($log_data['logs'], $len - 9);
                     }
-                    $log_data['logs'][date('Y-m-d H:i:s')] = $request_data['payload_hex'];
+                    $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
 
                     $log_data['logs'] = json_encode($log_data['logs']);
                 }
