@@ -223,12 +223,23 @@ class DashboardController extends Controller
             foreach($request->all() as $item)
             {
                 $sensor = Sensor::where('id', $item['id'])->first();
-                $sensor->update([
-                    "value" => $item["value"],
-                    "name" => $item["name"],
-                    "point_id" => $item["point_id"] ?? null,
-                    "visibility" => $item["visibility"]
-                ]);
+                // check if $item["value"] is string or not
+
+                if (is_numeric($item["value"] ))
+                    $sensor->update([
+                        "value" => $item["value"],
+                        "name" => $item["name"],
+                        "point_id" => $item["point_id"] ?? null,
+                        "visibility" => $item["visibility"]
+                    ]);
+                else {
+                    $sensor->update([
+                        "strValue" => $item["value"],
+                        "name" => $item["name"],
+                        "point_id" => $item["point_id"] ?? null,
+                        "visibility" => $item["visibility"]
+                    ]);
+                }
 
                 if ($item['point_id']) {
                     $points_updated = true;
