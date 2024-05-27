@@ -303,7 +303,6 @@ class ZENNERDecoder
         //     return strtoupper(str_pad(chr($byte), 2, '0', STR_PAD_LEFT));
         // }, $input['bytes']);
         $b = str_split(strtoupper( $input['bytes'] ), 2);
-        print_r($b);
         if ($b[0] === "11") {
             $this->decodePacketSP1_1($b, $d, $warnings);
         }
