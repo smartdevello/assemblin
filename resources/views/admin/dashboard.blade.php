@@ -281,7 +281,7 @@
                     { text: 'Tag', value: 'tag' },
                     { text: 'Name', value: 'name' },
                     { text: 'Type', value: 'type' },
-                    { text: 'Latest value', value: 'strValue' },
+                    { text: 'Latest value', value: 'value' },
                     { text: 'DEOS Point', value: 'point_id' },
                     { text: 'DEOS Controller', value: 'controller_id' },
                     { text: 'Area', value: 'area_id' },
@@ -294,15 +294,10 @@
 
             },
             mounted: function() {
-                //Remove All weather_forecast points from dashboard.
-                // index = this.points.length - 1;
-                // while (index >= 0) {
-                //     if (this.points[index].meta_type == 'weather_forecast') {
-                //         this.points.splice(index, 1);
-                //     }
-                //     index -= 1;
-                // }
                 for (sensor of this.sensors){
+                    if (sensor.strValue) {
+                        sensor.value = sensor.strValue;
+                    }
                     if (sensor.logs) {
                         // console.log(sensor.deviceId)
                         sensor.logs = JSON.parse(sensor.logs.logs);
