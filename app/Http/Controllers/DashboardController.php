@@ -98,6 +98,8 @@ class DashboardController extends Controller
         $sensors = Sensor::where('to_kiona', 1)->get();
         $return = [];
         foreach($sensors as $sensor) {
+            if ($sensor->strvalue)
+                $sensor->value = $sensor->strvalue;
             $return[] = [
                 'id' => $sensor->id,
                 'deviceId' => $sensor->deviceId,
@@ -136,6 +138,9 @@ class DashboardController extends Controller
                         if (!$sensors) break;
                         foreach($sensors as $sensor) {
                             // if ($sensor->to_kiona == 1) {
+                                if ($sensor->strvalue)
+                                    $sensor->value = $sensor->strvalue;
+
                                 $return[] = [
                                     'id' => $sensor->id,
                                     'deviceId' => $sensor->deviceId,
