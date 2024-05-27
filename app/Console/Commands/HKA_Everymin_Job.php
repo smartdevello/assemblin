@@ -183,7 +183,7 @@ class HKA_Everymin_Job extends Command
                         $this->automatic_update();
                     } else if ($job->job_name == 'smalldatagarden') {
                         $job->update([
-                            'next_run' => date('Y-m-d H:i:s', time() + 5 * 60),
+                            'next_run' => date('Y-m-d H:i:s', time() + 30 * 60),
                         ]);                        
                         LongRunningJob::dispatch('smalldatagarden');                    
                         

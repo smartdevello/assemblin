@@ -35,8 +35,8 @@ class LongRunningJob implements ShouldQueue
     public function handle()
     {
         // do something here for long running job
-        if ($this->job_name == 'smalldatagarden') {            
-            file_put_contents(storage_path('logs/smalldatagarden.log'), "SmallDataGarden Job is running\n", FILE_APPEND | LOCK_EX);
+        if ($this->job_name == 'smalldatagarden') {
+            $this->SmallDataGarden_updateSensors();
         }
         
     }
