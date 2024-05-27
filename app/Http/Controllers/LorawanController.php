@@ -804,7 +804,7 @@ class LorawanController extends Controller
                     'tag' => '',
                     'name' => '',
                     'unit' => '',
-                    'value' => $output['data']['warning_current'] ?? '',
+                    'strValue' => $output['data']['warning_current'] ?? '',
                     'fport' => $request_data['FPort'],
                     'message_time' => $request_data['Time'],
                 );
@@ -820,7 +820,7 @@ class LorawanController extends Controller
                 );
                 if (! isset($log)) {
                     $log_data['logs'] = json_encode([
-                        date('Y-m-d H:i:s') => $sensor->value,
+                        date('Y-m-d H:i:s') => $sensor->strValue,
                     ]);
                 } else {
                     $log_data['logs'] = (array) json_decode($log->logs);
@@ -828,7 +828,7 @@ class LorawanController extends Controller
                     if ($len > 9) {
                         $log_data['logs'] = array_slice($log_data['logs'], $len - 9);
                     }
-                    $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
+                    $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->strValue;
 
                     $log_data['logs'] = json_encode($log_data['logs']);
                 }
