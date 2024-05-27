@@ -835,13 +835,58 @@ class LorawanController extends Controller
                     ['sensor_id' => $sensor->id,], $log_data
                 );
             }
-            foreach ($data as $key => $val) {
+            if (is_array($data)) {
+                foreach ($data as $key => $val) {
 
-                if ($key == 'externalTemperature2') {
-                    foreach ($val as $key1 => $val1) {
-                        $sensorKey = $key . "_" . strval($key1);
-                        $sensorValue = $val1;
-
+                    if ($key == 'externalTemperature2') {
+                        foreach ($val as $key1 => $val1) {
+                            $sensorKey = $key . "_" . strval($key1);
+                            $sensorValue = $val1;
+    
+                            $dbdata = array(
+                                'deviceId' => $request_data['DevEUI'],
+                                'type' => $sensorKey,
+                                'observationId' => null,
+                                'tag' => '',
+                                'name' => '',
+                                'unit' => '',
+                                'value' => strval($sensorValue),
+                                'fport' => $request_data['FPort'],
+                                'message_time' => $request_data['Time'],
+                            );
+    
+                            $sensor = Sensor::updateOrCreate(
+                                ['deviceId' => $request_data['DevEUI'], 'type' => $sensorKey], $dbdata
+                            );
+    
+                            $log = SensorLog::where('sensor_id', $sensor->id)->first();
+    
+                            $log_data = array(
+                                'sensor_id' => $sensor->id,
+                            );
+                            if (! isset($log)) {
+                                $log_data['logs'] = json_encode([
+                                    date('Y-m-d H:i:s') => $sensor->value
+                                ]);
+                            } else {
+                                $log_data['logs'] = (array) json_decode($log->logs);
+                                $len = count($log_data['logs']);
+                                if ($len > 9) {
+                                    $log_data['logs'] = array_slice($log_data['logs'], $len - 9);
+                                }
+                                $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
+    
+                                $log_data['logs'] = json_encode($log_data['logs']);
+                            }
+                            $log = SensorLog::updateOrCreate(
+                                ['sensor_id' => $sensor->id,], $log_data
+                            );
+    
+                        }
+                    } else {
+                        $sensorKey = $key;
+                        $sensorValue = $val;
+    
                         $dbdata = array(
                             'deviceId' => $request_data['DevEUI'],
                             'type' => $sensorKey,
@@ -853,13 +898,13 @@ class LorawanController extends Controller
                             'fport' => $request_data['FPort'],
                             'message_time' => $request_data['Time'],
                         );
-
+    
                         $sensor = Sensor::updateOrCreate(
                             ['deviceId' => $request_data['DevEUI'], 'type' => $sensorKey], $dbdata
                         );
-
+    
                         $log = SensorLog::where('sensor_id', $sensor->id)->first();
-
+    
                         $log_data = array(
                             'sensor_id' => $sensor->id,
                         );
@@ -874,59 +919,17 @@ class LorawanController extends Controller
                                 $log_data['logs'] = array_slice($log_data['logs'], $len - 9);
                             }
                             $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
-
+    
                             $log_data['logs'] = json_encode($log_data['logs']);
                         }
+    
                         $log = SensorLog::updateOrCreate(
                             ['sensor_id' => $sensor->id,], $log_data
                         );
-
                     }
-                } else {
-                    $sensorKey = $key;
-                    $sensorValue = $val;
-
-                    $dbdata = array(
-                        'deviceId' => $request_data['DevEUI'],
-                        'type' => $sensorKey,
-                        'observationId' => null,
-                        'tag' => '',
-                        'name' => '',
-                        'unit' => '',
-                        'value' => strval($sensorValue),
-                        'fport' => $request_data['FPort'],
-                        'message_time' => $request_data['Time'],
-                    );
-
-                    $sensor = Sensor::updateOrCreate(
-                        ['deviceId' => $request_data['DevEUI'], 'type' => $sensorKey], $dbdata
-                    );
-
-                    $log = SensorLog::where('sensor_id', $sensor->id)->first();
-
-                    $log_data = array(
-                        'sensor_id' => $sensor->id,
-                    );
-                    if (! isset($log)) {
-                        $log_data['logs'] = json_encode([
-                            date('Y-m-d H:i:s') => $sensor->value
-                        ]);
-                    } else {
-                        $log_data['logs'] = (array) json_decode($log->logs);
-                        $len = count($log_data['logs']);
-                        if ($len > 9) {
-                            $log_data['logs'] = array_slice($log_data['logs'], $len - 9);
-                        }
-                        $log_data['logs'][date('Y-m-d H:i:s')] = $sensor->value;
-
-                        $log_data['logs'] = json_encode($log_data['logs']);
-                    }
-
-                    $log = SensorLog::updateOrCreate(
-                        ['sensor_id' => $sensor->id,], $log_data
-                    );
                 }
             }
+
 
         } catch (Exception $e) {
             Log::debug("Lora data error");
