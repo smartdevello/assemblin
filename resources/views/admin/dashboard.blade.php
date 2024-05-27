@@ -281,7 +281,7 @@
                     { text: 'Tag', value: 'tag' },
                     { text: 'Name', value: 'name' },
                     { text: 'Type', value: 'type' },
-                    { text: 'Latest value', value: 'value' },
+                    { text: 'Latest value', value: 'strValue' },
                     { text: 'DEOS Point', value: 'point_id' },
                     { text: 'DEOS Controller', value: 'controller_id' },
                     { text: 'Area', value: 'area_id' },
