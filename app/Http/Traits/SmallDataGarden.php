@@ -93,7 +93,7 @@ trait SmallDataGarden{
                     //'value' => $deviceData[0]->battvolt,
                     'message_time' => $device->Time,
                 );
-                if ($deviceData) {
+                if (is_array( $deviceData) ) {
                     foreach($deviceData[0] as $key => $value)
                     {
 
