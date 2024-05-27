@@ -186,7 +186,7 @@ class HKA_Everymin_Job extends Command
                             'next_run' => date('Y-m-d H:i:s', time() + 5 * 60),
                         ]);                        
                         LongRunningJob::dispatch('smalldatagarden');                    
-                        file_put_contents(storage_path('logs/smalldatagarden.log'), "SmallDataGarden Job is running\n", FILE_APPEND | LOCK_EX);
+                        
                     }
 
                 }
