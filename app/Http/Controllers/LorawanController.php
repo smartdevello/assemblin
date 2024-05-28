@@ -837,8 +837,7 @@ class LorawanController extends Controller
             }
             
                 foreach ($data as $key => $val) {
-
-                    if ($key == 'externalTemperature2') {
+                    if ($key == 'externalTemperature2' && (is_array($val) || is_object($val)) ) {
                         foreach ($val as $key1 => $val1) {
                             $sensorKey = $key . "_" . strval($key1);
                             $sensorValue = $val1;
