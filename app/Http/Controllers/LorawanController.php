@@ -764,14 +764,14 @@ class LorawanController extends Controller
     }
     public function receive_data(Request $request)
     {
-
+        $data = [];
         try {
             $request_data = $request->DevEUI_uplink;
 
             if (file_put_contents(sprintf("logs/%s.json", $request_data['DevEUI']), json_encode($request->all())) === false) {
                 file_put_contents(sprintf("logs/%X.json", $request_data['DevEUI']), json_encode($request->all()));
             }
-            $data = [];
+            
             if (strpos($request_data['DevEUI'], "A81758FFFE") === 0) {
                 $ELSYSdecoder = new ELSYSdecoder();
                 $hexvalue = $ELSYSdecoder->hexToBytes($request_data['payload_hex']);
@@ -835,7 +835,7 @@ class LorawanController extends Controller
                     ['sensor_id' => $sensor->id,], $log_data
                 );
             }
-            if (is_array($data)) {
+            
                 foreach ($data as $key => $val) {
 
                     if ($key == 'externalTemperature2') {
@@ -928,12 +928,13 @@ class LorawanController extends Controller
                         );
                     }
                 }
-            }
+            
 
 
         } catch (Exception $e) {
-            Log::debug("Lora data error");
+            Log::debug("Lora data error " . $request_data['DevEUI']);
             Log::debug($e->getMessage());
+            Log::debug(json_encode($data));
             return response()->json([
                 'error' => $e->getMessage()
             ], 403);
