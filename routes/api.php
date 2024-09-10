@@ -10,6 +10,8 @@ use App\Http\Controllers\TrendGroupController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AsmServerController;
+use App\Http\Controllers\WeatherForecastController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,7 +37,7 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function () {
 
     Route::group(['prefix' => 'WeatherForcast'], function ($router) {
         Route::get('getWeatherData', [DEOS_controllerController::class, 'getWeatherData'])->name('getWeatherData');
-
+        Route::get('sendToDEOS', [WeatherForecastController::class, 'sendToDEOS'])->name('sendToDEOS');
     }
     );
 
@@ -46,6 +48,7 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function () {
         Route::get('getTimeZone', [ElectricityPriceController::class, 'getTimeZone'])->name('getTimeZone');
     }
     );
+
 
     Route::group(['prefix' => 'lorawan'], function ($router) {
         Route::post('receive_data', [LorawanController::class, 'receive_data'])->name('receive_data');

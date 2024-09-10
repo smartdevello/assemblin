@@ -6,13 +6,14 @@ use App\Http\Traits\WeatherForcastTrait;
 use App\Models\DEOS_controller;
 use App\Models\HKA_Scheduled_JOb;
 use App\Models\DEOS_point;
-
+use App\Http\Traits\AssemblinInit;
 use Illuminate\Http\Request;
 
 class WeatherForecastController extends Controller
 {
 
     use WeatherForcastTrait;
+    use AssemblinInit;
     /**
      * Display a listing of the resource.
      *
@@ -55,7 +56,16 @@ class WeatherForecastController extends Controller
         }
         return view('admin.weather_forecast.index', compact('forecast_data'));
     }
+    public function sendToDEOS()
+    {
+        $id= 42;
+        $controller = DEOS_controller::where('id', $id)->first();
+        if (!$controller) {
+            return back()->with('error', 'Not found');
+        }
 
+        return $this->sendForcasttoDEOS('weather_forecast', $controller->id);
+    }
     /**
      * Show the form for creating a new resource.
      *
