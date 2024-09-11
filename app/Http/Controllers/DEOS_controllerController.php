@@ -238,7 +238,10 @@ class DEOS_controllerController extends Controller
                     'job_id' => $controller->id,
                 )
             );
-            $point_data = $this->getElectricityPricePointData();
+            $building = $controller->building;
+            $location = $building?->location;
+            $location_name = $location?->name ?? "";
+            $point_data = $this->getElectricityPricePointData($location_name);
             foreach ($point_data as $data) {
                 $label = $data['id'];
                 $name = $label;

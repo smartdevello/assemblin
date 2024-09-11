@@ -153,7 +153,10 @@ class HKA_Everymin_Job extends Command
                         $controller = DEOS_controller::where('id', $job->job_id)->first();
 
                         if ($controller) {
-                            $point_data = $this->getElectricityPricePointData();
+                            $building = $controller->building;
+                            $location = $building?->location;
+                            $location_name = $location?->name ?? "";
+                            $point_data = $this->getElectricityPricePointData($location_name);
 
 
                             foreach ($point_data as $data) {
