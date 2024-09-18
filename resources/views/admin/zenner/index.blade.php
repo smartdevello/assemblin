@@ -18,6 +18,13 @@
                     <v-card-title>
                         Zenner Devices
                         <v-spacer></v-spacer>
+                        <v-text-field
+                          v-model="search"
+                          append-icon="mdi-magnify"
+                          label="Search"
+                          single-line
+                          hide-details
+                        ></v-text-field>
                     </v-card-title>
 
                     <v-data-table
@@ -74,14 +81,14 @@
                     }
                     if (sensor.logs) {
                         // console.log(sensor.deviceId)
-                        sensor.logs = JSON.parse(sensor.logs.logs);
-                        console.log(sensor.logs);
+                        sensor.logs = JSON.parse(sensor.logs.logs);                        
                         for (log_key in sensor.logs){
                             // console.log(log_key);
                             new_log_key = new Date(log_key + " UTC").toLocaleString();
                             sensor.logs[new_log_key] = sensor.logs[log_key];
                             delete sensor.logs[log_key];
                         }
+                        console.log(sensor.logs);
                     }
                 }                
             },
