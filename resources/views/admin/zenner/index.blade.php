@@ -1,5 +1,6 @@
 @extends('admin.layout.master')
 @section('content')
+@verbatim
     <v-main v-if="!!sensors">
         <v-container>
             @if( \Session::has('success') )
@@ -70,6 +71,7 @@
             </template>
         </v-container>
     </v-main>
+@endverbatim
 @endsection
 
 @section('script')
