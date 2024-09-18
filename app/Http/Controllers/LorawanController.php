@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Sensor;
 use Illuminate\Support\Facades\Log;
 use App\Models\SensorLog;
+use App\Models\DEOS_controller;
+use App\Models\Area;
+
 use DateTime;
 use Exception;
 
@@ -942,5 +945,13 @@ class LorawanController extends Controller
         return response()->json([
             'success' => "Received Data"
         ], 200);
+    }
+    public function zenner() {
+        $sensors = Sensor::where('deviceId', 'LIKE', '04B6480C01%')->get();
+
+        foreach($sensors as $sensor) {
+            $sensor->logs;
+        }
+        return view('admin.zenner.index', compact('sensors'));
     }
 }

@@ -87,12 +87,11 @@
                                     nextIcon: 'mdi-plus'
                                 }"
                             >
+                                <template v-slot:item.name="{ item }">
 
-                            <template v-slot:item.name="{ item }">
+                                    <v-text-field v-model="item.name" solo></v-text-field>
 
-                                <v-text-field v-model="item.name" solo></v-text-field>
-
-                            </template>
+                                </template>
 
 
                                 <template v-slot:item.value="{ item }">

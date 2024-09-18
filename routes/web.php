@@ -106,7 +106,9 @@ Route::group(['prefix' => 'point', 'middleware' => 'auth'], function ($router) {
 Route::group(['prefix' => 'weather_forecast', 'middleware' => 'auth'], function ($router) {
     Route::get('', [WeatherForecastController::class, 'index'])->name('weather_forecast_dashboard');
 });
-
+Route::group(['prefix' => 'zenner', 'middleware' => 'auth'], function ($router) {
+    Route::get('', [LorawanController::class, 'zenner'])->name('zenner_dashboard');
+});
 Route::group(['prefix' => 'trendgroup', 'middleware' => 'auth'], function ($router) {
     Route::get('', [TrendGroupController::class, 'index'])->name('groups');
     Route::get('/{id}', [TrendGroupController::class, 'show'])->name('group-detail');
