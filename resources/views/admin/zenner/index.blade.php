@@ -96,6 +96,7 @@
                 drawer: true,
                 mainMenu: mainMenu,
                 sensors: ( <?php echo json_encode($sensors); ?> ),
+                areas: ( <?php echo json_encode($areas); ?> ),
                 headers: [
                     { text: '', value: 'data-table-expand' },
                     {
@@ -103,6 +104,7 @@
                         align: 'start',
                         value: 'deviceId',
                     },
+                    { text: 'Area', value: 'area_name'},
                     { text: 'Tag', value: 'tag' },
                     { text: 'Name', value: 'name' },
                     { text: 'Type', value: 'type' },

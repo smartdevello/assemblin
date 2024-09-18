@@ -948,10 +948,25 @@ class LorawanController extends Controller
     }
     public function zenner() {
         $sensors = Sensor::where('deviceId', 'LIKE', '04B6480C01%')->get();
-
+        $areas = Area::all();
         foreach($sensors as $sensor) {
+            $point = $sensor->point;
+            if ($point) {
+                if ($point->controller_id) {
+                    $controller = DEOS_controller::where('id', $point->controller_id)->first();
+                    $sensor->controller_id = $controller->id;
+                }
+                if ( $point->area_id) {
+                    $area = Area::where('id', $point->area_id)->first();
+                    $sensor->area_id = $area->id;
+                    $sensor->area_name = $area->name;
+                }
+            }
             $sensor->logs;
         }
-        return view('admin.zenner.index', compact('sensors'));
+        return view('admin.zenner.index', [
+            'sensors' => $sensors,
+            'areas' => $areas
+        ]);
     }
 }
