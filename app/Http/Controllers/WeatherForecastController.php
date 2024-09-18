@@ -8,7 +8,7 @@ use App\Models\HKA_Scheduled_JOb;
 use App\Models\DEOS_point;
 use App\Http\Traits\AssemblinInit;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 class WeatherForecastController extends Controller
 {
 
@@ -58,6 +58,10 @@ class WeatherForecastController extends Controller
     }
     public function sendToDEOS()
     {
+
+        Log::info('sendToDEOS method hit.');
+        Log::info('Authenticated User: ' . auth()->user());
+        
         $job = HKA_Scheduled_JOb::where('job_name', 'weather_forecast')->first();
         $controller = DEOS_controller::where('id', $job->id)->first();
         if (!$controller) {
