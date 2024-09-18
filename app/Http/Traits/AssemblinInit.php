@@ -498,7 +498,7 @@ trait AssemblinInit
         curl_close($ch);
 
         return [
-            'success' => $result,
+            'success' => ($result === false) ? false: true,
             'data' => $data,
         ];
     }
