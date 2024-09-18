@@ -7,6 +7,7 @@ use App\Models\DEOS_controller;
 use App\Models\HKA_Scheduled_JOb;
 use App\Models\DEOS_point;
 use App\Http\Traits\AssemblinInit;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 class WeatherForecastController extends Controller
@@ -61,14 +62,23 @@ class WeatherForecastController extends Controller
 
         Log::info('sendToDEOS method hit.');
         Log::info('Authenticated User: ' . auth()->user());
-        
-        $job = HKA_Scheduled_JOb::where('job_name', 'weather_forecast')->first();
-        $controller = DEOS_controller::where('id', $job->id)->first();
-        if (!$controller) {
-            return back()->with('error', 'Not found');
+
+        try {
+            $job = HKA_Scheduled_JOb::where('job_name', 'weather_forecast')->first();
+            $controller = DEOS_controller::where('id', $job->id)->first();
+            if (!$controller) {
+                return back()->with('error', 'Not found');
+            } else {
+                Log::info('Controller found: ' . $controller->id);
+            }
+    
+            $res = $this->sendForcasttoDEOS('weather_forecast', $controller->id);
+            return response()->json($res, 200);
+        } catch(Exception $e) {
+            Log::error('Error in sendToDEOS: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while sending forecast to DEOS.');
         }
 
-        return $this->sendForcasttoDEOS('weather_forecast', $controller->id);
     }
     /**
      * Show the form for creating a new resource.

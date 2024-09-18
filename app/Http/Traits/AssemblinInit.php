@@ -497,10 +497,10 @@ trait AssemblinInit
 
         curl_close($ch);
 
-        return response()->json([
+        return [
             'success' => $result,
             'data' => $data,
-        ], 200);
+        ];
     }
     public function automatic_update()
     {
