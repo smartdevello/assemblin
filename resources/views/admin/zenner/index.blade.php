@@ -43,8 +43,29 @@
                                     prevIcon: 'mdi-minus',
                                     nextIcon: 'mdi-plus'
                                 }"
-                            >
-                            </v-data-table>
+                    >
+                        <template v-slot:expanded-item="{ headers, item }">
+                            <v-simple-table>
+                                <template v-slot:default>
+                                    <tbody class="log_table">
+                                    <tr>
+                                        <td class="table_header">DateTime<td>
+                                        <td v-for="(i, val) in item.logs" :key="val" class="table_value">
+                                            {{val}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="table_header">Value<td>
+                                        <td v-for="(i, val) in item.logs" :key="val" class="table_value">
+                                            {{i}}
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </template>
+                            </v-simple-table>
+                        </template>
+                    </v-data-table>
                 </v-card>
             </template>
         </v-container>
