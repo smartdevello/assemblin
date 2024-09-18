@@ -150,7 +150,7 @@ class DEOS_controllerController extends Controller
         // Disable all controllers to have electricityprice_forcast functionalities
         // so only 1 controller to have electricityprice_forcast functionality
 
-        // $controllers = DEOS_controller::all();
+        $controllers = DEOS_controller::all();
         // foreach ($controllers as $item) {
         //     $item->update([
         //         'enable_weather_forecast' => false,
@@ -172,6 +172,17 @@ class DEOS_controllerController extends Controller
         // Update scheduled job controller, so it can reference the current controller's coordinate
         if (isset($request->enable_weather_forecast)) {
 
+        
+            // Disable all controllers to have weather_forecast functionalities
+            // so only 1 controller to have weather functionality
+            foreach ($controllers as $item) {
+                if ($item->id == $controller->id) {
+                    continue;
+                }
+                $item->update([
+                    'enable_weather_forecast' => false,
+                ]);
+            }
             $job = HKA_Scheduled_JOb::updateOrCreate(
                 ['job_name' => 'weather_forecast', 'job_id' => $controller->id], [
                     'job_name' => 'weather_forecast',
@@ -231,6 +242,18 @@ class DEOS_controllerController extends Controller
         // Update scheduled job controller for electricity price forcast
         if (isset($request->enable_electricityprice_forecast)) {
 
+            // Disable all controllers to have electricityprice_forcast functionalities
+            // so only 1 controller to have electricityprice_forcast functionality
+
+
+            foreach ($controllers as $item) {
+                if ($item->id == $controller->id) {
+                    continue;
+                }
+                $item->update([
+                    'enable_electricityprice_forecast' => false,
+                ]);
+            }
             $job = HKA_Scheduled_JOb::updateOrCreate(
                 ['job_name' => 'electricityprice_forecast'], array(
                     'job_name' => 'electricityprice_forecast',
