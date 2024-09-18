@@ -104,7 +104,7 @@
                         align: 'start',
                         value: 'deviceId',
                     },
-                    { text: 'Area', value: 'area_name'},
+                    { text: 'Area', value: 'controller_id'},
                     { text: 'Tag', value: 'tag' },
                     { text: 'Name', value: 'name' },
                     { text: 'Type', value: 'type' },
