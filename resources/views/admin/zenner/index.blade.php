@@ -75,7 +75,7 @@
                     if (sensor.logs) {
                         // console.log(sensor.deviceId)
                         sensor.logs = JSON.parse(sensor.logs.logs);
-                        // console.log(sensor.logs);
+                        console.log(sensor.logs);
                         for (log_key in sensor.logs){
                             // console.log(log_key);
                             new_log_key = new Date(log_key + " UTC").toLocaleString();
