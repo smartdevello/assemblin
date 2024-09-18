@@ -87,10 +87,6 @@ class HKA_Everymin_Job extends Command
                         //Check if the controller exists for weather_forecast
                         $controller = DEOS_controller::where('id', $job->job_id)->first();
                         if ($controller && isset($controller->longitude) && isset($controller->latitude)) {
-                            // Update Job next schedule time
-                            $job->update([
-                                'next_run' => date('Y-m-d H:i:s', time() + 5 * 60),
-                            ]);
 
                             //perform relevant actions
 
@@ -143,13 +139,16 @@ class HKA_Everymin_Job extends Command
                             }
                             $this->sendForcasttoDEOS('weather_forecast', $controller->id);
 
+                            // Update Job next schedule time
+                            $job->update([
+                                'next_run' => date('Y-m-d H:i:s', time() + 5 * 60),
+                            ]);
+                            
                         } else {
                             $job->delete();
                         }
                     } else if ($job->job_name == "electricityprice_forecast") {
-                        $job->update([
-                            'next_run' => date('Y-m-d H:i:s', time() + 5 * 60),
-                        ]);
+
                         $controller = DEOS_controller::where('id', $job->job_id)->first();
 
                         if ($controller) {
@@ -178,6 +177,10 @@ class HKA_Everymin_Job extends Command
                             }
                             $this->sendForcasttoDEOS('electricityprice_forecast', $controller->id);
                         }
+
+                        $job->update([
+                            'next_run' => date('Y-m-d H:i:s', time() + 5 * 60),
+                        ]);
                     } else if ($job->job_name == "automatic_update") {
 
                         $job->update([
