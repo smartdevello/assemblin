@@ -58,8 +58,8 @@ class WeatherForecastController extends Controller
     }
     public function sendToDEOS()
     {
-        $id= 42;
-        $controller = DEOS_controller::where('id', $id)->first();
+        $job = HKA_Scheduled_JOb::where('job_name', 'weather_forecast')->first();
+        $controller = DEOS_controller::where('id', $job->id)->first();
         if (!$controller) {
             return back()->with('error', 'Not found');
         }
