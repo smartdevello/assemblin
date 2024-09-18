@@ -488,10 +488,12 @@ trait AssemblinInit
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
         $result = curl_exec($ch);
+        $error = "";
         if (curl_errno($ch)) {
             curl_close($ch);
+            $error = curl_error($ch);
             return response()->json([
-                'error' => curl_error($ch),
+                'error' => $error
             ], 403);
         }
 
@@ -499,6 +501,7 @@ trait AssemblinInit
 
         return [
             'success' => ($result === false) ? false: true,
+            'error' => $error,
             'data' => $data,
         ];
     }
