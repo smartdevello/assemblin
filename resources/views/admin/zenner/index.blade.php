@@ -1,4 +1,28 @@
 @extends('admin.layout.master')
+@section('style')
+    <style>
+        tr.v-data-table__expanded__content>div{
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-left: 20px;
+        }
+        tr.v-data-table__expanded__content>div td.table_value{
+            min-width: 110px;
+        }
+        tr.v-data-table__expanded__content>div tr>td{
+            padding: 0 10px;
+        }
+        .v-data-table__expanded__content{
+            height:110px;
+        }
+        .v-data-table__expanded__content .log_table{
+            position: absolute;
+        }
+        div.v-data-table table thead tr th:nth-child(4), div.v-data-table table thead tr th:nth-child(6){
+            min-width: 200px;
+        }
+    </style>
+@endsection
 @section('content')
 @verbatim
     <v-main>
