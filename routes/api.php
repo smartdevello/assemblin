@@ -37,14 +37,14 @@ Route::middleware(['cors', 'auth:sanctum'])->group(function () {
 
     Route::group(['prefix' => 'WeatherForcast'], function ($router) {
         Route::get('getWeatherData', [DEOS_controllerController::class, 'getWeatherData'])->name('getWeatherData');
-        Route::get('sendToDEOS', [WeatherForecastController::class, 'sendToDEOS'])->name('sendToDEOS');
+        Route::get('sendToDEOS', [WeatherForecastController::class, 'sendToDEOS'])->name('sendWeatherToDEOS');
     }
     );
 
     Route::group(['prefix' => 'ElectricityPrice'], function ($router) {
         Route::get('getElectricityPriceData', [ElectricityPriceController::class, 'getElectricityPriceData'])->name('getElectricityPriceData');
         Route::get('getElectricityPricePointData', [ElectricityPriceController::class, 'getElectricityPricePointData'])->name('getElectricityPricePointData');
-        Route::get('sendToDEOS', [ElectricityPriceController::class, 'sendToDEOS'])->name('sendToDEOS');
+        Route::get('sendToDEOS', [ElectricityPriceController::class, 'sendToDEOS'])->name('sendElectricityToDEOS');
         Route::get('getTimeZone', [ElectricityPriceController::class, 'getTimeZone'])->name('getTimeZone');
     }
     );
