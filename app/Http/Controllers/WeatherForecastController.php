@@ -65,10 +65,10 @@ class WeatherForecastController extends Controller
 
         try {
             $job = HKA_Scheduled_JOb::where('job_name', 'weather_forecast')->first();
-            Log::info('Here is the job: ' . $job?->id);
-            $controller = DEOS_controller::where('id', $job->id)->first();
+            Log::info('Here is the job: ' . $job?->job_id);
+            $controller = DEOS_controller::where('id', $job->job_id)->first();
             if (!$controller) {
-                Log::info('Controller not found' . $job->id);
+                Log::info('Controller not found' . $job->job_id);
                 return back()->with('error', 'Not found');
             } else {
                 Log::info('Controller found: ' . $controller->id);

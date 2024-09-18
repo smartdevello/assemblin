@@ -19,7 +19,7 @@ class ElectricityPriceController extends Controller
     public function sendToDEOS()
     {
         $job = HKA_Scheduled_JOb::where('job_name', 'electricityprice_forecast')->first();
-        $controller = DEOS_controller::where('id', $job->id)->first();
+        $controller = DEOS_controller::where('id', $job->job_id)->first();
         if (!$controller) {
             return back()->with('error', 'Not found');
         }
