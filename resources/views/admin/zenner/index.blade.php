@@ -37,7 +37,7 @@
                                     nextIcon: 'mdi-plus'
                                 }"
                             >
-                                <template v-slot:expanded-item="{ headers, item }">
+                                <!-- <template v-slot:expanded-item="{ headers, item }">
                                     <v-simple-table>
                                         <template v-slot:default>
                                           <tbody class="log_table">
@@ -57,7 +57,7 @@
                                           </tbody>
                                         </template>
                                       </v-simple-table>
-                                  </template>
+                                  </template> -->
 
                             </v-data-table>
                 </v-card>
