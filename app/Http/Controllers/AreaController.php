@@ -8,6 +8,8 @@ use App\Models\Area;
 
 class AreaController extends Controller
 {
+
+    
     public function index()
     {
         $buildings = Building::all();
