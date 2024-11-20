@@ -456,7 +456,423 @@ class ZENNERDecoder
         return $date->format('c');
     }
 }
+class NexelecDecoder
+{
+    private $stringHex;
+    private $octetTypeProduit;
+    private $octetTypeMessage;
 
+    public function decodeUplink($input)
+    {
+        $this->stringHex = $input;
+        $this->octetTypeProduit = hexdec(substr($this->stringHex, 0, 2));
+        $this->octetTypeMessage = hexdec(substr($this->stringHex, 2, 2));
+
+        $data = $this->dataOutput($this->octetTypeMessage);
+        $errors = null;
+        $warnings = null;
+
+        return [
+            'data' => $data,
+            'errors' => $errors,
+            'warnings' => $warnings,
+        ];
+    }
+
+    private function dataOutput($octetTypeMessage)
+    {
+        $outputTypeMessage = [
+            $this->productStatusDataOutput(),
+            $this->productConfigurationDataOutput(),
+            $this->smokeAlarmDataOutput(),
+            $this->dailyAirDataOutput(),
+            $this->realTimeDataOutput(),
+            $this->temperatureDatalogDataOutput(),
+        ];
+
+        return $outputTypeMessage[$octetTypeMessage] ?? null;
+    }
+
+    private function typeOfProduct($octetTypeProduit)
+    {
+        $products = [
+            0xB1 => "Origin+ LoRa",
+            0xB2 => "Origin LoRa",
+            0xB3 => "Guard+ LoRa",
+            0xB4 => "Guard LoRa",
+        ];
+
+        return $products[$octetTypeProduit] ?? "Unknown";
+    }
+
+    private function typeOfMessage($octetTypeMessage)
+    {
+        $messageNames = [
+            "Product Status",
+            "Product Configuration",
+            "Smoke Alarm",
+            "Air Quality",
+            "Real Time",
+            "Temperature datalog",
+        ];
+
+        return $messageNames[$octetTypeMessage] ?? "Unknown";
+    }
+
+    private function productStatusDataOutput()
+    {
+        $hwVersion = hexdec(substr($this->stringHex, 4, 2)) & 0xFF;
+        $swVersion = hexdec(substr($this->stringHex, 6, 2)) & 0xFF;
+        $productLifetime = hexdec(substr($this->stringHex, 8, 2)) & 0xFF;
+        $smokeSensorStatus = (hexdec(substr($this->stringHex, 10, 1)) >> 3) & 0x01;
+        $tempHumSensorStatus = (hexdec(substr($this->stringHex, 10, 1)) >> 2) & 0x01;
+        $smokeSensorActivation = (hexdec(substr($this->stringHex, 10, 1)) >> 1) & 0x01;
+        $magneticBaseDetection = (hexdec(substr($this->stringHex, 10, 2)) >> 2) & 0x07;
+        $batteryLevel = hexdec(substr($this->stringHex, 11, 1)) & 0x03;
+        $batteryVoltage = hexdec(substr($this->stringHex, 12, 2)) & 0xFF;
+
+        return [
+            "typeOfProduct" => $this->typeOfProduct($this->octetTypeProduit),
+            "typeOfMessage" => $this->typeOfMessage($this->octetTypeMessage),
+            "hwVersion" => $hwVersion,
+            "swVersion" => $swVersion * 0.1,
+            "rmgLifetime" => $this->productLifetime($productLifetime),
+            "smokeSensorStatus" => $this->smokeStatus($smokeSensorStatus),
+            "tempHumSensorStatus" => $this->temperatureStatus($tempHumSensorStatus),
+            "smokeSensorActivation" => $this->smokeActivation($smokeSensorActivation),
+            "antiTearDetectionStatus" => $this->magnetBaseDetection($magneticBaseDetection),
+            "batteryLevel" => $this->batteryLevel($batteryLevel),
+            "batteryVoltage" => $this->batteryVoltage($batteryVoltage),
+        ];
+    }
+
+    private function productLifetime($octetProductLifetime)
+    {
+        return ["value" => $octetProductLifetime, "unit" => "month"];
+    }
+
+    private function smokeStatus($octetSmokeStatus)
+    {
+        $statuses = [
+            0 => "Smoke sensor ok",
+            1 => "Smoke sensor fault",
+        ];
+
+        return $statuses[$octetSmokeStatus] ?? "Unknown";
+    }
+
+    private function temperatureStatus($octetTemperatureStatus)
+    {
+        $statuses = [
+            0 => "T°/humidity sensor ok",
+            1 => "T°/humidity sensor fault",
+        ];
+
+        return $statuses[$octetTemperatureStatus] ?? "Unknown";
+    }
+
+    private function smokeActivation($octetSmokeActivation)
+    {
+        $statuses = [
+            0 => "Smoke sensor deactivate",
+            1 => "Smoke sensor activate",
+        ];
+
+        return $statuses[$octetSmokeActivation] ?? "Unknown";
+    }
+
+    private function magnetBaseDetection($octetMagnetBaseDetection)
+    {
+        $statuses = [
+            0 => "Magnetic base not detected",
+            1 => "Magnetic base detected",
+            2 => "Product removed from its base just now",
+            3 => "Product installed on its base just now",
+            4 => "Magnetic base never detected",
+        ];
+
+        return $statuses[$octetMagnetBaseDetection] ?? "Unknown";
+    }
+
+    private function batteryLevel($octetBatteryLevel)
+    {
+        $levels = [
+            0 => "High",
+            1 => "Medium",
+            2 => "Low",
+            3 => "Critical",
+        ];
+
+        return $levels[$octetBatteryLevel] ?? "Unknown";
+    }
+
+    private function batteryVoltage($octetBatteryVoltage)
+    {
+        return ["value" => ($octetBatteryVoltage * 5) + 2000, "units" => "mV"];
+    }
+
+    // Additional methods (e.g., productConfigurationDataOutput, smokeAlarmDataOutput, etc.)
+    // would follow the same pattern as productStatusDataOutput, translating each JS function.
+	private function productConfigurationDataOutput()
+	{
+		$dataReconfigurationSource = (hexdec(substr($this->stringHex, 4, 1)) >> 1) & 0x07;
+		$dataReconfigurationStatus = (hexdec(substr($this->stringHex, 4, 2)) >> 3) & 0x03;
+		$dataDatalogEnable = (hexdec(substr($this->stringHex, 5, 1)) >> 2) & 0x01;
+		$dataDailyAirEnable = (hexdec(substr($this->stringHex, 5, 1)) >> 1) & 0x01;
+		$dataMagnetRemovalEnable = hexdec(substr($this->stringHex, 5, 1)) & 0x01;
+		$dataPendingJoin = (hexdec(substr($this->stringHex, 6, 1)) >> 3) & 0x01;
+		$dataNfcStatus = (hexdec(substr($this->stringHex, 6, 1)) >> 1) & 0x03;
+		$dataLoraRegion = (hexdec(substr($this->stringHex, 6, 2)) >> 1) & 0x0F;
+		$dataNbNewData = (hexdec(substr($this->stringHex, 6, 4)) >> 3) & 0x3F;
+		$dataNbOfRedundancy = (hexdec(substr($this->stringHex, 9, 2)) >> 2) & 0x1F;
+		$dataTransmissionPeriod = (hexdec(substr($this->stringHex, 10, 3)) >> 2) & 0xFF;
+		$dataInterconnectionId = (hexdec(substr($this->stringHex, 12, 5)) >> 1) & 0x1FFFF;
+
+		return [
+			"typeOfProduct" => $this->typeOfProduct($this->octetTypeProduit),
+			"typeOfMessage" => $this->typeOfMessage($this->octetTypeMessage),
+			"reconfigurationSource" => $this->reconfigurationSource($dataReconfigurationSource),
+			"reconfigurationStatus" => $this->reconfigurationState($dataReconfigurationStatus),
+			"datalogEnable" => $this->active($dataDatalogEnable),
+			"dailyAirEnable" => $this->active($dataDailyAirEnable),
+			"smokeDetectionOnMagnetRemovalEnable" => $this->active($dataMagnetRemovalEnable),
+			"pendingJoin" => $this->pendingJoin($dataPendingJoin),
+			"nfcStatus" => $this->nfcStatus($dataNfcStatus),
+			"loraRegion" => $this->loraRegion($dataLoraRegion),
+			"datalogNewMeasure" => $dataNbNewData,
+			"datalogMeasureRepetition" => $dataNbOfRedundancy,
+			"transmissionIntervalDatalog" => $this->period($dataTransmissionPeriod),
+			"d2dNetworkID" => $dataInterconnectionId,
+		];
+	}
+
+	// Helper functions for decoding specific data.
+	private function reconfigurationSource($value)
+	{
+		// Map the value to meaningful names if applicable.
+		$sources = [
+			0 => "Source A",
+			1 => "Source B",
+			2 => "Source C",
+			// Add more as required.
+		];
+		return $sources[$value] ?? "Unknown";
+	}
+
+	private function reconfigurationState($value)
+	{
+		// Define mappings for reconfiguration states.
+		$states = [
+			0 => "State A",
+			1 => "State B",
+			// Add more as required.
+		];
+		return $states[$value] ?? "Unknown";
+	}
+
+	private function active($value)
+	{
+		return $value ? "Active" : "Inactive";
+	}
+
+	private function pendingJoin($value)
+	{
+		return $value ? "Join Pending" : "No Join Pending";
+	}
+
+	private function nfcStatus($value)
+	{
+		$statuses = [
+			0 => "NFC Disabled",
+			1 => "NFC Enabled",
+			2 => "NFC Error",
+			// Add more as required.
+		];
+		return $statuses[$value] ?? "Unknown";
+	}
+
+	private function loraRegion($value)
+	{
+		$regions = [
+			0 => "EU868",
+			1 => "US915",
+			2 => "AS923",
+			// Add more as required.
+		];
+		return $regions[$value] ?? "Unknown";
+	}
+
+	private function period($value)
+	{
+		return ["value" => $value, "unit" => "seconds"];
+	}
+	private function smokeAlarmDataOutput()
+	{
+		$dataSmokeAlarm = (hexdec(substr($this->stringHex, 4, 1)) >> 2) & 0x03;
+		$dataSmokeHush = hexdec(substr($this->stringHex, 4, 1)) & 0x03;
+		$dataSmokeTest = (hexdec(substr($this->stringHex, 5, 1)) >> 2) & 0x03;
+		$dataTimeSinceLastSmokeTest = (hexdec(substr($this->stringHex, 5, 3)) >> 2) & 0xFF;
+		$dataMaintenance = (hexdec(substr($this->stringHex, 7, 1)) >> 1) & 0x01;
+		$dataTimeSinceLastMaintenance = (hexdec(substr($this->stringHex, 7, 3)) >> 1) & 0xFF;
+		$dataTemperature = (hexdec(substr($this->stringHex, 9, 4)) >> 3) & 0x3FF;
+
+		return [
+			"typeOfProduct" => $this->typeOfProduct($this->octetTypeProduit),
+			"typeOfMessage" => $this->typeOfMessage($this->octetTypeMessage),
+			"smokeAlarm" => $this->alarmStatus($dataSmokeAlarm),
+			"smokeAlarmHush" => $this->alarmHush($dataSmokeHush),
+			"smokeLocalProductTest" => $this->smokeTest($dataSmokeTest),
+			"timeSinceLastTest" => $this->periodWeek($dataTimeSinceLastSmokeTest),
+			"digitalMaintenanceCertificate" => $this->maintenance($dataMaintenance),
+			"timeSinceLastMaintenance" => $this->periodWeek($dataTimeSinceLastMaintenance),
+			"temperature" => $this->temperature($dataTemperature),
+		];
+	}
+
+	private function dailyAirDataOutput()
+	{
+		$dataTempMini = (hexdec(substr($this->stringHex, 4, 3)) >> 2) & 0x3FF;
+		$dataTempMax = hexdec(substr($this->stringHex, 6, 3)) & 0x3FF;
+		$dataTempAvg = (hexdec(substr($this->stringHex, 9, 3)) >> 2) & 0x3FF;
+		$dataHumMin = (hexdec(substr($this->stringHex, 11, 3)) >> 2) & 0xFF;
+		$dataHumMax = (hexdec(substr($this->stringHex, 13, 3)) >> 2) & 0xFF;
+		$dataHumAvg = (hexdec(substr($this->stringHex, 15, 3)) >> 2) & 0xFF;
+
+		return [
+			"typeOfProduct" => $this->typeOfProduct($this->octetTypeProduit),
+			"typeOfMessage" => $this->typeOfMessage($this->octetTypeMessage),
+			"temperatureMin" => $this->temperature($dataTempMini),
+			"temperatureMax" => $this->temperature($dataTempMax),
+			"temperatureAvg" => $this->temperature($dataTempAvg),
+			"humidityMin" => $this->humidity($dataHumMin),
+			"humidityMax" => $this->humidity($dataHumMax),
+			"humidityAvg" => $this->humidity($dataHumAvg),
+		];
+	}
+
+	private function realTimeDataOutput()
+	{
+		$dataTemp = (hexdec(substr($this->stringHex, 4, 3)) >> 2) & 0x3FF;
+		$dataHum = (hexdec(substr($this->stringHex, 6, 3)) >> 2) & 0xFF;
+
+		return [
+			"typeOfProduct" => $this->typeOfProduct($this->octetTypeProduit),
+			"typeOfMessage" => $this->typeOfMessage($this->octetTypeMessage),
+			"temperature" => $this->temperature($dataTemp),
+			"humidity" => $this->humidity($dataHum),
+		];
+	}
+
+	private function temperatureDatalogDataOutput()
+	{
+		$measure = [];
+		$dataNombreMesures = (hexdec(substr($this->stringHex, 4, 2)) >> 2) & 0x3F;
+		$dataTimeBetweenMeasurementSec = (hexdec(substr($this->stringHex, 5, 3)) >> 2) & 0xFF;
+		$dataRepetition = hexdec(substr($this->stringHex, 7, 2)) & 0x3F;
+		$binary = $this->hexToBinary($this->stringHex);
+
+		for ($i = 0; $i < $dataNombreMesures; $i++) {
+			$offsetBinaire = 36 + (10 * $i);
+			$measure[$i] = bindec(substr($binary, $offsetBinaire, 10));
+			//$measure[$i] = ($measure[$i] === 0x3FF) ? 0 : round(($measure[$i] / 10) - 30);
+			$measure[$i] = ($measure[$i] === 0x3FF) ? 0 : number_format(($measure[$i] / 10 - 30), 2,".","");
+		}
+
+		return [
+			"typeOfProduct" => $this->typeOfProduct($this->octetTypeProduit),
+			"typeOfMessage" => $this->typeOfMessage($this->octetTypeMessage),
+			"datalogNewMeasure" => $dataNombreMesures,
+			"transmissionIntervalDatalog" => ["value" => $dataTimeBetweenMeasurementSec, "unit" => "minutes"],
+			"datalogMeasureRepetition" => $dataRepetition,
+			"temperature" => ["value" => $measure, "unit" => "°C"],
+		];
+	}
+	private function alarmStatus($octetAlarmStatus)
+	{
+		switch ($octetAlarmStatus) {
+			case 0:
+				return "Smoke Alarm non-activated";
+			case 1:
+				return "Local smoke Alarm activated";
+			case 2:
+				return "Remote smoke Alarm activated";
+			default:
+				return "Unknown Alarm Status"; // Fallback for unexpected values
+		}
+	}
+	// Converts alarm hush status to a descriptive message
+	private function alarmHush($octetAlarmHush)
+	{
+		switch ($octetAlarmHush) {
+			case 0:
+				return "Smoke alarm stopped because no smoke anymore";
+			case 1:
+				return "Smoke alarm stopped following central button press";
+			case 2:
+				return "Smoke alarm stopped following a remote silence";
+			default:
+				return "Unknown Alarm Hush Status";
+		}
+	}
+
+	// Converts smoke test status to a descriptive message
+	private function smokeTest($octetSmokeTest)
+	{
+		switch ($octetSmokeTest) {
+			case 0:
+				return "Smoke test off";
+			case 1:
+				return "Local smoke test was done";
+			case 2:
+				return "Remote smoke test was done";
+			default:
+				return "Unknown Smoke Test Status";
+		}
+	}
+
+	// Converts maintenance status to a descriptive message
+	private function maintenance($octetMaintenance)
+	{
+		return $octetMaintenance === 0 ? "Maintenance not done" : "Maintenance has been done";
+	}
+
+	// Converts a number of weeks to a structured response
+	private function periodWeek($octetWeek)
+	{
+		return ["value" => $octetWeek, "units" => "week"];
+	}
+
+	// Converts temperature octet to a structured response
+	private function temperature($octetTemperature)
+	{
+		if ($octetTemperature == 1023) {
+			return "Error";
+		}
+		return ["value" => ($octetTemperature * 0.1) - 30, "unit" => "°C"];
+	}
+
+	// Converts humidity octet to a structured response
+	private function humidity($octetHumidity)
+	{
+		if ($octetHumidity == 255) {
+			return "Error";
+		}
+		return ["value" => $octetHumidity * 0.5, "unit" => "°C"];
+	}
+
+	// Converts a hexadecimal string to a binary string
+	private function hexToBinary($encoded)
+	{
+		$string_bin = '';
+		foreach (str_split($encoded) as $char) {
+			$binary = str_pad(base_convert($char, 16, 2), 4, '0', STR_PAD_LEFT);
+			$string_bin .= $binary;
+		}
+		return $string_bin;
+	}
+
+
+}
 class Solidusdecoder extends ELSYSdecoder
 {
 
@@ -837,6 +1253,47 @@ class LorawanController extends Controller
                 $log = SensorLog::updateOrCreate(
                     ['sensor_id' => $sensor->id,], $log_data
                 );
+            } else if (strpos($request_data['DevEUI'], "70B3D540F658D536") === 0) {
+                //Nexelec device
+                $nexelecDecoder = new NexelecDecoder();
+                $input = $request_data['payload_hex'];
+                $output= $nexelecDecoder->decodeUplink($input);
+
+
+                $dbdata = array(
+                    'deviceId' => $request_data['DevEUI'],
+                    'type' => $output['data']['typeOfProduct'],
+                    'tag' => '',
+                    'name' => '',
+                    'unit' => $output['data']['temperature']['unit'],
+                    'value' => $output['data']['temperature']['value'][0] ?? '',
+                    'strValue' => $output['data']['temperature']['value'][0] ?? '',
+                    'fport' => $request_data['FPort'],
+                    'message_time' => $request_data['Time'],
+                );
+
+
+                $sensor = Sensor::updateOrCreate(
+                    ['deviceId' => $request_data['DevEUI'] ], $dbdata
+                );
+                $log = SensorLog::where('sensor_id', $sensor->id)->first();
+
+                $log_data = array(
+                    'sensor_id' => $sensor->id,
+                );
+                $values = $output['data']['temperature']['value'];
+                $logs = [];
+                $time = time();
+                // Limit the iteration to 10 values maximum
+                foreach (array_slice($values, 0, 10) as $i => $value) {
+                    $timestamp = $time - (1800 * $i);
+                    $logs[date("Y-m-d H:i:s", $timestamp)] = $value;
+                }
+                ksort($logs);
+                $log_data['logs'] = json_encode($logs, JSON_PRETTY_PRINT);
+                $log = SensorLog::updateOrCreate(
+                    ['sensor_id' => $sensor->id,], $log_data
+                );
             }
             
                 foreach ($data as $key => $val) {
@@ -965,6 +1422,29 @@ class LorawanController extends Controller
             $sensor->logs;
         }
         return view('admin.zenner.index', [
+            'sensors' => $sensors,
+            'areas' => $areas
+        ]);
+    }
+    public function nexelec() {
+        $sensors = Sensor::where('deviceId', 'LIKE', '70B3D540F658D536%')->get();
+        $areas = Area::all();
+        foreach($sensors as $sensor) {
+            $point = $sensor->point;
+            if ($point) {
+                if ($point->controller_id) {
+                    $controller = DEOS_controller::where('id', $point->controller_id)->first();
+                    $sensor->controller_id = $controller->id;
+                }
+                if ( $point->area_id) {
+                    $area = Area::where('id', $point->area_id)->first();
+                    $sensor->area_id = $area->id;
+                    $sensor->area_name = $area->name;
+                }
+            }
+            $sensor->logs;
+        }
+        return view('admin.nexelec.index', [
             'sensors' => $sensors,
             'areas' => $areas
         ]);

@@ -109,6 +109,9 @@ Route::group(['prefix' => 'weather_forecast', 'middleware' => 'auth'], function 
 Route::group(['prefix' => 'zenner', 'middleware' => 'auth'], function ($router) {
     Route::get('', [LorawanController::class, 'zenner'])->name('zenner_dashboard');
 });
+Route::group(['prefix' => 'nexelec', 'middleware' => 'auth'], function ($router) {
+    Route::get('', [LorawanController::class, 'nexelec'])->name('nexelec_dashboard');
+});
 Route::group(['prefix' => 'trendgroup', 'middleware' => 'auth'], function ($router) {
     Route::get('', [TrendGroupController::class, 'index'])->name('groups');
     Route::get('/{id}', [TrendGroupController::class, 'show'])->name('group-detail');
