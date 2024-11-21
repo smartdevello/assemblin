@@ -1201,6 +1201,47 @@ class LorawanController extends Controller
                 $hexvalue = $Solidusdecoder->hexToBytes($request_data['payload_hex']);
 
                 $data = $Solidusdecoder->DecodeSolidusPayload($hexvalue);
+            } else if (strpos($request_data['DevEUI'], "70B3D540F658D536") === 0) {
+                //Nexelec device
+                $nexelecDecoder = new NexelecDecoder();
+                $input = $request_data['payload_hex'];
+                $output= $nexelecDecoder->decodeUplink($input);
+
+
+                $dbdata = array(
+                    'deviceId' => $request_data['DevEUI'],
+                    'type' => $output['data']['typeOfProduct'],
+                    'tag' => '',
+                    'name' => '',
+                    'unit' => $output['data']['temperature']['unit'],
+                    'value' => $output['data']['temperature']['value'][0] ?? '',
+                    'strValue' => $output['data']['temperature']['value'][0] ?? '',
+                    'fport' => $request_data['FPort'],
+                    'message_time' => $request_data['Time'],
+                );
+
+
+                $sensor = Sensor::updateOrCreate(
+                    ['deviceId' => $request_data['DevEUI'] ], $dbdata
+                );
+                $log = SensorLog::where('sensor_id', $sensor->id)->first();
+
+                $log_data = array(
+                    'sensor_id' => $sensor->id,
+                );
+                $values = $output['data']['temperature']['value'];
+                $logs = [];
+                $time = time();
+                // Limit the iteration to 10 values maximum
+                foreach (array_slice($values, 0, 10) as $i => $value) {
+                    $timestamp = $time - (1800 * $i);
+                    $logs[date("Y-m-d H:i:s", $timestamp)] = $value;
+                }
+                ksort($logs);
+                $log_data['logs'] = json_encode($logs, JSON_PRETTY_PRINT);
+                $log = SensorLog::updateOrCreate(
+                    ['sensor_id' => $sensor->id,], $log_data
+                );
             } else if (strpos($request_data['DevEUI'], "70B3D") === 0) {
                 // $request_data['DevEUI'] == "70B3D55680000A6D" (L2 AQ05)
                 $IOTSUdecoder = new IOTSUdecoder();
@@ -1250,47 +1291,6 @@ class LorawanController extends Controller
 
                     $log_data['logs'] = json_encode($log_data['logs']);
                 }
-                $log = SensorLog::updateOrCreate(
-                    ['sensor_id' => $sensor->id,], $log_data
-                );
-            } else if (strpos($request_data['DevEUI'], "70B3D540F658D536") === 0) {
-                //Nexelec device
-                $nexelecDecoder = new NexelecDecoder();
-                $input = $request_data['payload_hex'];
-                $output= $nexelecDecoder->decodeUplink($input);
-
-
-                $dbdata = array(
-                    'deviceId' => $request_data['DevEUI'],
-                    'type' => $output['data']['typeOfProduct'],
-                    'tag' => '',
-                    'name' => '',
-                    'unit' => $output['data']['temperature']['unit'],
-                    'value' => $output['data']['temperature']['value'][0] ?? '',
-                    'strValue' => $output['data']['temperature']['value'][0] ?? '',
-                    'fport' => $request_data['FPort'],
-                    'message_time' => $request_data['Time'],
-                );
-
-
-                $sensor = Sensor::updateOrCreate(
-                    ['deviceId' => $request_data['DevEUI'] ], $dbdata
-                );
-                $log = SensorLog::where('sensor_id', $sensor->id)->first();
-
-                $log_data = array(
-                    'sensor_id' => $sensor->id,
-                );
-                $values = $output['data']['temperature']['value'];
-                $logs = [];
-                $time = time();
-                // Limit the iteration to 10 values maximum
-                foreach (array_slice($values, 0, 10) as $i => $value) {
-                    $timestamp = $time - (1800 * $i);
-                    $logs[date("Y-m-d H:i:s", $timestamp)] = $value;
-                }
-                ksort($logs);
-                $log_data['logs'] = json_encode($logs, JSON_PRETTY_PRINT);
                 $log = SensorLog::updateOrCreate(
                     ['sensor_id' => $sensor->id,], $log_data
                 );
